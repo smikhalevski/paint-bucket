@@ -1,8 +1,10 @@
 import {IRgb} from './color-types';
-import {rgb, tempRgb} from './color-utils';
-import {sqrt} from './math-utils';
+import {rgb} from './color';
+import {sqrt} from './algebra-utils';
 
 export type RgbAt = (x: number, y: number, outRgb?: IRgb) => IRgb;
+
+const tempRgb = rgb(0, 0, 0);
 
 export function toRgbAt(uint8Array: Uint8ClampedArray, width: number, alphaEnabled: boolean): RgbAt {
   const channelCount = alphaEnabled ? 4 : 3;

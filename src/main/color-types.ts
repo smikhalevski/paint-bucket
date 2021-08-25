@@ -12,4 +12,4 @@ export interface IHsl {
   alpha: number; // [0, 1]
 }
 
-export type ColorLike = number | string | IRgb | IHsl;
+export type ColorLike = string | IRgb | IHsl;

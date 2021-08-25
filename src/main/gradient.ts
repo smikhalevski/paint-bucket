@@ -1,4 +1,4 @@
-import {rgb, toRgb} from './color-utils';
+import {rgb, toRgb} from './color';
 import {ColorLike, IRgb} from './color-types';
 
 export interface IGradientStop {
@@ -9,7 +9,7 @@ export interface IGradientStop {
 /**
  * Returns color at `value` in the gradient that consists of `stops`.
  */
-export function gradient(stops: Array<IGradientStop>, value: number): IRgb {
+export function gradient(stops: Array<IGradientStop>, value: number, outRgb = rgb(0, 0, 0)): IRgb {
   if (stops.length === 0) {
     return rgb(0, 0, 0);
   }
@@ -36,12 +36,12 @@ export function gradient(stops: Array<IGradientStop>, value: number): IRgb {
 
   const r = (value - s1.value) / (s2.value - s1.value);
 
-  return rgb(
-      c1.r + (c2.r - c1.r) * r,
-      c1.g + (c2.g - c1.g) * r,
-      c1.b + (c2.b - c1.b) * r,
-      c1.alpha + (c2.alpha - c1.alpha) * r,
-  );
+  outRgb.r = c1.r + (c2.r - c1.r) * r;
+  outRgb.g = c1.g + (c2.g - c1.g) * r;
+  outRgb.b = c1.b + (c2.b - c1.b) * r;
+  outRgb.alpha = c1.alpha + (c2.alpha - c1.alpha) * r;
+
+  return outRgb;
 }
 
 export function gradientStop(color: ColorLike, value: number): IGradientStop {

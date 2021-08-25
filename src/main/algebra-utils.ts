@@ -1,4 +1,4 @@
-import {sqrt} from './math-utils';
+export const {pow, round, min, max, sqrt, abs, exp, PI, atan2, sin, cos} = Math;
 
 /**
  * Returns hypotenuse of the right triangle with `a` and `b` cathetus.
