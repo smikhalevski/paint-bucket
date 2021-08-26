@@ -1,6 +1,6 @@
-import {ColorLike, IHsl, IRgb} from './color-types';
-import {abs, atan2, cos, exp, hyp, PI, pow, pow2, sin, sqrt} from './algebra-utils';
-import {rgb, toRgb} from './color';
+import {abs, atan2, cos, exp, hyp, PI, pow, pow2, sin, sqrt} from './math';
+import {ColorModel, fromOctets, getColorOctet} from './octets';
+import {toRgb} from './rgb';
 
 /**
  * Computes the CIEDE2000 color-difference. Returns number in range `[0, 100]` where 2.3 is considered to be just
@@ -10,9 +10,18 @@ import {rgb, toRgb} from './color';
  * @see https://en.wikipedia.org/wiki/Color_difference
  * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
  */
-export function deltaE2000(color1: ColorLike, color2: ColorLike): number {
-  const {L: L1, a: a1, b: b1} = rgbToLab(toRgb(color1, tempRgb));
-  const {L: L2, a: a2, b: b2} = rgbToLab(toRgb(color2, tempRgb));
+export function deltaE2000(color1: number, color2: number): number {
+
+  const lab1 = rgbToLab(toRgb(color1));
+  const lab2 = rgbToLab(toRgb(color2));
+
+  const L1 = getColorOctet(lab1, 0) / 0xFF;
+  const a1 = getColorOctet(lab1, 0) / 0xFF;
+  const b1 = getColorOctet(lab1, 0) / 0xFF;
+
+  const L2 = getColorOctet(lab2, 0) / 0xFF;
+  const a2 = getColorOctet(lab2, 0) / 0xFF;
+  const b2 = getColorOctet(lab2, 0) / 0xFF;
 
   // Cab = sqrt(a^2 + b^2)
   const Cab1 = hyp(a1, b1);
@@ -144,15 +153,15 @@ export function deltaE2000(color1: ColorLike, color2: ColorLike): number {
  * @see https://en.wikipedia.org/wiki/Color_difference
  * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
  */
-export function isJustNoticeableDifference(color1: ColorLike, color2: ColorLike): boolean {
+export function isJustNoticeableDifference(color1: number, color2: number): boolean {
   return color1 === color2 || deltaE2000(color1, color2) < 2.3;
 }
 
 /**
  * Returns color from `colors` that is the closest to `color` basing on CIEDE2000 comparison algorithm.
  */
-export function pickClosestColor(colors: Array<IHsl>, color: IHsl): IHsl | undefined {
-  let closestColor;
+export function pickClosestColor(colors: Array<number>, color: number): number {
+  let closestColor = -1;
   let deJ = Infinity;
 
   for (const otherColor of colors) {
@@ -166,74 +175,40 @@ export function pickClosestColor(colors: Array<IHsl>, color: IHsl): IHsl | undef
   return closestColor;
 }
 
-// Internal color representation
-interface ILab {
-  L: number; // [0, 1]
-  a: number; // [0, 1]
-  b: number; // [0, 1]
-  alpha: number; // [0, 1]
-}
-
-// Internal color representation
-interface IXyz {
-  x: number; // [0, 1]
-  y: number; // [0, 1]
-  z: number; // [0, 1]
-  alpha: number; // [0, 1]
-}
-
-const tempXyz = {
-  x: 0,
-  y: 0,
-  z: 0,
-  alpha: 1,
-};
-
-const tempLab = {
-  L: 0,
-  a: 0,
-  b: 0,
-  alpha: 1,
-};
-
-const tempRgb = rgb(0, 0, 0);
-
 function rotateRgb(q: number): number {
   return q > 0.04045 ? pow((q + 0.055) / 1.055, 2.4) : q / 12.92;
 }
 
-function rgbToXyz(rgb: IRgb, xyz = tempXyz): IXyz {
+function rgbToXyz(rgb: number): number {
 
-  const r = rotateRgb(rgb.r / 255);
-  const g = rotateRgb(rgb.g / 255);
-  const b = rotateRgb(rgb.b / 255);
+  const r = rotateRgb(getColorOctet(rgb, 0) / 0xFF);
+  const g = rotateRgb(getColorOctet(rgb, 1) / 0xFF);
+  const b = rotateRgb(getColorOctet(rgb, 2) / 0xFF);
 
-  xyz.x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
-  xyz.y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
-  xyz.z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
-  xyz.alpha = rgb.alpha;
+  const x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
+  const y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+  const z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
 
-  return xyz;
+  return fromOctets(ColorModel.XYZ, 0xFF * x, 0xFF * y, 0xFF * z, getColorOctet(rgb, 3));
 }
 
 function rotateXyz(q: number): number {
   return q > 0.008856 ? pow(q, 1 / 3) : (7.787 * q) + 16 / 116;
 }
 
-function xyzToLab(xyz: IXyz, lab = tempLab): ILab {
+function xyzToLab(xyz: number): number {
 
-  const x = rotateXyz(xyz.x);
-  const y = rotateXyz(xyz.y);
-  const z = rotateXyz(xyz.z);
+  const x = rotateXyz(getColorOctet(xyz, 0) / 0xFF);
+  const y = rotateXyz(getColorOctet(xyz, 1) / 0xFF);
+  const z = rotateXyz(getColorOctet(xyz, 2) / 0xFF);
 
-  lab.L = (116 * y) - 16;
-  lab.a = 500 * (x - y);
-  lab.b = 200 * (y - z);
-  lab.alpha = xyz.alpha;
+  const L = (116 * y) - 16;
+  const a = 500 * (x - y);
+  const b = 200 * (y - z);
 
-  return lab;
+  return fromOctets(ColorModel.LAB, L, a, b, getColorOctet(xyz, 3));
 }
 
-function rgbToLab(rgb: IRgb): ILab {
+function rgbToLab(rgb: number): number {
   return xyzToLab(rgbToXyz(rgb));
 }

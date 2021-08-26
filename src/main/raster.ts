@@ -1,6 +1,6 @@
 import {IRgb} from './color-types';
 import {rgb} from './color';
-import {sqrt} from './algebra-utils';
+import {sqrt} from './math';
 
 export type RgbAt = (x: number, y: number, outRgb?: IRgb) => IRgb;
 
