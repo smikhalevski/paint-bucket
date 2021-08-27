@@ -1,6 +1,6 @@
 import {abs, atan2, cos, exp, hyp, PI, pow, pow2, sin, sqrt} from './math';
-import {ColorModel, fromOctets, getColorOctet} from './octets';
-import {toRgb} from './rgb';
+import {fromBytes, getColorByte, getColorFloat} from './bytes';
+import {toRgb} from './colors';
 
 /**
  * Computes the CIEDE2000 color-difference. Returns number in range `[0, 100]` where 2.3 is considered to be just
@@ -15,13 +15,13 @@ export function deltaE2000(color1: number, color2: number): number {
   const lab1 = rgbToLab(toRgb(color1));
   const lab2 = rgbToLab(toRgb(color2));
 
-  const L1 = getColorOctet(lab1, 0) / 0xFF;
-  const a1 = getColorOctet(lab1, 0) / 0xFF;
-  const b1 = getColorOctet(lab1, 0) / 0xFF;
+  const L1 = getColorFloat(lab1, 0);
+  const a1 = getColorFloat(lab1, 0);
+  const b1 = getColorFloat(lab1, 0);
 
-  const L2 = getColorOctet(lab2, 0) / 0xFF;
-  const a2 = getColorOctet(lab2, 0) / 0xFF;
-  const b2 = getColorOctet(lab2, 0) / 0xFF;
+  const L2 = getColorFloat(lab2, 0);
+  const a2 = getColorFloat(lab2, 0);
+  const b2 = getColorFloat(lab2, 0);
 
   // Cab = sqrt(a^2 + b^2)
   const Cab1 = hyp(a1, b1);
@@ -181,15 +181,15 @@ function rotateRgb(q: number): number {
 
 function rgbToXyz(rgb: number): number {
 
-  const r = rotateRgb(getColorOctet(rgb, 0) / 0xFF);
-  const g = rotateRgb(getColorOctet(rgb, 1) / 0xFF);
-  const b = rotateRgb(getColorOctet(rgb, 2) / 0xFF);
+  const r = rotateRgb(getColorFloat(rgb, 0));
+  const g = rotateRgb(getColorFloat(rgb, 1));
+  const b = rotateRgb(getColorFloat(rgb, 2));
 
   const x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
   const y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
   const z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
 
-  return fromOctets(ColorModel.XYZ, 0xFF * x, 0xFF * y, 0xFF * z, getColorOctet(rgb, 3));
+  return fromBytes(0 /* XYZ */, 0xFF * x, 0xFF * y, 0xFF * z, getColorByte(rgb, 3));
 }
 
 function rotateXyz(q: number): number {
@@ -198,15 +198,15 @@ function rotateXyz(q: number): number {
 
 function xyzToLab(xyz: number): number {
 
-  const x = rotateXyz(getColorOctet(xyz, 0) / 0xFF);
-  const y = rotateXyz(getColorOctet(xyz, 1) / 0xFF);
-  const z = rotateXyz(getColorOctet(xyz, 2) / 0xFF);
+  const x = rotateXyz(getColorFloat(xyz, 0));
+  const y = rotateXyz(getColorFloat(xyz, 1));
+  const z = rotateXyz(getColorFloat(xyz, 2));
 
   const L = (116 * y) - 16;
   const a = 500 * (x - y);
   const b = 200 * (y - z);
 
-  return fromOctets(ColorModel.LAB, L, a, b, getColorOctet(xyz, 3));
+  return fromBytes(0 /* LAB */, L, a, b, getColorByte(xyz, 3));
 }
 
 function rgbToLab(rgb: number): number {

@@ -1,52 +1,30 @@
-import {rgb, toRgb} from './color';
-import {ColorLike, IRgb} from './color-types';
-
-export interface IGradientStop {
-  color: IRgb;
-  value: number;
-}
+import {getColorByte, getColorModel, NakedColor} from './bytes';
+import {rgb, toColorModel, toRgb} from './colors';
 
 /**
- * Returns color at `value` in the gradient that consists of `stops`.
+ * Returns color that lies between `color1` and `color2` at position `t`.
  */
-export function gradient(stops: Array<IGradientStop>, value: number, outRgb = rgb(0, 0, 0)): IRgb {
-  if (stops.length === 0) {
-    return rgb(0, 0, 0);
-  }
+export function gradient(color1: NakedColor, color2: NakedColor, t: number): NakedColor {
 
-  const n = stops.length;
+  const rgb1 = toRgb(color1);
+  const rgb2 = toRgb(color1);
 
-  if (value <= stops[0].value) {
-    return stops[0].color;
-  }
-  if (value >= stops[n - 1].value) {
-    return stops[n - 1].color;
-  }
+  const r1 = getColorByte(rgb1, 0);
+  const g1 = getColorByte(rgb1, 1);
+  const b1 = getColorByte(rgb1, 2);
+  const a1 = getColorByte(rgb1, 3);
 
-  let i = 0;
-  while (value > stops[i].value) {
-    i++;
-  }
+  const r2 = getColorByte(rgb2, 0);
+  const g2 = getColorByte(rgb2, 1);
+  const b2 = getColorByte(rgb2, 2);
+  const a2 = getColorByte(rgb2, 3);
 
-  const s2 = stops[i];
-  const s1 = stops[i - 1];
+  const result = rgb(
+      (r1 + (r2 - r1)) * t,
+      (g1 + (g2 - g1)) * t,
+      (b1 + (b2 - b1)) * t,
+      (a1 + (a2 - a1)) * t / 0xFF,
+  );
 
-  const c1 = s1.color;
-  const c2 = s2.color;
-
-  const r = (value - s1.value) / (s2.value - s1.value);
-
-  outRgb.r = c1.r + (c2.r - c1.r) * r;
-  outRgb.g = c1.g + (c2.g - c1.g) * r;
-  outRgb.b = c1.b + (c2.b - c1.b) * r;
-  outRgb.alpha = c1.alpha + (c2.alpha - c1.alpha) * r;
-
-  return outRgb;
-}
-
-export function gradientStop(color: ColorLike, value: number): IGradientStop {
-  return {
-    color: toRgb(color),
-    value,
-  };
+  return toColorModel(result, getColorModel(color1));
 }

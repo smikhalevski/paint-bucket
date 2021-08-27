@@ -1,60 +1,49 @@
-import {IRgb} from './color-types';
-import {rgb} from './color';
-import {sqrt} from './math';
+import {pow2, sqrt} from './math';
+import {ColorModel, fromRawBytes, getColorByte, getColorModel, NakedColor} from './bytes';
 
-export type RgbAt = (x: number, y: number, outRgb?: IRgb) => IRgb;
+export type ColorAt = (x: number, y: number) => NakedColor;
 
-const tempRgb = rgb(0, 0, 0);
+export function toColorAt(colorModel: ColorModel, raster: Uint8ClampedArray, width: number): ColorAt {
+  return (x, y) => {
+    const k = (y * width + x) * 4;
 
-export function toRgbAt(uint8Array: Uint8ClampedArray, width: number, alphaEnabled: boolean): RgbAt {
-  const channelCount = alphaEnabled ? 4 : 3;
-
-  return (x, y, outRgb = rgb(0, 0, 0)) => {
-    const k = (y * width + x) * channelCount;
-
-    if (k < uint8Array.length) {
-
-      outRgb.r = uint8Array[k];
-      outRgb.g = uint8Array[k + 1];
-      outRgb.b = uint8Array[k + 2];
-      outRgb.alpha = alphaEnabled ? uint8Array[k + 3] : 1;
-
-      return outRgb;
+    if (k < raster.length) {
+      return fromRawBytes(colorModel, raster[k], raster[k + 1], raster[k + 2], raster[k + 3]);
     }
 
-    outRgb.r = 0;
-    outRgb.g = 0;
-    outRgb.b = 0;
-    outRgb.alpha = 1;
-
-    return outRgb;
+    return fromRawBytes(colorModel, 0, 0, 0, 0xFF);
   };
 }
 
-export function averageRgb(rgbAt: RgbAt, x: number, y: number, width: number, height: number, outRgb = rgb(0, 0, 0)): IRgb {
+export function averageColor(colorAt: ColorAt, x: number, y: number, width: number, height: number): NakedColor {
 
-  let sqR = 0;
-  let sqG = 0;
-  let sqB = 0;
-  let sqAlpha = 0;
+  let sq0 = 0;
+  let sq1 = 0;
+  let sq2 = 0;
+  let sq3 = 0;
 
-  for (let i = x; i < x + width; ++i) {
-    for (let j = y; j < y + height; ++j) {
-      const {r, g, b, alpha} = rgbAt(i, j, tempRgb);
+  const w = x + width;
+  const h = y + height;
 
-      sqR += r * r;
-      sqG += g * g;
-      sqB += b * b;
-      sqAlpha += alpha * alpha;
+  for (let i = x; i < w; ++i) {
+    for (let j = y; j < h; ++j) {
+
+      const color = colorAt(i, j);
+
+      sq0 += pow2(getColorByte(color, 0));
+      sq1 += pow2(getColorByte(color, 1));
+      sq2 += pow2(getColorByte(color, 2));
+      sq3 += pow2(getColorByte(color, 3));
     }
   }
 
   const n = width * height;
 
-  outRgb.r = sqrt(sqR / n);
-  outRgb.g = sqrt(sqG / n);
-  outRgb.b = sqrt(sqB / n);
-  outRgb.alpha = sqrt(sqAlpha / n);
-
-  return outRgb;
+  return fromRawBytes(
+      getColorModel(colorAt(x, y)),
+      sqrt(sq0 / n),
+      sqrt(sq1 / n),
+      sqrt(sq2 / n),
+      sqrt(sq3 / n),
+  );
 }

@@ -1,4 +1,4 @@
-import {ColorLike, IHsl, IRgb} from './color-types';
+import {ColorLike, IHsl, IRgb} from './color-objects';
 import {max, min, round, sqrt} from './math';
 import {hsl, rgb} from './color-factory';
 
