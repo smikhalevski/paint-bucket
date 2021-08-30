@@ -1,5 +1,5 @@
-import {fromRawBytes, getColorByte, getColorModel, NakedColor} from './bytes';
-import {toColorModel} from './colors';
+import {fromRawBytes, getColorByte, getColorSpace, NakedColor} from './bytes';
+import {toColorSpace} from './colors';
 
 /**
  * Mixes `color1` and `color2` in  proportion `prc`.
@@ -7,12 +7,12 @@ import {toColorModel} from './colors';
  * @param color1 The first color.
  * @param color2 The second color.
  * @param ratio The percentage of blend between `color1` and `color2`
- * @param colorModel The output color model. If omitted then color model of `color1` is used.
+ * @param colorSpace The output color model. If omitted then color model of `color1` is used.
  */
-export function blend(color1: NakedColor, color2: NakedColor, ratio: number, colorModel = getColorModel(color1)): NakedColor {
+export function blend(color1: NakedColor, color2: NakedColor, ratio: number, colorSpace = getColorSpace(color1)): NakedColor {
 
-  color1 = toColorModel(color1, colorModel);
-  color2 = toColorModel(color2, colorModel);
+  color1 = toColorSpace(color1, colorSpace);
+  color2 = toColorSpace(color2, colorSpace);
 
   const a1 = getColorByte(color1, 0);
   const b1 = getColorByte(color1, 1);
@@ -25,7 +25,7 @@ export function blend(color1: NakedColor, color2: NakedColor, ratio: number, col
   const d2 = getColorByte(color2, 3);
 
   return fromRawBytes(
-      colorModel,
+      colorSpace,
       (a1 + (a2 - a1)) * ratio,
       (b1 + (b2 - b1)) * ratio,
       (c1 + (c2 - c1)) * ratio,

@@ -1,4 +1,4 @@
-import {abs} from './math';
+import {abs, mapRange} from './math';
 import {and, Byte, clampByte, Int, left, or, right, xor} from './int';
 
 export type NibbleCount = 1 | 2 | 3 | 4 | 6 | 8;
@@ -7,31 +7,33 @@ export type ByteOffset = 0 | 1 | 2 | 3;
 
 export type NakedColor = Int;
 
-export const enum ColorModel {
+export const enum ColorSpace {
   RGB = 0,
   HSL = 1,
+  XYZ = 3,
+  LAB = 4,
 }
 
 /**
  * Normalizes bytes in the color value.
  *
  * ```ts
- * fromRawColor(ColorModel.HSL, 0x1, 1) // → 0x11_11_11_FF_01
- * fromRawColor(ColorModel.HSL, 0x12, 2) // → 0x12_12_12_FF_01
- * fromRawColor(ColorModel.HSL, 0x123, 3) // → 0x11_22_33_FF_01
- * fromRawColor(ColorModel.HSL, 0x1234, 4) // → 0x11_22_33_44_01
- * fromRawColor(ColorModel.HSL, 0x12345, 5) // → 0
- * fromRawColor(ColorModel.HSL, 0x123456, 6) // → 0x12_34_56_FF_01
- * fromRawColor(ColorModel.HSL, 0x1234567, 7) // → 0
- * fromRawColor(ColorModel.HSL, 0x12345678, 8) // → 0x12_34_56_78_01
+ * fromRawColor(ColorSpace.HSL, 0x1, 1) // → 0x11_11_11_FF_01
+ * fromRawColor(ColorSpace.HSL, 0x12, 2) // → 0x12_12_12_FF_01
+ * fromRawColor(ColorSpace.HSL, 0x123, 3) // → 0x11_22_33_FF_01
+ * fromRawColor(ColorSpace.HSL, 0x1234, 4) // → 0x11_22_33_44_01
+ * fromRawColor(ColorSpace.HSL, 0x12345, 5) // → 0
+ * fromRawColor(ColorSpace.HSL, 0x123456, 6) // → 0x12_34_56_FF_01
+ * fromRawColor(ColorSpace.HSL, 0x1234567, 7) // → 0
+ * fromRawColor(ColorSpace.HSL, 0x12345678, 8) // → 0x12_34_56_78_01
  * ```
  *
- * @param colorModel The color model assigned to the output color.
+ * @param colorSpace The color space assigned to the output color.
  * @param rawColor The input color to normalize, ex. `0xFF_FF_FF` for white in RGB space.
  * @param nibbleCount The number of nibbles the input color.
  * @return The normalized color or -1 if `nibbleCount` is invalid.
  */
-export function fromRawColor(colorModel: ColorModel, rawColor: Int, nibbleCount: NibbleCount): NakedColor | -1 {
+export function fromRawColor(colorSpace: ColorSpace, rawColor: Int, nibbleCount: NibbleCount): NakedColor | -1 {
 
   rawColor = abs(rawColor);
 
@@ -46,12 +48,12 @@ export function fromRawColor(colorModel: ColorModel, rawColor: Int, nibbleCount:
       // 0x1 → 0x11_11_11_FF
       a = 0x0F & rawColor;
       a += a << 4;
-      return fromRawBytes(colorModel, a, a, a, 0xFF);
+      return fromRawBytes(colorSpace, a, a, a, 0xFF);
 
     case 2:
       // 0x12 → 0x12_12_12_FF
       a = 0xFF & rawColor;
-      return fromRawBytes(colorModel, a, a, a, 0xFF);
+      return fromRawBytes(colorSpace, a, a, a, 0xFF);
 
     case 3:
       // 0x123 → 0x11_22_33_FF
@@ -61,7 +63,7 @@ export function fromRawColor(colorModel: ColorModel, rawColor: Int, nibbleCount:
       a += a << 4;
       b += b << 4;
       c += c << 4;
-      return fromRawBytes(colorModel, a, b, c, 0xFF);
+      return fromRawBytes(colorSpace, a, b, c, 0xFF);
 
     case 4:
       // 0x1234 → 0x11_22_33_44
@@ -73,29 +75,29 @@ export function fromRawColor(colorModel: ColorModel, rawColor: Int, nibbleCount:
       b += b << 4;
       c += c << 4;
       d += d << 4;
-      return fromRawBytes(colorModel, a, b, c, d);
+      return fromRawBytes(colorSpace, a, b, c, d);
 
     case 6:
       // 0x12_34_56 → 0x12_34_56_FF
-      return left(0xFF_FF_FF & rawColor, 16) + 0xFF00 + colorModel;
+      return left(0xFF_FF_FF & rawColor, 16) + 0xFF00 + colorSpace;
 
     case 8:
       // 0x12_34_56_78
-      return left(and(0xFF_FF_FF_FF, rawColor), 8) + colorModel;
+      return left(and(0xFF_FF_FF_FF, rawColor), 8) + colorSpace;
   }
 
   return -1;
 }
 
-export function fromRawBytes(colorModel: ColorModel, a: Byte, b: Byte, c: Byte, d: Byte): NakedColor {
-  return left(a, 32) + left(b, 24) + (c << 16) + (d << 8) + colorModel;
+export function fromRawBytes(colorSpace: ColorSpace, a: Byte, b: Byte, c: Byte, d: Byte): NakedColor {
+  return left(a, 32) + left(b, 24) + (c << 16) + (d << 8) + colorSpace;
 }
 
-export function fromBytes(colorModel: ColorModel, a: Byte, b: Byte, c: Byte, d: Byte): NakedColor {
-  return fromRawBytes(colorModel, clampByte(a), clampByte(b), clampByte(c), clampByte(d));
+export function fromBytes(colorSpace: ColorSpace, a: Byte, b: Byte, c: Byte, d: Byte): NakedColor {
+  return fromRawBytes(colorSpace, clampByte(a), clampByte(b), clampByte(c), clampByte(d));
 }
 
-export function getColorModel(color: NakedColor): ColorModel {
+export function getColorSpace(color: NakedColor): ColorSpace {
   return 0xFF & color;
 }
 
@@ -110,4 +112,12 @@ export function setColorByte(color: NakedColor, offset: ByteOffset, byte: Byte):
 
 export function getColorFloat(color: NakedColor, offset: ByteOffset): number {
   return getColorByte(color, offset) / 0xFF;
+}
+
+export function isColorSpace(color: NakedColor, colorSpace: ColorSpace): boolean {
+  return getColorSpace(color) === colorSpace;
+}
+
+export function packByte(n: number, a: number, b: number): Byte {
+  return mapRange(n, a, b, 0, 0xFF);
 }

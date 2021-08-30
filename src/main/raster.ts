@@ -1,17 +1,17 @@
 import {pow2, sqrt} from './math';
-import {ColorModel, fromRawBytes, getColorByte, getColorModel, NakedColor} from './bytes';
+import {ColorSpace, fromRawBytes, getColorByte, getColorSpace, NakedColor} from './bytes';
 
 export type ColorAt = (x: number, y: number) => NakedColor;
 
-export function toColorAt(colorModel: ColorModel, raster: Uint8ClampedArray, width: number): ColorAt {
+export function toColorAt(colorSpace: ColorSpace, raster: Uint8ClampedArray, width: number): ColorAt {
   return (x, y) => {
     const k = (y * width + x) * 4;
 
     if (k < raster.length) {
-      return fromRawBytes(colorModel, raster[k], raster[k + 1], raster[k + 2], raster[k + 3]);
+      return fromRawBytes(colorSpace, raster[k], raster[k + 1], raster[k + 2], raster[k + 3]);
     }
 
-    return fromRawBytes(colorModel, 0, 0, 0, 0xFF);
+    return fromRawBytes(colorSpace, 0, 0, 0, 0xFF);
   };
 }
 
@@ -40,7 +40,7 @@ export function averageColor(colorAt: ColorAt, x: number, y: number, width: numb
   const n = width * height;
 
   return fromRawBytes(
-      getColorModel(colorAt(x, y)),
+      getColorSpace(colorAt(x, y)),
       sqrt(sq0 / n),
       sqrt(sq1 / n),
       sqrt(sq2 / n),

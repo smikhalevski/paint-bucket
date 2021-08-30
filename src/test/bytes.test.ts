@@ -1,10 +1,10 @@
 import {
-  ColorModel,
+  ColorSpace,
   fromBytes,
   fromRawColor,
   getColorByte,
   getColorFloat,
-  getColorModel,
+  getColorSpace,
   NibbleCount,
   setColorByte,
 } from '../main/bytes';
@@ -12,39 +12,39 @@ import {
 describe('fromRawColor', () => {
 
   test('normalizes raw color bytes', () => {
-    expect(fromRawColor(ColorModel.HSL, 0x1, 1)).toBe(0x11_11_11_FF_01);
-    expect(fromRawColor(ColorModel.HSL, 0x12, 2)).toBe(0x12_12_12_FF_01);
-    expect(fromRawColor(ColorModel.HSL, 0x123, 3)).toBe(0x11_22_33_FF_01);
-    expect(fromRawColor(ColorModel.HSL, 0x1234, 4)).toBe(0x11_22_33_44_01);
-    expect(fromRawColor(ColorModel.HSL, 0x123456, 6)).toBe(0x12_34_56_FF_01);
-    expect(fromRawColor(ColorModel.HSL, 0x12345678, 8)).toBe(0x12_34_56_78_01);
+    expect(fromRawColor(ColorSpace.HSL, 0x1, 1)).toBe(0x11_11_11_FF_01);
+    expect(fromRawColor(ColorSpace.HSL, 0x12, 2)).toBe(0x12_12_12_FF_01);
+    expect(fromRawColor(ColorSpace.HSL, 0x123, 3)).toBe(0x11_22_33_FF_01);
+    expect(fromRawColor(ColorSpace.HSL, 0x1234, 4)).toBe(0x11_22_33_44_01);
+    expect(fromRawColor(ColorSpace.HSL, 0x123456, 6)).toBe(0x12_34_56_FF_01);
+    expect(fromRawColor(ColorSpace.HSL, 0x12345678, 8)).toBe(0x12_34_56_78_01);
   });
 
   test('returns -1 for invalid nibble count', () => {
-    expect(fromRawColor(ColorModel.HSL, 0x123, 0 as NibbleCount)).toBe(-1);
-    expect(fromRawColor(ColorModel.HSL, 0x12345, 5 as NibbleCount)).toBe(-1);
-    expect(fromRawColor(ColorModel.HSL, 0x1234567, 7 as NibbleCount)).toBe(-1);
-    expect(fromRawColor(ColorModel.HSL, 0x123456789A, 10 as NibbleCount)).toBe(-1);
+    expect(fromRawColor(ColorSpace.HSL, 0x123, 0 as NibbleCount)).toBe(-1);
+    expect(fromRawColor(ColorSpace.HSL, 0x12345, 5 as NibbleCount)).toBe(-1);
+    expect(fromRawColor(ColorSpace.HSL, 0x1234567, 7 as NibbleCount)).toBe(-1);
+    expect(fromRawColor(ColorSpace.HSL, 0x123456789A, 10 as NibbleCount)).toBe(-1);
   });
 });
 
 describe('fromBytes', () => {
 
   test('assembles color from bytes', () => {
-    expect(fromBytes(ColorModel.RGB, 0x12, 0x34, 0x56, 0x78)).toBe(0x1234567800);
+    expect(fromBytes(ColorSpace.RGB, 0x12, 0x34, 0x56, 0x78)).toBe(0x1234567800);
   });
 
   test('clamps bytes', () => {
-    expect(fromBytes(ColorModel.RGB, 0x12, 0xAA_34, 0x56, 0xAA_78)).toBe(0x12FF56FF00);
+    expect(fromBytes(ColorSpace.RGB, 0x12, 0xAA_34, 0x56, 0xAA_78)).toBe(0x12FF56FF00);
   });
 });
 
-describe('getColorModel', () => {
+describe('getColorSpace', () => {
 
-  test('gets the color model', () => {
-    expect(getColorModel(0x12_34_56_AA_01)).toBe(0x1);
-    expect(getColorModel(0x12_34_56_AA_0C)).toBe(0xC);
-    expect(getColorModel(0x12_34_56_AA_DC)).toBe(0xDC);
+  test('gets the color space', () => {
+    expect(getColorSpace(0x12_34_56_AA_01)).toBe(0x1);
+    expect(getColorSpace(0x12_34_56_AA_0C)).toBe(0xC);
+    expect(getColorSpace(0x12_34_56_AA_DC)).toBe(0xDC);
   });
 });
 

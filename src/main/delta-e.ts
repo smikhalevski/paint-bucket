@@ -3,7 +3,7 @@ import {fromBytes, getColorByte, getColorFloat, NakedColor} from './bytes';
 import {toRgb} from './colors';
 
 /**
- * Computes the CIEDE2000 color-difference. Returns number in range `[0, 100]` where 2.3 is considered to be just
+ * Computes the CIEDE2000 color-difference. Returns number in mapRange `[0, 100]` where 2.3 is considered to be just
  * noticeable difference (JND).
  *
  * @see http://www.ece.rochester.edu/~gsharma/ciede2000/
@@ -116,11 +116,10 @@ export function deltaE2000(color1: NakedColor, color2: NakedColor): number {
   // Sc = 1 + 0.045 * Cp
   const Sc = 1 + 0.045 * Cp;
 
-  // T = 1
-  //     - 0.17 * cos(hp - pi / 6) +
-  //     + 0.24 * cos(2 * hp) +
-  //     + 0.32 * cos(3 * hp + pi / 30) -
-  //     - 0.20 * cos(4 * hp - 63 * pi / 180)
+  // T = 1 - 0.17 * cos(hp - pi / 6)
+  //       + 0.24 * cos(2 * hp)
+  //       + 0.32 * cos(3 * hp + pi / 30)
+  //       - 0.20 * cos(4 * hp - 63 * pi / 180)
   const T = 1
       - 0.17 * cos(hp - PI / 6)
       + 0.24 * cos(2 * hp)
@@ -177,38 +176,4 @@ export function pickClosestColor(colors: Array<NakedColor>, color: NakedColor): 
 
 export function rgbToLab(rgb: NakedColor): NakedColor {
   return xyzToLab(rgbToXyz(rgb));
-}
-
-function rotateRgb(q: number): number {
-  return q > 0.04045 ? pow((q + 0.055) / 1.055, 2.4) : q / 12.92;
-}
-
-function rgbToXyz(rgb: NakedColor): NakedColor {
-
-  const r = rotateRgb(getColorFloat(rgb, 0));
-  const g = rotateRgb(getColorFloat(rgb, 1));
-  const b = rotateRgb(getColorFloat(rgb, 2));
-
-  const x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
-  const y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
-  const z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
-
-  return fromBytes(0 /* XYZ */, 0xFF * x, 0xFF * y, 0xFF * z, getColorByte(rgb, 3));
-}
-
-function rotateXyz(q: number): number {
-  return q > 0.008856 ? pow(q, 1 / 3) : (7.787 * q) + 16 / 116;
-}
-
-function xyzToLab(xyz: NakedColor): NakedColor {
-
-  const x = rotateXyz(getColorFloat(xyz, 0));
-  const y = rotateXyz(getColorFloat(xyz, 1));
-  const z = rotateXyz(getColorFloat(xyz, 2));
-
-  const L = (116 * y) - 16;
-  const a = 500 * (x - y);
-  const b = 200 * (y - z);
-
-  return fromBytes(0 /* LAB */, L, a, b, getColorByte(xyz, 3));
 }
