@@ -1,5 +1,5 @@
 import {abs, atan2, cos, exp, hyp, PI, pow, pow2, sin, sqrt} from './math';
-import {fromBytes, getColorByte, getColorFloat} from './bytes';
+import {fromBytes, getColorByte, getColorFloat, NakedColor} from './bytes';
 import {toRgb} from './colors';
 
 /**
@@ -10,7 +10,7 @@ import {toRgb} from './colors';
  * @see https://en.wikipedia.org/wiki/Color_difference
  * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
  */
-export function deltaE2000(color1: number, color2: number): number {
+export function deltaE2000(color1: NakedColor, color2: NakedColor): number {
 
   const lab1 = rgbToLab(toRgb(color1));
   const lab2 = rgbToLab(toRgb(color2));
@@ -153,14 +153,14 @@ export function deltaE2000(color1: number, color2: number): number {
  * @see https://en.wikipedia.org/wiki/Color_difference
  * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
  */
-export function isJustNoticeableDifference(color1: number, color2: number): boolean {
+export function isJustNoticeableDifference(color1: NakedColor, color2: NakedColor): boolean {
   return color1 === color2 || deltaE2000(color1, color2) < 2.3;
 }
 
 /**
  * Returns color from `colors` that is the closest to `color` basing on CIEDE2000 comparison algorithm.
  */
-export function pickClosestColor(colors: Array<number>, color: number): number {
+export function pickClosestColor(colors: Array<NakedColor>, color: NakedColor): NakedColor | -1 {
   let closestColor = -1;
   let deJ = Infinity;
 
@@ -175,11 +175,15 @@ export function pickClosestColor(colors: Array<number>, color: number): number {
   return closestColor;
 }
 
+export function rgbToLab(rgb: NakedColor): NakedColor {
+  return xyzToLab(rgbToXyz(rgb));
+}
+
 function rotateRgb(q: number): number {
   return q > 0.04045 ? pow((q + 0.055) / 1.055, 2.4) : q / 12.92;
 }
 
-function rgbToXyz(rgb: number): number {
+function rgbToXyz(rgb: NakedColor): NakedColor {
 
   const r = rotateRgb(getColorFloat(rgb, 0));
   const g = rotateRgb(getColorFloat(rgb, 1));
@@ -196,7 +200,7 @@ function rotateXyz(q: number): number {
   return q > 0.008856 ? pow(q, 1 / 3) : (7.787 * q) + 16 / 116;
 }
 
-function xyzToLab(xyz: number): number {
+function xyzToLab(xyz: NakedColor): NakedColor {
 
   const x = rotateXyz(getColorFloat(xyz, 0));
   const y = rotateXyz(getColorFloat(xyz, 1));
@@ -207,8 +211,4 @@ function xyzToLab(xyz: number): number {
   const b = 200 * (y - z);
 
   return fromBytes(0 /* LAB */, L, a, b, getColorByte(xyz, 3));
-}
-
-function rgbToLab(rgb: number): number {
-  return xyzToLab(rgbToXyz(rgb));
 }

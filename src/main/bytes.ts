@@ -1,17 +1,19 @@
 import {abs} from './math';
-import {and, Byte, clampByte, Int64, left, or, right, Uint32, xor} from './int';
+import {and, Byte, clampByte, Int, left, or, right, xor} from './int';
 
 export type NibbleCount = 1 | 2 | 3 | 4 | 6 | 8;
 
-export type NakedColor = Int64;
+export type ByteOffset = 0 | 1 | 2 | 3;
+
+export type NakedColor = Int;
 
 export const enum ColorModel {
-  RGB,
-  HSL,
+  RGB = 0,
+  HSL = 1,
 }
 
 /**
- * Normalizes octets in the color value.
+ * Normalizes bytes in the color value.
  *
  * ```ts
  * fromRawColor(ColorModel.HSL, 0x1, 1) // → 0x11_11_11_FF_01
@@ -25,11 +27,11 @@ export const enum ColorModel {
  * ```
  *
  * @param colorModel The color model assigned to the output color.
- * @param rawColor The input color to normalize.
+ * @param rawColor The input color to normalize, ex. `0xFF_FF_FF` for white in RGB space.
  * @param nibbleCount The number of nibbles the input color.
- * @return The normalized color or 0 if `nibbleCount` is invalid.
+ * @return The normalized color or -1 if `nibbleCount` is invalid.
  */
-export function fromRawColor(colorModel: ColorModel, rawColor: Int64, nibbleCount: NibbleCount): NakedColor {
+export function fromRawColor(colorModel: ColorModel, rawColor: Int, nibbleCount: NibbleCount): NakedColor | -1 {
 
   rawColor = abs(rawColor);
 
@@ -79,10 +81,10 @@ export function fromRawColor(colorModel: ColorModel, rawColor: Int64, nibbleCoun
 
     case 8:
       // 0x12_34_56_78
-      return left(0xFF_FF_FF_FF & rawColor, 8) + colorModel;
+      return left(and(0xFF_FF_FF_FF, rawColor), 8) + colorModel;
   }
 
-  return 0;
+  return -1;
 }
 
 export function fromRawBytes(colorModel: ColorModel, a: Byte, b: Byte, c: Byte, d: Byte): NakedColor {
@@ -93,23 +95,19 @@ export function fromBytes(colorModel: ColorModel, a: Byte, b: Byte, c: Byte, d: 
   return fromRawBytes(colorModel, clampByte(a), clampByte(b), clampByte(c), clampByte(d));
 }
 
-export function toRawColor(color: NakedColor): Int64 {
-  return right(color, 8);
-}
-
 export function getColorModel(color: NakedColor): ColorModel {
   return 0xFF & color;
 }
 
-export function getColorByte(color: NakedColor, offset: 0 | 1 | 2 | 3): Byte {
+export function getColorByte(color: NakedColor, offset: ByteOffset): Byte {
   return 0xFF & right(color, 32 - offset * 8);
 }
 
-export function setColorByte(color: NakedColor, offset: 0 | 1 | 2 | 3, byte: Byte): NakedColor {
+export function setColorByte(color: NakedColor, offset: ByteOffset, byte: Byte): NakedColor {
   const shift = 32 - offset * 8;
   return or(left(clampByte(byte), shift), and(xor(left(0xFF, shift), 0xFF_FF_FF_FF_FF), color));
 }
 
-export function getColorFloat(color: NakedColor, offset: 0 | 1 | 2 | 3): number {
+export function getColorFloat(color: NakedColor, offset: ByteOffset): number {
   return getColorByte(color, offset) / 0xFF;
 }

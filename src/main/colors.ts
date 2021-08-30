@@ -1,10 +1,12 @@
-import {ColorModel, fromBytes, fromRawBytes, getColorByte, getColorModel, NakedColor} from './bytes';
+import {ColorModel, fromBytes, fromRawBytes, getColorByte, getColorFloat, getColorModel, NakedColor} from './bytes';
 import {max, min, sqrt} from './math';
 import {Byte, right} from './int';
 
 export const blackRgb = rgb(0, 0, 0);
+export const whiteRgb = rgb(0xFF, 0xFF, 0xFF);
 
 export const blackHsl = hsl(0, 0, 0);
+export const whiteHsl = hsl(0, 0, 0xFF);
 
 export function rgb(r: Byte, g: Byte, b: Byte, alpha = 1): NakedColor {
   return fromBytes(ColorModel.RGB, r, g, b, 0xFF * alpha);
@@ -22,30 +24,36 @@ export function isHsl(color: NakedColor): boolean {
   return getColorModel(color) === ColorModel.HSL;
 }
 
-export function toColorModel(color: NakedColor, colorModel: ColorModel): NakedColor {
+/**
+ * Converts color to another color model.
+ *
+ * @param color The color to convert.
+ * @param colorModel The target color model.
+ * @returns The new color or -1 if color model is invalid.
+ */
+export function toColorModel(color: NakedColor, colorModel: ColorModel): NakedColor | -1 {
+
+  // @formatter:off
   switch (getColorModel(color)) {
 
     case ColorModel.RGB:
       switch (colorModel) {
-        case ColorModel.HSL:
-          return rgbToHsl(color);
-        case ColorModel.RGB:
-          return color;
+        case ColorModel.HSL: return rgbToHsl(color);
+        case ColorModel.RGB: return color;
       }
-      return blackRgb;
+      break;
 
     case ColorModel.HSL:
       switch (colorModel) {
-        case ColorModel.HSL:
-          return color;
-        case ColorModel.RGB:
-          return hslToRgb(color);
+        case ColorModel.HSL: return color;
+        case ColorModel.RGB: return hslToRgb(color);
       }
-      return blackHsl;
+      break;
   }
+  // @formatter:on
 
   // Unknown color model
-  return color;
+  return -1;
 }
 
 export function toRgb(color: NakedColor): NakedColor {
@@ -57,13 +65,9 @@ export function toHsl(color: NakedColor): NakedColor {
 }
 
 function rgbToHsl(rgb: NakedColor): NakedColor {
-  let r = getColorByte(rgb, 0);
-  let g = getColorByte(rgb, 1);
-  let b = getColorByte(rgb, 2);
-
-  r /= 0xFF;
-  g /= 0xFF;
-  b /= 0xFF;
+  const r = getColorFloat(rgb, 0);
+  const g = getColorFloat(rgb, 1);
+  const b = getColorFloat(rgb, 2);
 
   const A = max(r, g, b);
   const B = min(r, g, b);
@@ -95,9 +99,9 @@ function rgbToHsl(rgb: NakedColor): NakedColor {
 }
 
 function hslToRgb(hsl: NakedColor): NakedColor {
-  const h = getColorByte(hsl, 0) / 0xFF;
-  const s = getColorByte(hsl, 0) / 0xFF;
-  const l = getColorByte(hsl, 0) / 0xFF;
+  const h = getColorFloat(hsl, 0);
+  const s = getColorFloat(hsl, 1);
+  const l = getColorFloat(hsl, 2);
 
   let r = l;
   let g = l;
@@ -137,15 +141,14 @@ function hueToRgb(p: number, q: number, t: number): number {
 /**
  * Returns `true` if colors are exactly equal.
  */
-export function isEqualColor(color1: NakedColor, color2: NakedColor, ignoreOpacity = true): boolean {
+export function isEqualColor(color1: NakedColor, color2: NakedColor, ignoreAlpha = true): boolean {
   if (color1 === color2) {
     return true;
   }
 
-  const rgb1 = toRgb(color1);
-  const rgb2 = toRgb(color2);
+  color2 = toColorModel(color2, getColorModel(color1));
 
-  return ignoreOpacity ? right(rgb1, 16) === right(rgb2, 16) : rgb1 === rgb2;
+  return ignoreAlpha ? right(color1, 16) === right(color2, 16) : color1 === color2;
 }
 
 /**
@@ -172,5 +175,5 @@ export function toGrayscale(color: NakedColor): NakedColor {
  * @see https://awik.io/determine-color-bright-dark-using-javascript/
  */
 export function isDark(color: NakedColor): boolean {
-  return getColorByte(toGrayscale(toRgb(color)), 0) < 127.5;
+  return getColorByte(toGrayscale(toRgb(color)), 0) < 0x80;
 }
