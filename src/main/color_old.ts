@@ -1,5 +1,4 @@
-import {ColorLike, IHsl, IRgb} from './color-objects';
-import {max, min, round, sqrt} from './math';
+import {IHsl, IRgb} from './color-objects';
 import {hsl, rgb} from './color-factory';
 
 const tempRgb = rgb(0, 0, 0);

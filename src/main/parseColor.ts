@@ -1,5 +1,6 @@
-import {ColorSpace, fromBytes, fromRawColor, NakedColor, NibbleCount} from './bytes';
+import {fromBytes, fromRawColor, NibbleCount} from './packed-color';
 import {blackRgb} from './colors';
+import {ColorSpace, PackedColor} from './color-types';
 
 const parseByte = parseFloat;
 
@@ -11,7 +12,7 @@ const BYTES = `\\(${SPACE}(${DIGIT})${COMMA}(${DIGIT})${COMMA}(${DIGIT})(?:${COM
 const rgbRe = RegExp(`^rgba?${SPACE}${BYTES}$`);
 const hslRe = RegExp(`^hsla?${SPACE}${BYTES}$`);
 
-export function parseColor(color: string): NakedColor {
+export function parseColor(color: string): PackedColor {
 
   const rgbMatch = rgbRe.exec(color);
   if (rgbMatch) {

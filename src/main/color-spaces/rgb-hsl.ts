@@ -1,17 +1,18 @@
-import {ColorSpace, fromBytes, getColorByte, getColorFloat, NakedColor, packByte} from '../bytes';
 import {max, min} from '../math';
+import {IHslColor, IRgbColor} from '../color-types';
+import {FF} from '../int';
 
-export function rgbToHsl(rgb: NakedColor): NakedColor {
-  const r = getColorFloat(rgb, 0);
-  const g = getColorFloat(rgb, 1);
-  const b = getColorFloat(rgb, 2);
+export function rgbToHsl(rgb: IRgbColor, hsl: IHslColor): IHslColor {
+  const r = rgb.R / FF;
+  const g = rgb.G / FF;
+  const b = rgb.B / FF;
 
   const A = max(r, g, b);
   const B = min(r, g, b);
-  const l = (A + B) / 2;
 
   let h = 0;
   let s = 0;
+  let l = (A + B) / 2;
 
   if (A !== B) {
     const d = A - B;
@@ -32,19 +33,18 @@ export function rgbToHsl(rgb: NakedColor): NakedColor {
     h /= 6;
   }
 
-  return fromBytes(
-      ColorSpace.HSL,
-      packByte(h, 0, 1),
-      packByte(s, 0, 1),
-      packByte(l, 0, 1),
-      getColorByte(rgb, 3),
-  );
+  hsl.H = h * 360;
+  hsl.S = s * 100;
+  hsl.L = l * 100;
+  hsl.a = rgb.a;
+
+  return hsl;
 }
 
-export function hslToRgb(hsl: NakedColor): NakedColor {
-  const h = getColorFloat(hsl, 0);
-  const s = getColorFloat(hsl, 1);
-  const l = getColorFloat(hsl, 2);
+export function hslToRgb(hsl: IHslColor, rgb: IRgbColor): IRgbColor {
+  const h = hsl.H / 360;
+  const s = hsl.S / 100;
+  const l = hsl.L / 100;
 
   let r = l;
   let g = l;
@@ -59,13 +59,12 @@ export function hslToRgb(hsl: NakedColor): NakedColor {
     b = hueToRgb(p, q, h - 1 / 3);
   }
 
-  return fromBytes(
-      ColorSpace.RGB,
-      packByte(r, 0, 1),
-      packByte(g, 0, 1),
-      packByte(b, 0, 1),
-      getColorByte(hsl, 3),
-  );
+  rgb.R = r * FF;
+  rgb.G = g * FF;
+  rgb.B = b * FF;
+  rgb.a = hsl.a;
+
+  return rgb;
 }
 
 function hueToRgb(p: number, q: number, t: number): number {

@@ -1,7 +1,8 @@
 import {pow2, sqrt} from './math';
-import {ColorSpace, fromRawBytes, getColorByte, getColorSpace, NakedColor} from './bytes';
+import {fromRawBytes, getColorByte, getColorSpace} from './packed-color';
+import {ColorSpace, PackedColor} from './color-types';
 
-export type ColorAt = (x: number, y: number) => NakedColor;
+export type ColorAt = (x: number, y: number) => PackedColor;
 
 export function toColorAt(colorSpace: ColorSpace, raster: Uint8ClampedArray, width: number): ColorAt {
   return (x, y) => {
@@ -15,7 +16,7 @@ export function toColorAt(colorSpace: ColorSpace, raster: Uint8ClampedArray, wid
   };
 }
 
-export function averageColor(colorAt: ColorAt, x: number, y: number, width: number, height: number): NakedColor {
+export function averageColor(colorAt: ColorAt, x: number, y: number, width: number, height: number): PackedColor {
 
   let sq0 = 0;
   let sq1 = 0;

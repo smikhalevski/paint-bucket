@@ -1,9 +1,11 @@
-import {abs, floor, min, pow} from './math';
+import {abs, floor, min, pow, round} from './math';
 
 export type Byte = number;
 
 // Max value 0x1f_ff_ff_ff_ff_ff_ff
 export type Int = number;
+
+export const FF = 0xFF;
 
 const HI = 0x80000000;
 const LO = 0x7fffffff;
@@ -29,5 +31,5 @@ export function and(a: Int, b: Int): Int {
 }
 
 export function clampByte(a: Int): Byte {
-  return min(abs(a), 0xFF) | 0;
+  return min(round(abs(a)), 0xFF);
 }

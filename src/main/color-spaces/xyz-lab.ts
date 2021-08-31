@@ -1,23 +1,19 @@
 import {pow} from '../math';
-import {ColorSpace, fromBytes, getColorByte, getColorFloat, NakedColor, packByte} from '../bytes';
+import {ILabColor, IXyzColor} from '../color-types';
+import {MAX_X, MAX_Z} from './xyz';
 
-export function xyzToLab(xyz: NakedColor): NakedColor {
+export function xyzToLab(xyz: IXyzColor, lab: ILabColor): ILabColor {
 
-  const x = rotateXyz(getColorFloat(xyz, 0));
-  const y = rotateXyz(getColorFloat(xyz, 1));
-  const z = rotateXyz(getColorFloat(xyz, 2));
+  const x = rotateXyz(xyz.X / MAX_X);
+  const y = rotateXyz(xyz.Y / 100);
+  const z = rotateXyz(xyz.Z / MAX_Z);
 
-  const L = (116 * y) - 16;
-  const a = 500 * (x - y);
-  const b = 200 * (y - z);
+  lab.L = (116 * y) - 16;
+  lab.A = 500 * (x - y);
+  lab.B = 200 * (y - z);
+  lab.a = xyz.a;
 
-  return fromBytes(
-      ColorSpace.LAB,
-      packByte(L, 0, 100),
-      packByte(a, -128, 128),
-      packByte(b, -128, 128),
-      getColorByte(xyz, 3),
-  );
+  return lab;
 }
 
 function rotateXyz(q: number): number {

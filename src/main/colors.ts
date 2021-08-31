@@ -1,83 +1,74 @@
-import {ColorSpace, fromBytes, fromRawBytes, getColorByte, getColorFloat, getColorSpace, NakedColor} from './bytes';
-import {max, min, sqrt} from './math';
-import {Byte, right} from './int';
+import {getColorSpace} from './packed-color';
+import {hslToRgb, rgbToHsl} from './color-spaces/rgb-hsl';
+import {rgbToXyz} from './color-spaces/rgb-xyz';
+import {Color, ColorSpace, IHslColor, ILabColor, IRgbColor, IXyzColor, PackedColor} from './color-types';
+import {rgb, unpackRgb} from './color-spaces/rgb';
+import {unpackXyz, xyz} from './color-spaces/xyz';
+import {hsl, unpackHsl} from './color-spaces/hsl';
+import {lab, unpackLab} from './color-spaces/lab';
+import {xyzToLab} from './color-spaces/xyz-lab';
 
-/**
- * Converts color to another color model.
- *
- * @param color The color to convert.
- * @param colorSpace The target color model.
- * @returns The new color or -1 if color model is invalid.
- */
-export function toColorSpace(color: NakedColor, colorSpace: ColorSpace): NakedColor | -1 {
+const tempRgb = rgb(0, 0, 0);
+const tempHsl = hsl(0, 0, 0);
+const tempXyz = xyz(0, 0, 0);
+const tempLab = lab(0, 0, 0);
 
+export function unpackColor(color: PackedColor): Color {
   // @formatter:off
   switch (getColorSpace(color)) {
+    case ColorSpace.RGB: return unpackRgb(color, tempRgb);
+    case ColorSpace.HSL: return unpackHsl(color, tempHsl);
+    case ColorSpace.XYZ: return unpackXyz(color, tempXyz);
+    case ColorSpace.LAB: return unpackLab(color, tempLab);
+  }
+  // @formatter:on
+  throw Error('Packed color uses unknown color space');
+}
+
+export function toColorSpace(color: Color, colorSpace: ColorSpace.RGB): IRgbColor;
+export function toColorSpace(color: Color, colorSpace: ColorSpace.HSL): IHslColor;
+export function toColorSpace(color: Color, colorSpace: ColorSpace.XYZ): IXyzColor;
+export function toColorSpace(color: Color, colorSpace: ColorSpace.LAB): ILabColor;
+export function toColorSpace(color: Color, colorSpace: ColorSpace): Color {
+  // @formatter:off
+  switch (color.colorSpace) {
 
     case ColorSpace.RGB:
       switch (colorSpace) {
-        case ColorSpace.HSL: return rgbToHsl(color);
         case ColorSpace.RGB: return color;
+        case ColorSpace.HSL: return rgbToHsl(color, tempHsl);
+        case ColorSpace.XYZ: return rgbToXyz(color, tempXyz);
+        case ColorSpace.LAB: return xyzToLab(rgbToXyz(color, tempXyz), tempLab);
       }
       break;
 
     case ColorSpace.HSL:
       switch (colorSpace) {
+        case ColorSpace.RGB: return hslToRgb(color, tempRgb);
         case ColorSpace.HSL: return color;
-        case ColorSpace.RGB: return hslToRgb(color);
+        case ColorSpace.XYZ: return rgbToXyz(hslToRgb(color, tempRgb), tempXyz);
+        case ColorSpace.LAB: return xyzToLab(rgbToXyz(hslToRgb(color, tempRgb), tempXyz), tempLab);
+      }
+      break;
+
+    case ColorSpace.XYZ:
+      switch (colorSpace) {
+        case ColorSpace.RGB: break;
+        case ColorSpace.HSL: break;
+        case ColorSpace.XYZ: return color;
+        case ColorSpace.LAB: return xyzToLab(color, tempLab);
+      }
+      break;
+
+    case ColorSpace.LAB:
+      switch (colorSpace) {
+        case ColorSpace.RGB: break;
+        case ColorSpace.HSL: break;
+        case ColorSpace.XYZ: break;
+        case ColorSpace.LAB: return color;
       }
       break;
   }
   // @formatter:on
-
-  // Unknown color model
-  return -1;
-}
-
-export function toRgb(color: NakedColor): NakedColor {
-  return toColorSpace(color, ColorSpace.RGB);
-}
-
-export function toHsl(color: NakedColor): NakedColor {
-  return toColorSpace(color, ColorSpace.HSL);
-}
-
-/**
- * Returns `true` if colors are exactly equal.
- */
-export function isEqualColor(color1: NakedColor, color2: NakedColor, ignoreAlpha = true): boolean {
-  if (color1 === color2) {
-    return true;
-  }
-
-  color2 = toColorSpace(color2, getColorSpace(color1));
-
-  return ignoreAlpha ? right(color1, 16) === right(color2, 16) : color1 === color2;
-}
-
-/**
- * Converts any color to grayscale using Highly Sensitive Perceived brightness (HSP) equation. The output color uses the
- * same same color model as the input.
- *
- * @see http://alienryderflex.com/hsp.html
- */
-export function toGrayscale(color: NakedColor): NakedColor {
-  const rgb = toRgb(color);
-
-  const r = getColorByte(rgb, 0);
-  const g = getColorByte(rgb, 1);
-  const b = getColorByte(rgb, 2);
-
-  const a = sqrt(0.299 * r * r + 0.587 * g * g + 0.114 * b * b);
-
-  return toColorSpace(fromRawBytes(ColorSpace.RGB, a, a, a, getColorByte(rgb, 3)), getColorSpace(color));
-}
-
-/**
- * Returns `true` if the input color is dark and `false` if it's bright.
- *
- * @see https://awik.io/determine-color-bright-dark-using-javascript/
- */
-export function isDark(color: NakedColor): boolean {
-  return getColorByte(toGrayscale(toRgb(color)), 0) < 0x80;
+  throw new Error('No converter');
 }

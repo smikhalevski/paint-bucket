@@ -1,23 +1,19 @@
 import {pow} from '../math';
-import {ColorSpace, fromBytes, getColorByte, getColorFloat, NakedColor, packByte} from '../bytes';
+import {IRgbColor, IXyzColor} from '../color-types';
+import {FF} from '../int';
 
-export function rgbToXyz(rgb: NakedColor): NakedColor {
+export function rgbToXyz(rgb: IRgbColor, xyz: IXyzColor): IXyzColor {
 
-  const r = rotateRgb(getColorFloat(rgb, 0));
-  const g = rotateRgb(getColorFloat(rgb, 1));
-  const b = rotateRgb(getColorFloat(rgb, 2));
+  const r = rotateRgb(rgb.R / FF);
+  const g = rotateRgb(rgb.G / FF);
+  const b = rotateRgb(rgb.B / FF);
 
-  const x = (r * 0.41246 + g * 0.35758 + b * 0.18044) / 0.95048;
-  const y = (r * 0.21267 + g * 0.71515 + b * 0.07218);
-  const z = (r * 0.01933 + g * 0.11919 + b * 0.95030) / 1.08882;
+  xyz.X = (r * 0.41246 + g * 0.35758 + b * 0.18044) * 100;
+  xyz.Y = (r * 0.21267 + g * 0.71515 + b * 0.07218) * 100;
+  xyz.Z = (r * 0.01933 + g * 0.11919 + b * 0.95030) * 100;
+  xyz.a = rgb.a;
 
-  return fromBytes(
-      ColorSpace.XYZ,
-      packByte(x, 0, 1),
-      packByte(y, 0, 1),
-      packByte(z, 0, 1),
-      getColorByte(rgb, 3),
-  );
+  return xyz;
 }
 
 function rotateRgb(q: number): number {

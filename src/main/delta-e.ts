@@ -1,149 +1,121 @@
-import {abs, atan2, cos, exp, hyp, PI, pow, pow2, sin, sqrt} from './math';
-import {fromBytes, getColorByte, getColorFloat, NakedColor} from './bytes';
-import {toRgb} from './colors';
+import {abs, atan2, cos, exp, PI, pow, sin, sqrt} from './math';
+import {toColorSpace} from './colors';
+import {Color, ColorSpace} from './color-types';
 
 /**
- * Computes the CIEDE2000 color-difference. Returns number in mapRange `[0, 100]` where 2.3 is considered to be just
+ * Computes the CIEDE2000 color-difference.
+ *
+ * Returns number in range [0, 100] where 2.3 is considered to be just
  * noticeable difference (JND).
  *
+ * - [0, 1)    Not perceptible by human eyes.
+ * - [1, 2)    Perceptible through close observation.
+ * - [2, 10)   Perceptible at a glance.
+ * - [10, 50)  Colors are more similar than opposite.
+ * - [50, 100] Colors are exact opposite.
+ *
+ * @see http://zschuessler.github.io/DeltaE/learn
  * @see http://www.ece.rochester.edu/~gsharma/ciede2000/
  * @see https://en.wikipedia.org/wiki/Color_difference
  * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
  */
-export function deltaE2000(color1: NakedColor, color2: NakedColor): number {
+export function deltaE2000(c1: Color, c2: Color): number {
 
-  const lab1 = rgbToLab(toRgb(color1));
-  const lab2 = rgbToLab(toRgb(color2));
+  const {L: L1, A: a1, B: b1} = toColorSpace(c1, ColorSpace.LAB);
+  const {L: L2, A: a2, B: b2} = toColorSpace(c2, ColorSpace.LAB);
 
-  const L1 = getColorFloat(lab1, 0);
-  const a1 = getColorFloat(lab1, 0);
-  const b1 = getColorFloat(lab1, 0);
+  // Weight factors
+  var kL = 1;
+  var kC = 1;
+  var kH = 1;
 
-  const L2 = getColorFloat(lab2, 0);
-  const a2 = getColorFloat(lab2, 0);
-  const b2 = getColorFloat(lab2, 0);
+  /**
+   * Step 1: Calculate C1p, C2p, h1p, h2p
+   */
+  var C1 = sqrt(pow(a1, 2) + pow(b1, 2)); //(2)
+  var C2 = sqrt(pow(a2, 2) + pow(b2, 2)); //(2)
 
-  // Cab = sqrt(a^2 + b^2)
-  const Cab1 = hyp(a1, b1);
-  const Cab2 = hyp(a2, b2);
+  var a_C1_C2 = (C1 + C2) / 2.0;             //(3)
 
-  // CabAvg = (Cab1 + Cab2) / 2
-  const CabAvg = (Cab1 + Cab2) / 2;
+  var G = 0.5 * (1 - sqrt(pow(a_C1_C2, 7.0) /
+      (pow(a_C1_C2, 7.0) + pow(25.0, 7.0)))); //(4)
 
-  // G = 1 + (1 - sqrt((CabAvg^7) / (CabAvg^7 + 25^7))) / 2
-  const CabAvg7 = pow(CabAvg, 7);
-  const G = 1 + (1 - sqrt(CabAvg7 / (CabAvg7 + 25 ** 7))) / 2;
+  var a1p = (1.0 + G) * a1; //(5)
+  var a2p = (1.0 + G) * a2; //(5)
 
-  // ap = G * a
-  const ap1 = G * a1;
-  const ap2 = G * a2;
+  var C1p = sqrt(pow(a1p, 2) + pow(b1, 2)); //(6)
+  var C2p = sqrt(pow(a2p, 2) + pow(b2, 2)); //(6)
 
-  // Cp = sqrt(ap^2 + b^2)
-  const Cp1 = hyp(ap1, b1);
-  const Cp2 = hyp(ap2, b2);
+  var h1p = hp_f(b1, a1p); //(7)
+  var h2p = hp_f(b2, a2p); //(7)
 
-  // CpProd = (Cp1 * Cp2)
-  const CpProd = Cp1 * Cp2;
+  /**
+   * Step 2: Calculate dLp, dCp, dHp
+   */
+  var dLp = L2 - L1; //(8)
+  var dCp = C2p - C1p; //(9)
 
-  // hp1 = atan2(b1, ap1)
-  let hp1 = atan2(b1, ap1);
-  // ensure hue is between 0 and 2pi
-  if (hp1 < 0) {
-    // hp1 = hp1 + 2pi
-    hp1 += 2 * PI;
+  var dhp = dhp_f(C1, C2, h1p, h2p); //(10)
+  var dHp = 2 * sqrt(C1p * C2p) * sin(radians(dhp) / 2.0); //(11)
+
+  /**
+   * Step 3: Calculate CIEDE2000 Color-Difference
+   */
+  var a_L = (L1 + L2) / 2.0; //(12)
+  var a_Cp = (C1p + C2p) / 2.0; //(13)
+
+  var a_hp = a_hp_f(C1, C2, h1p, h2p); //(14)
+  var T = 1 - 0.17 * cos(radians(a_hp - 30)) + 0.24 * cos(radians(2 * a_hp)) +
+      0.32 * cos(radians(3 * a_hp + 6)) - 0.20 * cos(radians(4 * a_hp - 63)); //(15)
+  var d_ro = 30 * exp(-(pow((a_hp - 275) / 25, 2))); //(16)
+  var RC = sqrt((pow(a_Cp, 7.0)) / (pow(a_Cp, 7.0) + pow(25.0, 7.0)));//(17)
+  var SL = 1 + ((0.015 * pow(a_L - 50, 2)) /
+      sqrt(20 + pow(a_L - 50, 2.0)));//(18)
+  var SC = 1 + 0.045 * a_Cp;//(19)
+  var SH = 1 + 0.015 * a_Cp * T;//(20)
+  var RT = -2 * RC * sin(radians(2 * d_ro));//(21)
+  var dE = sqrt(pow(dLp / (SL * kL), 2) + pow(dCp / (SC * kC), 2) +
+      pow(dHp / (SH * kH), 2) + RT * (dCp / (SC * kC)) *
+      (dHp / (SH * kH))); //(22)
+  return dE;
+}
+
+/**
+ * INTERNAL FUNCTIONS
+ */
+function degrees(n: number) {
+  return n * (180 / PI);
+}
+
+function radians(n: number) {
+  return n * (PI / 180);
+}
+
+function hp_f(x: number, y: number) //(7)
+{
+  if (x === 0 && y === 0) return 0;
+  else {
+    var tmphp = degrees(atan2(x, y));
+    if (tmphp >= 0) return tmphp;
+    else return tmphp + 360;
   }
+}
 
-  // hp2 = atan2(b2, ap2)
-  let hp2 = atan2(b2, ap2);
-  // ensure hue is between 0 and 2pi
-  if (hp2 < 0) {
-    // hp2 = hp2 + 2pi
-    hp2 += 2 * PI;
-  }
+function dhp_f(C1: number, C2: number, h1p: number, h2p: number) //(10)
+{
+  if (C1 * C2 === 0) return 0;
+  else if (abs(h2p - h1p) <= 180) return h2p - h1p;
+  else if ((h2p - h1p) > 180) return (h2p - h1p) - 360;
+  else if ((h2p - h1p) < -180) return (h2p - h1p) + 360;
+  else throw(new Error());
+}
 
-  // dL = L2 - L1
-  const dL = L2 - L1;
-
-  // dC = Cp2 - Cp1
-  const dC = Cp2 - Cp1;
-
-  // computation of hue difference
-  let dhp = 0.0;
-  // set hue difference to zero if the product of chromas is zero
-  if (CpProd !== 0) {
-    // dhp = hp2 - hp1
-    dhp = hp2 - hp1;
-    if (dhp > PI) {
-      // dhp = dhp - 2pi
-      dhp -= 2 * PI;
-    } else if (dhp < -PI) {
-      // dhp = dhp + 2pi
-      dhp += 2 * PI;
-    }
-  }
-
-  // dH = 2 * sqrt(CpProd) * sin(dhp / 2)
-  const dH = 2 * sqrt(CpProd) * sin(dhp / 2);
-
-  // weighting functions
-  // Lp = (L1 + L2) / 2 - 50
-  const Lp = (L1 + L2) / 2 - 50;
-
-  // Cp = (Cp1 + Cp2) / 2
-  const Cp = (Cp1 + Cp2) / 2;
-
-  // average hue computation
-  // hp = (hp1 + hp2) / 2
-  let hp = (hp1 + hp2) / 2;
-
-  // identify positions for which abs hue diff exceeds 180 degrees
-  if (abs(hp1 - hp2) > PI) {
-    // hp = hp - pi
-    hp -= PI;
-  }
-  // ensure hue is between 0 and 2pi
-  if (hp < 0) {
-    // hp = hp + 2pi
-    hp += 2 * PI;
-  }
-
-  // LpSqr = Lp^2
-  const LpSqr = pow2(Lp);
-
-  // Sl = 1 + 0.015 * LpSqr / sqrt(20 + LpSqr)
-  const Sl = 1 + 0.015 * LpSqr / sqrt(20 + LpSqr);
-
-  // Sc = 1 + 0.045 * Cp
-  const Sc = 1 + 0.045 * Cp;
-
-  // T = 1 - 0.17 * cos(hp - pi / 6)
-  //       + 0.24 * cos(2 * hp)
-  //       + 0.32 * cos(3 * hp + pi / 30)
-  //       - 0.20 * cos(4 * hp - 63 * pi / 180)
-  const T = 1
-      - 0.17 * cos(hp - PI / 6)
-      + 0.24 * cos(2 * hp)
-      + 0.32 * cos(3 * hp + PI / 30)
-      - 0.20 * cos(4 * hp - PI / 180);
-
-  // Sh = 1 + 0.015 * Cp * T
-  const Sh = 1 + 0.015 * Cp * T;
-
-  // deltaThetaRad = (pi / 3) * e^-(36 / (5 * pi) * hp - 11)^2
-  const deltaThetaRad = (PI / 3) * exp(-pow2(36 / (5 * PI) * hp - 11));
-
-  // Rc = 2 * sqrt((Cp^7) / (Cp^7 + 25^7))
-  const Cp7 = Cp ** 7;
-  const Rc = 2 * sqrt(Cp7 / (Cp7 + 25 ** 7));
-
-  // RT = -sin(delthetarad) * Rc
-  const RT = -sin(deltaThetaRad) * Rc;
-
-  // de00 = sqrt((dL / Sl)^2 + (dC / Sc)^2 + (dH / Sh)^2 + RT * (dC / Sc) * (dH / Sh))
-  const dLSl = dL / Sl;
-  const dCSc = dC / Sc;
-  const dHSh = dH / Sh;
-  return sqrt(pow2(dLSl) + pow2(dCSc) + pow2(dHSh) + RT * dCSc * dHSh);
+function a_hp_f(C1: number, C2: number, h1p: number, h2p: number) { //(14)
+  if (C1 * C2 === 0) return h1p + h2p;
+  else if (abs(h1p - h2p) <= 180) return (h1p + h2p) / 2.0;
+  else if ((abs(h1p - h2p) > 180) && ((h1p + h2p) < 360)) return (h1p + h2p + 360) / 2.0;
+  else if ((abs(h1p - h2p) > 180) && ((h1p + h2p) >= 360)) return (h1p + h2p - 360) / 2.0;
+  else throw(new Error());
 }
 
 /**
@@ -152,15 +124,15 @@ export function deltaE2000(color1: NakedColor, color2: NakedColor): number {
  * @see https://en.wikipedia.org/wiki/Color_difference
  * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
  */
-export function isJustNoticeableDifference(color1: NakedColor, color2: NakedColor): boolean {
+export function isJustNoticeableDifference(color1: Color, color2: Color): boolean {
   return color1 === color2 || deltaE2000(color1, color2) < 2.3;
 }
 
 /**
  * Returns color from `colors` that is the closest to `color` basing on CIEDE2000 comparison algorithm.
  */
-export function pickClosestColor(colors: Array<NakedColor>, color: NakedColor): NakedColor | -1 {
-  let closestColor = -1;
+export function pickClosestColor(colors: Array<Color>, color: Color): Color | undefined {
+  let closestColor;
   let deJ = Infinity;
 
   for (const otherColor of colors) {
@@ -172,8 +144,4 @@ export function pickClosestColor(colors: Array<NakedColor>, color: NakedColor): 
     }
   }
   return closestColor;
-}
-
-export function rgbToLab(rgb: NakedColor): NakedColor {
-  return xyzToLab(rgbToXyz(rgb));
 }
