@@ -1,12 +1,4 @@
-import {
-  fromBytes,
-  fromRawColor,
-  getColorByte,
-  getColorFloat,
-  getColorSpace,
-  NibbleCount,
-  setColorByte,
-} from '../main/packed-color';
+import {fromBytes, fromRawColor, getColorByte, getColorSpace, NibbleCount, setColorByte} from '../main/packed-color';
 import {ColorSpace} from '../main/color-types';
 
 describe('fromRawColor', () => {
@@ -58,18 +50,6 @@ describe('getColorByte', () => {
     expect(getColorByte(color, 1)).toBe(0x34);
     expect(getColorByte(color, 2)).toBe(0x56);
     expect(getColorByte(color, 3)).toBe(0xAA);
-  });
-});
-
-describe('getColorFloat', () => {
-
-  test('gets the color byte as float', () => {
-    const color = 0x12_34_56_AA_0;
-
-    expect(getColorFloat(color, 0)).toBe(0x12 / 0xFF);
-    expect(getColorFloat(color, 1)).toBe(0x34 / 0xFF);
-    expect(getColorFloat(color, 2)).toBe(0x56 / 0xFF);
-    expect(getColorFloat(color, 3)).toBe(0xAA / 0xFF);
   });
 });
 

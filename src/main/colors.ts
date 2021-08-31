@@ -2,16 +2,28 @@ import {getColorSpace} from './packed-color';
 import {hslToRgb, rgbToHsl} from './color-spaces/rgb-hsl';
 import {rgbToXyz} from './color-spaces/rgb-xyz';
 import {Color, ColorSpace, IHslColor, ILabColor, IRgbColor, IXyzColor, PackedColor} from './color-types';
-import {rgb, unpackRgb} from './color-spaces/rgb';
-import {unpackXyz, xyz} from './color-spaces/xyz';
-import {hsl, unpackHsl} from './color-spaces/hsl';
-import {lab, unpackLab} from './color-spaces/lab';
+import {packRgb, rgb, unpackRgb} from './color-spaces/rgb';
+import {packXyz, unpackXyz, xyz} from './color-spaces/xyz';
+import {hsl, packHsl, unpackHsl} from './color-spaces/hsl';
+import {lab, packLab, unpackLab} from './color-spaces/lab';
 import {xyzToLab} from './color-spaces/xyz-lab';
 
 const tempRgb = rgb(0, 0, 0);
 const tempHsl = hsl(0, 0, 0);
 const tempXyz = xyz(0, 0, 0);
 const tempLab = lab(0, 0, 0);
+
+export function packColor(color: Color): PackedColor {
+  // @formatter:off
+  switch (color.colorSpace) {
+    case ColorSpace.RGB: return packRgb(color);
+    case ColorSpace.HSL: return packHsl(color);
+    case ColorSpace.XYZ: return packXyz(color);
+    case ColorSpace.LAB: return packLab(color);
+  }
+  // @formatter:on
+  throw Error('Unknown color space');
+}
 
 export function unpackColor(color: PackedColor): Color {
   // @formatter:off
@@ -22,13 +34,14 @@ export function unpackColor(color: PackedColor): Color {
     case ColorSpace.LAB: return unpackLab(color, tempLab);
   }
   // @formatter:on
-  throw Error('Packed color uses unknown color space');
+  throw Error('Unknown color space');
 }
 
 export function toColorSpace(color: Color, colorSpace: ColorSpace.RGB): IRgbColor;
 export function toColorSpace(color: Color, colorSpace: ColorSpace.HSL): IHslColor;
 export function toColorSpace(color: Color, colorSpace: ColorSpace.XYZ): IXyzColor;
 export function toColorSpace(color: Color, colorSpace: ColorSpace.LAB): ILabColor;
+export function toColorSpace(color: Color, colorSpace: ColorSpace): Color;
 export function toColorSpace(color: Color, colorSpace: ColorSpace): Color {
   // @formatter:off
   switch (color.colorSpace) {
@@ -53,8 +66,8 @@ export function toColorSpace(color: Color, colorSpace: ColorSpace): Color {
 
     case ColorSpace.XYZ:
       switch (colorSpace) {
-        case ColorSpace.RGB: break;
-        case ColorSpace.HSL: break;
+        case ColorSpace.RGB: throw new Error('No converter for XYZ → RGB');
+        case ColorSpace.HSL: throw new Error('No converter for XYZ → HSL');
         case ColorSpace.XYZ: return color;
         case ColorSpace.LAB: return xyzToLab(color, tempLab);
       }
@@ -62,13 +75,13 @@ export function toColorSpace(color: Color, colorSpace: ColorSpace): Color {
 
     case ColorSpace.LAB:
       switch (colorSpace) {
-        case ColorSpace.RGB: break;
-        case ColorSpace.HSL: break;
-        case ColorSpace.XYZ: break;
+        case ColorSpace.RGB: throw new Error('No converter for LAB → RGB');
+        case ColorSpace.HSL: throw new Error('No converter for LAB → HSL');
+        case ColorSpace.XYZ: throw new Error('No converter for LAB → XYZ');
         case ColorSpace.LAB: return color;
       }
       break;
   }
   // @formatter:on
-  throw new Error('No converter');
+  throw Error('Unknown color space');
 }

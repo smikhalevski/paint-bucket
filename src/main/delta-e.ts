@@ -1,12 +1,11 @@
-import {abs, atan2, cos, exp, PI, pow, sin, sqrt} from './math';
+import {abs, atan2, cos, deg, exp, hyp, pow2, rad, sin, sqrt} from './math';
 import {toColorSpace} from './colors';
 import {Color, ColorSpace} from './color-types';
 
 /**
  * Computes the CIEDE2000 color-difference.
  *
- * Returns number in range [0, 100] where 2.3 is considered to be just
- * noticeable difference (JND).
+ * Returns number in range [0, 100] where 2.3 is considered to be just noticeable difference (JND).
  *
  * - [0, 1)    Not perceptible by human eyes.
  * - [1, 2)    Perceptible through close observation.
@@ -24,124 +23,105 @@ export function deltaE2000(c1: Color, c2: Color): number {
   const {L: L1, A: a1, B: b1} = toColorSpace(c1, ColorSpace.LAB);
   const {L: L2, A: a2, B: b2} = toColorSpace(c2, ColorSpace.LAB);
 
-  // Weight factors
-  var kL = 1;
-  var kC = 1;
-  var kH = 1;
+  const Cab1 = hyp(a1, b1); // (2)
+  const Cab2 = hyp(a2, b2); // (2)
 
-  /**
-   * Step 1: Calculate C1p, C2p, h1p, h2p
-   */
-  var C1 = sqrt(pow(a1, 2) + pow(b1, 2)); //(2)
-  var C2 = sqrt(pow(a2, 2) + pow(b2, 2)); //(2)
+  const CabAvg7 = ((Cab1 + Cab2) / 2) ** 7; // (3)
+  const G = 0.5 - sqrt(CabAvg7 / (CabAvg7 + 25 ** 7)) / 2; // (4)
 
-  var a_C1_C2 = (C1 + C2) / 2.0;             //(3)
+  const ap1 = (1 + G) * a1; // (5)
+  const ap2 = (1 + G) * a2; // (5)
 
-  var G = 0.5 * (1 - sqrt(pow(a_C1_C2, 7.0) /
-      (pow(a_C1_C2, 7.0) + pow(25.0, 7.0)))); //(4)
+  const Cp1 = hyp(ap1, b1); // (6)
+  const Cp2 = hyp(ap2, b2); // (6)
 
-  var a1p = (1.0 + G) * a1; //(5)
-  var a2p = (1.0 + G) * a2; //(5)
+  const Hp1 = calcHp(b1, ap1); // (7)
+  const Hp2 = calcHp(b2, ap2); // (7)
 
-  var C1p = sqrt(pow(a1p, 2) + pow(b1, 2)); //(6)
-  var C2p = sqrt(pow(a2p, 2) + pow(b2, 2)); //(6)
+  const dL = L2 - L1; // (8)
+  const dCp = Cp2 - Cp1; // (9)
+  const dHp = 2 * sqrt(Cp1 * Cp2) * sin(rad(calcDHp(Cab1, Cab2, Hp1, Hp2)) / 2); // (11)
 
-  var h1p = hp_f(b1, a1p); //(7)
-  var h2p = hp_f(b2, a2p); //(7)
+  const aL = (L1 + L2) / 2; // (12)
+  const aCp = (Cp1 + Cp2) / 2; // (13)
 
-  /**
-   * Step 2: Calculate dLp, dCp, dHp
-   */
-  var dLp = L2 - L1; //(8)
-  var dCp = C2p - C1p; //(9)
+  const aHp = calcAHp(Cab1, Cab2, Hp1, Hp2); // (14)
 
-  var dhp = dhp_f(C1, C2, h1p, h2p); //(10)
-  var dHp = 2 * sqrt(C1p * C2p) * sin(radians(dhp) / 2.0); //(11)
+  const T = 1
+      - 0.17 * cos(rad(aHp - 30))
+      + 0.24 * cos(rad(2 * aHp))
+      + 0.32 * cos(rad(3 * aHp + 6))
+      - 0.20 * cos(rad(4 * aHp - 63)); // (15)
 
-  /**
-   * Step 3: Calculate CIEDE2000 Color-Difference
-   */
-  var a_L = (L1 + L2) / 2.0; //(12)
-  var a_Cp = (C1p + C2p) / 2.0; //(13)
+  const dro = 30 * exp(-pow2((aHp - 275) / 25)); // (16)
 
-  var a_hp = a_hp_f(C1, C2, h1p, h2p); //(14)
-  var T = 1 - 0.17 * cos(radians(a_hp - 30)) + 0.24 * cos(radians(2 * a_hp)) +
-      0.32 * cos(radians(3 * a_hp + 6)) - 0.20 * cos(radians(4 * a_hp - 63)); //(15)
-  var d_ro = 30 * exp(-(pow((a_hp - 275) / 25, 2))); //(16)
-  var RC = sqrt((pow(a_Cp, 7.0)) / (pow(a_Cp, 7.0) + pow(25.0, 7.0)));//(17)
-  var SL = 1 + ((0.015 * pow(a_L - 50, 2)) /
-      sqrt(20 + pow(a_L - 50, 2.0)));//(18)
-  var SC = 1 + 0.045 * a_Cp;//(19)
-  var SH = 1 + 0.015 * a_Cp * T;//(20)
-  var RT = -2 * RC * sin(radians(2 * d_ro));//(21)
-  var dE = sqrt(pow(dLp / (SL * kL), 2) + pow(dCp / (SC * kC), 2) +
-      pow(dHp / (SH * kH), 2) + RT * (dCp / (SC * kC)) *
-      (dHp / (SH * kH))); //(22)
-  return dE;
+  const aCp7 = aCp ** 7;
+
+  const rC = sqrt(aCp7 / (aCp7 + 25 ** 7)); // (17)
+
+  const aL2 = pow2(aL - 50);
+  const sL = 1 + 0.015 * aL2 / sqrt(20 + aL2); // (18)
+
+  const sC = 1 + 0.045 * aCp; // (19)
+  const sH = 1 + 0.015 * aCp * T; // (20)
+
+  const rT = -2 * rC * sin(rad(2 * dro)); // (21)
+
+  const dCpSc = dCp / sC;
+  const dHpSh = dHp / sH;
+
+  return sqrt(pow2(dL / sL) + pow2(dCpSc) + pow2(dHpSh) + rT * dCpSc * dHpSh); // (22)
 }
 
-/**
- * INTERNAL FUNCTIONS
- */
-function degrees(n: number) {
-  return n * (180 / PI);
-}
-
-function radians(n: number) {
-  return n * (PI / 180);
-}
-
-function hp_f(x: number, y: number) //(7)
-{
-  if (x === 0 && y === 0) return 0;
-  else {
-    var tmphp = degrees(atan2(x, y));
-    if (tmphp >= 0) return tmphp;
-    else return tmphp + 360;
+// (7)
+function calcHp(b: number, ap: number): number {
+  if (b === 0 && ap === 0) {
+    return 0;
   }
-}
+  const hp = deg(atan2(b, ap));
 
-function dhp_f(C1: number, C2: number, h1p: number, h2p: number) //(10)
-{
-  if (C1 * C2 === 0) return 0;
-  else if (abs(h2p - h1p) <= 180) return h2p - h1p;
-  else if ((h2p - h1p) > 180) return (h2p - h1p) - 360;
-  else if ((h2p - h1p) < -180) return (h2p - h1p) + 360;
-  else throw(new Error());
-}
-
-function a_hp_f(C1: number, C2: number, h1p: number, h2p: number) { //(14)
-  if (C1 * C2 === 0) return h1p + h2p;
-  else if (abs(h1p - h2p) <= 180) return (h1p + h2p) / 2.0;
-  else if ((abs(h1p - h2p) > 180) && ((h1p + h2p) < 360)) return (h1p + h2p + 360) / 2.0;
-  else if ((abs(h1p - h2p) > 180) && ((h1p + h2p) >= 360)) return (h1p + h2p - 360) / 2.0;
-  else throw(new Error());
-}
-
-/**
- * Returns `true` if colors are so close that they can be barely distinguished. Uses CIEDE2000 color diffing algorithm.
- *
- * @see https://en.wikipedia.org/wiki/Color_difference
- * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
- */
-export function isJustNoticeableDifference(color1: Color, color2: Color): boolean {
-  return color1 === color2 || deltaE2000(color1, color2) < 2.3;
-}
-
-/**
- * Returns color from `colors` that is the closest to `color` basing on CIEDE2000 comparison algorithm.
- */
-export function pickClosestColor(colors: Array<Color>, color: Color): Color | undefined {
-  let closestColor;
-  let deJ = Infinity;
-
-  for (const otherColor of colors) {
-    const deI = deltaE2000(otherColor, color);
-
-    if (deI < deJ) {
-      closestColor = otherColor;
-      deJ = deI;
-    }
+  if (hp >= 0) {
+    return hp;
   }
-  return closestColor;
+  return hp + 360;
+}
+
+// (10)
+function calcDHp(Cab1: number, Cab2: number, Hp1: number, Hp2: number): number {
+  if (Cab1 * Cab2 === 0) {
+    return 0;
+  }
+  const dHp = Hp2 - Hp1;
+
+  if (abs(dHp) <= 180) {
+    return dHp;
+  }
+  if (dHp > 180) {
+    return dHp - 360;
+  }
+  if (dHp < -180) {
+    return dHp + 360;
+  }
+  throw new Error();
+}
+
+// (14)
+function calcAHp(Cab1: number, Cab2: number, Hp1: number, Hp2: number): number {
+  if (Cab1 * Cab2 === 0) {
+    return Hp1 + Hp2;
+  }
+
+  const dHp = Hp1 - Hp2;
+  const lHp = Hp1 + Hp2;
+
+  if (abs(dHp) <= 180) {
+    return lHp / 2;
+  }
+  if (abs(dHp) > 180 && lHp < 360) {
+    return (lHp + 360) / 2;
+  }
+  if (abs(dHp) > 180 && lHp >= 360) {
+    return (lHp - 360) / 2;
+  }
+  throw new Error();
 }

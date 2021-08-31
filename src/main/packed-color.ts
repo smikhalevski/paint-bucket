@@ -75,7 +75,7 @@ export function fromRawColor(colorSpace: ColorSpace, rawColor: Int, nibbleCount:
       return left(and(0xFF_FF_FF_FF, rawColor), 4) + colorSpace;
   }
 
-  return colorSpace;
+  throw new Error('Invalid nibble count');
 }
 
 export function fromRawBytes(colorSpace: ColorSpace, a: Byte, b: Byte, c: Byte, d: Byte): PackedColor {
@@ -97,26 +97,4 @@ export function getColorByte(color: PackedColor, offset: ByteOffset): Byte {
 export function setColorByte(color: PackedColor, offset: ByteOffset, byte: Byte): PackedColor {
   const shift = 28 - offset * 8;
   return or(left(clampByte(byte), shift), and(xor(left(0xFF, shift), 0xFF_FF_FF_FF_F), color));
-}
-
-export function getColorFloat(color: PackedColor, offset: ByteOffset): number {
-  return getColorByte(color, offset) / 0xFF;
-}
-
-export function isColorSpace(color: PackedColor, colorSpace: ColorSpace): boolean {
-  return getColorSpace(color) === colorSpace;
-}
-
-/**
- * Maps n ∈ [a, b] to [0, 0xFF].
- */
-export function toByte(n: number, a: number, b: number): Byte {
-  return 0xFF * (n - a) / (b - a);
-}
-
-/**
- * Maps byte ∈ [0, 0xFF] to [a, b].
- */
-export function fromByte(byte: Byte, a: number, b: number): number {
-  return a + (b - a) * byte / 0xFF;
 }
