@@ -2,8 +2,6 @@ import {abs} from './math';
 import {and, Byte, clampByte, Int64, left, or, right, xor} from './int64';
 import {ColorSpace, RawColor} from './colors';
 
-export type NibbleCount = 1 | 2 | 3 | 4 | 6 | 8;
-
 export type ByteOffset = 0 | 1 | 2 | 3;
 
 /**
@@ -22,10 +20,10 @@ export type ByteOffset = 0 | 1 | 2 | 3;
  *
  * @param colorSpace The color space assigned to the output color.
  * @param nakedColor The input color to normalize, ex. `0xFF_FF_FF` for white in RGB space.
- * @param nibbleCount The number of nibbles the input color.
+ * @param nibbleCount The number (1, 2, 3, 4, 6 or 8) of nibbles the input color.
  * @return A valid raw color.
  */
-export function fromNakedColor(colorSpace: ColorSpace, nakedColor: Int64, nibbleCount: NibbleCount): RawColor {
+export function fromNakedColor(colorSpace: ColorSpace, nakedColor: Int64, nibbleCount: number): RawColor {
 
   nakedColor = abs(nakedColor);
 

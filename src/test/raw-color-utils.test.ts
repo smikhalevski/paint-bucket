@@ -1,4 +1,4 @@
-import {composeBytes, fromNakedColor, getColorByte, getColorSpace, NibbleCount, setColorByte} from '../main/raw-color-utils';
+import {composeBytes, fromNakedColor, getColorByte, getColorSpace, setColorByte} from '../main/raw-color-utils';
 import {ColorSpace} from '../main/colors/color-types';
 
 describe('fromNakedColor', () => {
@@ -13,12 +13,12 @@ describe('fromNakedColor', () => {
   });
 
   test('returns black for invalid nibble count', () => {
-    expect(fromNakedColor(ColorSpace.RGB, 0x123, 0 as NibbleCount)).toBe(0);
+    expect(fromNakedColor(ColorSpace.RGB, 0x123, 0)).toBe(0);
 
-    expect(fromNakedColor(ColorSpace.HSL, 0x123, 0 as NibbleCount)).toBe(1);
-    expect(fromNakedColor(ColorSpace.HSL, 0x12345, 5 as NibbleCount)).toBe(1);
-    expect(fromNakedColor(ColorSpace.HSL, 0x1234567, 7 as NibbleCount)).toBe(1);
-    expect(fromNakedColor(ColorSpace.HSL, 0x123456789A, 10 as NibbleCount)).toBe(1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x123, 0)).toBe(1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x12345, 5)).toBe(1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x1234567, 7)).toBe(1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x123456789A, 10)).toBe(1);
   });
 });
 

@@ -25,3 +25,11 @@ export function rad(n: number): number {
 export function lerp(t: number, a: number, b: number): number {
   return a + t * (b - a);
 }
+
+export function intOrZero(value: string, radix: number): number {
+  return parseInt(value, radix) || 0;
+}
+
+export function floatOrZero(value: string): number {
+  return parseFloat(value) || 0;
+}
