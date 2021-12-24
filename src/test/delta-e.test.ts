@@ -1,4 +1,4 @@
-import {deltaE2000} from '../main/delta-e';
+import {deltaE2000} from '../main/deltaE2000';
 import {rgb} from '../main/color-spaces/rgb';
 import {lab} from '../main/color-spaces/lab';
 

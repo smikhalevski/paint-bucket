@@ -19,6 +19,9 @@ export function rad(n: number): number {
   return n * DEG;
 }
 
+/**
+ * Linear polynomial interpolation.
+ */
 export function lerp(t: number, a: number, b: number): number {
   return a + t * (b - a);
 }

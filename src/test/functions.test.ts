@@ -1,6 +1,6 @@
 import {blackHsl, hsl, whiteHsl} from '../main/color-spaces/hsl';
 import {blackRgb, rgb, whiteRgb} from '../main/color-spaces/rgb';
-import {toGrayscale} from '../main/functions';
+import {toGrayscale} from '../main/color-functions';
 
 describe('toGrayscale', () => {
 

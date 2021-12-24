@@ -1,6 +1,8 @@
 import {abs, atan2, cos, deg, exp, hyp, pow2, rad, sin, sqrt} from './math';
-import {toColorSpace} from './colors';
-import {Color, ColorSpace} from './color-types';
+import {convertColorSpace} from './color-space-utils';
+import {Color, Lab} from './colors';
+
+const tempLab = new Lab(0, 0, 0);
 
 /**
  * Computes the CIEDE2000 color-difference.
@@ -18,25 +20,25 @@ import {Color, ColorSpace} from './color-types';
  * @see https://en.wikipedia.org/wiki/Color_difference
  * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
  */
-export function deltaE2000(c1: Color, c2: Color): number {
+export function deltaE2000(color1: Color, color2: Color): number {
 
-  const {L: L1, A: a1, B: b1} = toColorSpace(c1, ColorSpace.LAB);
-  const {L: L2, A: a2, B: b2} = toColorSpace(c2, ColorSpace.LAB);
+  const {L: L1, A: A1, B: B1} = convertColorSpace(color1, tempLab);
+  const {L: L2, A: A2, B: B2} = convertColorSpace(color2, tempLab);
 
-  const Cab1 = hyp(a1, b1); // (2)
-  const Cab2 = hyp(a2, b2); // (2)
+  const Cab1 = hyp(A1, B1); // (2)
+  const Cab2 = hyp(A2, B2); // (2)
 
   const CabAvg7 = ((Cab1 + Cab2) / 2) ** 7; // (3)
   const G = 0.5 - sqrt(CabAvg7 / (CabAvg7 + 25 ** 7)) / 2; // (4)
 
-  const ap1 = (1 + G) * a1; // (5)
-  const ap2 = (1 + G) * a2; // (5)
+  const ap1 = (1 + G) * A1; // (5)
+  const ap2 = (1 + G) * A2; // (5)
 
-  const Cp1 = hyp(ap1, b1); // (6)
-  const Cp2 = hyp(ap2, b2); // (6)
+  const Cp1 = hyp(ap1, B1); // (6)
+  const Cp2 = hyp(ap2, B2); // (6)
 
-  const Hp1 = calcHp(b1, ap1); // (7)
-  const Hp2 = calcHp(b2, ap2); // (7)
+  const Hp1 = calcHp(B1, ap1); // (7)
+  const Hp2 = calcHp(B2, ap2); // (7)
 
   const dL = L2 - L1; // (8)
   const dCp = Cp2 - Cp1; // (9)

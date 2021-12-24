@@ -1,4 +1,4 @@
-import {ColorSpace} from '../../main/color-types';
+import {ColorSpace} from '../../main/colors/color-types';
 import {lab, packLab, unpackLab} from '../../main/color-spaces/lab';
 
 describe('lab', () => {

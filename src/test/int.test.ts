@@ -1,4 +1,4 @@
-import {and, clampByte, left, or, right, xor} from '../main/int';
+import {and, clampByte, left, or, right, xor} from '../main/int64';
 
 describe('left', () => {
 

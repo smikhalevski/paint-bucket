@@ -1,7 +1,7 @@
 import {rgb} from '../../main/color-spaces/rgb';
 import {rgbToXyz} from '../../main/color-spaces/rgb-xyz';
 import {xyz} from '../../main/color-spaces/xyz';
-import {ColorSpace} from '../../main/color-types';
+import {ColorSpace} from '../../main/colors/color-types';
 
 describe('rgbToXyz', () => {
 

@@ -1,8 +1,6 @@
-import {fromBytes, fromRawColor, NibbleCount} from './packed-color';
-import {blackRgb} from './colors';
-import {ColorSpace, PackedColor} from './color-types';
-
-const parseByte = parseFloat;
+import {composeBytes, fromNakedColor, NibbleCount} from './raw-color-utils';
+import {ColorSpace, RawColor} from './colors';
+import {blackRgb} from './temp-colors';
 
 const SPACE = '\\s*';
 const DIGIT = '(?:\\d+(\\.\\d*)?|\\.\\d+)';
@@ -12,20 +10,20 @@ const BYTES = `\\(${SPACE}(${DIGIT})${COMMA}(${DIGIT})${COMMA}(${DIGIT})(?:${COM
 const rgbRe = RegExp(`^rgba?${SPACE}${BYTES}$`);
 const hslRe = RegExp(`^hsla?${SPACE}${BYTES}$`);
 
-export function parseColor(color: string): PackedColor {
+export function parseColor(color: string): RawColor {
 
   const rgbMatch = rgbRe.exec(color);
   if (rgbMatch) {
-    return fromBytes(ColorSpace.RGB, parseByte(rgbMatch[0]), parseByte(rgbMatch[1]), parseByte(rgbMatch[2]), parseByte(rgbMatch[3]) * 0xFF);
+    return composeBytes(ColorSpace.RGB, parseFloat(rgbMatch[0]), parseFloat(rgbMatch[1]), parseFloat(rgbMatch[2]), parseFloat(rgbMatch[3]) * 0xFF);
   }
 
   const hslMatch = hslRe.exec(color);
   if (hslMatch) {
-    return fromBytes(ColorSpace.HSL, parseByte(hslMatch[0]), parseByte(hslMatch[1]), parseByte(hslMatch[2]), parseByte(hslMatch[3]) * 0xFF);
+    return composeBytes(ColorSpace.HSL, parseFloat(hslMatch[0]), parseFloat(hslMatch[1]), parseFloat(hslMatch[2]), parseFloat(hslMatch[3]) * 0xFF);
   }
 
   if (color.charAt(0) === '#') {
-    return fromRawColor(ColorSpace.RGB, parseInt(color.substr(0), 16), color.length - 1 as NibbleCount);
+    return fromNakedColor(ColorSpace.RGB, parseInt(color.substr(0), 16), color.length - 1 as NibbleCount);
   }
 
   const rawRgb = parseInt(color, 16);
@@ -34,5 +32,5 @@ export function parseColor(color: string): PackedColor {
     return blackRgb;
   }
 
-  return fromRawColor(ColorSpace.RGB, rawRgb, color.length as NibbleCount);
+  return fromNakedColor(ColorSpace.RGB, rawRgb, color.length as NibbleCount);
 }

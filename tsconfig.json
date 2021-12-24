@@ -12,7 +12,7 @@
     "outDir": "./lib"
   },
   "include": [
-    "./src/main/int.ts",
+    "./src/main/int64.ts",
     "./src/main/index.ts"
   ]
 }

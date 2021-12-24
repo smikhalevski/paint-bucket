@@ -1,5 +1,5 @@
 import {hsl, packHsl, unpackHsl} from '../../main/color-spaces/hsl';
-import {ColorSpace} from '../../main/color-types';
+import {ColorSpace} from '../../main/colors/color-types';
 
 describe('hsl', () => {
 

@@ -3,33 +3,33 @@ import {abs, floor, min, pow, round} from './math';
 export type Byte = number;
 
 // Max value 0x1f_ff_ff_ff_ff_ff_ff
-export type Int = number;
+export type Int64 = number;
 
 export const FF = 0xFF;
 
 const HI = 0x80000000;
 const LO = 0x7fffffff;
 
-export function left(x: Int, shift: Int): Int {
+export function left(x: Int64, shift: Int64): Int64 {
   return floor(x) * pow(2, shift);
 }
 
-export function right(x: Int, shift: Int): Int {
+export function right(x: Int64, shift: Int64): Int64 {
   return floor(x / pow(2, shift));
 }
 
-export function xor(a: Int, b: Int): Int {
+export function xor(a: Int64, b: Int64): Int64 {
   return ((a / HI) ^ (b / HI)) * HI + ((a & LO) ^ (b & LO));
 }
 
-export function or(a: Int, b: Int): Int {
+export function or(a: Int64, b: Int64): Int64 {
   return ((a / HI) | (b / HI)) * HI + ((a & LO) | (b & LO));
 }
 
-export function and(a: Int, b: Int): Int {
+export function and(a: Int64, b: Int64): Int64 {
   return ((a / HI) & (b / HI)) * HI + ((a & LO) & (b & LO));
 }
 
-export function clampByte(a: Int): Byte {
+export function clampByte(a: Int64): Byte {
   return min(round(abs(a)), 0xFF);
 }

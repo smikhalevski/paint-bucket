@@ -1,8 +1,8 @@
 import {pow} from '../math';
-import {IRgbColor, IXyzColor} from '../color-types';
-import {FF} from '../int';
+import {FF} from '../int64';
+import {Rgb, Xyz} from '../colors';
 
-export function rgbToXyz(rgb: IRgbColor, xyz: IXyzColor): IXyzColor {
+export function rgbToXyz(rgb: Rgb, xyz: Xyz): Xyz {
 
   const r = rotateRgb(rgb.R / FF);
   const g = rotateRgb(rgb.G / FF);

@@ -1,7 +1,7 @@
 import {xyzToLab} from '../../main/color-spaces/xyz-lab';
 import {lab} from '../../main/color-spaces/lab';
 import {xyz} from '../../main/color-spaces/xyz';
-import {ColorSpace} from '../../main/color-types';
+import {ColorSpace} from '../../main/colors/color-types';
 
 describe('xyzToLab', () => {
 

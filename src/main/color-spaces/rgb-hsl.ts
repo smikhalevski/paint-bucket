@@ -1,8 +1,9 @@
 import {max, min} from '../math';
-import {IHslColor, IRgbColor} from '../color-types';
-import {FF} from '../int';
+import {FF} from '../int64';
+import {Hsl, Rgb} from '../colors';
 
-export function rgbToHsl(rgb: IRgbColor, hsl: IHslColor): IHslColor {
+export function rgbToHsl(rgb: Rgb, hsl: Hsl): Hsl {
+
   const r = rgb.R / FF;
   const g = rgb.G / FF;
   const b = rgb.B / FF;
@@ -41,7 +42,7 @@ export function rgbToHsl(rgb: IRgbColor, hsl: IHslColor): IHslColor {
   return hsl;
 }
 
-export function hslToRgb(hsl: IHslColor, rgb: IRgbColor): IRgbColor {
+export function hslToRgb(hsl: Hsl, rgb: Rgb): Rgb {
   const h = hsl.H / 360;
   const s = hsl.S / 100;
   const l = hsl.L / 100;

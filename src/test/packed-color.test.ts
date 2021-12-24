@@ -1,35 +1,35 @@
-import {fromBytes, fromRawColor, getColorByte, getColorSpace, NibbleCount, setColorByte} from '../main/packed-color';
-import {ColorSpace} from '../main/color-types';
+import {composeBytes, fromNakedColor, getColorByte, getColorSpace, NibbleCount, setColorByte} from '../main/raw-color-utils';
+import {ColorSpace} from '../main/colors/color-types';
 
-describe('fromRawColor', () => {
+describe('fromNakedColor', () => {
 
   test('normalizes raw color bytes', () => {
-    expect(fromRawColor(ColorSpace.HSL, 0x1, 1)).toBe(0x11_11_11_FF_1);
-    expect(fromRawColor(ColorSpace.HSL, 0x12, 2)).toBe(0x12_12_12_FF_1);
-    expect(fromRawColor(ColorSpace.HSL, 0x123, 3)).toBe(0x11_22_33_FF_1);
-    expect(fromRawColor(ColorSpace.HSL, 0x1234, 4)).toBe(0x11_22_33_44_1);
-    expect(fromRawColor(ColorSpace.HSL, 0x123456, 6)).toBe(0x12_34_56_FF_1);
-    expect(fromRawColor(ColorSpace.HSL, 0x12345678, 8)).toBe(0x12_34_56_78_1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x1, 1)).toBe(0x11_11_11_FF_1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x12, 2)).toBe(0x12_12_12_FF_1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x123, 3)).toBe(0x11_22_33_FF_1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x1234, 4)).toBe(0x11_22_33_44_1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x123456, 6)).toBe(0x12_34_56_FF_1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x12345678, 8)).toBe(0x12_34_56_78_1);
   });
 
   test('returns black for invalid nibble count', () => {
-    expect(fromRawColor(ColorSpace.RGB, 0x123, 0 as NibbleCount)).toBe(0);
+    expect(fromNakedColor(ColorSpace.RGB, 0x123, 0 as NibbleCount)).toBe(0);
 
-    expect(fromRawColor(ColorSpace.HSL, 0x123, 0 as NibbleCount)).toBe(1);
-    expect(fromRawColor(ColorSpace.HSL, 0x12345, 5 as NibbleCount)).toBe(1);
-    expect(fromRawColor(ColorSpace.HSL, 0x1234567, 7 as NibbleCount)).toBe(1);
-    expect(fromRawColor(ColorSpace.HSL, 0x123456789A, 10 as NibbleCount)).toBe(1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x123, 0 as NibbleCount)).toBe(1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x12345, 5 as NibbleCount)).toBe(1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x1234567, 7 as NibbleCount)).toBe(1);
+    expect(fromNakedColor(ColorSpace.HSL, 0x123456789A, 10 as NibbleCount)).toBe(1);
   });
 });
 
-describe('fromBytes', () => {
+describe('composeBytes', () => {
 
   test('assembles color from bytes', () => {
-    expect(fromBytes(ColorSpace.RGB, 0x12, 0x34, 0x56, 0x78)).toBe(0x123456780);
+    expect(composeBytes(ColorSpace.RGB, 0x12, 0x34, 0x56, 0x78)).toBe(0x123456780);
   });
 
   test('clamps bytes', () => {
-    expect(fromBytes(ColorSpace.RGB, 0x12, 0xAA_34, 0x56, 0xAA_78)).toBe(0x12FF56FF0);
+    expect(composeBytes(ColorSpace.RGB, 0x12, 0xAA_34, 0x56, 0xAA_78)).toBe(0x12FF56FF0);
   });
 });
 

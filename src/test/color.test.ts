@@ -7,44 +7,44 @@ import {
   isHsl,
   isRgb,
   rgb,
-  toColorSpace,
+  convertColorSpace,
   toGrayscale,
   whiteHsl,
   whiteRgb,
-} from '../main/colors';
-import {ColorSpace} from '../main/color-types';
+} from '../main/color-space-utils';
+import {ColorSpace} from '../main/colors/color-types';
 
 
-describe('toColorSpace', () => {
+describe('convertColorSpace', () => {
 
   test('converts RGB to RGB', () => {
-    expect(toColorSpace(blackRgb, ColorSpace.RGB)).toBe(blackRgb);
-    expect(toColorSpace(rgb(0x7F, 0x7F, 0x7F), ColorSpace.RGB)).toBe(rgb(0x7F, 0x7F, 0x7F));
-    expect(toColorSpace(rgb(0x12, 0x34, 0x56), ColorSpace.RGB)).toBe(rgb(0x12, 0x34, 0x56));
+    expect(convertColorSpace(blackRgb, ColorSpace.RGB)).toBe(blackRgb);
+    expect(convertColorSpace(rgb(0x7F, 0x7F, 0x7F), ColorSpace.RGB)).toBe(rgb(0x7F, 0x7F, 0x7F));
+    expect(convertColorSpace(rgb(0x12, 0x34, 0x56), ColorSpace.RGB)).toBe(rgb(0x12, 0x34, 0x56));
   });
 
   // test('converts RGB to HSL', () => {
-  //   expect(toColorSpace(blackRgb, ColorSpace.HSL)).toBe(hsl(0, 0, 0));
-  //   expect(toColorSpace(rgb(0x7F, 0x7F, 0x7F), ColorSpace.HSL)).toBe(hsl(0, 0, 0x7F));
-  //   expect(toColorSpace(rgb(0x12, 0x34, 0x56), ColorSpace.HSL)).toBe(hsl(0x94, 0xA6, 0x34));
+  //   expect(convertColorSpace(blackRgb, ColorSpace.HSL)).toBe(hsl(0, 0, 0));
+  //   expect(convertColorSpace(rgb(0x7F, 0x7F, 0x7F), ColorSpace.HSL)).toBe(hsl(0, 0, 0x7F));
+  //   expect(convertColorSpace(rgb(0x12, 0x34, 0x56), ColorSpace.HSL)).toBe(hsl(0x94, 0xA6, 0x34));
   // });
 
   test('converts HSL to HSL', () => {
-    expect(toColorSpace(blackHsl, ColorSpace.HSL)).toBe(blackHsl);
-    expect(toColorSpace(hsl(0x7F, 0x7F, 0x7F), ColorSpace.HSL)).toBe(hsl(0x7F, 0x7F, 0x7F));
-    expect(toColorSpace(hsl(0x12, 0x34, 0x56), ColorSpace.HSL)).toBe(hsl(0x12, 0x34, 0x56));
+    expect(convertColorSpace(blackHsl, ColorSpace.HSL)).toBe(blackHsl);
+    expect(convertColorSpace(hsl(0x7F, 0x7F, 0x7F), ColorSpace.HSL)).toBe(hsl(0x7F, 0x7F, 0x7F));
+    expect(convertColorSpace(hsl(0x12, 0x34, 0x56), ColorSpace.HSL)).toBe(hsl(0x12, 0x34, 0x56));
   });
 
   // test('converts HSL to RGB', () => {
-  //   expect(toColorSpace(blackHsl, ColorSpace.RGB)).toBe(rgb(0, 0, 0));
-  //   expect(toColorSpace(hsl(0, 0, 0x7F), ColorSpace.RGB)).toBe(rgb(0x7F, 0x7F, 0x7F));
+  //   expect(convertColorSpace(blackHsl, ColorSpace.RGB)).toBe(rgb(0, 0, 0));
+  //   expect(convertColorSpace(hsl(0, 0, 0x7F), ColorSpace.RGB)).toBe(rgb(0x7F, 0x7F, 0x7F));
   //
   //   // heavy rounding error
-  //   expect(toColorSpace(hsl(0x94, 0xA6, 0x34), ColorSpace.RGB)).toBe(rgb(0x12, 0x35, 0x55));
+  //   expect(convertColorSpace(hsl(0x94, 0xA6, 0x34), ColorSpace.RGB)).toBe(rgb(0x12, 0x35, 0x55));
   // });
 
   test('returns -1 for unknown color model', () => {
-    expect(toColorSpace(0x33, ColorSpace.RGB)).toBe(-1);
+    expect(convertColorSpace(0x33, ColorSpace.RGB)).toBe(-1);
   });
 });
 

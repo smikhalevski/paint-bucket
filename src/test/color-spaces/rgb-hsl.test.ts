@@ -1,7 +1,7 @@
 import {hsl} from '../../main/color-spaces/hsl';
 import {rgb} from '../../main/color-spaces/rgb';
 import {hslToRgb, rgbToHsl} from '../../main/color-spaces/rgb-hsl';
-import {ColorSpace} from '../../main/color-types';
+import {ColorSpace} from '../../main/colors/color-types';
 
 describe('rgbToHsl', () => {
 

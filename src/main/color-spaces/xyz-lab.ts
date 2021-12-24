@@ -1,12 +1,11 @@
 import {pow} from '../math';
-import {ILabColor, IXyzColor} from '../color-types';
-import {MAX_X, MAX_Z} from './xyz';
+import {Lab, Xyz} from '../colors';
 
-export function xyzToLab(xyz: IXyzColor, lab: ILabColor): ILabColor {
+export function xyzToLab(xyz: Xyz, lab: Lab): Lab {
 
-  const x = rotateXyz(xyz.X / MAX_X);
+  const x = rotateXyz(xyz.X / Xyz.MAX_X);
   const y = rotateXyz(xyz.Y / 100);
-  const z = rotateXyz(xyz.Z / MAX_Z);
+  const z = rotateXyz(xyz.Z / Xyz.MAX_Z);
 
   lab.L = (116 * y) - 16;
   lab.A = 500 * (x - y);
