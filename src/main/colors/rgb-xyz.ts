@@ -1,6 +1,6 @@
 import {pow} from '../math';
 import {FF} from '../int64';
-import {Rgb, Xyz} from '../colors';
+import {Rgb, Xyz} from './index';
 
 export function rgbToXyz(rgb: Rgb, xyz: Xyz): Xyz {
 

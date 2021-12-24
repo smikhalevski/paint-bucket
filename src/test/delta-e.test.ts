@@ -1,6 +1,6 @@
 import {deltaE2000} from '../main/deltaE2000';
-import {rgb} from '../main/color-spaces/rgb';
-import {lab} from '../main/color-spaces/lab';
+import {rgb} from '../main/converters/rgb';
+import {lab} from '../main/converters/lab';
 
 describe('deltaE2000', () => {
 

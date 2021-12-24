@@ -26,10 +26,6 @@ export function lerp(t: number, a: number, b: number): number {
   return a + t * (b - a);
 }
 
-export function intOrZero(value: string, radix: number): number {
-  return parseInt(value, radix) || 0;
-}
-
-export function floatOrZero(value: string): number {
-  return parseFloat(value) || 0;
+export function clamp(x: number, a: number, b: number): number {
+  return max(a, min(x, b));
 }

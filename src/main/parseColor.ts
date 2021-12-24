@@ -1,7 +1,6 @@
-import {composeBytes, fromNakedColor} from './raw-color-utils';
-import {ColorSpace, RawColor} from './colors';
+import {normalizeChannels} from './channel-utils';
+import {Hsl, Rgb} from './colors';
 import {FF} from './int64';
-import {floatOrZero, intOrZero} from './math';
 
 /**
  * CSS numerical or percentage value.
@@ -19,21 +18,25 @@ const TUPLE = `^(\\w+)\\s*\\(?\\s*(${VALUE})${COMMA}(${VALUE})${COMMA}(${VALUE})
 
 const tupleRe = RegExp(TUPLE);
 
-export function parseCssColor(cssColor: string): RawColor {
+export function parseColor(color: string): Rgb | Hsl {
 
-  cssColor = cssColor.trim();
+  color = color.trim();
 
-  if (cssColor.charCodeAt(0) === 35 /* # */) {
-    return fromNakedColor(ColorSpace.RGB, intOrZero(cssColor.substr(1), 16), cssColor.length - 1);
+  if (color.charCodeAt(0) === 35 /* # */) {
+    const rgb = new Rgb();
+    rgb.setRawColor(normalizeChannels(parseInt(color.substr(1), 16), color.length - 1));
+    return rgb;
   }
 
-  const nakedRgb = parseInt(cssColor, 16);
+  const rawColor = parseInt(color, 16);
 
-  if (!isNaN(nakedRgb)) {
-    return fromNakedColor(ColorSpace.RGB, nakedRgb, cssColor.length);
+  if (!isNaN(rawColor)) {
+    const rgb = new Rgb();
+    rgb.setRawColor(normalizeChannels(rawColor, color.length));
+    return rgb;
   }
 
-  const tupleMatch = tupleRe.exec(cssColor);
+  const tupleMatch = tupleRe.exec(color);
 
   if (tupleMatch) {
     const colorSpaceName = tupleMatch[1].toLowerCase();
@@ -44,22 +47,22 @@ export function parseCssColor(cssColor: string): RawColor {
     const d = parseAlpha(tupleMatch[5]);
 
     if (colorSpaceName === 'rgb' || colorSpaceName === 'rgba') {
-      return composeBytes(ColorSpace.RGB, a, b, c, d);
+      return new Rgb(a, b, c, d);
     }
     if (colorSpaceName === 'hsl' || colorSpaceName === 'hsla') {
-      return composeBytes(ColorSpace.HSL, a, b, c, d);
+      return new Hsl(a, b, c, d);
     }
   }
 
-  throw new Error('Illegal color format: ' + cssColor);
+  throw new Error('Invalid color format: ' + color);
 }
 
 function parseByte(value: string): number {
-  return isPercentage(value) ? floatOrZero(value) / 100 * FF : floatOrZero(value);
+  return isPercentage(value) ? parseFloat(value) / 100 * FF : parseFloat(value);
 }
 
 function parseAlpha(value: string | undefined): number {
-  return value === undefined ? FF : isPercentage(value) ? floatOrZero(value) / 100 * FF : floatOrZero(value) * FF;
+  return value === undefined ? FF : isPercentage(value) ? parseFloat(value) / 100 * FF : parseFloat(value) * FF;
 }
 
 function isPercentage(value: string): boolean {

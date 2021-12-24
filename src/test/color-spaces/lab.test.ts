@@ -1,5 +1,5 @@
-import {ColorSpace} from '../../main/colors/color-types';
-import {lab, packLab, unpackLab} from '../../main/color-spaces/lab';
+import {ColorSpace} from '../../main/color-types';
+import {lab, packLab, unpackLab} from '../../main/converters/lab';
 
 describe('lab', () => {
 

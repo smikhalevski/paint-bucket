@@ -12,7 +12,7 @@ import {
   whiteHsl,
   whiteRgb,
 } from '../main/color-space-utils';
-import {ColorSpace} from '../main/colors/color-types';
+import {ColorSpace} from '../main/color-types';
 
 
 describe('convertColorSpace', () => {
@@ -48,7 +48,7 @@ describe('convertColorSpace', () => {
   });
 });
 
-describe('isEqualColor', () => {
+describe('areEqualColors', () => {
 
   test('returns true if colors are exactly equal', () => {
     expect(isEqualColor(rgb(0x12, 0x34, 0x56), rgb(0x12, 0x34, 0x56))).toBe(true);

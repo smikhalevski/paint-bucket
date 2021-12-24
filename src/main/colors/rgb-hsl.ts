@@ -1,6 +1,6 @@
 import {max, min} from '../math';
 import {FF} from '../int64';
-import {Hsl, Rgb} from '../colors';
+import {Hsl, Rgb} from './index';
 
 export function rgbToHsl(rgb: Rgb, hsl: Hsl): Hsl {
 

@@ -1,8 +1,5 @@
 import {abs, atan2, cos, deg, exp, hyp, pow2, rad, sin, sqrt} from './math';
-import {convertColorSpace} from './color-space-utils';
-import {Color, Lab} from './colors';
-
-const tempLab = new Lab(0, 0, 0);
+import {Lab} from './colors';
 
 /**
  * Computes the CIEDE2000 color-difference.
@@ -15,15 +12,17 @@ const tempLab = new Lab(0, 0, 0);
  * - [10, 50)  Colors are more similar than opposite.
  * - [50, 100] Colors are exact opposite.
  *
+ * Alpha channel is ignored.
+ *
  * @see http://zschuessler.github.io/DeltaE/learn
  * @see http://www.ece.rochester.edu/~gsharma/ciede2000/
  * @see https://en.wikipedia.org/wiki/Color_difference
  * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
  */
-export function deltaE2000(color1: Color, color2: Color): number {
+export function deltaE2000(lab1: Lab, lab2: Lab): number {
 
-  const {L: L1, A: A1, B: B1} = convertColorSpace(color1, tempLab);
-  const {L: L2, A: A2, B: B2} = convertColorSpace(color2, tempLab);
+  const {L: L1, A: A1, B: B1} = lab1;
+  const {L: L2, A: A2, B: B2} = lab2;
 
   const Cab1 = hyp(A1, B1); // (2)
   const Cab2 = hyp(A2, B2); // (2)

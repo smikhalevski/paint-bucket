@@ -1,5 +1,5 @@
-import {packRgb, rgb, unpackRgb} from '../../main/color-spaces/rgb';
-import {ColorSpace} from '../../main/colors/color-types';
+import {packRgb, rgb, unpackRgb} from '../../main/converters/rgb';
+import {ColorSpace} from '../../main/color-types';
 
 describe('rgb', () => {
 
