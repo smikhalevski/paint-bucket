@@ -1,10 +1,22 @@
 import {Int64} from '../data-types';
 import {composeChannels, getColorChannel} from '../channel-utils';
 import {FF} from '../int64';
-import {IColor, IColorSpace} from './color-space-types';
+import {IColorSpace} from './color-space-types';
 import {hslToRgb, rgbToHsl} from './hsl-rgb';
 
-export interface IHsl extends IColor<'hsl'> {
+/**
+ * HSLa color space definition.
+ */
+export const hslColorSpace: IColorSpace<IHsl> = {
+  createColor: createHsl,
+  isColor: isHsl,
+  colorToRgb: hslToRgb,
+  rgbToColor: rgbToHsl,
+};
+
+export interface IHsl {
+
+  type: 'hsl',
 
   /**
    * Hue ∈ [0, 360].
@@ -27,15 +39,9 @@ export interface IHsl extends IColor<'hsl'> {
   a: number;
 }
 
-/**
- * HSLa color space definition.
- */
-export const hsl: IColorSpace<IHsl, 'hsl'> = {
-  type: 'hsl',
-  create: createHsl,
-  colorToRgb: hslToRgb,
-  rgbToColor: rgbToHsl,
-};
+export function isHsl(value: any): value is IHsl {
+  return typeof value === 'object' && value !== null && value.type === 'hsl';
+}
 
 /**
  * Creates black color in HSLa color space.

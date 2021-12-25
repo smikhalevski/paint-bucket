@@ -1,10 +1,22 @@
 import {composeChannels, getColorChannel} from '../channel-utils';
 import {FF} from '../int64';
 import {Int64} from '../data-types';
-import {IColor, IColorSpace} from './color-space-types';
+import {IColorSpace} from './color-space-types';
 import {rgbToRgb} from './rgb-rgb';
 
-export interface IRgb extends IColor<'rgb'> {
+/**
+ * RGBa color space definition.
+ */
+export const rgbColorSpace: IColorSpace<IRgb> = {
+  createColor: createRgb,
+  isColor: isRgb,
+  colorToRgb: rgbToRgb,
+  rgbToColor: rgbToRgb,
+};
+
+export interface IRgb {
+
+  readonly type: 'rgb';
 
   /**
    * Red ∈ [0, 255].
@@ -27,15 +39,9 @@ export interface IRgb extends IColor<'rgb'> {
   a: number;
 }
 
-/**
- * RGBa color space definition.
- */
-export const rgb: IColorSpace<IRgb, 'rgb'> = {
-  type: 'rgb',
-  create: createRgb,
-  colorToRgb: rgbToRgb,
-  rgbToColor: rgbToRgb,
-};
+export function isRgb(value: any): value is IRgb {
+  return typeof value === 'object' && value !== null && value.type === 'rgb';
+}
 
 /**
  * Creates black color in RGBa color space.

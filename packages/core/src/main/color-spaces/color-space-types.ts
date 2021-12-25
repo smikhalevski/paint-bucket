@@ -1,14 +1,10 @@
 import {IRgb} from './rgb';
 
-export interface IColor<T> {
-  type: T;
-}
+export interface IColorSpace<C = unknown> {
 
-export interface IColorSpace<C extends IColor<T>, T> {
+  createColor(): C;
 
-  type: T;
-
-  create(): C;
+  isColor(value: unknown): value is C;
 
   colorToRgb(color: C, rgb: IRgb): void;
 
