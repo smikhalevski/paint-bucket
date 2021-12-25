@@ -1,58 +1,24 @@
 {
   "name": "paint-bucket",
-  "version": "1.0.0",
-  "description": "The color encoder/decoder.",
-  "main": "./lib/index-cjs.js",
-  "module": "./lib/index.js",
-  "types": "./lib/index.d.ts",
-  "sideEffects": false,
-  "files": [
-    "lib"
-  ],
+  "private": true,
   "scripts": {
-    "build": "tsc && npm run rollup && npm run terser",
-    "rollup": "rollup --input ./lib/index.js --file ./lib/index-cjs.js --format cjs --plugin @rollup/plugin-node-resolve",
-    "terser": "terser --compress --mangle toplevel --output ./lib/index-cjs.js -- ./lib/index-cjs.js",
-    "clean": "rm -rf ./lib ./docs",
-    "test": "jest --detectOpenHandles",
-    "perf": "[ -d ./lib ] || npm run build && node --expose-gc --max-old-space-size=4096 ./src/test/perf.js",
-    "docs": "typedoc ./src/main/index.ts",
-    "publish-docs": "[ -d ./docs ] && [[ ! $(git status --porcelain) ]] && branch=$(git rev-parse --abbrev-ref HEAD) && sha=$(git rev-parse --short HEAD) && t=$(mktemp -d) && cp -R ./docs/ $t && git checkout ghpages && ls -A | grep -wv .git | xargs rm -rf && cp -R $t/ . && git add . && git commit -m \"Updated docs ($sha)\" && git push && git checkout $branch",
-    "release-docs": "npm run clean && npm run encode-data && npm run docs && npm run publish-docs"
+    "build": "npm run build --workspaces",
+    "clean": "rimraf ./docs && npm run clean --workspaces",
+    "test": "npm run test --workspaces"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/smikhalevski/paint-bucket.git"
-  },
-  "keywords": [
-    "color",
-    "decode",
-    "hex",
-    "rgb",
-    "rgba",
-    "hsl",
-    "hsla"
+  "workspaces": [
+    "./packages/core",
+    "./packages/color-difference"
   ],
-  "author": "Savva Mikhalevski <smikhalevski@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/smikhalevski/paint-bucket/issues"
-  },
-  "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
-  "jest": {
-    "preset": "ts-jest"
-  },
   "devDependencies": {
-    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
-    "@smikhalevski/perf-test": "^1.0.0",
     "@types/jest": "^27.0.1",
-    "chalk": "^4.1.2",
     "jest": "^27.0.2",
+    "rimraf": "^3.0.2",
     "rollup": "^2.50.5",
     "terser": "^5.7.0",
     "ts-jest": "^27.0.2",
     "typedoc": "^0.21.4",
-    "typescript": "4.2.4"
+    "typescript": "^4.4.3"
   }
 }
