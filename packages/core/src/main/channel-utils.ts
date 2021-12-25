@@ -1,6 +1,6 @@
 import {abs} from './math';
-import {and, Byte, clampByte, Int64, left, or, right, xor} from './int64';
-import {RawColor} from './color-types';
+import {and, clampByte, left, or, right, xor} from './int64';
+import {Byte, Int64} from './data-types';
 
 export type ByteOffset = 0 | 1 | 2 | 3;
 
@@ -8,21 +8,21 @@ export type ByteOffset = 0 | 1 | 2 | 3;
  * Normalizes the size of channel in the given color.
  *
  * ```ts
- * normalizeChannels(ColorSpace.RGB, 0x1, 1) // → 0x11_11_11_FF
- * normalizeChannels(ColorSpace.RGB, 0x12, 2) // → 0x12_12_12_FF
- * normalizeChannels(ColorSpace.RGB, 0x123, 3) // → 0x11_22_33_FF
- * normalizeChannels(ColorSpace.RGB, 0x1234, 4) // → 0x11_22_33_44
- * normalizeChannels(ColorSpace.RGB, 0x12345, 5) // → Error
- * normalizeChannels(ColorSpace.RGB, 0x123456, 6) // → 0x12_34_56_FF
- * normalizeChannels(ColorSpace.RGB, 0x1234567, 7) // → Error
- * normalizeChannels(ColorSpace.RGB, 0x12345678, 8) // → 0x12_34_56_78
+ * normalizeChannels(0x1, 1) // → 0x11_11_11_FF
+ * normalizeChannels(0x12, 2) // → 0x12_12_12_FF
+ * normalizeChannels(0x123, 3) // → 0x11_22_33_FF
+ * normalizeChannels(0x1234, 4) // → 0x11_22_33_44
+ * normalizeChannels(0x12345, 5) // → Error
+ * normalizeChannels(0x123456, 6) // → 0x12_34_56_FF
+ * normalizeChannels(0x1234567, 7) // → Error
+ * normalizeChannels(0x12345678, 8) // → 0x12_34_56_78
  * ```
  *
  * @param color The input color to normalize, ex. `0xFF_FF_FF` for white in RGB space.
  * @param nibbleCount The number (1, 2, 3, 4, 6 or 8) of nibbles the input color.
  * @return A valid raw color.
  */
-export function normalizeChannels(color: Int64, nibbleCount: number): RawColor {
+export function normalizeChannels(color: Int64, nibbleCount: number): Int64 {
 
   color = abs(color);
 
@@ -75,19 +75,19 @@ export function normalizeChannels(color: Int64, nibbleCount: number): RawColor {
   throw new Error('Invalid nibble count: ' + nibbleCount);
 }
 
-export function unsafeComposeChannels(a: Byte, b: Byte, c: Byte, d: Byte): RawColor {
+export function unsafeComposeChannels(a: Byte, b: Byte, c: Byte, d: Byte): Int64 {
   return left(a, 24) + left(b, 16) + (c << 8) + d;
 }
 
-export function composeChannels(a: Byte, b: Byte, c: Byte, d: Byte): RawColor {
+export function composeChannels(a: Byte, b: Byte, c: Byte, d: Byte): Int64 {
   return unsafeComposeChannels(clampByte(a), clampByte(b), clampByte(c), clampByte(d));
 }
 
-export function getColorChannel(rawColor: RawColor, offset: ByteOffset): Byte {
-  return 0xFF & right(rawColor, 24 - offset * 8);
+export function getColorChannel(color: Int64, offset: ByteOffset): Byte {
+  return 0xFF & right(color, 24 - offset * 8);
 }
 
-export function setColorChannel(rawColor: RawColor, offset: ByteOffset, value: Byte): RawColor {
+export function setColorChannel(color: Int64, offset: ByteOffset, value: Byte): Int64 {
   const shift = 24 - offset * 8;
-  return or(left(clampByte(value), shift), and(xor(left(0xFF, shift), 0xFF_FF_FF_FF), rawColor));
+  return or(left(clampByte(value), shift), and(xor(left(0xFF, shift), 0xFF_FF_FF_FF), color));
 }

@@ -1,5 +1,5 @@
-import {composeChannels, getColorChannel} from '../channel-utils';
-import {FF} from '../int64';
+import {composeChannels, getColorChannel} from '@paint-bucket/core/src/main/channel-utils';
+import {FF} from '@paint-bucket/core/src/main/int64';
 import {IColor, RawColor} from '../color-types';
 import {Rgb} from './Rgb';
 import {xyzToLab} from './xyz-lab';

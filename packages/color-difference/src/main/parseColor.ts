@@ -1,6 +1,6 @@
-import {normalizeChannels} from './channel-utils';
+import {normalizeChannels} from '@paint-bucket/core/src/main/channel-utils';
 import {Hsl, Rgb} from './colors';
-import {FF} from './int64';
+import {FF} from '@paint-bucket/core/src/main/int64';
 
 /**
  * CSS numerical or percentage value.

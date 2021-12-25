@@ -1,9 +1,5 @@
 import {abs, floor, min, pow, round} from './math';
-
-export type Byte = number;
-
-// Max value 0x1f_ff_ff_ff_ff_ff_ff
-export type Int64 = number;
+import {Byte, Int64} from './data-types';
 
 export const FF = 0xFF;
 

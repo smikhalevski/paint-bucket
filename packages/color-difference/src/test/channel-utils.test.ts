@@ -1,4 +1,4 @@
-import {composeChannels, normalizeChannels, getColorChannel, getColorSpace, setColorChannel} from '../main/channel-utils';
+import {composeChannels, normalizeChannels, getColorChannel, getColorSpace, setColorChannel} from '@paint-bucket/core/src/main/channel-utils';
 import {ColorSpace} from '../main/color-types';
 
 describe('normalizeChannels', () => {

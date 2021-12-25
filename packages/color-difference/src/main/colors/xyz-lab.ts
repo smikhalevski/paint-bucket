@@ -1,4 +1,4 @@
-import {pow} from '../math';
+import {pow} from '@paint-bucket/core/src/main/math';
 import {Lab, Xyz} from './index';
 
 export function xyzToLab(xyz: Xyz, lab: Lab): Lab {

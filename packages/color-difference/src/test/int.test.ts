@@ -1,4 +1,4 @@
-import {and, clampByte, left, or, right, xor} from '../main/int64';
+import {and, clampByte, left, or, right, xor} from '@paint-bucket/core/src/main/int64';
 
 describe('left', () => {
 

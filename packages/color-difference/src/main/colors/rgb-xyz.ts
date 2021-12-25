@@ -1,5 +1,5 @@
-import {pow} from '../math';
-import {FF} from '../int64';
+import {pow} from '@paint-bucket/core/src/main/math';
+import {FF} from '@paint-bucket/core/src/main/int64';
 import {Rgb, Xyz} from './index';
 
 export function rgbToXyz(rgb: Rgb, xyz: Xyz): Xyz {

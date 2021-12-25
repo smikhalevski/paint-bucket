@@ -1,4 +1,4 @@
-import {abs, atan2, cos, deg, exp, hyp, pow2, rad, sin, sqrt} from './math';
+import {abs, atan2, cos, deg, exp, hyp, pow2, rad, sin, sqrt} from '@paint-bucket/core/src/main/math';
 import {Lab} from './colors';
 
 /**

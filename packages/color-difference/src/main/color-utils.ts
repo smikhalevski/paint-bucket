@@ -1,5 +1,5 @@
-import {clamp, lerp, sqrt} from './math';
-import {right} from './int64';
+import {clamp, lerp, sqrt} from '@paint-bucket/core/src/main/math';
+import {right} from '@paint-bucket/core/src/main/int64';
 import {Hsl, Lab, Rgb} from './colors';
 import {IColor} from './color-types';
 import {deltaE2000} from './deltaE2000';

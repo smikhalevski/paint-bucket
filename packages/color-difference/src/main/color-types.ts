@@ -1,5 +1,5 @@
-import {Int64} from './int64';
 import {Rgb} from './colors';
+import {Int64} from '@paint-bucket/core/src/main/data-types';
 
 export type RawColor = Int64;
 
