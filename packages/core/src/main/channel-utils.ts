@@ -1,8 +1,4 @@
-import {abs} from './math';
-import {and, clampByte, left, or, right, xor} from './int64';
-import {Byte, Int64} from './core-types';
-
-export type ByteOffset = 0 | 1 | 2 | 3;
+import {and, byte, left, or, right, xor} from 'numeric-wrench';
 
 /**
  * Normalizes the size of channel in the given color.
@@ -22,9 +18,9 @@ export type ByteOffset = 0 | 1 | 2 | 3;
  * @param nibbleCount The number (1, 2, 3, 4, 6 or 8) of nibbles the input color.
  * @return A valid raw color.
  */
-export function normalizeChannels(color: Int64, nibbleCount: number): Int64 {
+export function normalizeChannels(color: number, nibbleCount: number): number {
 
-  color = abs(color);
+  color = Math.abs(color);
 
   let a, b, c, d;
 
@@ -75,19 +71,19 @@ export function normalizeChannels(color: Int64, nibbleCount: number): Int64 {
   throw new Error('Invalid nibble count: ' + nibbleCount);
 }
 
-export function unsafeComposeChannels(a: Byte, b: Byte, c: Byte, d: Byte): Int64 {
+export function unsafeComposeChannels(a: number, b: number, c: number, d: number): number {
   return left(a, 24) + left(b, 16) + (c << 8) + d;
 }
 
-export function composeChannels(a: Byte, b: Byte, c: Byte, d: Byte): Int64 {
-  return unsafeComposeChannels(clampByte(a), clampByte(b), clampByte(c), clampByte(d));
+export function composeChannels(a: number, b: number, c: number, d: number): number {
+  return unsafeComposeChannels(byte(a), byte(b), byte(c), byte(d));
 }
 
-export function getColorChannel(color: Int64, offset: ByteOffset): Byte {
+export function getColorChannel(color: number, offset: number): number {
   return 0xFF & right(color, 24 - offset * 8);
 }
 
-export function setColorChannel(color: Int64, offset: ByteOffset, value: Byte): Int64 {
+export function setColorChannel(color: number, offset: number, value: number): number {
   const shift = 24 - offset * 8;
-  return or(left(clampByte(value), shift), and(xor(left(0xFF, shift), 0xFF_FF_FF_FF), color));
+  return or(left(byte(value), shift), and(xor(left(0xFF, shift), 0xFF_FF_FF_FF), color));
 }

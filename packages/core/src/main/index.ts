@@ -3,3 +3,4 @@ export * from './core-types';
 export * from './color';
 export * from './PaintBucket';
 export * from './rgb';
+export * from './rgb-int';

@@ -1,21 +1,22 @@
 import {IColorSpace} from './core-types';
-import {IRgb, rgbColorSpace} from './rgb';
+import {IRgb, RGB} from './rgb';
 
 export class PaintBucket {
 
+  protected color?: unknown;
+  protected colorSpace?: IColorSpace;
+
   private _rgb?: IRgb;
-  private _color?: unknown;
-  private _colorSpace?: IColorSpace;
   private _allocatedColors?: Map<IColorSpace, any>;
 
   protected forColorSpace<C>(colorSpace: IColorSpace<C>): C {
-    const currColor = this._color;
+    const currColor = this.color;
 
     if (colorSpace.isColor(currColor)) {
       return currColor;
     }
 
-    const allocatedColors = this._allocatedColors ||= new Map<IColorSpace, unknown>();
+    const allocatedColors = this._allocatedColors ||= new Map<IColorSpace, any>();
 
     let nextColor = allocatedColors.get(colorSpace);
 
@@ -24,15 +25,15 @@ export class PaintBucket {
       allocatedColors.set(colorSpace, nextColor);
     }
 
-    this._rgb ||= rgbColorSpace.isColor(nextColor) ? nextColor : rgbColorSpace.createColor();
+    this._rgb ||= RGB.isColor(nextColor) ? nextColor : RGB.createColor();
 
     if (currColor) {
-      this._colorSpace?.colorToRgb(currColor, this._rgb);
+      this.colorSpace?.colorToRgb(currColor, this._rgb);
     }
     colorSpace.rgbToColor(this._rgb, nextColor);
 
-    this._color = nextColor;
-    this._colorSpace = colorSpace;
+    this.color = nextColor;
+    this.colorSpace = colorSpace;
 
     return nextColor;
   }

@@ -1,0 +1,1 @@
+# @paint-bucket/rgb-plugin

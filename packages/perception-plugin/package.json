@@ -1,5 +1,5 @@
 {
-  "name": "@paint-bucket/core",
+  "name": "@paint-bucket/perception-plugin",
   "version": "1.0.0",
   "description": "",
   "main": "./lib/index-cjs.js",
@@ -10,7 +10,7 @@
     "lib"
   ],
   "scripts": {
-    "build": "tsc --project ./tsconfig.build.json && npm run rollup && npm run terser",
+    "build": "tsc && npm run rollup && npm run terser",
     "rollup": "rollup --input ./lib/index.js --file ./lib/index-cjs.js --format cjs --plugin @rollup/plugin-node-resolve",
     "terser": "for file in $(find ./lib -name '*.js'); do terser --compress --mangle --mangle-props regex=/^_/ --output $file -- $file; done || exit 1",
     "clean": "rimraf ./lib ./docs",
@@ -48,6 +48,8 @@
     }
   },
   "dependencies": {
+    "@paint-bucket/core": "^1.0.0",
+    "@paint-bucket/lab": "^1.0.0",
     "numeric-wrench": "^1.0.0"
   }
 }
