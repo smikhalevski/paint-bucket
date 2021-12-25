@@ -8,7 +8,7 @@
   },
   "workspaces": [
     "./packages/core",
-    "./packages/color-difference"
+    "./packages/hsl"
   ],
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",

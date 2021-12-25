@@ -1,8 +1,5 @@
-import {Int64} from '../data-types';
-import {composeChannels, getColorChannel} from '../channel-utils';
-import {FF} from '../int64';
-import {IColorSpace} from './color-space-types';
 import {hslToRgb, rgbToHsl} from './hsl-rgb';
+import {composeChannels, getColorChannel, IColorSpace, Int64} from '@paint-bucket/core';
 
 /**
  * HSLa color space definition.
@@ -63,18 +60,18 @@ export function createHsl(H = 0, S = 0, L = 0, a = 1): IHsl {
 }
 
 export function intToHsl(color: Int64, hsl: IHsl): IHsl {
-  hsl.H = getColorChannel(color, 0) / FF * 360;
-  hsl.S = getColorChannel(color, 1) / FF * 100;
-  hsl.L = getColorChannel(color, 2) / FF * 100;
-  hsl.a = getColorChannel(color, 3) / FF;
+  hsl.H = getColorChannel(color, 0) / 0xFF * 360;
+  hsl.S = getColorChannel(color, 1) / 0xFF * 100;
+  hsl.L = getColorChannel(color, 2) / 0xFF * 100;
+  hsl.a = getColorChannel(color, 3) / 0xFF;
   return hsl;
 }
 
 export function hslToInt(hsl: IHsl): Int64 {
   return composeChannels(
-      FF * hsl.H / 360,
-      FF * hsl.S / 100,
-      FF * hsl.L / 100,
-      FF * hsl.a,
+      0xFF * hsl.H / 360,
+      0xFF * hsl.S / 100,
+      0xFF * hsl.L / 100,
+      0xFF * hsl.a,
   );
 }

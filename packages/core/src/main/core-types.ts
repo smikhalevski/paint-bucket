@@ -1,5 +1,11 @@
 import {IRgb} from './rgb';
 
+// Max value 0xFF
+export type Byte = number;
+
+// Max value 0x1F_FF_FF_FF_FF_FF_FF
+export type Int64 = number;
+
 export interface IColorSpace<C = unknown> {
 
   createColor(): C;

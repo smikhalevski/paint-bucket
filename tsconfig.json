@@ -10,6 +10,9 @@
     "paths": {
       "@paint-bucket/*": [
         "./packages/*/src/main"
+      ],
+      "@paint-bucket/core/lib/*": [
+        "./packages/core/src/main/*"
       ]
     }
   },

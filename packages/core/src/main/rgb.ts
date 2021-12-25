@@ -1,8 +1,5 @@
-import {composeChannels, getColorChannel} from '../channel-utils';
-import {FF} from '../int64';
-import {Int64} from '../data-types';
-import {IColorSpace} from './color-space-types';
-import {rgbToRgb} from './rgb-rgb';
+import {composeChannels, getColorChannel} from './channel-utils';
+import {IColorSpace, Int64} from './core-types';
 
 /**
  * RGBa color space definition.
@@ -66,10 +63,21 @@ export function intToRgb(color: Int64, rgb: IRgb): IRgb {
   rgb.R = getColorChannel(color, 0);
   rgb.G = getColorChannel(color, 1);
   rgb.B = getColorChannel(color, 2);
-  rgb.a = getColorChannel(color, 3) / FF;
+  rgb.a = getColorChannel(color, 3) / 0xFF;
   return rgb;
 }
 
 export function rgbToInt(rgb: IRgb): Int64 {
-  return composeChannels(rgb.R, rgb.G, rgb.B, FF * rgb.a);
+  return composeChannels(rgb.R, rgb.G, rgb.B, 0xFF * rgb.a);
+}
+
+/**
+ * Assign channels from `rgb1` to `rgb2`.
+ */
+export function rgbToRgb(rgb1: IRgb, rgb2: IRgb): IRgb {
+  rgb2.R = rgb1.R;
+  rgb2.G = rgb1.G;
+  rgb2.B = rgb1.B;
+  rgb2.a = rgb1.a;
+  return rgb2;
 }

@@ -1,16 +1,14 @@
-import {max, min} from '../math';
-import {FF} from '../int64';
-import {IRgb} from './rgb';
+import {IRgb} from '@paint-bucket/core';
 import {IHsl} from './hsl';
 
 export function rgbToHsl(rgb: IRgb, hsl: IHsl): IHsl {
 
-  const r = rgb.R / FF;
-  const g = rgb.G / FF;
-  const b = rgb.B / FF;
+  const r = rgb.R / 0xFF;
+  const g = rgb.G / 0xFF;
+  const b = rgb.B / 0xFF;
 
-  const A = max(r, g, b);
-  const B = min(r, g, b);
+  const A = Math.max(r, g, b);
+  const B = Math.min(r, g, b);
 
   let h = 0;
   let s = 0;
@@ -61,9 +59,9 @@ export function hslToRgb(hsl: IHsl, rgb: IRgb): IRgb {
     b = hueToRgb(p, q, h - 1 / 3);
   }
 
-  rgb.R = r * FF;
-  rgb.G = g * FF;
-  rgb.B = b * FF;
+  rgb.R = r * 0xFF;
+  rgb.G = g * 0xFF;
+  rgb.B = b * 0xFF;
   rgb.a = hsl.a;
 
   return rgb;

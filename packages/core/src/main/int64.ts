@@ -1,7 +1,5 @@
 import {abs, floor, min, pow, round} from './math';
-import {Byte, Int64} from './data-types';
-
-export const FF = 0xFF;
+import {Byte, Int64} from './core-types';
 
 const HI = 0x80000000;
 const LO = 0x7fffffff;

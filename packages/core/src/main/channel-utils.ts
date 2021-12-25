@@ -1,6 +1,6 @@
 import {abs} from './math';
 import {and, clampByte, left, or, right, xor} from './int64';
-import {Byte, Int64} from './data-types';
+import {Byte, Int64} from './core-types';
 
 export type ByteOffset = 0 | 1 | 2 | 3;
 

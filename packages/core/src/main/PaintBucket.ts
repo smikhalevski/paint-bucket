@@ -1,5 +1,5 @@
-import {IColorSpace} from './color-spaces/color-space-types';
-import {IRgb, rgbColorSpace} from './color-spaces';
+import {IColorSpace} from './core-types';
+import {IRgb, rgbColorSpace} from './rgb';
 
 export class PaintBucket {
 
