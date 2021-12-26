@@ -1,7 +1,7 @@
 {
   "name": "@paint-bucket/lab",
   "version": "1.0.0",
-  "description": "",
+  "description": "CIELAB color model plugin for Paint Bucket.",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
