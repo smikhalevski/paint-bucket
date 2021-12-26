@@ -1,4 +1,4 @@
-import {IColorSpace} from '@paint-bucket/core';
+import {IColorModel} from '@paint-bucket/core';
 import {rgbToXyz} from './xyz-rgb';
 
 export const MAX_X = 95.047;
@@ -7,13 +7,13 @@ export const MAX_Z = 108.883;
 /**
  * XYZa color space definition.
  */
-export const XYZ: IColorSpace<IXyz> = {
+export const XYZ: IColorModel<IXyz> = {
   createColor: createXyz,
   isColor: isXyz,
-  colorToRgb() {
+  componentsToRgb() {
     throw new Error('Not implemented');
   },
-  rgbToColor: rgbToXyz,
+  rgbToComponents: rgbToXyz,
 };
 
 export interface IXyz {

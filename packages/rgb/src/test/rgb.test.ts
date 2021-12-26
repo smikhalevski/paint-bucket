@@ -1,4 +1,4 @@
-import {createRgb} from '../main';
+import {createRgb} from '@paint-bucket/core/src/main';
 
 describe('rgb', () => {
 

@@ -1,4 +1,4 @@
-import {createRgb, intToRgb, rgbToInt} from '../main';
+import {createRgb, intToRgb, rgbToInt} from '@paint-bucket/core/src/main';
 
 describe('rgbToInt', () => {
 

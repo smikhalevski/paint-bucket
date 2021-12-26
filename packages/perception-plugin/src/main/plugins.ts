@@ -1,9 +1,13 @@
-import {PaintBucket} from '@paint-bucket/core';
+import {color, Color} from '@paint-bucket/core';
 import {deltaE2000} from './deltaE2000';
 import {LAB} from '@paint-bucket/lab';
 import {areIndistinguishableColors} from './utils';
 
 declare module '@paint-bucket/core/lib/PaintBucket' {
+
+  interface IPaintBucketFactory {
+    (qweqwee: number): PaintBucket;
+  }
 
   interface PaintBucket {
 
@@ -13,10 +17,10 @@ declare module '@paint-bucket/core/lib/PaintBucket' {
   }
 }
 
-PaintBucket.prototype.deltaE2000 = function (this: PaintBucket, color) {
-  return deltaE2000(this.forColorSpace(LAB), color.forColorSpace(LAB));
+Color.prototype.deltaE2000 = function (this: Color, color) {
+  return deltaE2000(this.as(LAB), color.forColorSpace(LAB));
 };
 
-PaintBucket.prototype.isIndistinguishable = function (this: PaintBucket, color) {
-  return areIndistinguishableColors(this.forColorSpace(LAB), color.forColorSpace(LAB));
+Color.prototype.isIndistinguishable = function (this: Color, color) {
+  return areIndistinguishableColors(this.as(LAB), color.forColorSpace(LAB));
 };

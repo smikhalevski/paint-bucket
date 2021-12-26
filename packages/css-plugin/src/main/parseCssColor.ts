@@ -1,4 +1,4 @@
-import {normalizeChannels} from '@paint-bucket/core';
+import {normalizeComponents} from '@paint-bucket/core';
 import {createRgb, intToRgb, IRgb} from '@paint-bucket/core';
 import {createHsl, IHsl} from '@paint-bucket/hsl';
 
@@ -23,13 +23,13 @@ export function parseCssColor(color: string): IRgb | IHsl {
   color = color.trim();
 
   if (color.charCodeAt(0) === 35 /* # */) {
-    return intToRgb(normalizeChannels(parseInt(color.substr(1), 16), color.length - 1), createRgb());
+    return intToRgb(normalizeComponents(parseInt(color.substr(1), 16), color.length - 1), createRgb());
   }
 
   const rawColor = parseInt(color, 16);
 
   if (!isNaN(rawColor)) {
-    return intToRgb(normalizeChannels(rawColor, color.length), createRgb());
+    return intToRgb(normalizeComponents(rawColor, color.length), createRgb());
   }
 
   const tupleMatch = tupleRe.exec(color);

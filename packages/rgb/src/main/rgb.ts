@@ -1,44 +1,19 @@
-import {composeChannels, getColorChannel} from './channel-utils';
-import {IColorSpace} from './core-types';
+import {IColor} from '@paint-bucket/core/lib/Color';
+import {IColorModel} from '@paint-bucket/core/lib/color-types';
+
+
+
+export interface IRgbColor extends IRgb, IColor {
+}
 
 /**
  * RGBa color space definition.
  */
-export const RGB: IColorSpace<IRgb> = {
+export const RGB: IColorModel<IRgbColor> = {
   createColor: createRgb,
-  isColor: isRgb,
-  colorToRgb: copyRgb,
-  rgbToColor: copyRgb,
+  componentsToRgb: copyRgb,
+  rgbToComponents: copyRgb,
 };
-
-export interface IRgb {
-
-  readonly type: 'rgb';
-
-  /**
-   * Red ∈ [0, 255].
-   */
-  R: number;
-
-  /**
-   * Green ∈ [0, 255].
-   */
-  G: number;
-
-  /**
-   * Blue ∈ [0, 255].
-   */
-  B: number;
-
-  /**
-   * Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
-   */
-  a: number;
-}
-
-export function isRgb(value: any): value is IRgb {
-  return value?.type === 'rgb';
-}
 
 /**
  * Creates black color in RGBa color space.
@@ -56,11 +31,13 @@ export function createRgb(): IRgb;
 export function createRgb(R: number, G: number, B: number, a?: number): IRgb;
 
 export function createRgb(R = 0, G = 0, B = 0, a = 1): IRgb {
-  return {type: 'rgb', R, G, B, a};
+  return {R, G, B, a};
 }
 
 /**
  * Assign channels from `rgb1` to `rgb2`.
+ *
+ * @returns `rgb2`
  */
 export function copyRgb(rgb1: IRgb, rgb2: IRgb): IRgb {
   rgb2.R = rgb1.R;

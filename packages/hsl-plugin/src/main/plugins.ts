@@ -1,4 +1,4 @@
-import {PaintBucket} from '@paint-bucket/core';
+import {Color} from '@paint-bucket/core';
 import {HSL} from '@paint-bucket/hsl';
 import {adjustLightness, adjustLightnessBy} from './utils';
 
@@ -16,22 +16,22 @@ declare module '@paint-bucket/core/lib/PaintBucket' {
   }
 }
 
-PaintBucket.prototype.lighten = function (this: PaintBucket, delta) {
-  adjustLightness(this.forColorSpace(HSL), delta);
+Color.prototype.lighten = function (this: Color, delta) {
+  adjustLightness(this.as(HSL), delta);
   return this;
 };
 
-PaintBucket.prototype.lightenBy = function (this: PaintBucket, percent) {
-  adjustLightnessBy(this.forColorSpace(HSL), percent);
+Color.prototype.lightenBy = function (this: Color, percent) {
+  adjustLightnessBy(this.as(HSL), percent);
   return this;
 };
 
-PaintBucket.prototype.darken = function (this: PaintBucket, delta) {
-  adjustLightness(this.forColorSpace(HSL), -delta);
+Color.prototype.darken = function (this: Color, delta) {
+  adjustLightness(this.as(HSL), -delta);
   return this;
 };
 
-PaintBucket.prototype.darkenBy = function (this: PaintBucket, percent) {
-  adjustLightnessBy(this.forColorSpace(HSL), -percent);
+Color.prototype.darkenBy = function (this: Color, percent) {
+  adjustLightnessBy(this.as(HSL), -percent);
   return this;
 };

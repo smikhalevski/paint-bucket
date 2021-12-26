@@ -1,14 +1,14 @@
 import {hslToRgb, rgbToHsl} from './hsl-rgb';
-import {IColorSpace} from '@paint-bucket/core';
+import {IColorModel} from '@paint-bucket/core';
 
 /**
  * HSLa color space definition.
  */
-export const HSL: IColorSpace<IHsl> = {
+export const HSL: IColorModel<IHsl> = {
   createColor: createHsl,
   isColor: isHsl,
-  colorToRgb: hslToRgb,
-  rgbToColor: rgbToHsl,
+  componentsToRgb: hslToRgb,
+  rgbToComponents: rgbToHsl,
 };
 
 export interface IHsl {

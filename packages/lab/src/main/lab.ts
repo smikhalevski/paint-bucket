@@ -1,16 +1,16 @@
-import {IColorSpace} from '@paint-bucket/core';
+import {IColorModel} from '@paint-bucket/core';
 import {rgbToLab} from './lab-rgb';
 
 /**
  * CIELAB color space definition.
  */
-export const LAB: IColorSpace<ILab> = {
+export const LAB: IColorModel<ILab> = {
   createColor: createLab,
   isColor: isLab,
-  colorToRgb() {
+  componentsToRgb() {
     throw new Error('Not implemented');
   },
-  rgbToColor: rgbToLab,
+  rgbToComponents: rgbToLab,
 };
 
 export interface ILab {
