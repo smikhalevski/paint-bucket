@@ -1,5 +1,8 @@
 import {composeComponents, getColorComponent} from '@paint-bucket/core';
-import {IXyz, MAX_X, MAX_Z} from './xyz';
+import {IXyz} from './xyz';
+
+const MAX_X = 95.047;
+const MAX_Z = 108.883;
 
 export function intToXyz(color: number, xyz: IXyz): IXyz {
   xyz.X = getColorComponent(color, 0) / 0xFF * MAX_X;

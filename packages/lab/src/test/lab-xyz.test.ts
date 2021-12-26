@@ -1,30 +1,35 @@
-import {createLab, xyzToLab} from '../main';
+import {createLab, labToXyz, xyzToLab} from '../main';
 import {createXyz} from '@paint-bucket/xyz';
 
 describe('xyzToLab', () => {
 
   test('converts XYZ to LAB', () => {
     expect(xyzToLab(createXyz(), createLab())).toEqual({
-      type: 'lab',
       L: 0,
       A: 0,
       B: 0,
       a: 1,
     });
 
-    expect(xyzToLab(createXyz(0.5, 0.5, 0.5), createLab())).toEqual({
-      type: 'lab',
-      L: 4.516459999999999,
-      A: 1.0144720769724447,
-      B: 0.6352866930558476,
+    expect(xyzToLab(createXyz(41.25, 21.27, 1.93), createLab())).toEqual({
+      L: 54.2947584122476,
+      A: 80.8161379805365,
+      B: 69.91517622055352,
       a: 1,
     });
+  });
+});
 
-    expect(xyzToLab(createXyz(0.41246, 0.21267, 0.01933), createLab())).toEqual({
-      type: 'lab',
-      L: 1.9210310964000001,
-      A: 8.615681955736115,
-      B: 3.035637343553538,
+describe('labToXyz', () => {
+
+  test('converts LAB to XYZ', () => {
+    const xyz = createXyz(41.25, 21.27, 1.93);
+    const lab = xyzToLab(xyz, createLab());
+
+    expect(labToXyz(lab, createXyz())).toEqual({
+      X: 41.24999842546713,
+      Y: 21.270001629204344,
+      Z: 1.930000866892758,
       a: 1,
     });
   });

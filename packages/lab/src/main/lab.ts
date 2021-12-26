@@ -1,34 +1,30 @@
 import {IColorModel} from '@paint-bucket/core';
-import {rgbToLab} from './lab-rgb';
+import {labToRgb, rgbToLab} from './lab-rgb';
 
 /**
  * CIELAB color model definition.
  */
 export const LAB: IColorModel<ILab> = {
-  createColor: createLab,
-  isColor: isLab,
-  componentsToRgb() {
-    throw new Error('Not implemented');
-  },
+  createComponents: createLab,
+  cloneComponents: (lab) => copyLab(lab, createLab()),
+  componentsToRgb: labToRgb,
   rgbToComponents: rgbToLab,
 };
 
 export interface ILab {
 
-  type: 'lab',
-
   /**
-   * L* ∈ [0, 100].
+   * CIE Lightness L* ∈ [0, 100].
    */
   L: number;
 
   /**
-   * a* ∈ [-128, 128].
+   * Red/Green coordinate a* ∈ [-128, 128].
    */
   A: number;
 
   /**
-   * b* ∈ [-128, 128].
+   * Yellow/Blue coordinate b* ∈ [-128, 128].
    */
   B: number;
 
@@ -36,10 +32,6 @@ export interface ILab {
    * Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
    */
   a: number;
-}
-
-export function isLab(value: any): value is ILab {
-  return value?.type === 'lab';
 }
 
 /**
@@ -50,13 +42,21 @@ export function createLab(): ILab;
 /**
  * Creates a color in CIELAB color model.
  *
- * @param L L* ∈ [0, 100].
- * @param A a* ∈ [-128, 128].
- * @param B b* ∈ [-128, 128].
+ * @param L CIE Lightness L* ∈ [0, 100].
+ * @param A Red/Green coordinate a* ∈ [-128, 128].
+ * @param B Yellow/Blue coordinate b* ∈ [-128, 128].
  * @param [a = 1] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
  */
 export function createLab(L: number, A: number, B: number, a?: number): ILab;
 
 export function createLab(L = 0, A = 0, B = 0, a = 1): ILab {
-  return {type: 'lab', L, A, B, a};
+  return {L, A, B, a};
+}
+
+export function copyLab(lab1: ILab, lab2: ILab): ILab {
+  lab2.L = lab1.L;
+  lab2.A = lab1.A;
+  lab2.B = lab1.B;
+  lab2.a = lab1.a;
+  return lab2;
 }
