@@ -68,7 +68,7 @@ export function normalizeChannels(color: number, nibbleCount: number): number {
       return and(0xFF_FF_FF_FF, color);
   }
 
-  throw new Error('Invalid nibble count: ' + nibbleCount);
+  return 0;
 }
 
 export function unsafeComposeChannels(a: number, b: number, c: number, d: number): number {

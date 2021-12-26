@@ -13,11 +13,9 @@ describe('normalizeChannels', () => {
 
   test('returns black for invalid nibble count', () => {
     expect(normalizeChannels(0x123, 0)).toBe(0);
-
-    expect(normalizeChannels(0x123, 0)).toBe(1);
-    expect(normalizeChannels(0x12345, 5)).toBe(1);
-    expect(normalizeChannels(0x1234567, 7)).toBe(1);
-    expect(normalizeChannels(0x123456789A, 10)).toBe(1);
+    expect(normalizeChannels(0x12345, 5)).toBe(0);
+    expect(normalizeChannels(0x1234567, 7)).toBe(0);
+    expect(normalizeChannels(0x123456789A, 10)).toBe(0);
   });
 });
 
