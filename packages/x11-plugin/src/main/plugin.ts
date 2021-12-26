@@ -26,6 +26,5 @@ Color.extendFactory((factory) => (args) => {
       return Color.create(RGB, intToRgb(rgb, createRgb()));
     }
   }
-
   return factory(args);
 });

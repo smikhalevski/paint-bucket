@@ -6,7 +6,7 @@ describe('Color', () => {
     createComponents() {
       return {R: 0, G: 0, B: 0, a: 1};
     },
-    clone(components) {
+    cloneComponents(components) {
       return Object.assign({}, components);
     },
     componentsToRgb(components, rgb) {
@@ -21,7 +21,7 @@ describe('Color', () => {
     createComponents() {
       return {A: 0, B: 0, C: 0, a: 1};
     },
-    clone(components) {
+    cloneComponents(components) {
       return Object.assign({}, components);
     },
     componentsToRgb(components, rgb) {

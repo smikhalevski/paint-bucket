@@ -5,15 +5,13 @@ import {IColorModel} from '@paint-bucket/core';
  * HSLa color model definition.
  */
 export const HSL: IColorModel<IHsl> = {
-  createColor: createHsl,
-  isColor: isHsl,
+  createComponents: createHsl,
+  cloneComponents: (hsl) => copyHsl(hsl, createHsl()),
   componentsToRgb: hslToRgb,
   rgbToComponents: rgbToHsl,
 };
 
 export interface IHsl {
-
-  type: 'hsl',
 
   /**
    * Hue ∈ [0, 360].
@@ -36,10 +34,6 @@ export interface IHsl {
   a: number;
 }
 
-export function isHsl(value: any): value is IHsl {
-  return value?.type === 'hsl';
-}
-
 /**
  * Creates black color in HSLa color model.
  */
@@ -56,5 +50,13 @@ export function createHsl(): IHsl;
 export function createHsl(H: number, S: number, L: number, a?: number): IHsl;
 
 export function createHsl(H = 0, S = 0, L = 0, a = 1): IHsl {
-  return {type: 'hsl', H, S, L, a};
+  return {H, S, L, a};
+}
+
+export function copyHsl(hsl1: IHsl, hsl2: IHsl): IHsl {
+  hsl2.H = hsl1.H;
+  hsl2.S = hsl1.S;
+  hsl2.L = hsl1.L;
+  hsl2.a = hsl1.a;
+  return hsl2;
 }

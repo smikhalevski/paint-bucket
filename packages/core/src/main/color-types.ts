@@ -42,7 +42,7 @@ export interface IColorModel<C = unknown> {
    * @param components The color components to clone.
    * @return The cloned color components.
    */
-  clone(components: C): C;
+  cloneComponents(components: C): C;
 
   /**
    * Converts color components to RGBa color model.

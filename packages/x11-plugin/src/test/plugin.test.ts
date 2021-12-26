@@ -2,7 +2,7 @@ import {Color, color} from '@paint-bucket/core';
 import {RGB} from '@paint-bucket/rgb';
 import '../main';
 
-describe('color', () => {
+describe('plugin', () => {
 
   test('creates color by X11 name', (done) => {
     (function (this: Color) {

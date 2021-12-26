@@ -5,7 +5,7 @@ import {IColorModel, IRgb} from '@paint-bucket/core';
  */
 export const RGB: IColorModel<IRgb> = {
   createComponents: createRgb,
-  clone: (rgb) => copyRgb(rgb, createRgb()),
+  cloneComponents: (rgb) => copyRgb(rgb, createRgb()),
   componentsToRgb: copyRgb,
   rgbToComponents: copyRgb,
 };
@@ -29,11 +29,6 @@ export function createRgb(R = 0, G = 0, B = 0, a = 1): IRgb {
   return {R, G, B, a};
 }
 
-/**
- * Assign channels from `rgb1` to `rgb2`.
- *
- * @returns `rgb2`
- */
 export function copyRgb(rgb1: IRgb, rgb2: IRgb): IRgb {
   rgb2.R = rgb1.R;
   rgb2.G = rgb1.G;

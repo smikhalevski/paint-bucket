@@ -3,7 +3,7 @@ import {createHsl, hslToInt, intToHsl} from '../main';
 describe('hslToInt', () => {
 
   test('clamps bytes', () => {
-    expect(hslToInt(createHsl(900, 30, 200, 100))).toBe(0xFF_4D_FF_FF_1);
+    expect(hslToInt(createHsl(900, 30, 200, 100))).toBe(0xFF_4D_FF_FF);
   });
 });
 
@@ -15,7 +15,6 @@ describe('intToHsl', () => {
 
     expect(hsl2).toBe(hsl1);
     expect(hsl2).toEqual({
-      type: 'hsl',
       H: 25.41176470588235,
       S: 30.19607843137255,
       L: 70.19607843137254,

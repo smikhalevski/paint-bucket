@@ -1,7 +1,7 @@
 {
   "name": "@paint-bucket/hsl",
   "version": "1.0.0",
-  "description": "",
+  "description": "HSLa color model plugin for Paint Bucket.",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -46,6 +46,9 @@
         }
       }
     }
+  },
+  "devDependencies": {
+    "@paint-bucket/rgb": "^1.0.0"
   },
   "dependencies": {
     "@paint-bucket/core": "^1.0.0"

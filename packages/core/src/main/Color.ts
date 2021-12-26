@@ -85,7 +85,7 @@ export class Color {
    * @returns The cloned instance.
    */
   public clone(): Color {
-    return new Color(this._model, this._model?.clone(this._components));
+    return new Color(this._model, this._model?.cloneComponents(this._components));
   }
 
   /**
