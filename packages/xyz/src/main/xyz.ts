@@ -5,7 +5,7 @@ export const MAX_X = 95.047;
 export const MAX_Z = 108.883;
 
 /**
- * XYZa color space definition.
+ * XYZa color model definition.
  */
 export const XYZ: IColorModel<IXyz> = {
   createColor: createXyz,
@@ -46,12 +46,12 @@ export function isXyz(value: any): value is IXyz {
 }
 
 /**
- * Creates black color in XYZa color space.
+ * Creates black color in XYZa color model.
  */
 export function createXyz(): IXyz;
 
 /**
- * Creates a color in XYZa color space.
+ * Creates a color in XYZa color model.
  *
  * @param X X ∈ [0, 95.047].
  * @param Y Y ∈ [0, 100].

@@ -1,27 +1,22 @@
-import {IColor} from '@paint-bucket/core/lib/Color';
-import {IColorModel} from '@paint-bucket/core/lib/color-types';
-
-
-
-export interface IRgbColor extends IRgb, IColor {
-}
+import {IColorModel, IRgb} from '@paint-bucket/core';
 
 /**
- * RGBa color space definition.
+ * RGBa color model definition.
  */
-export const RGB: IColorModel<IRgbColor> = {
-  createColor: createRgb,
+export const RGB: IColorModel<IRgb> = {
+  createComponents: createRgb,
+  clone: (rgb) => copyRgb(rgb, createRgb()),
   componentsToRgb: copyRgb,
   rgbToComponents: copyRgb,
 };
 
 /**
- * Creates black color in RGBa color space.
+ * Creates black color in RGBa color model.
  */
 export function createRgb(): IRgb;
 
 /**
- * Creates a color in RGBa color space.
+ * Creates a color in RGBa color model.
  *
  * @param R Red ∈ [0, 255].
  * @param G Green ∈ [0, 255].

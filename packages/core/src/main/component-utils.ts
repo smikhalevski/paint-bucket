@@ -14,13 +14,13 @@ import {and, byte, left, or, right, xor} from 'numeric-wrench';
  * normalizeComponents(0x12345678, 8) // → 0x12_34_56_78
  * ```
  *
- * @param color The input color to normalize, ex. `0xFF_FF_FF` for white in RGB space.
+ * @param components The input color to normalize, ex. `0xFF_FF_FF` for white in RGB space.
  * @param nibbleCount The number (1, 2, 3, 4, 6 or 8) of nibbles the input color.
  * @return A valid raw color.
  */
-export function normalizeComponents(color: number, nibbleCount: number): number {
+export function normalizeComponents(components: number, nibbleCount: number): number {
 
-  color = Math.abs(color);
+  components = Math.abs(components);
 
   let a, b, c, d;
 
@@ -28,20 +28,20 @@ export function normalizeComponents(color: number, nibbleCount: number): number 
 
     case 1:
       // 0x1 → 0x11_11_11_FF
-      a = 0xF & color;
+      a = 0xF & components;
       a += a << 4;
       return unsafeComposeComponents(a, a, a, 0xFF);
 
     case 2:
       // 0x12 → 0x12_12_12_FF
-      a = 0xFF & color;
+      a = 0xFF & components;
       return unsafeComposeComponents(a, a, a, 0xFF);
 
     case 3:
       // 0x123 → 0x11_22_33_FF
-      a = 0xF & right(color, 8);
-      b = 0xF & right(color, 4);
-      c = 0xF & color;
+      a = 0xF & right(components, 8);
+      b = 0xF & right(components, 4);
+      c = 0xF & components;
       a += a << 4;
       b += b << 4;
       c += c << 4;
@@ -49,10 +49,10 @@ export function normalizeComponents(color: number, nibbleCount: number): number 
 
     case 4:
       // 0x1234 → 0x11_22_33_44
-      a = 0xF & right(color, 12);
-      b = 0xF & right(color, 8);
-      c = 0xF & right(color, 4);
-      d = 0xF & color;
+      a = 0xF & right(components, 12);
+      b = 0xF & right(components, 8);
+      c = 0xF & right(components, 4);
+      d = 0xF & components;
       a += a << 4;
       b += b << 4;
       c += c << 4;
@@ -61,11 +61,11 @@ export function normalizeComponents(color: number, nibbleCount: number): number 
 
     case 6:
       // 0x12_34_56 → 0x12_34_56_FF
-      return left(0xFF_FF_FF & color, 8) + 0xFF;
+      return left(0xFF_FF_FF & components, 8) + 0xFF;
 
     case 8:
       // 0x12_34_56_78
-      return and(0xFF_FF_FF_FF, color);
+      return and(0xFF_FF_FF_FF, components);
   }
 
   return 0;
@@ -79,11 +79,11 @@ export function composeComponents(a: number, b: number, c: number, d: number): n
   return unsafeComposeComponents(byte(a), byte(b), byte(c), byte(d));
 }
 
-export function getColorComponent(color: number, offset: number): number {
-  return 0xFF & right(color, 24 - offset * 8);
+export function getColorComponent(components: number, offset: number): number {
+  return 0xFF & right(components, 24 - offset * 8);
 }
 
-export function setColorComponent(color: number, offset: number, value: number): number {
+export function setColorComponent(components: number, offset: number, value: number): number {
   const shift = 24 - offset * 8;
-  return or(left(byte(value), shift), and(xor(left(0xFF, shift), 0xFF_FF_FF_FF), color));
+  return or(left(byte(value), shift), and(xor(left(0xFF, shift), 0xFF_FF_FF_FF), components));
 }

@@ -1,7 +1,7 @@
 {
-  "name": "@paint-bucket/rgb",
+  "name": "@paint-bucket/x11-plugin",
   "version": "1.0.0",
-  "description": "RGBa color model plugin for Paint Bucket color manipulation library.",
+  "description": "",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -48,7 +48,6 @@
     }
   },
   "dependencies": {
-    "@paint-bucket/core": "^1.0.0",
-    "@paint-bucket/xyz": "^1.0.0"
+    "@paint-bucket/core": "^1.0.0"
   }
 }

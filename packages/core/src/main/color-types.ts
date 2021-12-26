@@ -34,7 +34,7 @@ export interface IColorModel<C = unknown> {
   /**
    * Creates the new black color components.
    */
-  black(): C;
+  createComponents(): C;
 
   /**
    * Clones color components.

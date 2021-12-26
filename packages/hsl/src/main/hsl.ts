@@ -2,7 +2,7 @@ import {hslToRgb, rgbToHsl} from './hsl-rgb';
 import {IColorModel} from '@paint-bucket/core';
 
 /**
- * HSLa color space definition.
+ * HSLa color model definition.
  */
 export const HSL: IColorModel<IHsl> = {
   createColor: createHsl,
@@ -41,12 +41,12 @@ export function isHsl(value: any): value is IHsl {
 }
 
 /**
- * Creates black color in HSLa color space.
+ * Creates black color in HSLa color model.
  */
 export function createHsl(): IHsl;
 
 /**
- * Creates a color in HSLa color space.
+ * Creates a color in HSLa color model.
  *
  * @param H Hue ∈ [0, 360].
  * @param S Saturation ∈ [0, 100].

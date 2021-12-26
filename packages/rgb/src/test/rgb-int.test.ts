@@ -1,9 +1,9 @@
-import {createRgb, intToRgb, rgbToInt} from '@paint-bucket/core/src/main';
+import {createRgb, intToRgb, rgbToInt} from '../main';
 
 describe('rgbToInt', () => {
 
   test('clamps bytes', () => {
-    expect(rgbToInt(createRgb(400, 52, 300, 100))).toBe(0xFF_34_FF_FF_0);
+    expect(rgbToInt(createRgb(400, 52, 300, 100))).toBe(0xFF_34_FF_FF);
   });
 });
 
@@ -15,7 +15,6 @@ describe('intToRgb', () => {
 
     expect(rgb2).toBe(rgb1);
     expect(rgb2).toEqual({
-      type: 'rgb',
       R: 18,
       G: 52,
       B: 86,

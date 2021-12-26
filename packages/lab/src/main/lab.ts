@@ -2,7 +2,7 @@ import {IColorModel} from '@paint-bucket/core';
 import {rgbToLab} from './lab-rgb';
 
 /**
- * CIELAB color space definition.
+ * CIELAB color model definition.
  */
 export const LAB: IColorModel<ILab> = {
   createColor: createLab,
@@ -43,12 +43,12 @@ export function isLab(value: any): value is ILab {
 }
 
 /**
- * Creates black color in CIELAB color space.
+ * Creates black color in CIELAB color model.
  */
 export function createLab(): ILab;
 
 /**
- * Creates a color in CIELAB color space.
+ * Creates a color in CIELAB color model.
  *
  * @param L L* ∈ [0, 100].
  * @param A a* ∈ [-128, 128].

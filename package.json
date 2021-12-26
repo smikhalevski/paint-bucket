@@ -8,6 +8,7 @@
   },
   "workspaces": [
     "./packages/core",
+    "./packages/rgb",
     "./packages/hsl",
     "./packages/xyz",
     "./packages/lab",

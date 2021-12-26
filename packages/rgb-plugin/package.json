@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@paint-bucket/core": "^1.0.0",
-    "@paint-bucket/hsl": "^1.0.0",
+    "@paint-bucket/rgb": "^1.0.0",
     "numeric-wrench": "^1.0.0"
   }
 }
