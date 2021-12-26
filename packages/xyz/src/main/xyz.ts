@@ -1,5 +1,5 @@
 import {IColorModel} from '@paint-bucket/core';
-import {rgbToXyz} from './xyz-rgb';
+import {rgbToXyz, xyzToRgb} from './xyz-rgb';
 
 export const MAX_X = 95.047;
 export const MAX_Z = 108.883;
@@ -8,17 +8,13 @@ export const MAX_Z = 108.883;
  * XYZa color model definition.
  */
 export const XYZ: IColorModel<IXyz> = {
-  createColor: createXyz,
-  isColor: isXyz,
-  componentsToRgb() {
-    throw new Error('Not implemented');
-  },
+  createComponents: createXyz,
+  cloneComponents: (xyz) => copyXyz(xyz, createXyz()),
+  componentsToRgb: xyzToRgb,
   rgbToComponents: rgbToXyz,
 };
 
 export interface IXyz {
-
-  type: 'xyz',
 
   /**
    * X ∈ [0, 95.047].
@@ -41,10 +37,6 @@ export interface IXyz {
   a: number;
 }
 
-export function isXyz(value: any): value is IXyz {
-  return value?.type === 'xyz';
-}
-
 /**
  * Creates black color in XYZa color model.
  */
@@ -61,5 +53,13 @@ export function createXyz(): IXyz;
 export function createXyz(X: number, Y: number, Z: number, a?: number): IXyz;
 
 export function createXyz(X = 0, Y = 0, Z = 0, a = 1): IXyz {
-  return {type: 'xyz', X, Y, Z, a};
+  return {X, Y, Z, a};
+}
+
+export function copyXyz(xyz1: IXyz, xyz2: IXyz): IXyz {
+  xyz2.X = xyz1.X;
+  xyz2.Y = xyz1.Y;
+  xyz2.Z = xyz1.Z;
+  xyz2.a = xyz1.a;
+  return xyz2;
 }
