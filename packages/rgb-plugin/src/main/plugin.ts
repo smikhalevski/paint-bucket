@@ -1,6 +1,8 @@
 import {Color, IRgb} from '@paint-bucket/core';
 import {copyRgb, createRgb, RGB, rgbToInt} from '@paint-bucket/rgb';
 import {lerp} from 'numeric-wrench';
+import {getLuminance} from './utils';
+import {Wcag2} from './plugin-types';
 
 declare module '@paint-bucket/core/lib/Color' {
 
@@ -45,11 +47,29 @@ declare module '@paint-bucket/core/lib/Color' {
      */
     getBrightness(): number;
 
+    /**
+     * The relative brightness of any point in a colorspace, normalized to 0 for darkest black and 1 for lightest white.
+     * @see http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+     */
+    getLuminance(): number;
+
     isDark(): boolean;
 
     isLight(): boolean;
 
     isEqual(color: Color, ignoreAlpha?: boolean): boolean;
+
+    /**
+     * Analyze the 2 colors and returns the color contrast defined by WCAG Version 2.
+     *
+     * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef WCAG Version 2}
+     */
+    readability(color: Color): number;
+
+    /**
+     * Returns `true` is foreground and background color combination meet WCAG2 guidelines.
+     */
+    isReadable(color: Color, wcag2?: Wcag2): boolean;
 
     /**
      * Mixes colors in given proportion.
@@ -125,6 +145,10 @@ Color.prototype.getBrightness = function (this: Color) {
   return (R * 0.299 + G * 0.587 + B * 0.114) / 0xFF;
 };
 
+Color.prototype.getLuminance = function (this: Color) {
+  return getLuminance(this.forRead(RGB));
+};
+
 Color.prototype.isDark = function (this: Color) {
   return this.getBrightness() < 0.5;
 };
@@ -141,6 +165,32 @@ Color.prototype.isEqual = function (this: Color, color, ignoreAlpha) {
   const rgb2 = color.forRead(RGB);
 
   return rgb1.R === rgb2.R && rgb1.G === rgb2.G && rgb1.B === rgb2.B && (ignoreAlpha || rgb1.a === rgb2.a);
+};
+
+Color.prototype.readability = function (this: Color, color) {
+  const l1 = this.getLuminance();
+  const l2 = color.getLuminance();
+
+  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+};
+
+Color.prototype.isReadable = function (this: Color, color, wcag2 = Wcag2.AA_SMALL) {
+  const r = this.readability(color);
+
+  switch (wcag2) {
+
+    case Wcag2.AA_SMALL:
+    case Wcag2.AAA_LARGE:
+      return r >= 4.5;
+
+    case Wcag2.AA_LARGE:
+      return r >= 3;
+
+    case Wcag2.AAA_SMALL:
+      return r >= 7;
+  }
+
+  return false;
 };
 
 Color.prototype.mix = function (this: Color, color, ratio) {

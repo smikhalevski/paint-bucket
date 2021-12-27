@@ -37,10 +37,6 @@ declare module '@paint-bucket/core/lib/Color' {
      * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
      */
     isJnd(color: Color): boolean;
-
-    readability(): number;
-
-    isReadable(): boolean;
   }
 }
 
