@@ -1,7 +1,7 @@
 {
-  "name": "@paint-bucket/xyz",
+  "name": "@paint-bucket/hsl",
   "version": "1.0.0",
-  "description": "CIE 1931 XYZa color model plugin for Paint Bucket.",
+  "description": "HSVa color model plugin for Paint Bucket.",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -51,7 +51,6 @@
     "@paint-bucket/rgb": "^1.0.0"
   },
   "dependencies": {
-    "@paint-bucket/core": "^1.0.0",
-    "numeric-wrench": "^1.0.0"
+    "@paint-bucket/core": "^1.0.0"
   }
 }

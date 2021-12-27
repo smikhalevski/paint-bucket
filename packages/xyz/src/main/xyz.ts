@@ -2,7 +2,7 @@ import {IColorModel} from '@paint-bucket/core';
 import {rgbToXyz, xyzToRgb} from './xyz-rgb';
 
 /**
- * XYZa color model definition.
+ * CIE 1931 XYZa color model definition.
  */
 export const XYZ: IColorModel<IXyz> = {
   createComponents: createXyz,
@@ -14,17 +14,17 @@ export const XYZ: IColorModel<IXyz> = {
 export interface IXyz {
 
   /**
-   * Chromaticity of X ∈ [0, 95.047].
+   * Chromaticity of X ∈ [0, 1].
    */
   X: number;
 
   /**
-   * Chromaticity of Y ∈ [0, 100].
+   * Chromaticity of Y ∈ [0, 1].
    */
   Y: number;
 
   /**
-   * Chromaticity of Z ∈ [0, 108.883].
+   * Chromaticity of Z ∈ [0, 1].
    */
   Z: number;
 
@@ -42,9 +42,9 @@ export function createXyz(): IXyz;
 /**
  * Creates a color in XYZa color model.
  *
- * @param X Chromaticity of X ∈ [0, 95.047].
- * @param Y Chromaticity of Y ∈ [0, 100].
- * @param Z Chromaticity of Z ∈ [0, 108.883].
+ * @param X Chromaticity of X ∈ [0, 1].
+ * @param Y Chromaticity of Y ∈ [0, 1].
+ * @param Z Chromaticity of Z ∈ [0, 1].
  * @param [a = 1] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
  */
 export function createXyz(X: number, Y: number, Z: number, a?: number): IXyz;

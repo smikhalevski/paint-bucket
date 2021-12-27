@@ -14,17 +14,17 @@ export const LAB: IColorModel<ILab> = {
 export interface ILab {
 
   /**
-   * CIE Lightness L* ∈ [0, 100].
+   * CIE Lightness L* ∈ [0, 1].
    */
   L: number;
 
   /**
-   * Red/Green coordinate a* ∈ [-128, 128].
+   * Red/Green coordinate a* ∈ [-1, 1].
    */
   A: number;
 
   /**
-   * Yellow/Blue coordinate b* ∈ [-128, 128].
+   * Yellow/Blue coordinate b* ∈ [-1, 1].
    */
   B: number;
 
@@ -42,9 +42,9 @@ export function createLab(): ILab;
 /**
  * Creates a color in CIELAB color model.
  *
- * @param L CIE Lightness L* ∈ [0, 100].
- * @param A Red/Green coordinate a* ∈ [-128, 128].
- * @param B Yellow/Blue coordinate b* ∈ [-128, 128].
+ * @param L CIE Lightness L* ∈ [0, 1].
+ * @param A Red/Green coordinate a* ∈ [-1, 1].
+ * @param B Yellow/Blue coordinate b* ∈ [-1, 1].
  * @param [a = 1] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
  */
 export function createLab(L: number, A: number, B: number, a?: number): ILab;

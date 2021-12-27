@@ -2,66 +2,62 @@ import {IRgb} from '@paint-bucket/core';
 import {IHsl} from './hsl';
 
 export function rgbToHsl(rgb: IRgb, hsl: IHsl): IHsl {
+  const {R, G, B} = rgb;
 
-  const r = rgb.R / 0xFF;
-  const g = rgb.G / 0xFF;
-  const b = rgb.B / 0xFF;
+  const max = Math.max(R, G, B);
+  const min = Math.min(R, G, B);
+  const d = max - min;
+  const p = max + min;
 
-  const A = Math.max(r, g, b);
-  const B = Math.min(r, g, b);
+  let H = 0;
+  let S = 0;
+  let L = p / 2;
 
-  let h = 0;
-  let s = 0;
-  let l = (A + B) / 2;
+  if (d !== 0) {
+    S = L > 0.5 ? d / (2 - p) : d / p;
 
-  if (A !== B) {
-    const d = A - B;
-    s = l > 0.5 ? d / (2 - A - B) : d / (A + B);
-
-    switch (A) {
-      case r:
-        h = (g - b) / d + (g < b ? 6 : 0);
+    switch (max) {
+      case R:
+        H = (G - B) / d + (G < B ? 6 : 0);
         break;
-      case g:
-        h = (b - r) / d + 2;
+      case G:
+        H = (B - R) / d + 2;
         break;
-      case b:
-        h = (r - g) / d + 4;
+      case B:
+        H = (R - G) / d + 4;
         break;
     }
 
-    h /= 6;
+    H /= 6;
   }
 
-  hsl.H = h * 360;
-  hsl.S = s * 100;
-  hsl.L = l * 100;
+  hsl.H = H;
+  hsl.S = S;
+  hsl.L = L;
   hsl.a = rgb.a;
 
   return hsl;
 }
 
 export function hslToRgb(hsl: IHsl, rgb: IRgb): IRgb {
-  const h = hsl.H / 360;
-  const s = hsl.S / 100;
-  const l = hsl.L / 100;
+  const {H, S, L} = hsl;
 
-  let r = l;
-  let g = l;
-  let b = l;
+  let R = L;
+  let G = L;
+  let B = L;
 
-  if (s !== 0) {
-    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    const p = 2 * l - q;
+  if (S !== 0) {
+    const q = L < 0.5 ? L * (1 + S) : L + S - L * S;
+    const p = 2 * L - q;
 
-    r = hueToRgb(p, q, h + 1 / 3);
-    g = hueToRgb(p, q, h);
-    b = hueToRgb(p, q, h - 1 / 3);
+    R = hueToRgb(p, q, H + 1 / 3);
+    G = hueToRgb(p, q, H);
+    B = hueToRgb(p, q, H - 1 / 3);
   }
 
-  rgb.R = r * 0xFF;
-  rgb.G = g * 0xFF;
-  rgb.B = b * 0xFF;
+  rgb.R = R;
+  rgb.G = G;
+  rgb.B = B;
   rgb.a = hsl.a;
 
   return rgb;

@@ -1,27 +1,22 @@
-import {createXyz, rgbToXyz, xyzToRgb} from '../main';
 import {createRgb} from '@paint-bucket/rgb';
+import {createXyz, xyzToRgb, rgbToXyz} from '../main';
 
 describe('rgbToXyz', () => {
 
-  test('converts RGB to XYZ', () => {
+  test('converts black RGB to XYZ', () => {
     expect(rgbToXyz(createRgb(), createXyz())).toEqual({
       X: 0,
       Y: 0,
       Z: 0,
       a: 1,
     });
+  });
 
-    expect(rgbToXyz(createRgb(127, 127, 127), createXyz())).toEqual({
-      X: 20.171896799933698,
-      Y: 21.22307786371309,
-      Z: 23.108321559514565,
-      a: 1,
-    });
-
-    expect(rgbToXyz(createRgb(255, 0, 0), createXyz())).toEqual({
-      X: 41.24564,
-      Y: 21.26729,
-      Z: 1.9333900000000002,
+  test('converts RGB to XYZ', () => {
+    expect(rgbToXyz(createRgb(0.12, 0.34, 0.56), createXyz())).toEqual({
+      X: 0.08879152765920298,
+      Y: 0.0902970352964331,
+      Z: 0.2718308369694447,
       a: 1,
     });
   });
@@ -30,12 +25,12 @@ describe('rgbToXyz', () => {
 describe('xyzToRgb', () => {
 
   test('converts XYZ to RGB', () => {
-    const rgb = createRgb(255, 0, 0);
-    const xyz = rgbToXyz(rgb, createXyz());
+    const xyz = rgbToXyz(createRgb(0.12, 0.34, 0.56), createXyz());
+
     expect(xyzToRgb(xyz, createRgb())).toEqual({
-      R: 254.99997925881817,
-      G: 0.0004342721639882612,
-      B: -0.00005629176621817678,
+      R: 0.11999999999997679,
+      G: 0.3400000000000021,
+      B: 0.5599999999999997,
       a: 1,
     });
   });

@@ -3,18 +3,20 @@ import {createXyz} from '@paint-bucket/xyz';
 
 describe('xyzToLab', () => {
 
-  test('converts XYZ to LAB', () => {
+  test('converts black XYZ to LAB', () => {
     expect(xyzToLab(createXyz(), createLab())).toEqual({
       L: 0,
       A: 0,
       B: 0,
       a: 1,
     });
+  });
 
-    expect(xyzToLab(createXyz(41.25, 21.27, 1.93), createLab())).toEqual({
-      L: 54.2947584122476,
-      A: 80.8161379805365,
-      B: 69.91517622055352,
+  test('converts XYZ to LAB', () => {
+    expect(xyzToLab(createXyz(0.25, 0.40, 0.15), createLab())).toEqual({
+      L: 0.6946953076845696,
+      A: -0.48043948235658995,
+      B: 0.44067586493416133,
       a: 1,
     });
   });
@@ -23,13 +25,12 @@ describe('xyzToLab', () => {
 describe('labToXyz', () => {
 
   test('converts LAB to XYZ', () => {
-    const xyz = createXyz(41.25, 21.27, 1.93);
-    const lab = xyzToLab(xyz, createLab());
+    const lab = xyzToLab(createXyz(0.25, 0.40, 0.15), createLab());
 
     expect(labToXyz(lab, createXyz())).toEqual({
-      X: 41.24999842546713,
-      Y: 21.270001629204344,
-      Z: 1.930000866892758,
+      X: 0.25,
+      Y: 0.40,
+      Z: 0.15,
       a: 1,
     });
   });

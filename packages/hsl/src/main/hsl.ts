@@ -14,17 +14,17 @@ export const HSL: IColorModel<IHsl> = {
 export interface IHsl {
 
   /**
-   * Hue ∈ [0, 360].
+   * Hue ∈ [0, 1].
    */
   H: number;
 
   /**
-   * Saturation ∈ [0, 100].
+   * Saturation ∈ [0, 1].
    */
   S: number;
 
   /**
-   * Lightness ∈ [0, 100], 0 = black, 1 = white.
+   * Lightness ∈ [0, 1], 0 = black, 1 = white.
    */
   L: number;
 
@@ -42,9 +42,9 @@ export function createHsl(): IHsl;
 /**
  * Creates a color in HSLa color model.
  *
- * @param H Hue ∈ [0, 360].
- * @param S Saturation ∈ [0, 100].
- * @param L Lightness ∈ [0, 100], 0 = black, 1 = white.
+ * @param H Hue ∈ [0, 1].
+ * @param S Saturation ∈ [0, 1].
+ * @param L Lightness ∈ [0, 1], 0 = black, 1 = white.
  * @param [a = 1] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
  */
 export function createHsl(H: number, S: number, L: number, a?: number): IHsl;

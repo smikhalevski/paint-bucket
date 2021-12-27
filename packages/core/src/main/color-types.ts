@@ -4,17 +4,17 @@
 export interface IRgb {
 
   /**
-   * Red ∈ [0, 255].
+   * Red ∈ [0, 1].
    */
   R: number;
 
   /**
-   * Green ∈ [0, 255].
+   * Green ∈ [0, 1].
    */
   G: number;
 
   /**
-   * Blue ∈ [0, 255].
+   * Blue ∈ [0, 1].
    */
   B: number;
 

@@ -1,27 +1,22 @@
-import {createHsl, hslToRgb, rgbToHsl} from '../main';
 import {createRgb} from '@paint-bucket/rgb';
+import {createHsl, hslToRgb, rgbToHsl} from '../main';
 
 describe('rgbToHsl', () => {
 
-  test('converts RGB to HSL', () => {
-    expect(rgbToHsl(createRgb(0, 0, 0), createHsl())).toEqual({
+  test('converts black RGB to HSL', () => {
+    expect(rgbToHsl(createRgb(), createHsl())).toEqual({
       H: 0,
       S: 0,
       L: 0,
       a: 1,
     });
+  });
 
-    expect(rgbToHsl(createRgb(127, 127, 127), createHsl())).toEqual({
-      H: 0,
-      S: 0,
-      L: 49.80392156862745,
-      a: 1,
-    });
-
-    expect(rgbToHsl(createRgb(18, 52, 86), createHsl())).toEqual({
-      H: 210,
-      S: 65.384615384615400,
-      L: 20.392156862745097,
+  test('converts RGB to HSL', () => {
+    expect(rgbToHsl(createRgb(0.12, 0.34, 0.56), createHsl())).toEqual({
+      H: 0.5833333333333334,
+      S: 0.6470588235294118,
+      L: 0.34,
       a: 1,
     });
   });
@@ -30,24 +25,12 @@ describe('rgbToHsl', () => {
 describe('hslToRgb', () => {
 
   test('converts HSL to RGB', () => {
-    expect(hslToRgb(createHsl(0, 0, 0), createRgb())).toEqual({
-      R: 0,
-      G: 0,
-      B: 0,
-      a: 1,
-    });
+    const hsl = rgbToHsl(createRgb(0.12, 0.34, 0.56), createHsl());
 
-    expect(hslToRgb(createHsl(0, 0, 50), createRgb())).toEqual({
-      R: 127.5,
-      G: 127.5,
-      B: 127.5,
-      a: 1,
-    });
-
-    expect(hslToRgb(createHsl(209, 65.38, 20.4), createRgb())).toEqual({
-      R: 18.009323999999996,
-      G: 53.15368919999996,
-      B: 86.030676,
+    expect(hslToRgb(hsl, createRgb())).toEqual({
+      R: 0.12,
+      G: 0.33999999999999986,
+      B: 0.56,
       a: 1,
     });
   });
