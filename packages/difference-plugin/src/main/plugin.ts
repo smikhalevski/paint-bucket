@@ -1,7 +1,6 @@
-import {color, Color} from '@paint-bucket/core';
+import {Color} from '@paint-bucket/core';
 import {deltaE2000} from './deltaE2000';
 import {LAB} from '@paint-bucket/lab';
-import {areIndistinguishableColors} from './utils';
 
 declare module '@paint-bucket/core/lib/Color' {
 
@@ -28,12 +27,20 @@ declare module '@paint-bucket/core/lib/Color' {
     deltaE2000(color: Color): number;
 
     /**
-     * Returns `true` if colors are so close that they can be barely distinguished. Uses CIEDE2000 color diffing algorithm.
+     * Returns `true` if colors are so close that they can be barely distinguished.
      *
+     * Uses CIEDE2000 color diffing algorithm.
+     *
+     * @see http://zschuessler.github.io/DeltaE/learn
+     * @see http://www.ece.rochester.edu/~gsharma/ciede2000/
      * @see https://en.wikipedia.org/wiki/Color_difference
      * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
      */
     isJnd(color: Color): boolean;
+
+    readability(): number;
+
+    isReadable(): boolean;
   }
 }
 

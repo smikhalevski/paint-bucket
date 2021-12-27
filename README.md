@@ -3,6 +3,7 @@
 Highly performant and extensible color manipulation library.
 
 https://jonneal.dev/convert-colors/lab-xyz.js.html#line44
+https://github.com/colorjs/color-space/blob/master/test/index.js
 
 ```ts
 import {color} from '@paint-bucket/core';

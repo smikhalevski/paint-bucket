@@ -102,4 +102,4 @@ export const whitepoint = {
      */
     E: [1, 1, 1],
   },
-} as const;
+};

@@ -11,6 +11,14 @@ export const XYZ: IColorModel<IXyz> = {
   rgbToComponents: rgbToXyz,
 };
 
+/**
+ * XYZ is an additive color model based on how the eye interprets stimulus from light. Unlike other additive RGB like
+ * color model, XYZ is a purely mathematical model. The primary components are "imaginary," meaning you can't create
+ * the represented color in the physical by shining any lights representing X, Y, and Z.
+ *
+ * @see http://www.colourphil.co.uk/xyz_colour_space.shtml
+ * @see http://dougkerr.net/pumpkin/articles/CIE_XYZ.pdf
+ */
 export interface IXyz {
 
   /**

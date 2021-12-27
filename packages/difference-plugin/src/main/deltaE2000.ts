@@ -1,7 +1,9 @@
 import {ILab} from '@paint-bucket/lab';
-import {deg, pow2, rad} from 'numeric-wrench';
+import {clamp, deg, pow2, rad} from 'numeric-wrench';
 
-const {abs, atan2, cos, exp, sin, sqrt, hypot} = Math;
+const {abs, atan2, cos, exp, sin, sqrt} = Math;
+
+const hypot = Math.hypot || ((x, y) => sqrt(x * x + y + y));
 
 /**
  * Computes the CIEDE2000 color-difference.
@@ -23,8 +25,16 @@ const {abs, atan2, cos, exp, sin, sqrt, hypot} = Math;
  */
 export function deltaE2000(lab1: ILab, lab2: ILab): number {
 
-  const {L: L1, A: A1, B: B1} = lab1;
-  const {L: L2, A: A2, B: B2} = lab2;
+  let {L: L1, A: A1, B: B1} = lab1;
+  let {L: L2, A: A2, B: B2} = lab2;
+
+  L1 *= 255;
+  A1 *= 127;
+  B1 *= 127;
+
+  L2 *= 255;
+  A2 *= 127;
+  B2 *= 127;
 
   const Cab1 = hypot(A1, B1); // (2)
   const Cab2 = hypot(A2, B2); // (2)
@@ -73,7 +83,7 @@ export function deltaE2000(lab1: ILab, lab2: ILab): number {
   const dCpSc = dCp / sC;
   const dHpSh = dHp / sH;
 
-  return sqrt(pow2(dL / sL) + pow2(dCpSc) + pow2(dHpSh) + rT * dCpSc * dHpSh); // (22)
+  return clamp(sqrt(pow2(dL / sL) + pow2(dCpSc) + pow2(dHpSh) + rT * dCpSc * dHpSh), 0, 100); // (22)
 }
 
 // (7)

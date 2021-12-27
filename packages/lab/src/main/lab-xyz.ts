@@ -1,6 +1,5 @@
 import {ILab} from './lab';
-import {IXyz} from '@paint-bucket/xyz';
-import {whitepoint} from '@paint-bucket/xyz';
+import {IXyz, whitepoint} from '@paint-bucket/xyz';
 import {clamp, clamp01} from 'numeric-wrench';
 
 function pow3(x: number): number {
@@ -22,7 +21,7 @@ const K = 7.787;
  * @see https://www.w3.org/TR/css-color-4/#color-conversion-code
  * @see https://www.easyrgb.com/en/math.php
  */
-export function xyzToLab(xyz: IXyz, lab: ILab, white = whitepoint[2].E): ILab {
+export function xyzToLab(xyz: IXyz, lab: ILab, white = whitepoint[10].D65): ILab {
   const {X, Y, Z} = xyz;
 
   const fX = rotateXyz(X / white[0]);
@@ -44,7 +43,7 @@ function rotateXyz(v: number): number {
 /**
  * Convert CIELAB to XYZa.
  */
-export function labToXyz(lab: ILab, xyz: IXyz, white = whitepoint[2].E): IXyz {
+export function labToXyz(lab: ILab, xyz: IXyz, white = whitepoint[10].D65): IXyz {
   const {L, A, B} = lab;
 
   // Compute f, starting with the luminance-related term
