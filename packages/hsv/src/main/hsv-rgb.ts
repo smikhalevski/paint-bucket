@@ -1,6 +1,9 @@
 import {IRgb} from '@paint-bucket/core';
 import {IHsv} from './hsv';
 
+/**
+ * Convert RGBa to HSVa.
+ */
 export function rgbToHsv(rgb: IRgb, hsv: IHsv): IHsv {
   const {R, G, B} = rgb;
 
@@ -34,6 +37,9 @@ export function rgbToHsv(rgb: IRgb, hsv: IHsv): IHsv {
   return hsv;
 }
 
+/**
+ * Convert HSVa to RGBa.
+ */
 export function hsvToRgb(hsv: IHsv, rgb: IRgb): IRgb {
   const {H, S, V} = hsv;
 

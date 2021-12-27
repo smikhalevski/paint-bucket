@@ -1,46 +1,64 @@
 import {ILab} from './lab';
 import {IXyz} from '@paint-bucket/xyz';
+import {whitepoint} from '@paint-bucket/xyz';
+import {clamp, clamp01} from 'numeric-wrench';
+
+function pow3(x: number): number {
+  return x * x * x;
+}
 
 const cbrt = Math.cbrt || ((x) => Math.pow(x, 1 / 3));
 
-export function xyzToLab(xyz: IXyz, lab: ILab): ILab {
+// Epsilon
+const E = pow3(6) / pow3(29);
+
+// Kappa
+const K = 7.787;
+
+/**
+ * Convert XYZa to CIELAB.
+ *
+ * @see https://www.w3.org/TR/css-color-4/#rgb-to-lab
+ * @see https://www.w3.org/TR/css-color-4/#color-conversion-code
+ * @see https://www.easyrgb.com/en/math.php
+ */
+export function xyzToLab(xyz: IXyz, lab: ILab, white = whitepoint[2].E): ILab {
   const {X, Y, Z} = xyz;
 
-  const x = rotateXyz(X / 0.95047);
-  const y = rotateXyz(Y);
-  const z = rotateXyz(Z / 1.08883);
+  const fX = rotateXyz(X / white[0]);
+  const fY = rotateXyz(Y / white[1]);
+  const fZ = rotateXyz(Z / white[2]);
 
-  lab.L = (1.16 * y) - 0.16;
-  lab.A = 5 * (x - y);
-  lab.B = 2 * (y - z);
+  lab.L = clamp01((1.16 * fY) - 0.16);
+  lab.A = clamp(5 * (fX - fY), -1, 1);
+  lab.B = clamp(2 * (fY - fZ), -1, 1);
   lab.a = xyz.a;
 
   return lab;
 }
 
 function rotateXyz(v: number): number {
-  return v > 0.008856 ? cbrt(v) : 7.787 * v + 16 / 116;
+  return v > E ? cbrt(v) : K * v + 16 / 116;
 }
 
-export function labToXyz(lab: ILab, xyz: IXyz): IXyz {
+/**
+ * Convert CIELAB to XYZa.
+ */
+export function labToXyz(lab: ILab, xyz: IXyz, white = whitepoint[2].E): IXyz {
   const {L, A, B} = lab;
-  var x = 0, y, z = 0, y2;
 
-  if (L <= 8) {
-    y = (L * 100) / 903.3;
-    y2 = (7.787 * (y / 100)) + (16 / 116);
-  } else {
-    y = 100 * Math.pow((L + 16) / 116, 3);
-    y2 = Math.pow(y / 100, 1 / 3);
-  }
+  // Compute f, starting with the luminance-related term
+  const fX = (L + 0.16) / 1.16;
+  const fY = A / 5 + fX;
+  const fZ = fX - B / 2;
 
-  x = x / 95.047 <= 0.008856 ? (95.047 * ((A / 500) + y2 - (16 / 116))) / 7.787 : 95.047 * Math.pow((A / 500) + y2, 3);
+  const X = pow3(fY) > E ? pow3(fY) : (1.16 * fY - 0.16) / K;
+  const Y = L > K * E ? pow3((L + 0.16) / 1.16) : L / K;
+  const Z = pow3(fZ) > E ? pow3(fZ) : (1.16 * fZ - 0.16) / K;
 
-  z = z / 108.883 <= 0.008859 ? (108.883 * (y2 - (B / 200) - (16 / 116))) / 7.787 : 108.883 * Math.pow(y2 - (B / 200), 3);
-
-  xyz.X = x;
-  xyz.Y = y;
-  xyz.Z = z;
+  xyz.X = clamp01(X * white[0]);
+  xyz.Y = clamp01(Y * white[1]);
+  xyz.Z = clamp01(Z * white[2]);
   xyz.a = lab.a;
 
   return xyz;

@@ -1,6 +1,9 @@
 import {IRgb} from '@paint-bucket/core';
 import {IHsl} from './hsl';
 
+/**
+ * Convert RGBa to HSLa.
+ */
 export function rgbToHsl(rgb: IRgb, hsl: IHsl): IHsl {
   const {R, G, B} = rgb;
 
@@ -39,6 +42,9 @@ export function rgbToHsl(rgb: IRgb, hsl: IHsl): IHsl {
   return hsl;
 }
 
+/**
+ * Convert HSLa to RGBa.
+ */
 export function hslToRgb(hsl: IHsl, rgb: IRgb): IRgb {
   const {H, S, L} = hsl;
 
