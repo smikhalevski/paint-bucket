@@ -1,16 +1,72 @@
-import {Color, IRgb} from '@paint-bucket/core';
-import {copyRgb, createRgb, RGB, rgbToInt} from '@paint-bucket/rgb';
-import {lerp} from 'numeric-wrench';
+import {Color, IRgb, normalizeComponents} from '@paint-bucket/core';
+import {copyRgb, createRgb, intToRgb, RGB, rgbToInt} from '@paint-bucket/rgb';
+import {lerp, right} from 'numeric-wrench';
 import {getLuminance} from './utils';
 import {Wcag2} from './plugin-types';
 
 declare module '@paint-bucket/core/lib/Color' {
 
   interface IColorFactory {
-    (rgb: IRgb): Color;
+
+    /**
+     * Sets {@link IRgb} components defined in range [0, 1].
+     *
+     * @see {@link Color.setRgb}
+     */
+    (rgb: Partial<IRgb>): Color;
+
+    /**
+     * Sets RGB components from an integer.
+     *
+     * ```ts
+     * setRgb(0x1, 1) // → Sets 0x11_11_11_FF
+     * setRgb(0x12, 2) // → Sets 0x12_12_12_FF
+     * setRgb(0x123, 3) // → Sets 0x11_22_33_FF
+     * setRgb(0x1234, 4) // → Sets 0x11_22_33_44
+     * setRgb(0x12345, 5) // → Sets 0
+     * setRgb(0x123456, 6) // → Sets 0x12_34_56_FF
+     * setRgb(0x1234567, 7) // → Sets 0
+     * setRgb(0x12345678, 8) // → Sets 0x12_34_56_78
+     * ```
+     *
+     * @param rgb The RGBa color serialized as integer.
+     * @param [nibbleCount = 6] The number of nibbles in integer.
+     *
+     * @see {@link Color.setRgbInt}
+     */
+    (rgb: number, nibbleCount?: number): Color;
   }
 
   interface Color {
+
+    /**
+     * Sets {@link IRgb} components defined in range [0, 1].
+     */
+    setRgb(rgb: Partial<IRgb>): this;
+
+    /**
+     * Sets {@link IRgb} components. `R`, `G` and `B` must be in range [0, 255] and `a` must be in range [0, 1].
+     */
+    setRgb255(rgb: Partial<IRgb>): this;
+
+    /**
+     * Sets RGB components from an integer.
+     *
+     * ```ts
+     * setRgb(0x1, 1) // → Sets 0x11_11_11_FF
+     * setRgb(0x12, 2) // → Sets 0x12_12_12_FF
+     * setRgb(0x123, 3) // → Sets 0x11_22_33_FF
+     * setRgb(0x1234, 4) // → Sets 0x11_22_33_44
+     * setRgb(0x12345, 5) // → Sets 0
+     * setRgb(0x123456, 6) // → Sets 0x12_34_56_FF
+     * setRgb(0x1234567, 7) // → Sets 0
+     * setRgb(0x12345678, 8) // → Sets 0x12_34_56_78
+     * ```
+     *
+     * @param rgb The RGBa color serialized as integer.
+     * @param [nibbleCount = 6] The number of nibbles in integer.
+     */
+    setRgbInt(rgb: number, nibbleCount?: number): this;
 
     /**
      * Red color component ∈ [0, 255].
@@ -57,6 +113,12 @@ declare module '@paint-bucket/core/lib/Color' {
 
     isLight(): boolean;
 
+    /**
+     * Returns `true` if 24-bit integer color representations are equal.
+     *
+     * @param color The color to compare with this color.
+     * @param [ignoreAlpha = false] If set to `true` the alpha channel is ignored.
+     */
     isEqual(color: Color, ignoreAlpha?: boolean): boolean;
 
     /**
@@ -94,14 +156,46 @@ declare module '@paint-bucket/core/lib/Color' {
 }
 
 Color.extendFactory((factory) => (args) => {
-  const [rgb] = args;
+  const [rgb, nibbleCount] = args;
 
-  if (typeof rgb === 'object' && rgb !== null && typeof rgb.R === 'number' && typeof rgb.G === 'number' && typeof rgb.B === 'number') {
-    return Color.create(RGB, createRgb(rgb.R, rgb.G, rgb.B, rgb.a));
+  if (typeof rgb === 'object' && rgb !== null && (typeof rgb.R === 'number' || typeof rgb.G === 'number' || typeof rgb.B === 'number' || typeof rgb.a === 'number')) {
+    return Color.create().setRgb(rgb);
+  }
+
+  if (typeof rgb === 'number') {
+    return Color.create().setRgbInt(rgb, nibbleCount);
   }
 
   return factory(args);
 });
+
+Color.prototype.setRgb = function (this: Color, components) {
+  const rgb = this.forUpdate(RGB);
+  const {R = 0, G = 0, B = 0, a = 1} = components;
+
+  rgb.R = R;
+  rgb.G = G;
+  rgb.B = B;
+  rgb.a = a;
+
+  return this;
+};
+
+Color.prototype.setRgb255 = function (this: Color, components) {
+  const rgb = this.forUpdate(RGB);
+  const {R = 0, G = 0, B = 0, a = 1} = components;
+
+  rgb.R = R / 0xFF;
+  rgb.G = G / 0xFF;
+  rgb.B = B / 0xFF;
+  rgb.a = a;
+
+  return this;
+};
+
+Color.prototype.setRgbInt = function (this: Color, rgb, nibbleCount = 6) {
+  return this.setRgb(intToRgb(normalizeComponents(rgb, nibbleCount), createRgb()));
+};
 
 Color.prototype.getRed = function (this: Color) {
   return this.forRead(RGB).R;
@@ -142,7 +236,7 @@ Color.prototype.setAlpha = function (this: Color, value) {
 Color.prototype.getBrightness = function (this: Color) {
   const {R, G, B} = this.forRead(RGB);
 
-  return (R * 0.299 + G * 0.587 + B * 0.114) / 0xFF;
+  return R * 0.299 + G * 0.587 + B * 0.114;
 };
 
 Color.prototype.getLuminance = function (this: Color) {
@@ -157,14 +251,15 @@ Color.prototype.isLight = function (this: Color) {
   return !this.isDark();
 };
 
-Color.prototype.isEqual = function (this: Color, color, ignoreAlpha) {
+Color.prototype.isEqual = function (this: Color, color, ignoreAlpha = false) {
   if (this === color) {
     return true;
   }
-  const rgb1 = this.forRead(RGB);
-  const rgb2 = color.forRead(RGB);
 
-  return rgb1.R === rgb2.R && rgb1.G === rgb2.G && rgb1.B === rgb2.B && (ignoreAlpha || rgb1.a === rgb2.a);
+  const rgb1 = rgbToInt(this.forRead(RGB));
+  const rgb2 = rgbToInt(color.forRead(RGB));
+
+  return rgb1 === rgb2 || (ignoreAlpha && right(rgb1, 8) === right(rgb2, 8));
 };
 
 Color.prototype.readability = function (this: Color, color) {

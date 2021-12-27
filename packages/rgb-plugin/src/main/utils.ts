@@ -3,7 +3,7 @@ import {IRgb} from '@paint-bucket/core';
 export function getLuminance(rgb: IRgb): number {
   const {R, G, B} = rgb;
 
-  return 0.2126 * getChannelLuminance(R) + 0.7152 * getChannelLuminance(G) + 0.0722 * getChannelLuminance(B);
+  return getChannelLuminance(R) * 0.2126 + getChannelLuminance(G) * 0.7152 + getChannelLuminance(B) * 0.0722;
 }
 
 function getChannelLuminance(v: number): number {

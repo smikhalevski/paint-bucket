@@ -48,7 +48,7 @@
     }
   },
   "devDependencies": {
-    "@paint-bucket/rgb": "^1.0.0"
+    "@paint-bucket/rgb-plugin": "^1.0.0"
   },
   "dependencies": {
     "@paint-bucket/core": "^1.0.0",

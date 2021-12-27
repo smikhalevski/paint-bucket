@@ -8,9 +8,9 @@ import {and, byte, left, or, right, xor} from 'numeric-wrench';
  * normalizeComponents(0x12, 2) // → 0x12_12_12_FF
  * normalizeComponents(0x123, 3) // → 0x11_22_33_FF
  * normalizeComponents(0x1234, 4) // → 0x11_22_33_44
- * normalizeComponents(0x12345, 5) // → Error
+ * normalizeComponents(0x12345, 5) // → 0
  * normalizeComponents(0x123456, 6) // → 0x12_34_56_FF
- * normalizeComponents(0x1234567, 7) // → Error
+ * normalizeComponents(0x1234567, 7) // → 0
  * normalizeComponents(0x12345678, 8) // → 0x12_34_56_78
  * ```
  *
