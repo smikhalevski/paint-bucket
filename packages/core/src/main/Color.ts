@@ -94,31 +94,34 @@ export class Color {
    * Use this method in plugins to acquire color components without changing the current model of {@link Color}
    * instance. Usually this is required if plugin method returns a computed value.
    *
-   * @param colorModel The color model that provides color components.
+   * @param model The color model that provides color components.
    * @returns The read-only color components.
    */
-  protected forRead<C>(colorModel: IColorModel<C>): Readonly<C> {
-    if (this._model === colorModel) {
+  protected forRead<C>(model: IColorModel<C>): Readonly<C> {
+    if (this._model === model) {
       return this._components as C;
     }
 
     this._cache ||= new Map();
 
-    let color = this._cache.get(colorModel) as C | undefined;
+    let components = this._cache.get(model) as C | undefined;
 
-    if (color === undefined) {
-      color = colorModel.createComponents();
-      this._cache.set(colorModel, color);
+    if (components === undefined) {
+      components = model.createComponents();
+      this._cache.set(model, components);
     }
 
     if (this._model) {
       this._model.componentsToRgb(this._components, tempRgb);
     } else {
+      this._model = model;
+      this._components = components;
+
       tempRgb.R = tempRgb.G = tempRgb.B = 0;
       tempRgb.a = 1;
     }
 
-    return colorModel.rgbToComponents(tempRgb, color) || color;
+    return model.rgbToComponents(tempRgb, components) || components;
   }
 
   /**
@@ -127,13 +130,13 @@ export class Color {
    * Use this method in plugins if you want {@link Color} instance to use the provided color model for next calls.
    * Usually this is required if plugin method returns this {@link Color} instance for chaining.
    *
-   * @param colorModel The color model that provides color components.
+   * @param model The color model that provides color components.
    * @returns The read-only color components.
    */
-  protected forUpdate<C>(colorModel: IColorModel<C>): C {
-    const components = this.forRead(colorModel);
+  protected forUpdate<C>(model: IColorModel<C>): C {
+    const components = this.forRead(model);
 
-    this._model = colorModel;
+    this._model = model;
     this._components = components;
 
     return components;
