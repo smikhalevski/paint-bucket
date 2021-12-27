@@ -2,13 +2,24 @@
 
 Highly performant and extensible color manipulation library.
 
-https://jonneal.dev/convert-colors/lab-xyz.js.html#line44
-https://github.com/colorjs/color-space/blob/master/test/index.js
+```shell
+npm install --save-prod paint-bucket
+```
+
+# Usage
 
 ```ts
 import {color} from '@paint-bucket/core';
 import '@paint-bucket/rgb-plugin';
-import '@paint-bucket/perception-plugin';
+import '@paint-bucket/difference-plugin';
 
-color(0xFF_00_00).toGrayscale().isIndistinguishable(color(0xAA_AA_AA)); // → true
+// or import all plugins at once using 
+// import {color} from 'paint-bucket';
+
+color('#FF0000').grayscale().isJnd(color(0xAA_AA_AA_FF)); // → true
 ```
+
+I cannot underestimate how much these libraries helped me to implement color model conversion algorithms:
+
+- [@jonathantneal/convert-colors](https://github.com/jonathantneal/convert-colors)
+- [@colorjs/color-space](https://github.com/colorjs/color-space)
