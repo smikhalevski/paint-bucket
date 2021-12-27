@@ -1,1 +1,1 @@
-# @paint-bucket/hsl-plugin
+# @paint-bucket/css-plugin

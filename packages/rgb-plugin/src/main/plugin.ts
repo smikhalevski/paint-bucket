@@ -30,7 +30,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * ```
      *
      * @param rgb The RGBa color serialized as integer.
-     * @param [nibbleCount = 6] The number of nibbles in integer.
+     * @param [nibbleCount = 8] The number of nibbles in integer.
      *
      * @see {@link Color.setRgbInt}
      */
@@ -64,7 +64,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * ```
      *
      * @param rgb The RGBa color serialized as integer.
-     * @param [nibbleCount = 6] The number of nibbles in integer.
+     * @param [nibbleCount = 8] The number of nibbles in integer.
      */
     setRgbInt(rgb: number, nibbleCount?: number): this;
 
@@ -108,6 +108,9 @@ declare module '@paint-bucket/core/lib/Color' {
      * @see http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
      */
     getLuminance(): number;
+
+    // brighten(amount: number): number;
+    // brightenBy(percent: number): number;
 
     isDark(): boolean;
 

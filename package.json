@@ -10,10 +10,12 @@
     "./packages/core",
     "./packages/rgb",
     "./packages/hsl",
+    "./packages/hsv",
     "./packages/xyz",
     "./packages/lab",
     "./packages/rgb-plugin",
     "./packages/hsl-plugin",
+    "./packages/x11-plugin",
     "./packages/css-plugin",
     "./packages/difference-plugin"
   ],

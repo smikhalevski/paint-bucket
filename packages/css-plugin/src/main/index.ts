@@ -1,1 +1,1 @@
-export * from './parseCssColor';
+export * from './plugin';
