@@ -193,8 +193,9 @@ Color.prototype.setRgb255 = function (this: Color, components) {
   return this;
 };
 
-Color.prototype.setRgbInt = function (this: Color, rgb, nibbleCount = 6) {
-  return this.setRgb(intToRgb(normalizeComponents(rgb, nibbleCount), createRgb()));
+Color.prototype.setRgbInt = function (this: Color, rgb, nibbleCount = 8) {
+  intToRgb(normalizeComponents(rgb, nibbleCount), this.forUpdate(RGB));
+  return this;
 };
 
 Color.prototype.getRed = function (this: Color) {
