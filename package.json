@@ -17,6 +17,7 @@
     "./packages/hsl-plugin",
     "./packages/x11-plugin",
     "./packages/css-plugin",
+    "./packages/combination-plugin",
     "./packages/difference-plugin"
   ],
   "devDependencies": {
