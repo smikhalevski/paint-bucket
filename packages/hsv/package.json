@@ -1,5 +1,5 @@
 {
-  "name": "@paint-bucket/hsl",
+  "name": "@paint-bucket/hsv",
   "version": "1.0.0",
   "description": "HSVa color model plugin for Paint Bucket.",
   "main": "./lib/index-cjs.js",
