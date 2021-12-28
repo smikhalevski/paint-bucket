@@ -158,7 +158,7 @@ declare module '@paint-bucket/core/lib/Color' {
   }
 }
 
-Color.extendFactory((factory) => (args) => {
+Color.overrideFactory((factory) => (args) => {
   const [rgb, nibbleCount] = args;
 
   if (typeof rgb === 'object' && rgb !== null && (typeof rgb.R === 'number' || typeof rgb.G === 'number' || typeof rgb.B === 'number' || typeof rgb.a === 'number')) {
@@ -173,7 +173,7 @@ Color.extendFactory((factory) => (args) => {
 });
 
 Color.prototype.setRgb = function (this: Color, components) {
-  const rgb = this.forUpdate(RGB);
+  const rgb = this.use(RGB);
   const {R = 0, G = 0, B = 0, a = 1} = components;
 
   rgb.R = R;
@@ -185,7 +185,7 @@ Color.prototype.setRgb = function (this: Color, components) {
 };
 
 Color.prototype.setRgb255 = function (this: Color, components) {
-  const rgb = this.forUpdate(RGB);
+  const rgb = this.use(RGB);
   const {R = 0, G = 0, B = 0, a = 1} = components;
 
   rgb.R = R / 0xFF;
@@ -197,54 +197,54 @@ Color.prototype.setRgb255 = function (this: Color, components) {
 };
 
 Color.prototype.setRgbInt = function (this: Color, rgb, nibbleCount = 8) {
-  intToRgb(normalizeComponents(rgb, nibbleCount), this.forUpdate(RGB));
+  intToRgb(normalizeComponents(rgb, nibbleCount), this.use(RGB));
   return this;
 };
 
 Color.prototype.getRed = function (this: Color) {
-  return this.forRead(RGB).R;
+  return this.get(RGB).R;
 };
 
 Color.prototype.setRed = function (this: Color, value) {
-  this.forUpdate(RGB).R = value;
+  this.use(RGB).R = value;
   return this;
 };
 
 Color.prototype.getGreen = function (this: Color) {
-  return this.forRead(RGB).G;
+  return this.get(RGB).G;
 };
 
 Color.prototype.setGreen = function (this: Color, value) {
-  this.forUpdate(RGB).G = value;
+  this.use(RGB).G = value;
   return this;
 };
 
 Color.prototype.getBlue = function (this: Color) {
-  return this.forRead(RGB).B;
+  return this.get(RGB).B;
 };
 
 Color.prototype.setBlue = function (this: Color, value) {
-  this.forUpdate(RGB).B = value;
+  this.use(RGB).B = value;
   return this;
 };
 
 Color.prototype.getAlpha = function (this: Color) {
-  return this.forRead(RGB).B;
+  return this.get(RGB).B;
 };
 
 Color.prototype.setAlpha = function (this: Color, value) {
-  this.forUpdate(RGB).B = value;
+  this.use(RGB).B = value;
   return this;
 };
 
 Color.prototype.getBrightness = function (this: Color) {
-  const {R, G, B} = this.forRead(RGB);
+  const {R, G, B} = this.get(RGB);
 
   return R * 0.299 + G * 0.587 + B * 0.114;
 };
 
 Color.prototype.getLuminance = function (this: Color) {
-  return getLuminance(this.forRead(RGB));
+  return getLuminance(this.get(RGB));
 };
 
 Color.prototype.isDark = function (this: Color) {
@@ -260,8 +260,8 @@ Color.prototype.isEqual = function (this: Color, color, ignoreAlpha = false) {
     return true;
   }
 
-  const rgb1 = rgbToInt(this.forRead(RGB));
-  const rgb2 = rgbToInt(color.forRead(RGB));
+  const rgb1 = rgbToInt(this.get(RGB));
+  const rgb2 = rgbToInt(color.get(RGB));
 
   return rgb1 === rgb2 || (ignoreAlpha && right(rgb1, 8) === right(rgb2, 8));
 };
@@ -293,8 +293,8 @@ Color.prototype.isReadable = function (this: Color, color, wcag2 = Wcag2.AA_SMAL
 };
 
 Color.prototype.mix = function (this: Color, color, ratio) {
-  const rgb1 = this.forUpdate(RGB);
-  const rgb2 = color.forUpdate(RGB);
+  const rgb1 = this.use(RGB);
+  const rgb2 = color.use(RGB);
 
   rgb1.R = lerp(ratio, rgb1.R, rgb2.R);
   rgb1.G = lerp(ratio, rgb1.G, rgb2.G);
@@ -305,7 +305,7 @@ Color.prototype.mix = function (this: Color, color, ratio) {
 };
 
 Color.prototype.greyscale = function (this: Color) {
-  const rgb = this.forUpdate(RGB);
+  const rgb = this.use(RGB);
   const {R, G, B} = rgb;
 
   const q = Math.sqrt(R * R * 0.299 + G * G * 0.587 + B * B * 0.114);
@@ -318,9 +318,9 @@ Color.prototype.greyscale = function (this: Color) {
 };
 
 Color.prototype.toRgb = function (this: Color) {
-  return copyRgb(this.forRead(RGB), createRgb());
+  return copyRgb(this.get(RGB), createRgb());
 };
 
 Color.prototype.toRgbInt = function (this: Color) {
-  return rgbToInt(this.forRead(RGB));
+  return rgbToInt(this.get(RGB));
 };

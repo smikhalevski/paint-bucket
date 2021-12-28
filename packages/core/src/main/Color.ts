@@ -1,6 +1,6 @@
 import {IColorModel, IRgb} from './color-types';
 
-// RGBa color components that are used for model-to-model conversions.
+// RGBa color components that are used for implicit model-to-model conversions.
 const tempRgb: IRgb = {R: 0, G: 0, B: 0, a: 1};
 
 /**
@@ -22,42 +22,47 @@ export interface IColorFactory {
   (color: Color): Color;
 }
 
+/**
+ * Provides color manipulation API that is extensible via plugins.
+ */
 export class Color {
 
   /**
    * Creates the new {@link Color} instance.
+   *
+   * Use {@link overrideFactory} to override factory implementation.
    */
-  public static factory(args: any[]): Color {
+  public static factory(args: ReadonlyArray<any>): Color {
     return args[0] instanceof Color ? args[0].clone() : Color.create();
   };
 
   /**
-   * Overrides the current factory implementation.
+   * Overrides the current {@link factory} implementation.
    *
    * Use this in plugins to add new parsing mechanisms or static methods for {@link color}.
    */
-  public static extendFactory(cb: (prevFactory: (args: any[]) => Color) => (args: any[]) => Color): void {
+  public static overrideFactory(cb: (prevFactory: (args: any[]) => Color) => (args: any[]) => Color): void {
     Color.factory = cb(Color.factory);
   }
 
   /**
-   * Cache of color components used by this {@link Color} instance. These map is lazily created and updated when
-   * {@link forRead} and {@link forUpdate} methods are invoked.
+   * The active color model or `undefined` if {@link Color} was created without any model which means that a it
+   * represents a black color.
    */
-  private _cache?: Map<IColorModel, unknown>;
+  protected model;
 
   /**
-   * The currently active color model.
+   * Readonly active color components in the color model returned by {@link model}.
    */
-  private _model;
+  protected components;
 
   /**
-   * The color components in terms of the active color model.
+   * Cache of color components used by this {@link Color} instance for a particular color model.
    */
-  private _components;
+  private cache?: Map<IColorModel, unknown>;
 
   /**
-   * Creates a new {@link Color} instance backed by black RGBa color.
+   * Creates a new {@link Color} instance backed by black color.
    */
   public static create(): Color;
 
@@ -75,8 +80,8 @@ export class Color {
   }
 
   protected constructor(colorModel?: IColorModel, components?: unknown) {
-    this._model = colorModel;
-    this._components = components;
+    this.model = colorModel;
+    this.components = components;
   }
 
   /**
@@ -85,37 +90,38 @@ export class Color {
    * @returns The cloned instance.
    */
   public clone(): Color {
-    return new Color(this._model, this._model?.cloneComponents(this._components));
+    return new Color(this.model, this.model?.cloneComponents(this.components));
   }
 
   /**
-   * Returns color components of this {@link Color} in particular color model.
+   * Returns readonly color components of this {@link Color} in particular color model.
    *
    * Use this method in plugins to acquire color components without changing the current model of {@link Color}
    * instance. Usually this is required if plugin method returns a computed value.
    *
    * @param model The color model that provides color components.
-   * @returns The read-only color components.
+   * @returns Readonly color components.
    */
-  protected forRead<C>(model: IColorModel<C>): Readonly<C> {
-    if (this._model === model) {
-      return this._components as C;
+  protected get<C>(model: IColorModel<C>): Readonly<C> {
+    if (this.model === model) {
+      return this.components as C;
     }
 
-    this._cache ||= new Map();
+    this.cache ||= new Map();
 
-    let components = this._cache.get(model) as C | undefined;
+    let components = this.cache.get(model) as C | undefined;
 
     if (components === undefined) {
       components = model.createComponents();
-      this._cache.set(model, components);
+      this.cache.set(model, components);
     }
 
-    if (this._model) {
-      this._model.componentsToRgb(this._components, tempRgb);
+    if (this.model) {
+      this.cache.set(this.model, this.components);
+      this.model.componentsToRgb(this.components, tempRgb);
     } else {
-      this._model = model;
-      this._components = components;
+      this.model = model;
+      this.components = components;
 
       tempRgb.R = tempRgb.G = tempRgb.B = 0;
       tempRgb.a = 1;
@@ -125,19 +131,39 @@ export class Color {
   }
 
   /**
-   * Returns color components of this {@link Color} in particular color model.
+   * Sets the active color model and its components.
    *
-   * Use this method in plugins if you want {@link Color} instance to use the provided color model for next calls.
-   * Usually this is required if plugin method returns this {@link Color} instance for chaining.
+   * Always prefer {@link use} over {@link set}. If components of color model are immutable for some reason, only then
+   * you should use {@link set} as a fallback.
+   */
+  protected set<C>(model: IColorModel<C>, components: C): this {
+    if (this.model === model) {
+      this.components = components;
+      return this;
+    }
+    if (this.model) {
+      this.cache ||= new Map();
+      this.cache.set(this.model, this.components);
+    }
+    this.model = model;
+    this.components = components;
+    return this;
+  }
+
+  /**
+   * Returns mutable color components of this {@link Color} in particular color model.
+   *
+   * Use this method in plugins if you want {@link Color} instance to switch active color model. Usually this is
+   * required if plugin method returns this {@link Color} instance for chaining.
    *
    * @param model The color model that provides color components.
-   * @returns The read-only color components.
+   * @returns Mutable color components.
    */
-  protected forUpdate<C>(model: IColorModel<C>): C {
-    const components = this.forRead(model);
+  protected use<C>(model: IColorModel<C>): C {
+    const components = this.get(model);
 
-    this._model = model;
-    this._components = components;
+    this.model = model;
+    this.components = components;
 
     return components;
   }

@@ -50,11 +50,11 @@ describe('Color', () => {
     const color = Color.create();
 
     (function (this: Color) {
-      abc1 = this.forRead(abcColorModel);
+      abc1 = this.get(abcColorModel);
     }).call(color);
 
     (function (this: Color) {
-      abc2 = this.forRead(abcColorModel);
+      abc2 = this.get(abcColorModel);
     }).call(color);
 
     expect(abc1).toEqual({A: 0, B: 0, C: 0, a: 1});
@@ -68,11 +68,11 @@ describe('Color', () => {
     const color = Color.create();
 
     (function (this: Color) {
-      abc1 = this.forUpdate(abcColorModel);
+      abc1 = this.use(abcColorModel);
     }).call(color);
 
     (function (this: Color) {
-      abc2 = this.forRead(abcColorModel);
+      abc2 = this.get(abcColorModel);
     }).call(color);
 
     expect(abc1).toEqual({A: 0, B: 0, C: 0, a: 1});
@@ -83,12 +83,12 @@ describe('Color', () => {
     const color = Color.create();
 
     (function (this: Color) {
-      const abc = this.forUpdate(abcColorModel);
+      const abc = this.use(abcColorModel);
       abc.A = abc.B = abc.C = 1;
     }).call(color);
 
     (function (this: Color) {
-      expect(this.forRead(rgbColorModel)).toEqual({R: 100, G: 100, B: 100, a: 1});
+      expect(this.get(rgbColorModel)).toEqual({R: 100, G: 100, B: 100, a: 1});
       done();
     }).call(color);
   });
@@ -97,7 +97,7 @@ describe('Color', () => {
     const rgb: IRgb = {R: 127, G: 127, B: 127, a: 0.77};
 
     (function (this: Color) {
-      expect(this.forRead(rgbColorModel)).toBe(rgb);
+      expect(this.get(rgbColorModel)).toBe(rgb);
       done();
     }).call(Color.create(rgbColorModel, rgb));
   });

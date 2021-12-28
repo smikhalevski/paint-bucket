@@ -29,25 +29,25 @@ declare module '@paint-bucket/core/lib/Color' {
 }
 
 Color.prototype.lighten = function (this: Color, delta) {
-  adjustLightness(this.forUpdate(HSL), delta);
+  adjustLightness(this.use(HSL), delta);
   return this;
 };
 
 Color.prototype.lightenBy = function (this: Color, percent) {
-  adjustLightnessBy(this.forUpdate(HSL), percent);
+  adjustLightnessBy(this.use(HSL), percent);
   return this;
 };
 
 Color.prototype.darken = function (this: Color, delta) {
-  adjustLightness(this.forUpdate(HSL), -delta);
+  adjustLightness(this.use(HSL), -delta);
   return this;
 };
 
 Color.prototype.darkenBy = function (this: Color, percent) {
-  adjustLightnessBy(this.forUpdate(HSL), -percent);
+  adjustLightnessBy(this.use(HSL), -percent);
   return this;
 };
 
 Color.prototype.toHsl = function (this: Color) {
-  return copyHsl(this.forRead(HSL), createHsl());
+  return copyHsl(this.get(HSL), createHsl());
 };

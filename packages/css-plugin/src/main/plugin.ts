@@ -21,7 +21,7 @@ declare module '@paint-bucket/core/lib/Color' {
   // }
 }
 
-Color.extendFactory((factory) => (args) => {
+Color.overrideFactory((factory) => (args) => {
   const [input] = args;
 
   if (typeof input === 'string') {

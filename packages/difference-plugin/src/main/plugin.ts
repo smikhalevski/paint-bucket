@@ -41,7 +41,7 @@ declare module '@paint-bucket/core/lib/Color' {
 }
 
 Color.prototype.deltaE2000 = function (this: Color, color) {
-  return deltaE2000(this.forRead(LAB), color.forRead(LAB));
+  return deltaE2000(this.get(LAB), color.get(LAB));
 };
 
 Color.prototype.isJnd = function (this: Color, color) {
