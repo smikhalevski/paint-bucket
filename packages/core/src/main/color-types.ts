@@ -4,22 +4,22 @@
 export interface IRgb {
 
   /**
-   * Red ∈ [0, 1].
+   * Red.
    */
   R: number;
 
   /**
-   * Green ∈ [0, 1].
+   * Green.
    */
   G: number;
 
   /**
-   * Blue ∈ [0, 1].
+   * Blue.
    */
   B: number;
 
   /**
-   * Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
+   * Alpha.
    */
   a: number;
 }

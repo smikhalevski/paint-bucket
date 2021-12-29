@@ -6,7 +6,7 @@ const tempRgb: IRgb = {R: 0, G: 0, B: 0, a: 1};
 /**
  * Re-declare this interface in plugin to extend {@link color} function signature.
  */
-export interface IColorFactory {
+export interface IColorFunction {
 
   /**
    * Creates a new black color.
@@ -14,13 +14,19 @@ export interface IColorFactory {
   (): Color;
 
   /**
-   * Creates a clone of {@link Color} instance.
+   * Clone a {@link Color} instance.
    *
    * @param color The color to clone.
    * @returns The new color instance.
    */
   (color: Color): Color;
 }
+
+// Rest arguments aren't used to prevent excessive array allocation.
+/**
+ * Creates a new {@link Color} instance.
+ */
+export const color = ((arg1: any, arg2: any, arg3: any, arg4: any, arg5: any, arg6: any, arg7: any) => Color.factory(arg1, arg2, arg3, arg4, arg5, arg6, arg7)) as IColorFunction;
 
 /**
  * Provides color manipulation API that is extensible via plugins.
@@ -32,8 +38,10 @@ export class Color {
    *
    * Use {@link overrideFactory} to override factory implementation.
    */
-  public static factory(args: ReadonlyArray<any>): Color {
-    return args[0] instanceof Color ? args[0].clone() : Color.create();
+  public static factory(...args: any[]): Color;
+
+  public static factory(arg: any): Color {
+    return arg instanceof Color ? arg.clone() : Color.create();
   };
 
   /**
@@ -41,7 +49,7 @@ export class Color {
    *
    * Use this in plugins to add new parsing mechanisms or static methods for {@link color}.
    */
-  public static overrideFactory(cb: (prevFactory: (args: any[]) => Color) => (args: any[]) => Color): void {
+  public static overrideFactory(cb: (prevPipeline: (...args: any[]) => Color) => (...args: any[]) => Color): void {
     Color.factory = cb(Color.factory);
   }
 
@@ -59,7 +67,7 @@ export class Color {
   /**
    * Cache of color components used by this {@link Color} instance for a particular color model.
    */
-  private cache?: Map<IColorModel, unknown>;
+  private _cache?: Map<IColorModel, unknown>;
 
   /**
    * Creates a new {@link Color} instance backed by black color.
@@ -94,6 +102,15 @@ export class Color {
   }
 
   /**
+   * Returns the reference to this {@link Color} instance.
+   *
+   * Use this method in plugins to acquire `this` reference.
+   */
+  protected ref(): Color {
+    return this;
+  }
+
+  /**
    * Returns readonly color components of this {@link Color} in particular color model.
    *
    * Use this method in plugins to acquire color components without changing the current model of {@link Color}
@@ -107,17 +124,17 @@ export class Color {
       return this.components as C;
     }
 
-    this.cache ||= new Map();
+    this._cache ||= new Map();
 
-    let components = this.cache.get(model) as C | undefined;
+    let components = this._cache.get(model) as C | undefined;
 
     if (components === undefined) {
       components = model.createComponents();
-      this.cache.set(model, components);
+      this._cache.set(model, components);
     }
 
     if (this.model) {
-      this.cache.set(this.model, this.components);
+      this._cache.set(this.model, this.components);
       this.model.componentsToRgb(this.components, tempRgb);
     } else {
       this.model = model;
@@ -128,6 +145,19 @@ export class Color {
     }
 
     return model.rgbToComponents(tempRgb, components) || components;
+  }
+
+  /**
+   * Returns mutable copy of color components of this {@link Color} in particular color model.
+   *
+   * Use this method in plugins to acquire color components without changing the current model of {@link Color}
+   * instance. Usually this is required if plugin method returns a computed value.
+   *
+   * @param model The color model that provides color components.
+   * @returns Mutable color components.
+   */
+  protected getCopy<C>(model: IColorModel<C>): C {
+    return model.cloneComponents(this.get(model));
   }
 
   /**
@@ -142,8 +172,8 @@ export class Color {
       return this;
     }
     if (this.model) {
-      this.cache ||= new Map();
-      this.cache.set(this.model, this.components);
+      this._cache ||= new Map();
+      this._cache.set(this.model, this.components);
     }
     this.model = model;
     this.components = components;
@@ -168,8 +198,3 @@ export class Color {
     return components;
   }
 }
-
-/**
- * Creates a new {@link Color} instance.
- */
-export const color: IColorFactory = (...args: any[]) => Color.factory(args);

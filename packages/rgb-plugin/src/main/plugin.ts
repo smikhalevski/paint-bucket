@@ -1,241 +1,449 @@
-import {Color, IRgb, normalizeComponents} from '@paint-bucket/core';
-import {copyRgb, createRgb, intToRgb, RGB, rgbToInt} from '@paint-bucket/rgb';
-import {lerp, right} from 'numeric-wrench';
-import {getLuminance} from './utils';
-import {Wcag2} from './plugin-types';
+import {color, Color, composeComponents, IRgb, normalizeComponents} from '@paint-bucket/core';
+import {intToRgb, RGB} from '@paint-bucket/rgb';
+import {clamp01, int, right, unNaN} from 'numeric-wrench';
+
+function isFunction(value: unknown): value is Function {
+  return typeof value === 'function';
+}
+
+export type Applicator<T> = T | ((prevValue: T) => T);
 
 declare module '@paint-bucket/core/lib/Color' {
 
-  interface IColorFactory {
+  interface IColorFunction {
 
     /**
-     * Sets {@link IRgb} components defined in range [0, 1].
-     *
-     * @see {@link Color.setRgb}
-     */
-    (rgb: Partial<IRgb>): Color;
-
-    /**
-     * Sets RGB components from an integer.
+     * Creates the new color from RGBa components.
      *
      * ```ts
-     * setRgb(0x1, 1) // → Sets 0x11_11_11_FF
-     * setRgb(0x12, 2) // → Sets 0x12_12_12_FF
-     * setRgb(0x123, 3) // → Sets 0x11_22_33_FF
-     * setRgb(0x1234, 4) // → Sets 0x11_22_33_44
-     * setRgb(0x12345, 5) // → Sets 0
-     * setRgb(0x123456, 6) // → Sets 0x12_34_56_FF
-     * setRgb(0x1234567, 7) // → Sets 0
-     * setRgb(0x12345678, 8) // → Sets 0x12_34_56_78
+     * color.rgb({R: 255, G: 255, B: 255, a: 0.5});
      * ```
      *
-     * @param rgb The RGBa color serialized as integer.
-     * @param [nibbleCount = 8] The number of nibbles in integer.
-     *
-     * @see {@link Color.setRgbInt}
+     * @param rgb R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B component is
+     *     omitted it is set to 0. If alpha component is omitted it is set to 1.
+     * @returns The new color instance.
      */
-    (rgb: number, nibbleCount?: number): Color;
+    rgb(rgb: Readonly<Partial<IRgb>>): Color;
+
+    /**
+     * Creates the new color from RGBa components.
+     *
+     * ```ts
+     * color.rgb(255, 255, 255, 0.5);
+     * ```
+     *
+     * @param R Red ∈ [0, 255].
+     * @param G Green ∈ [0, 255].
+     * @param B Blue ∈ [0, 255].
+     * @param [a = 1] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
+     * @returns The new color instance.
+     */
+    rgb(R: number, G: number, B: number, a?: number): Color;
+
+    /**
+     * Creates the new color from RGB components represented as 24-bit integer.
+     *
+     * ```ts
+     * color.rgb24(0xFF_FF_FF, 0.5).toRgb() // → {R: 255, G: 255, B: 255, a: 0.5}
+     * ```
+     *
+     * @param rgb24 24-bit integer, representing color in RGB model.
+     * @param [a] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque. If omitted then current alpha component is left
+     *     unchanged.
+     * @returns The new color instance.
+     */
+    rgb24(rgb24: number, a?: number): Color;
+
+    /**
+     * Creates the new color from RGBa components represented as 32-bit integer.
+     *
+     * ```ts
+     * color.rgb32(0xAA_BB_CC_DD).toRgb() // → {R: 170, G: 187, B: 204, a: 0.86}
+     * ```
+     *
+     * @param rgb32 32-bit integer, representing color in RGBa model.
+     */
+    rgb32(rgb32: number): Color;
   }
 
   interface Color {
 
     /**
-     * Sets {@link IRgb} components defined in range [0, 1].
-     */
-    setRgb(rgb: Partial<IRgb>): this;
-
-    /**
-     * Sets {@link IRgb} components. `R`, `G` and `B` must be in range [0, 255] and `a` must be in range [0, 1].
-     */
-    setRgb255(rgb: Partial<IRgb>): this;
-
-    /**
-     * Sets RGB components from an integer.
+     * Returns RGBs components where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
      *
      * ```ts
-     * setRgb(0x1, 1) // → Sets 0x11_11_11_FF
-     * setRgb(0x12, 2) // → Sets 0x12_12_12_FF
-     * setRgb(0x123, 3) // → Sets 0x11_22_33_FF
-     * setRgb(0x1234, 4) // → Sets 0x11_22_33_44
-     * setRgb(0x12345, 5) // → Sets 0
-     * setRgb(0x123456, 6) // → Sets 0x12_34_56_FF
-     * setRgb(0x1234567, 7) // → Sets 0
-     * setRgb(0x12345678, 8) // → Sets 0x12_34_56_78
+     * color().toRgb(); // → {R: 0, G: 0, B: 0, a: 1}
      * ```
-     *
-     * @param rgb The RGBa color serialized as integer.
-     * @param [nibbleCount = 8] The number of nibbles in integer.
      */
-    setRgbInt(rgb: number, nibbleCount?: number): this;
+    toRgb(): IRgb;
 
     /**
-     * Red color component ∈ [0, 255].
+     * Returns 24-bit integer representing RGB components without alpha.
+     *
+     * ```ts
+     * color().toRgb24(); // → 0x00_00_00
+     * ```
+     */
+    toRgb24(): number;
+
+    /**
+     * Returns 32-bit integer representing RGBa components.
+     *
+     * ```ts
+     * color().toRgb24(); // → 0x00_00_00_FF
+     * ```
+     */
+    toRgb32(): number;
+
+    /**
+     * Sets RGBa components.
+     *
+     * ```ts
+     * color().setRgb({R: 255, G: 255, B: 255, a: 0.5});
+     * ```
+     *
+     * @param rgb R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B component is
+     *     omitted it is set to 0. If alpha component is omitted it is set to 1.
+     */
+    setRgb(rgb: Applicator<Readonly<Partial<IRgb>>>): this;
+
+    /**
+     * Sets RGBa components.
+     *
+     * ```ts
+     * color().setRgb(255, 255, 255, 0.5);
+     * ```
+     *
+     * @param R Red ∈ [0, 255].
+     * @param G Green ∈ [0, 255].
+     * @param B Blue ∈ [0, 255].
+     * @param [a = 1] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
+     */
+    setRgb(R: Applicator<number>, G: Applicator<number>, B: Applicator<number>, a?: Applicator<number>): this;
+
+    /**
+     * Sets RGB components from 24-bit integer representation.
+     *
+     * ```ts
+     * color().setRgb24(0xFF_FF_FF, 0.5).toRgb() // → {R: 255, G: 255, B: 255, a: 0.5}
+     * ```
+     *
+     * @param rgb24 24-bit integer, representing color in RGB model.
+     * @param [a] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque. If omitted then current alpha component is left
+     *     unchanged.
+     */
+    setRgb24(rgb24: Applicator<number>, a?: Applicator<number>): this;
+
+    /**
+     * Sets RGBa components from 32-bit integer representation.
+     *
+     * ```ts
+     * color().setRgb32(0xAA_BB_CC_DD).toRgb() // → {R: 170, G: 187, B: 204, a: 0.86}
+     * ```
+     *
+     * @param rgb32 32-bit integer, representing color in RGBa model.
+     */
+    setRgb32(rgb32: Applicator<number>): this;
+
+    /**
+     * Returns red color component.
+     *
+     * @returns Red ∈ [0, 255].
      */
     getRed(): number;
 
-    setRed(value: number): this;
+    /**
+     * Sets red color component.
+     *
+     * ```ts
+     * color().setRed(64).setRed((R) => R * 2).getRed(); // → 128
+     * ```
+     *
+     * @param R Red ∈ [0, 255].
+     */
+    setRed(R: Applicator<number>): this;
 
     /**
-     * Green color component ∈ [0, 255].
+     * Returns green color component.
+     *
+     * @returns Green ∈ [0, 255].
      */
     getGreen(): number;
 
-    setGreen(value: number): this;
+    /**
+     * Sets green color component.
+     *
+     * ```ts
+     * color().setGreen(64).setGreen((G) => G * 2).getGreen(); // → 128
+     * ```
+     * @param G Green ∈ [0, 255].
+     */
+    setGreen(G: Applicator<number>): this;
 
     /**
-     * Blue color component ∈ [0, 255].
+     * Returns blue color component.
+     *
+     * @returns Blue ∈ [0, 255].
      */
     getBlue(): number;
 
-    setBlue(value: number): this;
+    /**
+     * Sets blue color component.
+     *
+     * ```ts
+     * color().setBlue(64).setBlue((B) => B * 2).getBlue(); // → 128
+     * ```
+     * @param B Blue ∈ [0, 255].
+     */
+    setBlue(B: Applicator<number>): this;
 
     /**
-     * Alpha channel ∈ [0, 1], 0 = transparent, 1 = opaque.
+     * Sets color alpha channel.
+     *
+     * @returns Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
      */
     getAlpha(): number;
 
-    setAlpha(value: number): this;
-
     /**
-     * Returns the color brightness in range [0, 1].
+     * Sets color alpha channel.
      *
-     * @see {@link http://www.w3.org/TR/AERT#color-contrast}
+     * ```ts
+     * color().setAlpha(0.2).setAlpha((a) => a * 2).getAlpha(); // → 0.4
+     * ```
+     * @param a Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
      */
-    getBrightness(): number;
+    setAlpha(a: Applicator<number>): this;
 
-    /**
-     * The relative brightness of any point in a colorspace, normalized to 0 for darkest black and 1 for lightest white.
-     * @see http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
-     */
-    getLuminance(): number;
 
-    // brighten(amount: number): number;
-    // brightenBy(percent: number): number;
+    /*
+        /!**
+         * @returns Brightness ∈ [0, 1].
+         * @see {@link http://www.w3.org/TR/AERT#color-contrast}
+         *!/
+        getBrightness(): number;
 
-    isDark(): boolean;
+        /!**
+         * Increase brightness by the absolute value.
+         *
+         * @param d Additional brightness.
+         *!/
+        brighten(d: number): this;
 
-    isLight(): boolean;
+        /!**
+         * Increase brightness by the percentage of current value.
+         *
+         * @param p Brightness percentage increase.
+         *!/
+        brightenBy(p: number): number;
 
-    /**
-     * Returns `true` if 24-bit integer color representations are equal.
-     *
-     * @param color The color to compare with this color.
-     * @param [ignoreAlpha = false] If set to `true` the alpha channel is ignored.
-     */
-    isEqual(color: Color, ignoreAlpha?: boolean): boolean;
+        /!**
+         * The relative brightness.
+         *
+         * @returns Luminance ∈ [0, 1], 0 = darkest black, 1 = lightest white.
+         * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef WCAG20 Relative Luminance}
+         *!/
+        getLuminance(): number;
 
-    /**
-     * Analyze the 2 colors and returns the color contrast defined by WCAG Version 2.
-     *
-     * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef WCAG Version 2}
-     */
-    readability(color: Color): number;
+        /!**
+         * Mixes colors in given proportion.
+         *
+         * @param color The color to mix.
+         * @param ratio The percentage of blend between colors.
+         *!/
+        mix(color: Color, ratio: number): this;
 
-    /**
-     * Returns `true` is foreground and background color combination meet WCAG2 guidelines.
-     */
-    isReadable(color: Color, wcag2?: Wcag2): boolean;
+        /!**
+         * Converts any color to grayscale using Highly Sensitive Perceived brightness (HSP) equation. The output color
+         * uses the same same color model as the input.
+         *
+         * @see http://alienryderflex.com/hsp.html
+         *!/
+        greyscale(): this;
 
-    /**
-     * Mixes colors in given proportion.
-     *
-     * @param color The color to mix.
-     * @param ratio The percentage of blend between colors.
-     */
-    mix(color: Color, ratio: number): this;
+        /!**
+         * Analyze the 2 colors and returns the color contrast defined by WCAG Version 2.
+         *
+         * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef WCAG Contrast Ratio}
+         *!/
+        readability(color: Color): number;
 
-    /**
-     * Converts any color to grayscale using Highly Sensitive Perceived brightness (HSP) equation. The output color
-     * uses the same same color model as the input.
-     *
-     * @see http://alienryderflex.com/hsp.html
-     */
-    greyscale(): this;
+        /!**
+         * Returns `true` is foreground and background color combination meet WCAG2 guidelines.
+         *!/
+        isReadable(color: Color, wcag2?: Wcag2): boolean;
 
-    toRgb(): IRgb;
+        isDark(): boolean;
 
-    toRgbInt(): number;
+        isLight(): boolean;
+
+        /!**
+         * Returns `true` if 24-bit integer color representations are equal.
+         *
+         * @param color The color to compare with this color.
+         * @param [ignoreAlpha = false] If set to `true` the alpha channel is ignored.
+         *!/
+        isEqual(color: Color, ignoreAlpha?: boolean): boolean;*/
   }
 }
 
-Color.overrideFactory((factory) => (args) => {
-  const [rgb, nibbleCount] = args;
 
-  if (typeof rgb === 'object' && rgb !== null && (typeof rgb.R === 'number' || typeof rgb.G === 'number' || typeof rgb.B === 'number' || typeof rgb.a === 'number')) {
-    return Color.create().setRgb(rgb);
+color.rgb = function () {
+  const args = arguments;
+
+  return Color.create().setRgb(args[0], args[1], args[2], args[3]);
+};
+
+color.rgb24 = (rgb24, a) => Color.create().setRgb24(rgb24, a);
+
+color.rgb32 = (rgb32) => Color.create().setRgb32(rgb32);
+
+
+const colorPrototype = Color.prototype;
+
+colorPrototype.toRgb = function (this: Color) {
+  const rgb = this.getCopy(RGB);
+
+  rgb.R *= 0xFF;
+  rgb.G *= 0xFF;
+  rgb.B *= 0xFF;
+
+  return rgb;
+};
+
+colorPrototype.toRgb24 = function (this: Color) {
+  const rgb = this.get(RGB);
+  return right(composeComponents(rgb.R * 0xFF, rgb.G * 0xF, rgb.B * 0xFF, 0xFF), 8);
+};
+
+colorPrototype.toRgb24 = function (this: Color) {
+  const rgb = this.get(RGB);
+  return composeComponents(rgb.R * 0xFF, rgb.G * 0xF, rgb.B * 0xFF, rgb.a * 0xFF);
+};
+
+colorPrototype.setRgb = function (this: Color) {
+
+  const args = arguments;
+  const arg0 = args[0];
+  const arg1 = args[1];
+  const arg2 = args[2];
+  const arg3 = args[3];
+
+  const ref = this.ref();
+  const rgb = ref.use(RGB);
+
+  let R, G, B, a;
+
+  if (args.length === 1) {
+    const rgb = isFunction(arg0) ? arg0(ref.toRgb()) : arg0;
+
+    if (rgb != null) {
+      R = rgb.R;
+      G = rgb.G;
+      B = rgb.B;
+      a = rgb.a;
+    }
+  } else {
+    R = isFunction(arg0) ? arg0(rgb.R) : arg0;
+    G = isFunction(arg1) ? arg1(rgb.G) : arg1;
+    B = isFunction(arg2) ? arg2(rgb.B) : arg2;
+    a = isFunction(arg3) ? arg3(rgb.a) : arg3;
   }
 
-  if (typeof rgb === 'number') {
-    return Color.create().setRgbInt(rgb, nibbleCount);
+  if (R != null) {
+    rgb.R = clamp01(unNaN(R) / 0xFF);
+  }
+  if (G != null) {
+    rgb.G = clamp01(unNaN(G) / 0xFF);
+  }
+  if (B != null) {
+    rgb.B = clamp01(unNaN(B) / 0xFF);
+  }
+  if (a != null) {
+    rgb.a = clamp01(unNaN(a, 1));
   }
 
-  return factory(args);
-});
-
-Color.prototype.setRgb = function (this: Color, components) {
-  const rgb = this.use(RGB);
-  const {R = 0, G = 0, B = 0, a = 1} = components;
-
-  rgb.R = R;
-  rgb.G = G;
-  rgb.B = B;
-  rgb.a = a;
-
-  return this;
+  return ref;
 };
 
-Color.prototype.setRgb255 = function (this: Color, components) {
-  const rgb = this.use(RGB);
-  const {R = 0, G = 0, B = 0, a = 1} = components;
+colorPrototype.setRgb24 = function (this: Color, rgb24, a) {
+  const ref = this.ref();
+  const rgb = ref.use(RGB);
+  const rgbA = rgb.a;
 
-  rgb.R = R / 0xFF;
-  rgb.G = G / 0xFF;
-  rgb.B = B / 0xFF;
-  rgb.a = a;
+  rgb24 = int(isFunction(rgb24) ? rgb24(this.toRgb24()) : rgb24);
 
-  return this;
+  intToRgb(normalizeComponents(rgb24, 6), rgb);
+
+  a = isFunction(a) ? a(rgbA) : a;
+
+  rgb.a = a != null ? unNaN(a, 1) : rgbA;
+
+  return ref;
 };
 
-Color.prototype.setRgbInt = function (this: Color, rgb, nibbleCount = 8) {
-  intToRgb(normalizeComponents(rgb, nibbleCount), this.use(RGB));
-  return this;
+colorPrototype.setRgb32 = function (this: Color, rgb32) {
+  const ref = this.ref();
+
+  rgb32 = int(isFunction(rgb32) ? rgb32(this.toRgb32()) : rgb32);
+
+  intToRgb(normalizeComponents(rgb32, 8), ref.use(RGB));
+
+  return ref;
 };
 
-Color.prototype.getRed = function (this: Color) {
-  return this.get(RGB).R;
+colorPrototype.getRed = function (this: Color) {
+  return this.get(RGB).R * 0xFF;
 };
 
-Color.prototype.setRed = function (this: Color, value) {
-  this.use(RGB).R = value;
-  return this;
+colorPrototype.setRed = function (this: Color, R) {
+  const ref = this.ref();
+  const rgb = ref.use(RGB);
+
+  rgb.R = clamp01(unNaN(isFunction(R) ? R(rgb.R) : R, 1) / 0xFF);
+
+  return ref;
 };
 
-Color.prototype.getGreen = function (this: Color) {
-  return this.get(RGB).G;
+colorPrototype.getGreen = function (this: Color) {
+  return this.get(RGB).G * 0xFF;
 };
 
-Color.prototype.setGreen = function (this: Color, value) {
-  this.use(RGB).G = value;
-  return this;
+colorPrototype.setGreen = function (this: Color, G) {
+  const ref = this.ref();
+  const rgb = ref.use(RGB);
+
+  rgb.G = clamp01(unNaN(isFunction(G) ? G(rgb.G) : G, 1) / 0xFF);
+
+  return ref;
 };
 
-Color.prototype.getBlue = function (this: Color) {
-  return this.get(RGB).B;
+colorPrototype.getBlue = function (this: Color) {
+  return this.get(RGB).B * 0xFF;
 };
 
-Color.prototype.setBlue = function (this: Color, value) {
-  this.use(RGB).B = value;
-  return this;
+colorPrototype.setBlue = function (this: Color, B) {
+  const ref = this.ref();
+  const rgb = ref.use(RGB);
+
+  rgb.B = clamp01(unNaN(isFunction(B) ? B(rgb.B) : B, 1) / 0xFF);
+
+  return ref;
 };
 
-Color.prototype.getAlpha = function (this: Color) {
-  return this.get(RGB).B;
+colorPrototype.getAlpha = function (this: Color) {
+  return this.get(RGB).a;
 };
 
-Color.prototype.setAlpha = function (this: Color, value) {
-  this.use(RGB).B = value;
-  return this;
+colorPrototype.setAlpha = function (this: Color, a) {
+  const ref = this.ref();
+  const rgb = ref.use(RGB);
+
+  rgb.a = clamp01(unNaN(isFunction(a) ? a(rgb.a) : a, 1));
+
+  return ref;
 };
+
+/*
 
 Color.prototype.getBrightness = function (this: Color) {
   const {R, G, B} = this.get(RGB);
@@ -324,3 +532,4 @@ Color.prototype.toRgb = function (this: Color) {
 Color.prototype.toRgbInt = function (this: Color) {
   return rgbToInt(this.get(RGB));
 };
+*/

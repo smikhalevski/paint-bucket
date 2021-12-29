@@ -18,9 +18,9 @@ export function createRgb(): IRgb;
 /**
  * Creates a color in RGBa color model.
  *
- * @param R Red ∈ [0, 1].
- * @param G Green ∈ [0, 1].
- * @param B Blue ∈ [0, 1].
+ * @param R Red.
+ * @param G Green.
+ * @param B Blue.
  * @param [a = 1] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
  */
 export function createRgb(R: number, G: number, B: number, a?: number): IRgb;

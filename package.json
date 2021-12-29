@@ -76,17 +76,17 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "@paint-bucket/core": "^1.0.0",
-    "@paint-bucket/rgb": "^1.0.0",
-    "@paint-bucket/hsl": "^1.0.0",
-    "@paint-bucket/hsv": "^1.0.0",
-    "@paint-bucket/xyz": "^1.0.0",
-    "@paint-bucket/lab": "^1.0.0",
-    "@paint-bucket/rgb-plugin": "^1.0.0",
-    "@paint-bucket/hsl-plugin": "^1.0.0",
-    "@paint-bucket/x11-plugin": "^1.0.0",
-    "@paint-bucket/css-plugin": "^1.0.0",
     "@paint-bucket/combination-plugin": "^1.0.0",
-    "@paint-bucket/difference-plugin": "^1.0.0"
+    "@paint-bucket/core": "^1.0.0",
+    "@paint-bucket/css-plugin": "^1.0.0",
+    "@paint-bucket/difference-plugin": "^1.0.0",
+    "@paint-bucket/hsl": "^1.0.0",
+    "@paint-bucket/hsl-plugin": "^1.0.0",
+    "@paint-bucket/hsv": "^1.0.0",
+    "@paint-bucket/lab": "^1.0.0",
+    "@paint-bucket/rgb": "^1.0.0",
+    "@paint-bucket/rgb-plugin": "^1.0.0",
+    "@paint-bucket/x11-plugin": "^1.0.0",
+    "@paint-bucket/xyz": "^1.0.0"
   }
 }

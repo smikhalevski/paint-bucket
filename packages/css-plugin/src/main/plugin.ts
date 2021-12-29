@@ -4,7 +4,7 @@ import {parseCssColor} from './parseCssColor';
 declare module '@paint-bucket/core/lib/Color' {
 
 
-  interface IColorFactory {
+  interface IColorFunction {
 
     /**
      * Parses color from CSS string.

@@ -4,7 +4,7 @@ import {createRgb, intToRgb, RGB} from '@paint-bucket/rgb';
 
 declare module '@paint-bucket/core/lib/Color' {
 
-  interface IColorFactory {
+  interface IColorFunction {
 
     /**
      * Creates a new color using its X11 name.
