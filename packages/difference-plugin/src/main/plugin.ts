@@ -24,7 +24,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * @see https://en.wikipedia.org/wiki/Color_difference
      * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
      */
-    deltaE2000(color: Color): number;
+    getDelta(color: Color): number;
 
     /**
      * Returns `true` if colors are so close that they can be barely distinguished.
@@ -40,10 +40,12 @@ declare module '@paint-bucket/core/lib/Color' {
   }
 }
 
-Color.prototype.deltaE2000 = function (this: Color, color) {
+const colorPrototype = Color.prototype;
+
+colorPrototype.getDelta = function (this: Color, color) {
   return deltaE2000(this.get(LAB), color.get(LAB));
 };
 
-Color.prototype.isJnd = function (this: Color, color) {
-  return this.deltaE2000(color) < 2.3;
+colorPrototype.isJnd = function (this: Color, color) {
+  return this.getDelta(color) < 2.3;
 };

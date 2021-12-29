@@ -1,9 +1,17 @@
 import {color, Color, composeComponents, IRgb, normalizeComponents} from '@paint-bucket/core';
 import {intToRgb, RGB} from '@paint-bucket/rgb';
-import {clamp01, int, right, unNaN} from 'numeric-wrench';
+import {clamp01, int, lerp, right, unNaN} from 'numeric-wrench';
 
 function isFunction(value: unknown): value is Function {
   return typeof value === 'function';
+}
+
+function clamp255(x: number): number {
+  return clamp01(unNaN(x) / 0xFF);
+}
+
+function clamp1(x: number): number {
+  return clamp01(unNaN(x, 1));
 }
 
 export type Applicator<T> = T | ((prevValue: T) => T);
@@ -198,14 +206,14 @@ declare module '@paint-bucket/core/lib/Color' {
     setBlue(B: Applicator<number>): this;
 
     /**
-     * Sets color alpha channel.
+     * Returns opacity (alpha) component.
      *
      * @returns Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
      */
     getAlpha(): number;
 
     /**
-     * Sets color alpha channel.
+     * Sets opacity (alpha) component.
      *
      * ```ts
      * color().setAlpha(0.2).setAlpha((a) => a * 2).getAlpha(); // → 0.4
@@ -214,82 +222,63 @@ declare module '@paint-bucket/core/lib/Color' {
      */
     setAlpha(a: Applicator<number>): this;
 
+    /**
+     * Returns the perceived brightness of a color.
+     *
+     * @returns Brightness ∈ [0, 255].
+     * @see {@link http://www.w3.org/TR/AERT#color-contrast Web Content Accessibility Guidelines (Version 1.0)}
+     */
+    getBrightness(): number;
 
-    /*
-        /!**
-         * @returns Brightness ∈ [0, 1].
-         * @see {@link http://www.w3.org/TR/AERT#color-contrast}
-         *!/
-        getBrightness(): number;
+    /**
+     * Sets the perceived brightness of a color.
+     *
+     * @param b Brightness ∈ [0, 1].
+     */
+    setBrightness(b: Applicator<number>): this;
 
-        /!**
-         * Increase brightness by the absolute value.
-         *
-         * @param d Additional brightness.
-         *!/
-        brighten(d: number): this;
+    /**
+     * The relative brightness.
+     *
+     * @returns Luminance ∈ [0, 1], 0 = darkest black, 1 = lightest white.
+     * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef WCAG20 Relative Luminance}
+     */
+    getLuminance(): number;
 
-        /!**
-         * Increase brightness by the percentage of current value.
-         *
-         * @param p Brightness percentage increase.
-         *!/
-        brightenBy(p: number): number;
+    /**
+     * Mixes colors in given proportion.
+     *
+     * @param color The color to mix.
+     * @param ratio The percentage ∈ [0, 1] of the mix between colors.
+     */
+    mix(color: Color, ratio: number): this;
 
-        /!**
-         * The relative brightness.
-         *
-         * @returns Luminance ∈ [0, 1], 0 = darkest black, 1 = lightest white.
-         * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef WCAG20 Relative Luminance}
-         *!/
-        getLuminance(): number;
+    /**
+     * Converts any color to grayscale using Highly Sensitive Perceived brightness (HSP) equation. The output color
+     * uses the same same color model as the input.
+     *
+     * @see http://alienryderflex.com/hsp.html
+     */
+    greyscale(): this;
 
-        /!**
-         * Mixes colors in given proportion.
-         *
-         * @param color The color to mix.
-         * @param ratio The percentage of blend between colors.
-         *!/
-        mix(color: Color, ratio: number): this;
+    /**
+     * Returns the color contrast.
+     *
+     * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef WCAG Contrast Ratio}
+     */
+    getContrast(color: Color): number;
 
-        /!**
-         * Converts any color to grayscale using Highly Sensitive Perceived brightness (HSP) equation. The output color
-         * uses the same same color model as the input.
-         *
-         * @see http://alienryderflex.com/hsp.html
-         *!/
-        greyscale(): this;
-
-        /!**
-         * Analyze the 2 colors and returns the color contrast defined by WCAG Version 2.
-         *
-         * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef WCAG Contrast Ratio}
-         *!/
-        readability(color: Color): number;
-
-        /!**
-         * Returns `true` is foreground and background color combination meet WCAG2 guidelines.
-         *!/
-        isReadable(color: Color, wcag2?: Wcag2): boolean;
-
-        isDark(): boolean;
-
-        isLight(): boolean;
-
-        /!**
-         * Returns `true` if 24-bit integer color representations are equal.
-         *
-         * @param color The color to compare with this color.
-         * @param [ignoreAlpha = false] If set to `true` the alpha channel is ignored.
-         *!/
-        isEqual(color: Color, ignoreAlpha?: boolean): boolean;*/
+    /**
+     * Returns `true` if 24-bit integer RGBa color representations are equal.
+     *
+     * @param color The color to compare with this color.
+     */
+    isEqual(color: Color): boolean;
   }
 }
 
-
 color.rgb = function () {
   const args = arguments;
-
   return Color.create().setRgb(args[0], args[1], args[2], args[3]);
 };
 
@@ -297,16 +286,13 @@ color.rgb24 = (rgb24, a) => Color.create().setRgb24(rgb24, a);
 
 color.rgb32 = (rgb32) => Color.create().setRgb32(rgb32);
 
-
 const colorPrototype = Color.prototype;
 
 colorPrototype.toRgb = function (this: Color) {
   const rgb = this.getCopy(RGB);
-
   rgb.R *= 0xFF;
   rgb.G *= 0xFF;
   rgb.B *= 0xFF;
-
   return rgb;
 };
 
@@ -315,13 +301,12 @@ colorPrototype.toRgb24 = function (this: Color) {
   return right(composeComponents(rgb.R * 0xFF, rgb.G * 0xF, rgb.B * 0xFF, 0xFF), 8);
 };
 
-colorPrototype.toRgb24 = function (this: Color) {
+colorPrototype.toRgb32 = function (this: Color) {
   const rgb = this.get(RGB);
   return composeComponents(rgb.R * 0xFF, rgb.G * 0xF, rgb.B * 0xFF, rgb.a * 0xFF);
 };
 
 colorPrototype.setRgb = function (this: Color) {
-
   const args = arguments;
   const arg0 = args[0];
   const arg1 = args[1];
@@ -333,7 +318,12 @@ colorPrototype.setRgb = function (this: Color) {
 
   let R, G, B, a;
 
-  if (args.length === 1) {
+  if (arg1 != null) {
+    R = isFunction(arg0) ? arg0(rgb.R) : arg0;
+    G = isFunction(arg1) ? arg1(rgb.G) : arg1;
+    B = isFunction(arg2) ? arg2(rgb.B) : arg2;
+    a = isFunction(arg3) ? arg3(rgb.a) : arg3;
+  } else {
     const rgb = isFunction(arg0) ? arg0(ref.toRgb()) : arg0;
 
     if (rgb != null) {
@@ -342,41 +332,32 @@ colorPrototype.setRgb = function (this: Color) {
       B = rgb.B;
       a = rgb.a;
     }
-  } else {
-    R = isFunction(arg0) ? arg0(rgb.R) : arg0;
-    G = isFunction(arg1) ? arg1(rgb.G) : arg1;
-    B = isFunction(arg2) ? arg2(rgb.B) : arg2;
-    a = isFunction(arg3) ? arg3(rgb.a) : arg3;
   }
-
   if (R != null) {
-    rgb.R = clamp01(unNaN(R) / 0xFF);
+    rgb.R = clamp255(R);
   }
   if (G != null) {
-    rgb.G = clamp01(unNaN(G) / 0xFF);
+    rgb.G = clamp255(G);
   }
   if (B != null) {
-    rgb.B = clamp01(unNaN(B) / 0xFF);
+    rgb.B = clamp255(B);
   }
   if (a != null) {
-    rgb.a = clamp01(unNaN(a, 1));
+    rgb.a = clamp1(a);
   }
-
   return ref;
 };
 
 colorPrototype.setRgb24 = function (this: Color, rgb24, a) {
   const ref = this.ref();
   const rgb = ref.use(RGB);
-  const rgbA = rgb.a;
+  const alpha = rgb.a;
 
   rgb24 = int(isFunction(rgb24) ? rgb24(this.toRgb24()) : rgb24);
-
   intToRgb(normalizeComponents(rgb24, 6), rgb);
 
-  a = isFunction(a) ? a(rgbA) : a;
-
-  rgb.a = a != null ? unNaN(a, 1) : rgbA;
+  a = isFunction(a) ? a(alpha) : a;
+  rgb.a = a != null ? clamp1(a) : alpha;
 
   return ref;
 };
@@ -385,7 +366,6 @@ colorPrototype.setRgb32 = function (this: Color, rgb32) {
   const ref = this.ref();
 
   rgb32 = int(isFunction(rgb32) ? rgb32(this.toRgb32()) : rgb32);
-
   intToRgb(normalizeComponents(rgb32, 8), ref.use(RGB));
 
   return ref;
@@ -398,9 +378,7 @@ colorPrototype.getRed = function (this: Color) {
 colorPrototype.setRed = function (this: Color, R) {
   const ref = this.ref();
   const rgb = ref.use(RGB);
-
-  rgb.R = clamp01(unNaN(isFunction(R) ? R(rgb.R) : R, 1) / 0xFF);
-
+  rgb.R = clamp255(isFunction(R) ? R(rgb.R) : R);
   return ref;
 };
 
@@ -411,9 +389,7 @@ colorPrototype.getGreen = function (this: Color) {
 colorPrototype.setGreen = function (this: Color, G) {
   const ref = this.ref();
   const rgb = ref.use(RGB);
-
-  rgb.G = clamp01(unNaN(isFunction(G) ? G(rgb.G) : G, 1) / 0xFF);
-
+  rgb.G = clamp255(isFunction(G) ? G(rgb.G) : G);
   return ref;
 };
 
@@ -424,9 +400,7 @@ colorPrototype.getBlue = function (this: Color) {
 colorPrototype.setBlue = function (this: Color, B) {
   const ref = this.ref();
   const rgb = ref.use(RGB);
-
-  rgb.B = clamp01(unNaN(isFunction(B) ? B(rgb.B) : B, 1) / 0xFF);
-
+  rgb.B = clamp255(isFunction(B) ? B(rgb.B) : B);
   return ref;
 };
 
@@ -437,99 +411,64 @@ colorPrototype.getAlpha = function (this: Color) {
 colorPrototype.setAlpha = function (this: Color, a) {
   const ref = this.ref();
   const rgb = ref.use(RGB);
-
-  rgb.a = clamp01(unNaN(isFunction(a) ? a(rgb.a) : a, 1));
-
+  rgb.a = clamp1(isFunction(a) ? a(rgb.a) : a);
   return ref;
 };
 
-/*
-
-Color.prototype.getBrightness = function (this: Color) {
-  const {R, G, B} = this.get(RGB);
-
-  return R * 0.299 + G * 0.587 + B * 0.114;
+colorPrototype.getBrightness = function (this: Color) {
+  const rgb = this.get(RGB);
+  return rgb.R * 0.299 + rgb.G * 0.587 + rgb.B * 0.114;
 };
 
-Color.prototype.getLuminance = function (this: Color) {
-  return getLuminance(this.get(RGB));
+colorPrototype.setBrightness = function (this: Color, b) {
+  const ref = this.ref();
+  const rgb = this.use(RGB);
+  const brightness = ref.getBrightness();
+  const ratio = brightness / clamp255(isFunction(b) ? b(brightness) : b);
+  rgb.R *= ratio;
+  rgb.G *= ratio;
+  rgb.B *= ratio;
+  return ref;
 };
 
-Color.prototype.isDark = function (this: Color) {
-  return this.getBrightness() < 0.5;
+colorPrototype.getLuminance = function (this: Color) {
+  const rgb = this.get(RGB);
+  return componentLuminance(rgb.R) * 0.2126 + componentLuminance(rgb.G) * 0.7152 + componentLuminance(rgb.B) * 0.0722;
 };
 
-Color.prototype.isLight = function (this: Color) {
-  return !this.isDark();
-};
+function componentLuminance(v: number): number {
+  return v > 0.03928 ? Math.pow((v + 0.055) / 1.055, 2.4) : v / 12.92;
+}
 
-Color.prototype.isEqual = function (this: Color, color, ignoreAlpha = false) {
-  if (this === color) {
-    return true;
-  }
-
-  const rgb1 = rgbToInt(this.get(RGB));
-  const rgb2 = rgbToInt(color.get(RGB));
-
-  return rgb1 === rgb2 || (ignoreAlpha && right(rgb1, 8) === right(rgb2, 8));
-};
-
-Color.prototype.readability = function (this: Color, color) {
-  const l1 = this.getLuminance();
-  const l2 = color.getLuminance();
-
-  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
-};
-
-Color.prototype.isReadable = function (this: Color, color, wcag2 = Wcag2.AA_SMALL) {
-  const r = this.readability(color);
-
-  switch (wcag2) {
-
-    case Wcag2.AA_SMALL:
-    case Wcag2.AAA_LARGE:
-      return r >= 4.5;
-
-    case Wcag2.AA_LARGE:
-      return r >= 3;
-
-    case Wcag2.AAA_SMALL:
-      return r >= 7;
-  }
-
-  return false;
-};
-
-Color.prototype.mix = function (this: Color, color, ratio) {
-  const rgb1 = this.use(RGB);
-  const rgb2 = color.use(RGB);
+colorPrototype.mix = function (this: Color, color, ratio) {
+  const ref = this.ref();
+  const rgb1 = ref.use(RGB);
+  const rgb2 = color.get(RGB);
+  ratio = clamp1(ratio);
 
   rgb1.R = lerp(ratio, rgb1.R, rgb2.R);
   rgb1.G = lerp(ratio, rgb1.G, rgb2.G);
   rgb1.B = lerp(ratio, rgb1.B, rgb2.B);
-  rgb1.a = lerp(ratio, rgb1.a, rgb2.a);
 
-  return this;
+  return ref;
 };
 
-Color.prototype.greyscale = function (this: Color) {
-  const rgb = this.use(RGB);
-  const {R, G, B} = rgb;
-
-  const q = Math.sqrt(R * R * 0.299 + G * G * 0.587 + B * B * 0.114);
-
-  rgb.R = q;
-  rgb.G = q;
-  rgb.B = q;
-
-  return this;
+colorPrototype.greyscale = function (this: Color) {
+  const ref = this.ref();
+  const rgb = ref.use(RGB);
+  const value = Math.sqrt(rgb.R * rgb.R * 0.299 + rgb.G * rgb.G * 0.587 + rgb.B * rgb.B * 0.114);
+  rgb.R = value;
+  rgb.G = value;
+  rgb.B = value;
+  return ref;
 };
 
-Color.prototype.toRgb = function (this: Color) {
-  return copyRgb(this.get(RGB), createRgb());
+colorPrototype.getContrast = function (this: Color, color) {
+  const a = this.getLuminance();
+  const b = color.getLuminance();
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 };
 
-Color.prototype.toRgbInt = function (this: Color) {
-  return rgbToInt(this.get(RGB));
+colorPrototype.isEqual = function (this: Color, color) {
+  return this === color || this.toRgb24() === color.toRgb24();
 };
-*/
