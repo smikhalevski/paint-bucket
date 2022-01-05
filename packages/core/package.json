@@ -12,7 +12,7 @@
   "scripts": {
     "build": "tsc --project ./tsconfig.build.json && npm run rollup && npm run terser",
     "rollup": "rollup --external numeric-wrench --no-treeshake --input ./lib/index.js --file ./lib/index-cjs.js --format cjs --plugin @rollup/plugin-node-resolve",
-    "terser": "for file in $(find ./lib -name '*.js'); do terser --compress --mangle --output $file -- $file; done || exit 1",
+    "terser": "for file in $(find ./lib -name '*.js'); do terser --compress --mangle --mangle-props reserved=[__esModule],regex=/^_/ --output $file -- $file; done || exit 1",
     "clean": "rimraf ./lib",
     "test": "jest --detectOpenHandles"
   },
