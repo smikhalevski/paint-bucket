@@ -1,4 +1,4 @@
-import {Color, IColorModel, IRgb} from '../main';
+import {color, Color, IColorModel, IRgb} from '../main';
 
 describe('Color', () => {
 
@@ -17,7 +17,14 @@ describe('Color', () => {
     },
   };
 
-  const abcColorModel: IColorModel<{ A: number, B: number, C: number, a: number }> = {
+  interface IAbc {
+    A: number;
+    B: number;
+    C: number;
+    a: number;
+  }
+
+  const abcColorModel: IColorModel<IAbc> = {
     createComponents() {
       return {A: 0, B: 0, C: 0, a: 1};
     },
@@ -38,9 +45,31 @@ describe('Color', () => {
     },
   };
 
+  const colorFactory = Color.factory;
+
+  beforeEach(() => {
+    Color.factory = colorFactory;
+  });
+
   test('creates a new color', () => {
     expect(Color.create()).toBeInstanceOf(Color);
-    expect(Color.factory([])).toBeInstanceOf(Color);
+    expect(Color.factory(undefined)).toBeInstanceOf(Color);
+  });
+
+  test('overrides factory', () => {
+    const factoryMock = jest.fn();
+    const cbMock = jest.fn(() => factoryMock);
+
+    Color.overrideFactory(cbMock);
+
+    expect(factoryMock).not.toHaveBeenCalled();
+    expect(cbMock).toHaveBeenCalledTimes(1);
+    expect(cbMock).toHaveBeenLastCalledWith(colorFactory);
+
+    color('abc' as any);
+
+    expect(factoryMock).toHaveBeenCalledTimes(1);
+    expect(factoryMock).toHaveBeenLastCalledWith('abc');
   });
 
   test('returns the same color', () => {
@@ -100,6 +129,42 @@ describe('Color', () => {
       expect(this.get(rgbColorModel)).toBe(rgb);
       done();
     }).call(Color.create(rgbColorModel, rgb));
+  });
+
+  test('clones instance', (done) => {
+    const rgb: IRgb = {R: 127, G: 127, B: 127, a: 0.77};
+    const color = Color.create(rgbColorModel, rgb);
+    const colorClone = color.clone();
+
+    (function (this: Color) {
+      expect(this.model).toBe(rgbColorModel);
+      expect(this.components).not.toBe(rgb);
+      expect(this.components).toEqual(rgb);
+      done();
+    }).call(colorClone);
+  });
+
+  test('returns components copy', (done) => {
+    const rgb: IRgb = {R: 127, G: 127, B: 127, a: 0.77};
+
+    (function (this: Color) {
+      const rgb2 = this.getCopy(rgbColorModel);
+
+      expect(rgb2).not.toBe(rgb);
+      expect(rgb2).toEqual(rgb);
+      done();
+    }).call(Color.create(rgbColorModel, rgb));
+  });
+
+  test('sets components', (done) => {
+    const abc: IAbc = {A: 100, B: 100, C: 100, a: 1};
+
+    (function (this: Color) {
+      this.set(abcColorModel, abc);
+
+      expect(this.get(abcColorModel)).toBe(abc);
+      done();
+    }).call(Color.create());
   });
 
 });

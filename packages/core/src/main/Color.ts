@@ -4,7 +4,9 @@ import {IColorModel, IRgb} from './color-types';
 const tempRgb: IRgb = {R: 0, G: 0, B: 0, a: 1};
 
 /**
- * Re-declare this interface in plugin to extend {@link color} function signature.
+ * Re-declare this interface in the plugin package to extend {@link color} function signature.
+ *
+ * **Note:** Only one-argument signatures are allowed.
  */
 export interface IColorFunction {
 
@@ -14,7 +16,7 @@ export interface IColorFunction {
   (): Color;
 
   /**
-   * Clone a {@link Color} instance.
+   * Clones a {@link Color} instance.
    *
    * @param color The color to clone.
    * @returns The new color instance.
@@ -26,7 +28,7 @@ export interface IColorFunction {
 /**
  * Creates a new {@link Color} instance.
  */
-export const color = ((arg1: any, arg2: any, arg3: any, arg4: any, arg5: any, arg6: any, arg7: any) => Color.factory(arg1, arg2, arg3, arg4, arg5, arg6, arg7)) as IColorFunction;
+export const color = ((arg?: unknown) => Color.factory(arg)) as IColorFunction;
 
 /**
  * Provides color manipulation API that is extensible via plugins.
@@ -38,9 +40,7 @@ export class Color {
    *
    * Use {@link overrideFactory} to override factory implementation.
    */
-  public static factory(...args: any[]): Color;
-
-  public static factory(arg: any): Color {
+  public static factory(arg: unknown): Color {
     return arg instanceof Color ? arg.clone() : Color.create();
   };
 
@@ -49,7 +49,7 @@ export class Color {
    *
    * Use this in plugins to add new parsing mechanisms or static methods for {@link color}.
    */
-  public static overrideFactory(cb: (prevPipeline: (...args: any[]) => Color) => (...args: any[]) => Color): void {
+  public static overrideFactory(cb: (prevFactory: (arg: unknown) => Color) => (arg: unknown) => Color): void {
     Color.factory = cb(Color.factory);
   }
 
