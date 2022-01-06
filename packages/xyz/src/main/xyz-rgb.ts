@@ -1,4 +1,4 @@
-import {IRgb} from '@paint-bucket/core';
+import {Rgb} from '@paint-bucket/core';
 import {IXyz} from './xyz';
 import {clamp01} from 'numeric-wrench';
 import {whitepoint} from './whitepoint';
@@ -6,7 +6,7 @@ import {whitepoint} from './whitepoint';
 /**
  * Convert RGBa to XYZa.
  */
-export function rgbToXyz(rgb: IRgb, xyz: IXyz, white = whitepoint[2].D65): IXyz {
+export function rgbToXyz(rgb: Rgb, xyz: IXyz, white = whitepoint[2].D65): IXyz {
 
   const r = rotateRgbToXyz(rgb.R) / white[0];
   const g = rotateRgbToXyz(rgb.G) / white[1];
@@ -37,7 +37,7 @@ function rotateRgbToXyz(v: number): number {
  * @see https://www.w3.org/TR/css-color-4/#color-conversion-code
  * @see http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
  */
-export function xyzToRgb(xyz: IXyz, rgb: IRgb, white = whitepoint[2].D65): IRgb {
+export function xyzToRgb(xyz: IXyz, rgb: Rgb, white = whitepoint[2].D65): Rgb {
   const {X, Y, Z} = xyz;
 
   const r = X * +3.240969941904521 + Y * -1.537383177570093 + Z * -0.498610760293000;

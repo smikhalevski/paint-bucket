@@ -1,11 +1,11 @@
-import {IRgb} from '@paint-bucket/core';
-import {IHsl} from './hsl';
+import {Rgb} from '@paint-bucket/core';
+import {Hsl} from './hsl';
 
 /**
  * Convert RGBa to HSLa.
  */
-export function rgbToHsl(rgb: IRgb, hsl: IHsl): IHsl {
-  const {R, G, B} = rgb;
+export function rgbToHsl(rgb: Rgb, hsl: Hsl): Hsl {
+  const [R, G, B] = rgb;
 
   const max = Math.max(R, G, B);
   const min = Math.min(R, G, B);
@@ -34,10 +34,10 @@ export function rgbToHsl(rgb: IRgb, hsl: IHsl): IHsl {
     H /= 6;
   }
 
-  hsl.H = H;
-  hsl.S = S;
-  hsl.L = L;
-  hsl.a = rgb.a;
+  hsl[0] = H;
+  hsl[1] = S;
+  hsl[2] = L;
+  hsl[3] = rgb[3];
 
   return hsl;
 }
@@ -45,8 +45,8 @@ export function rgbToHsl(rgb: IRgb, hsl: IHsl): IHsl {
 /**
  * Convert HSLa to RGBa.
  */
-export function hslToRgb(hsl: IHsl, rgb: IRgb): IRgb {
-  const {H, S, L} = hsl;
+export function hslToRgb(hsl: Hsl, rgb: Rgb): Rgb {
+  const [H, S, L] = hsl;
 
   let R = L;
   let G = L;
@@ -61,10 +61,10 @@ export function hslToRgb(hsl: IHsl, rgb: IRgb): IRgb {
     B = hueToRgb(p, q, H - 1 / 3);
   }
 
-  rgb.R = R;
-  rgb.G = G;
-  rgb.B = B;
-  rgb.a = hsl.a;
+  rgb[0] = R;
+  rgb[1] = G;
+  rgb[2] = B;
+  rgb[3] = hsl[3];
 
   return rgb;
 }

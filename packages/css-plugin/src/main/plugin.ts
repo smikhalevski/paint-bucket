@@ -1,10 +1,10 @@
-import {Color, IRgb} from '@paint-bucket/core';
+import {Color, Rgb} from '@paint-bucket/core';
 import {parseCssColor} from './parseCssColor';
 
 declare module '@paint-bucket/core/lib/Color' {
 
 
-  interface IColorFunction {
+  interface ColorFunction {
 
     /**
      * Parses color from CSS string.

@@ -1,6 +1,6 @@
 import {Color, normalizeComponents} from '@paint-bucket/core';
-import {createHsl, HSL} from '@paint-bucket/hsl';
-import {createRgb, intToRgb, RGB} from '@paint-bucket/rgb';
+import {createHsl, Hsl} from '@paint-bucket/hsl';
+import {createRgb, intToRgb, Rgb} from '@paint-bucket/rgb';
 
 /**
  * CSS numerical or percentage value.
@@ -23,13 +23,13 @@ export function parseCssColor(color: string): Color | undefined {
   color = color.trim();
 
   if (color.charCodeAt(0) === 35 /* # */) {
-    return Color.create(RGB, intToRgb(normalizeComponents(parseInt(color.substr(1), 16), color.length - 1), createRgb()));
+    return Color.create(Rgb, intToRgb(normalizeComponents(parseInt(color.substr(1), 16), color.length - 1), createRgb()));
   }
 
   const rawColor = parseInt(color, 16);
 
   if (!isNaN(rawColor)) {
-    return Color.create(RGB, intToRgb(normalizeComponents(rawColor, color.length), createRgb()));
+    return Color.create(Rgb, intToRgb(normalizeComponents(rawColor, color.length), createRgb()));
   }
 
   const tupleMatch = tupleRe.exec(color);
@@ -43,10 +43,10 @@ export function parseCssColor(color: string): Color | undefined {
     const d = parseAlpha(tupleMatch[5]);
 
     if (colorSpaceName === 'rgb' || colorSpaceName === 'rgba') {
-      return Color.create(RGB, createRgb(a, b, c, d));
+      return Color.create(Rgb, createRgb(a, b, c, d));
     }
     if (colorSpaceName === 'hsl' || colorSpaceName === 'hsla') {
-      return Color.create(HSL, createHsl(a, b, c, d));
+      return Color.create(Hsl, createHsl(a, b, c, d));
     }
   }
 }

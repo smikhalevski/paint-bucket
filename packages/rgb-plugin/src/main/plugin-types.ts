@@ -1,141 +1,164 @@
-import {Applicator, IRgb} from '@paint-bucket/core';
+import {Applicator, ColorLike, Rgb} from '@paint-bucket/core';
+
+export interface RgbObject {
+  R: number;
+  G: number;
+  B: number;
+  a: number;
+}
 
 declare module '@paint-bucket/core/lib/Color' {
 
-  interface IColorFunction {
+  interface ColorFunction {
 
     /**
      * Creates the new color from RGBa components.
      *
      * ```ts
-     * color.fromRgb({R: 255, G: 255, B: 255, a: 0.5});
+     * color([255, 255, 255, 0.5]);
+     * // or
+     * color({R: 255, G: 255, B: 255, a: 0.5});
+     *
+     * color([, , 255]); // Creates the opaque blue color
+     * // or
+     * color({B: 255});
      * ```
      *
-     * @param rgb R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B component is
-     *     omitted it is set to 0. If alpha component is omitted it is set to 1.
+     * @param rgb The tuple of R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B
+     *     component is omitted it is set to 0. If alpha component is omitted it is set to 1.
      * @returns The new color instance.
      */
-    fromRgb(rgb: Readonly<Partial<IRgb>>): Color;
+    (rgb: Partial<Rgb> | Partial<RgbObject>): Color;
 
     /**
      * Creates the new color from RGBa components.
      *
      * ```ts
-     * color.fromRgb(255, 255, 255, 0.5);
+     * color.rgb([255, 255, 255, 0.5]);
+     * // or
+     * color.rgb({R: 255, G: 255, B: 255, a: 0.5});
+     *
+     * color.rgb([, , 255]); // Creates the opaque blue color
+     * // or
+     * color.rgb({B: 255});
      * ```
      *
-     * @param R Red ∈ [0, 255].
-     * @param G Green ∈ [0, 255].
-     * @param B Blue ∈ [0, 255].
-     * @param [a = 1] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
+     * @param rgb The tuple of R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B
+     *     component is omitted it is set to 0. If alpha component is omitted it is set to 1.
      * @returns The new color instance.
      */
-    fromRgb(R: number, G: number, B: number, a?: number): Color;
+    rgb(rgb: Partial<Rgb> | Partial<RgbObject>): Color;
 
     /**
      * Creates the new color from RGB components represented as 24-bit integer.
      *
      * ```ts
-     * color.fromRgb24(0xFF_FF_FF, 0.5).toRgb() // → {R: 255, G: 255, B: 255, a: 0.5}
+     * color.rgb24(0xFF_FF_FF, 0.5).rgb() // → [255, 255, 255, 0.5]
      * ```
      *
-     * @param rgb24 24-bit integer, representing color in RGB model.
-     * @param [a] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque. If omitted then current alpha component is left
-     *     unchanged.
+     * @param rgb The 24-bit integer, representing color in RGB model (without alpha component).
+     * @param [a = 1] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
      * @returns The new color instance.
      */
-    fromRgb24(rgb24: number, a?: number): Color;
+    rgb24(rgb: number, a?: number): Color;
 
     /**
      * Creates the new color from RGBa components represented as 32-bit integer.
      *
      * ```ts
-     * color.fromRgb32(0xAA_BB_CC_DD).toRgb() // → {R: 170, G: 187, B: 204, a: 0.86}
+     * color.rgb32(0xAA_BB_CC_DD).rgb() // → [170, 187, 204, 0.86]
      * ```
      *
-     * @param rgb32 32-bit integer, representing color in RGBa model.
+     * @param rgb The 32-bit integer, representing color in RGBa model (with alpha component).
+     * @returns The new color instance.
      */
-    fromRgb32(rgb32: number): Color;
+    rgb32(rgb: number): Color;
   }
 
   interface Color {
 
     /**
-     * Returns RGBs components where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
+     * Returns RGBa components as an array where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
      *
      * ```ts
-     * color().toRgb(); // → {R: 0, G: 0, B: 0, a: 1}
+     * color().rgb(); // → [0, 0, 0, 1]
      * ```
      */
-    toRgb(): IRgb;
+    rgb(): Rgb;
+
+    /**
+     * Sets RGBa components.
+     *
+     * ```ts
+     * color.rgb([255, 255, 255, 0.5]);
+     *
+     * color({B: 255});
+     *
+     * color().rgb(([, , B]) => [255, 255, B, 0.5]);
+     * ```
+     *
+     * @param rgb The tuple of R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B
+     *     component is omitted it is set to 0. If alpha component is omitted it is set to 1.
+     */
+    rgb(rgb: Applicator<Rgb, Partial<Rgb>>): Color;
 
     /**
      * Returns 24-bit integer representing RGB components without alpha.
      *
      * ```ts
-     * color().toRgb24(); // → 0x00_00_00
+     * color().rgb24(); // → 0x00_00_00
      * ```
      */
-    toRgb24(): number;
-
-    /**
-     * Returns 32-bit integer representing RGBa components.
-     *
-     * ```ts
-     * color().toRgb24(); // → 0x00_00_00_FF
-     * ```
-     */
-    toRgb32(): number;
-
-    /**
-     * Sets RGBa components.
-     *
-     * ```ts
-     * color().setRgb({R: 255, G: 255, B: 255, a: 0.5});
-     * ```
-     *
-     * @param rgb R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B component is
-     *     omitted it is set to 0. If alpha component is omitted it is set to 1.
-     */
-    setRgb(rgb: Applicator<Readonly<Partial<IRgb>>>): this;
-
-    /**
-     * Sets RGBa components.
-     *
-     * ```ts
-     * color().setRgb(255, 255, 255, 0.5);
-     * ```
-     *
-     * @param R Red ∈ [0, 255].
-     * @param G Green ∈ [0, 255].
-     * @param B Blue ∈ [0, 255].
-     * @param [a = 1] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
-     */
-    setRgb(R: Applicator<number>, G: Applicator<number>, B: Applicator<number>, a?: Applicator<number>): this;
+    rgb24(): number;
 
     /**
      * Sets RGB components from 24-bit integer representation.
      *
      * ```ts
-     * color().setRgb24(0xFF_FF_FF, 0.5).toRgb() // → {R: 255, G: 255, B: 255, a: 0.5}
+     * color().rgb24(0xFF_FF_FF).rgb() // → [255, 255, 255, 1]
      * ```
      *
-     * @param rgb24 24-bit integer, representing color in RGB model.
-     * @param [a] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque. If omitted then current alpha component is left
-     *     unchanged.
+     * @param rgb The 24-bit integer, representing color in RGB model.
      */
-    setRgb24(rgb24: Applicator<number>, a?: Applicator<number>): this;
+    rgb24(rgb: Applicator<number>): Color;
+
+    /**
+     * Returns 32-bit integer representing RGBa components.
+     *
+     * ```ts
+     * color().rgb32(); // → 0x00_00_00_FF
+     * ```
+     */
+    rgb32(): number;
 
     /**
      * Sets RGBa components from 32-bit integer representation.
      *
      * ```ts
-     * color().setRgb32(0xAA_BB_CC_DD).toRgb() // → {R: 170, G: 187, B: 204, a: 0.86}
+     * color().rgb32(0xAA_BB_CC_DD).rgb() // → [170, 187, 204, 0.86]
      * ```
      *
-     * @param rgb32 32-bit integer, representing color in RGBa model.
+     * @param rgb The 32-bit integer, representing color in RGBa model.
      */
-    setRgb32(rgb32: Applicator<number>): this;
+    rgb32(rgb: Applicator<number>): Color;
+
+    /**
+     * Returns RGBa components as an object where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
+     *
+     * ```ts
+     * color().rgbObject(); // → {R: 0, G: 0, B: 0, a: 1}
+     * ```
+     */
+    rgbObject(): RgbObject;
+
+    /**
+     * Returns RGBa components as an object where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
+     *
+     * ```ts
+     * color().rgbObject(); // → {R: 0, G: 0, B: 0, a: 1}
+     * ```
+     */
+    rgbObject(rgb: Applicator<RgbObject, Partial<RgbObject>>): Color;
 
     /**
      * Returns red color component.
@@ -148,63 +171,63 @@ declare module '@paint-bucket/core/lib/Color' {
      * Sets red color component.
      *
      * ```ts
-     * color().setRed(64).setRed((R) => R * 2).getRed(); // → 128
+     * color().red(64).red((R) => R * 2).red(); // → 128
      * ```
      *
      * @param R Red ∈ [0, 255].
      */
-    red(R: Applicator<number>): this;
+    red(R: Applicator<number>): Color;
 
     /**
      * Returns green color component.
      *
      * @returns Green ∈ [0, 255].
      */
-    getGreen(): number;
+    green(): number;
 
     /**
      * Sets green color component.
      *
      * ```ts
-     * color().setGreen(64).setGreen((G) => G * 2).getGreen(); // → 128
+     * color().green(64).green((G) => G * 2).green(); // → 128
      * ```
      * @param G Green ∈ [0, 255].
      */
-    setGreen(G: Applicator<number>): this;
+    green(G: Applicator<number>): Color;
 
     /**
      * Returns blue color component.
      *
      * @returns Blue ∈ [0, 255].
      */
-    getBlue(): number;
+    blue(): number;
 
     /**
      * Sets blue color component.
      *
      * ```ts
-     * color().setBlue(64).setBlue((B) => B * 2).getBlue(); // → 128
+     * color().blue(64).blue((B) => B * 2).blue(); // → 128
      * ```
      * @param B Blue ∈ [0, 255].
      */
-    setBlue(B: Applicator<number>): this;
+    blue(B: Applicator<number>): Color;
 
     /**
      * Returns opacity (alpha) component.
      *
      * @returns Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
      */
-    getAlpha(): number;
+    alpha(): number;
 
     /**
      * Sets opacity (alpha) component.
      *
      * ```ts
-     * color().setAlpha(0.2).setAlpha((a) => a * 2).getAlpha(); // → 0.4
+     * color().alpha(0.2).alpha((a) => a * 2).alpha(); // → 0.4
      * ```
      * @param a Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
      */
-    setAlpha(a: Applicator<number>): this;
+    alpha(a: Applicator<number>): Color;
 
     /**
      * Returns the perceived brightness of a color.
@@ -212,14 +235,14 @@ declare module '@paint-bucket/core/lib/Color' {
      * @returns Brightness ∈ [0, 255].
      * @see {@link http://www.w3.org/TR/AERT#color-contrast Web Content Accessibility Guidelines (Version 1.0)}
      */
-    getBrightness(): number;
+    brightness(): number;
 
     /**
      * Sets the perceived brightness of a color.
      *
      * @param b Brightness ∈ [0, 1].
      */
-    setBrightness(b: Applicator<number>): this;
+    brightness(b: Applicator<number>): Color;
 
     /**
      * The relative brightness.
@@ -227,14 +250,18 @@ declare module '@paint-bucket/core/lib/Color' {
      * @returns Luminance ∈ [0, 1], 0 = darkest black, 1 = lightest white.
      * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef WCAG20 Relative Luminance}
      */
-    getLuminance(): number;
+    luminance(): number;
 
     /**
      * Returns the color contrast.
      *
+     * ```ts
+     * color.rgb24(0x00_00_00).contrast(color(0xFF_FF_FF)); // → 1
+     * ```
+     *
      * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef WCAG Contrast Ratio}
      */
-    getContrast(color: Color): number;
+    contrast(color: ColorLike): number;
 
     /**
      * Mixes colors in given proportion.
@@ -242,14 +269,12 @@ declare module '@paint-bucket/core/lib/Color' {
      * @param color The color to mix.
      * @param ratio The percentage ∈ [0, 1] of the mix between colors.
      */
-    mix(color: Color, ratio: number): this;
+    mix(color: ColorLike, ratio: number): Color;
 
     /**
-     * Converts any color to grayscale using Highly Sensitive Perceived brightness (HSP) equation. The output color
-     * uses the same same color model as the input.
-     *
-     * @see http://alienryderflex.com/hsp.html
+     * Converts to grayscale using [Highly Sensitive Perceived brightness (HSP)](http://alienryderflex.com/hsp.html)
+     * equation. The output color uses the same same color model as the input.
      */
-    greyscale(): this;
+    greyscale(): Color;
   }
 }

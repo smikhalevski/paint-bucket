@@ -5,7 +5,7 @@ export type Applicator<T> = T | ((prevValue: T) => T);
 
 declare module '@paint-bucket/core/lib/Color' {
 
-  interface IColorFunction {
+  interface ColorFunction {
 
     fromHsl(hsl: Readonly<Partial<IHsl>>): Color;
 

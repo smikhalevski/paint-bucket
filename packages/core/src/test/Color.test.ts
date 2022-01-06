@@ -1,8 +1,8 @@
-import {color, Color, IColorModel, IRgb} from '../main';
+import {color, Color, ColorModel, Rgb} from '../main';
 
 describe('Color', () => {
 
-  const rgbColorModel: IColorModel<IRgb> = {
+  const rgbColorModel: ColorModel<Rgb> = {
     createComponents() {
       return {R: 0, G: 0, B: 0, a: 1};
     },
@@ -24,7 +24,7 @@ describe('Color', () => {
     a: number;
   }
 
-  const abcColorModel: IColorModel<IAbc> = {
+  const abcColorModel: ColorModel<IAbc> = {
     createComponents() {
       return {A: 0, B: 0, C: 0, a: 1};
     },
@@ -123,7 +123,7 @@ describe('Color', () => {
   });
 
   test('returns initial color', (done) => {
-    const rgb: IRgb = {R: 127, G: 127, B: 127, a: 0.77};
+    const rgb: Rgb = {R: 127, G: 127, B: 127, a: 0.77};
 
     (function (this: Color) {
       expect(this.get(rgbColorModel)).toBe(rgb);
@@ -132,7 +132,7 @@ describe('Color', () => {
   });
 
   test('clones instance', (done) => {
-    const rgb: IRgb = {R: 127, G: 127, B: 127, a: 0.77};
+    const rgb: Rgb = {R: 127, G: 127, B: 127, a: 0.77};
     const color = Color.create(rgbColorModel, rgb);
     const colorClone = color.clone();
 
@@ -145,7 +145,7 @@ describe('Color', () => {
   });
 
   test('returns components copy', (done) => {
-    const rgb: IRgb = {R: 127, G: 127, B: 127, a: 0.77};
+    const rgb: Rgb = {R: 127, G: 127, B: 127, a: 0.77};
 
     (function (this: Color) {
       const rgb2 = this.getCopy(rgbColorModel);

@@ -1,10 +1,10 @@
-import {IColorModel} from '@paint-bucket/core';
+import {ColorModel} from '@paint-bucket/core';
 import {rgbToXyz, xyzToRgb} from './xyz-rgb';
 
 /**
  * CIE 1931 XYZa color model definition.
  */
-export const XYZ: IColorModel<IXyz> = {
+export const XYZ: ColorModel<IXyz> = {
   createComponents: createXyz,
   cloneComponents: (xyz) => copyXyz(xyz, createXyz()),
   componentsToRgb: xyzToRgb,

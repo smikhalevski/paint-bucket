@@ -1,10 +1,10 @@
 import {hsvToRgb, rgbToHsv} from './hsv-rgb';
-import {IColorModel} from '@paint-bucket/core';
+import {ColorModel} from '@paint-bucket/core';
 
 /**
  * HSVa color model definition.
  */
-export const HSV: IColorModel<IHsv> = {
+export const HSV: ColorModel<IHsv> = {
   createComponents: createHsv,
   cloneComponents: (hsv) => copyHsv(hsv, createHsv()),
   componentsToRgb: hsvToRgb,

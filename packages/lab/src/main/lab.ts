@@ -1,10 +1,10 @@
-import {IColorModel} from '@paint-bucket/core';
+import {ColorModel} from '@paint-bucket/core';
 import {labToRgb, rgbToLab} from './lab-rgb';
 
 /**
  * CIELAB color model definition.
  */
-export const LAB: IColorModel<ILab> = {
+export const LAB: ColorModel<ILab> = {
   createComponents: createLab,
   cloneComponents: (lab) => copyLab(lab, createLab()),
   componentsToRgb: labToRgb,

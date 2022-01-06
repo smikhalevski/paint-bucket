@@ -2,7 +2,7 @@ import {Color} from '@paint-bucket/core';
 
 declare module '@paint-bucket/core/lib/Color' {
 
-  interface IColorFunction {
+  interface ColorFunction {
 
     random(): Color;
   }

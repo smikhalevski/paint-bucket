@@ -1,10 +1,10 @@
 import {Color} from '@paint-bucket/core';
 import {x11Map} from './x11Map';
-import {createRgb, intToRgb, RGB} from '@paint-bucket/rgb';
+import {createRgb, intToRgb, Rgb} from '@paint-bucket/rgb';
 
 declare module '@paint-bucket/core/lib/Color' {
 
-  interface IColorFunction {
+  interface ColorFunction {
 
     /**
      * Creates a new color using its X11 name.
@@ -23,7 +23,7 @@ Color.overrideFactory((factory) => (args) => {
     const rgb = x11Map.get(name.toLowerCase());
 
     if (rgb) {
-      return Color.create(RGB, intToRgb(rgb, createRgb()));
+      return Color.create(Rgb, intToRgb(rgb, createRgb()));
     }
   }
   return factory(args);
