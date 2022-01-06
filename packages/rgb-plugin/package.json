@@ -1,7 +1,7 @@
 {
   "name": "@paint-bucket/rgb-plugin",
   "version": "1.0.0",
-  "description": "",
+  "description": "RGBa color model manipulation plugin for Paint Bucket.",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",

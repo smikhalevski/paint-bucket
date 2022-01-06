@@ -1,8 +1,20 @@
 import {IHsl} from '@paint-bucket/hsl';
+import {color} from '@paint-bucket/core';
 
 export type Applicator<T> = T | ((prevValue: T) => T);
 
 declare module '@paint-bucket/core/lib/Color' {
+
+  interface IColorFunction {
+
+    fromHsl(hsl: Readonly<Partial<IHsl>>): Color;
+
+    fromHsl(H: number, S: number, L: number, a?: number): Color;
+
+    fromHsl24(hsl24: number, a?: number): Color;
+
+    fromHsl32(hsl32: number): Color;
+  }
 
   interface Color {
 

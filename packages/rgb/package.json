@@ -1,7 +1,7 @@
 {
   "name": "@paint-bucket/rgb",
   "version": "1.0.0",
-  "description": "RGBa color model plugin for Paint Bucket.",
+  "description": "Converter from and to RGBa color model for Paint Bucket.",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",

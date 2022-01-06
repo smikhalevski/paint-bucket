@@ -6,8 +6,8 @@ import {IColorModel, IRgb} from '@paint-bucket/core';
 export const RGB: IColorModel<IRgb> = {
   createComponents: createRgb,
   cloneComponents: (rgb) => copyRgb(rgb, createRgb()),
-  componentsToRgb: copyRgb,
-  rgbToComponents: copyRgb,
+  componentsToRgb: (rgb) => rgb,
+  rgbToComponents: (rgb) => rgb,
 };
 
 /**

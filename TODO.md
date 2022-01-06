@@ -1,0 +1,3 @@
+```ts
+color.gradient(0xA, 0xB, 0xC).toRgbAt(0.5);
+```

@@ -34,6 +34,37 @@ describe('rgb24', () => {
   });
 });
 
+describe('rgb32', () => {
+
+  test('creates color from 32-bit integer', () => {
+    expect(color.rgb32(0xFF_FF_FF_EE).toRgb()).toEqual({
+      R: 255,
+      G: 255,
+      B: 255,
+      a: 0.9333333333333333,
+    });
+  });
+});
+
+describe('toRgb24', () => {
+
+  test('returns 24-bit color integer', () => {
+    expect(color.rgb(255, 255, 255, 0.5).toRgb24()).toBe(0xFF_FF_FF);
+  });
+});
+
+describe('setRgb', () => {
+
+  test('sets color from object', () => {
+    expect(color().setRgb({R: 128, a: 0.5}).toRgb()).toEqual({
+      R: 128,
+      G: 0,
+      B: 0,
+      a: 0.5,
+    });
+  });
+});
+
 // describe('toRgb', () => {
 //
 //   test('creates color from object', () => {
@@ -64,14 +95,7 @@ test('creates color from integer with nibble count', () => {
   });
 });
 
-test('sets color from object', () => {
-  expect(color().setRgb({R: 0.5, a: 0.5}).toRgb()).toEqual({
-    R: 0.5,
-    G: 0,
-    B: 0,
-    a: 0.5,
-  });
-});
+
 
 test('sets color from object with values bound to 255', () => {
   expect(color().setRgb255({R: 128, a: 0.5}).toRgb()).toEqual({
