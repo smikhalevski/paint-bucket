@@ -1,4 +1,4 @@
-import {Color, Rgb} from '@paint-bucket/core';
+import {Color} from '@paint-bucket/core';
 import {parseCssColor} from './parseCssColor';
 
 declare module '@paint-bucket/core/lib/Color' {
@@ -12,24 +12,22 @@ declare module '@paint-bucket/core/lib/Color' {
     (color: string): Color;
   }
 
-  // interface Color {
-  //
-  //   /**
-  //    * Parses color from CSS string.
-  //    */
-  //   setCss(color: string): this;
-  // }
+  interface Color {
+
+    /**
+     * Sets color from CSS string.
+     */
+    css(color: string): Color;
+  }
 }
 
-Color.overrideFactory((factory) => (args) => {
-  const [input] = args;
+Color.overrideParser((next) => (value) => {
+  if (typeof value === 'string') {
+    const color = parseCssColor(value);
 
-  if (typeof input === 'string') {
-    const color = parseCssColor(input);
     if (color) {
       return color;
     }
   }
-
-  return factory(args);
+  return next(value);
 });

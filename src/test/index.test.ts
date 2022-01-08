@@ -1,8 +1,15 @@
 import {color} from '../main';
 
-describe('color', () => {
+describe('rgb', () => {
 
-  test('', () => {
-    expect(color('#aaa').isJnd(color(0xAA_BB_CC))).toBe(false);
+  test('returns RGBa components', () => {
+    expect(color('#abc').rgb()).toEqual([170, 187, 204, 1]);
+  });
+});
+
+describe('deltaE', () => {
+
+  test('returns deltaE', () => {
+    expect(color('#aaa').deltaE(0xAA_BB_CC)).toBeCloseTo(12.9222);
   });
 });

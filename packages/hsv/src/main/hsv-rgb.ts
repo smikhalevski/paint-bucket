@@ -1,11 +1,11 @@
 import {Rgb} from '@paint-bucket/core';
-import {IHsv} from './hsv';
+import {Hsv} from './hsv';
 
 /**
  * Convert RGBa to HSVa.
  */
-export function rgbToHsv(rgb: Rgb, hsv: IHsv): IHsv {
-  const {R, G, B} = rgb;
+export function rgbToHsv(rgb: Rgb, hsv: Hsv): Hsv {
+  const [R, G, B] = rgb;
 
   const V = Math.max(R, G, B);
   const d = V - Math.min(R, G, B);
@@ -29,10 +29,10 @@ export function rgbToHsv(rgb: Rgb, hsv: IHsv): IHsv {
     H /= 6;
   }
 
-  hsv.H = H;
-  hsv.S = S;
-  hsv.V = V;
-  hsv.a = rgb.a;
+  hsv[0] = H;
+  hsv[1] = S;
+  hsv[2] = V;
+  hsv[3] = rgb[3];
 
   return hsv;
 }
@@ -40,8 +40,8 @@ export function rgbToHsv(rgb: Rgb, hsv: IHsv): IHsv {
 /**
  * Convert HSVa to RGBa.
  */
-export function hsvToRgb(hsv: IHsv, rgb: Rgb): Rgb {
-  const {H, S, V} = hsv;
+export function hsvToRgb(hsv: Hsv, rgb: Rgb): Rgb {
+  const [H, S, V] = hsv;
 
   const i = Math.floor(H);
   const f = H - i;
@@ -86,10 +86,10 @@ export function hsvToRgb(hsv: IHsv, rgb: Rgb): Rgb {
       break;
   }
 
-  rgb.R = R;
-  rgb.G = G;
-  rgb.B = B;
-  rgb.a = hsv.a;
+  rgb[0] = R;
+  rgb[1] = G;
+  rgb[2] = B;
+  rgb[3] = hsv[3];
 
   return rgb;
 }

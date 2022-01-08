@@ -1,1 +1,0 @@
-# @paint-bucket/combination-plugin

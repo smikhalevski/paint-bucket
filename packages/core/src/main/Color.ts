@@ -1,7 +1,15 @@
 import {ColorModel, Rgb} from './color-model';
+import {Parameter} from './utility-types';
 
+// RGBa color components that are used for implicit model-to-model conversions
 const tempRgb: Rgb = [0, 0, 0, 1];
-const tempComponents: number[] = [];
+
+const tempComponents: number[] = [0, 0, 0, 1];
+
+/**
+ * Returns the new {@link Color} instance.
+ */
+export const color = ((value) => Color.parser(value)) as ColorFunction;
 
 /**
  * Re-declare this interface in the plugin package to extend {@link color} function signature.
@@ -11,12 +19,12 @@ const tempComponents: number[] = [];
 export interface ColorFunction {
 
   /**
-   * Creates a new black color.
+   * Creates the new black color.
    */
   (): Color;
 
   /**
-   * Clones a {@link Color} instance.
+   * Clones the {@link Color} instance.
    *
    * @param color The color to clone.
    * @returns The new color instance.
@@ -24,13 +32,10 @@ export interface ColorFunction {
   (color: Color): Color;
 }
 
-export type ColorLike = Exclude<Parameters<ColorFunction>[0], void>;
-
-// Rest arguments aren't used to prevent excessive array allocation.
 /**
- * Creates a new {@link Color} instance.
+ * The type of the value that can be parsed into a {@link Color} instance using {@link color} function.
  */
-export const color = ((value?: unknown) => Color.factory(value)) as ColorFunction;
+export type ColorLike = Parameter<ColorFunction>;
 
 /**
  * Provides color manipulation API that is extensible via plugins.
@@ -38,34 +43,35 @@ export const color = ((value?: unknown) => Color.factory(value)) as ColorFunctio
 export class Color {
 
   /**
-   * Creates the new {@link Color} instance.
-   *
-   * Use {@link overrideFactory} to override factory implementation.
+   * Parser that transforms input values into {@link Color} instances.
    */
-  public static factory(value: unknown): Color {
-    return value instanceof Color ? value.clone() : new Color();
-  };
+  public static parser = (value: unknown): Color => value instanceof Color ? value.clone() : new Color();
 
   /**
-   * Overrides the current {@link factory} implementation.
+   * Overrides parsing implementation that backs the {@link color} function.
    *
-   * Use this in plugins to add new parsing mechanisms or static methods for {@link color}.
+   * Use this in plugins to add new parsing mechanisms or static methods for {@link color} function.
    */
-  public static overrideFactory(cb: (prevFactory: (value: unknown) => Color) => (value: unknown) => Color): void {
-    Color.factory = cb(Color.factory);
+  public static overrideParser(cb: (next: (value: unknown) => Color) => (value: unknown) => Color): void {
+    this.parser = cb(this.parser);
   }
 
   /**
-   * The active color model or `undefined` if {@link Color} was created without any model which means that a it
-   * represents a black color.
+   * The current color model.
    */
   protected model;
 
   /**
-   * Readonly active color components in the color model returned by {@link model}.
+   * Color color components of the current color model.
    */
-  protected components;
+  protected readonly components;
 
+  /**
+   * Creates a new {@link Color} instance.
+   *
+   * @param model The initial color model.
+   * @param components The initial color components.
+   */
   public constructor(model: ColorModel = Rgb, components: number[] = [0, 0, 0, 1]) {
     this.model = model;
     this.components = components;
@@ -83,36 +89,42 @@ export class Color {
   /**
    * Returns readonly color components of this {@link Color} in particular color model.
    *
-   * Use this method in plugins to acquire color components without changing the current model of {@link Color}
-   * instance. Usually this is required if plugin method returns a computed value.
+   * Use this method to acquire color components without changing the current model of this {@link Color} instance.
+   * Usually this is required if plugin method returns a computed value.
+   *
+   * **Note:** Don't keep reference to the returned array because it is reused.
    *
    * @param model The color model that provides color components.
    * @returns Readonly color components.
    */
-  public get(model: ColorModel): readonly number[] {
-    if (this.model === model) {
-      return this.components;
-    }
-    this.model.componentsToRgb(this.components, tempRgb);
-    model.rgbToComponents(tempRgb, tempComponents);
-    return tempComponents;
+  protected get(model: ColorModel): readonly number[] {
+    return this._getOrUpdate(model, tempComponents);
   }
 
   /**
    * Returns mutable color components of this {@link Color} in particular color model.
    *
-   * Use this method in plugins if you want {@link Color} instance to switch active color model. Usually this is
-   * required if plugin method returns this {@link Color} instance for chaining.
+   * Use this method in plugins if you want {@link Color} instance to switch the current color model or to update color
+   * components.
    *
    * @param model The color model that provides color components.
    * @returns Mutable color components.
    */
-  public use(model: ColorModel): number[] {
+  protected use(model: ColorModel): number[] {
+    this._getOrUpdate(model, this.components);
+    this.model = model;
+    return this.components;
+  }
+
+  /**
+   * Returns current color components or updates `components` if current model doesn't match `model`.
+   */
+  private _getOrUpdate(model: ColorModel, components: number[]): number[] {
     if (this.model === model) {
       return this.components;
     }
     this.model.componentsToRgb(this.components, tempRgb);
-    model.rgbToComponents(tempRgb, this.components);
-    return this.components;
+    model.rgbToComponents(tempRgb, components);
+    return components;
   }
 }

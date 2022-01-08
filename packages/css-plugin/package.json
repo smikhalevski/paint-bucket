@@ -1,7 +1,7 @@
 {
   "name": "@paint-bucket/css-plugin",
   "version": "1.0.0",
-  "description": "",
+  "description": "CSS values support plugin for Paint Bucket",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -12,7 +12,7 @@
   "scripts": {
     "build": "tsc --project ./tsconfig.build.json && npm run rollup && npm run terser",
     "rollup": "rollup --external @paint-bucket/core,@paint-bucket/hsl --no-treeshake --input ./lib/index.js --file ./lib/index-cjs.js --format cjs --plugin @rollup/plugin-node-resolve",
-    "terser": "for file in $(find ./lib -name '*.js'); do terser --compress --mangle --mangle-props reserved=[__esModule],regex=/^_/ --output $file -- $file; done || exit 1",
+    "terser": "for file in $(find ./lib -name '*.js'); do terser --compress --mangle --output $file -- $file; done || exit 1",
     "clean": "rimraf ./lib",
     "test": "jest --detectOpenHandles"
   },
@@ -52,7 +52,6 @@
   },
   "dependencies": {
     "@paint-bucket/core": "^1.0.0",
-    "@paint-bucket/rgb": "^1.0.0",
     "@paint-bucket/hsl": "^1.0.0"
   }
 }

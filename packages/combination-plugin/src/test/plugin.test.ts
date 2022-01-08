@@ -1,6 +1,0 @@
-describe('plugin', () => {
-
-  test('', () => {
-    // todo
-  });
-});

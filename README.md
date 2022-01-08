@@ -13,13 +13,13 @@ import {color} from '@paint-bucket/core';
 import '@paint-bucket/rgb-plugin';
 import '@paint-bucket/difference-plugin';
 
-// or import all plugins at once using 
+// or import all plugins at once using
 // import {color} from 'paint-bucket';
 
-color('#FF0000').grayscale().isJnd(color(0xAA_AA_AA_FF)); // → true
+color('#aaa').grayscale().delta(0xAA_BB_CC); // → 12.9222
 ```
 
-I cannot underestimate how much these libraries helped me to implement color model conversion algorithms:
+I cannot overestimate how much these libraries helped me to implement color model conversion algorithms:
 
 - [@jonathantneal/convert-colors](https://github.com/jonathantneal/convert-colors)
 - [@colorjs/color-space](https://github.com/colorjs/color-space)

@@ -1,12 +1,5 @@
 import {Applicator, ColorLike, Rgb} from '@paint-bucket/core';
 
-export interface RgbObject {
-  R: number;
-  G: number;
-  B: number;
-  a: number;
-}
-
 declare module '@paint-bucket/core/lib/Color' {
 
   interface ColorFunction {
@@ -16,51 +9,45 @@ declare module '@paint-bucket/core/lib/Color' {
      *
      * ```ts
      * color([255, 255, 255, 0.5]);
-     * // or
-     * color({R: 255, G: 255, B: 255, a: 0.5});
      *
-     * color([, , 255]); // Creates the opaque blue color
-     * // or
-     * color({B: 255});
+     * color([, , 255]); // Opaque blue color
+     *
+     * color(0x00_00_FF);
      * ```
      *
-     * @param rgb The tuple of R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B
-     *     component is omitted it is set to 0. If alpha component is omitted it is set to 1.
+     * @param rgb The 24-bit integer RGBa color or separate components where R, G and B ∈ [0, 255] and a ∈ [0, 1]
+     *     (0 = transparent, 1 = opaque). If a R, G or B component is omitted it is set to 0. If alpha component is
+     *     omitted it is set to 1.
      * @returns The new color instance.
      */
-    (rgb: Partial<Rgb> | Partial<RgbObject>): Color;
+    (rgb: number | Partial<Rgb>): Color;
 
     /**
      * Creates the new color from RGBa components.
      *
      * ```ts
      * color.rgb([255, 255, 255, 0.5]);
-     * // or
-     * color.rgb({R: 255, G: 255, B: 255, a: 0.5});
      *
-     * color.rgb([, , 255]); // Creates the opaque blue color
-     * // or
-     * color.rgb({B: 255});
+     * color.rgb([, , 255]); // Opaque blue color
      * ```
      *
-     * @param rgb The tuple of R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B
-     *     component is omitted it is set to 0. If alpha component is omitted it is set to 1.
+     * @param rgb R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B component is
+     *     omitted it is set to 0. If alpha component is omitted it is set to 1.
      * @returns The new color instance.
      */
-    rgb(rgb: Partial<Rgb> | Partial<RgbObject>): Color;
+    rgb(rgb: Partial<Rgb>): Color;
 
     /**
      * Creates the new color from RGB components represented as 24-bit integer.
      *
      * ```ts
-     * color.rgb24(0xFF_FF_FF, 0.5).rgb() // → [255, 255, 255, 0.5]
+     * color.rgb24(0xFF_FF_FF).rgb() // → [255, 255, 255, 1]
      * ```
      *
      * @param rgb The 24-bit integer, representing color in RGB model (without alpha component).
-     * @param [a = 1] Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
      * @returns The new color instance.
      */
-    rgb24(rgb: number, a?: number): Color;
+    rgb24(rgb: number): Color;
 
     /**
      * Creates the new color from RGBa components represented as 32-bit integer.
@@ -92,8 +79,6 @@ declare module '@paint-bucket/core/lib/Color' {
      * ```ts
      * color.rgb([255, 255, 255, 0.5]);
      *
-     * color({B: 255});
-     *
      * color().rgb(([, , B]) => [255, 255, B, 0.5]);
      * ```
      *
@@ -115,7 +100,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Sets RGB components from 24-bit integer representation.
      *
      * ```ts
-     * color().rgb24(0xFF_FF_FF).rgb() // → [255, 255, 255, 1]
+     * color().rgb24(0xFF_FF_FF).rgb(); // → [255, 255, 255, 1]
      * ```
      *
      * @param rgb The 24-bit integer, representing color in RGB model.
@@ -135,30 +120,12 @@ declare module '@paint-bucket/core/lib/Color' {
      * Sets RGBa components from 32-bit integer representation.
      *
      * ```ts
-     * color().rgb32(0xAA_BB_CC_DD).rgb() // → [170, 187, 204, 0.86]
+     * color().rgb32(0xAA_BB_CC_DD).rgb(); // → [170, 187, 204, 0.86]
      * ```
      *
      * @param rgb The 32-bit integer, representing color in RGBa model.
      */
     rgb32(rgb: Applicator<number>): Color;
-
-    /**
-     * Returns RGBa components as an object where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
-     *
-     * ```ts
-     * color().rgbObject(); // → {R: 0, G: 0, B: 0, a: 1}
-     * ```
-     */
-    rgbObject(): RgbObject;
-
-    /**
-     * Returns RGBa components as an object where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
-     *
-     * ```ts
-     * color().rgbObject(); // → {R: 0, G: 0, B: 0, a: 1}
-     * ```
-     */
-    rgbObject(rgb: Applicator<RgbObject, Partial<RgbObject>>): Color;
 
     /**
      * Returns red color component.
@@ -232,17 +199,10 @@ declare module '@paint-bucket/core/lib/Color' {
     /**
      * Returns the perceived brightness of a color.
      *
-     * @returns Brightness ∈ [0, 255].
+     * @returns Brightness ∈ [0, 1].
      * @see {@link http://www.w3.org/TR/AERT#color-contrast Web Content Accessibility Guidelines (Version 1.0)}
      */
     brightness(): number;
-
-    /**
-     * Sets the perceived brightness of a color.
-     *
-     * @param b Brightness ∈ [0, 1].
-     */
-    brightness(b: Applicator<number>): Color;
 
     /**
      * The relative brightness.
@@ -253,10 +213,10 @@ declare module '@paint-bucket/core/lib/Color' {
     luminance(): number;
 
     /**
-     * Returns the color contrast.
+     * Returns the color contrast ∈ [1, 21].
      *
      * ```ts
-     * color.rgb24(0x00_00_00).contrast(color(0xFF_FF_FF)); // → 1
+     * color(0x00_00_00).contrast(0xFF_FF_FF); // → 21
      * ```
      *
      * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef WCAG Contrast Ratio}

@@ -1,30 +1,27 @@
-import {Color} from '@paint-bucket/core';
-import {x11Map} from './x11Map';
-import {createRgb, intToRgb, Rgb} from '@paint-bucket/rgb';
+import {Color, Rgb} from '@paint-bucket/core';
+import {x11Components} from './x11-components';
 
 declare module '@paint-bucket/core/lib/Color' {
 
   interface ColorFunction {
 
     /**
-     * Creates a new color using its X11 name.
+     * Creates a new color using its [X11 color name](https://en.wikipedia.org/wiki/X11_color_names).
      *
-     * @see {@link https://en.wikipedia.org/wiki/X11_color_names X11 color names}
      * @param name The case-insensitive color name.
+     * @return The new {@link Color} instance.
      */
     (name: string): Color;
   }
 }
 
-Color.overrideFactory((factory) => (args) => {
-  const [name] = args;
+Color.overrideParser((next) => (value) => {
+  if (typeof value === 'string') {
+    const components = x11Components.get(value.toLowerCase());
 
-  if (typeof name === 'string') {
-    const rgb = x11Map.get(name.toLowerCase());
-
-    if (rgb) {
-      return Color.create(Rgb, intToRgb(rgb, createRgb()));
+    if (components) {
+      return new Color(Rgb, components.slice(0));
     }
   }
-  return factory(args);
+  return next(value);
 });

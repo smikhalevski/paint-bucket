@@ -1,12 +1,7 @@
-export * from '@paint-bucket/core';
-export * from '@paint-bucket/rgb';
-export * from '@paint-bucket/hsl';
-export * from '@paint-bucket/hsv';
-export * from '@paint-bucket/xyz';
-export * from '@paint-bucket/lab';
-export * from '@paint-bucket/rgb-plugin';
-export * from '@paint-bucket/hsl-plugin';
-export * from '@paint-bucket/x11-plugin';
-export * from '@paint-bucket/css-plugin';
-export * from '@paint-bucket/combination-plugin';
-export * from '@paint-bucket/difference-plugin';
+import '@paint-bucket/rgb-plugin';
+import '@paint-bucket/hsl-plugin';
+import '@paint-bucket/x11-plugin';
+import '@paint-bucket/css-plugin';
+import '@paint-bucket/difference-plugin';
+
+export {color, Accessor, Applicator, Color, ColorLike, ColorModel, ColorFunction, Rgb} from '@paint-bucket/core';

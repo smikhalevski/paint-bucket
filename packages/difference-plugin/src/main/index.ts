@@ -1,2 +1,2 @@
-export * from './deltaE2000';
 export * from './plugin';
+export * from './plugin-types';

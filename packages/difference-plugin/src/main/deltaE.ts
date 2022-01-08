@@ -1,4 +1,4 @@
-import {ILab} from '@paint-bucket/lab';
+import {Lab} from '@paint-bucket/lab';
 import {clamp, deg, pow2, rad} from 'numeric-wrench';
 
 const {abs, atan2, cos, exp, sin, sqrt} = Math;
@@ -23,10 +23,10 @@ const hypot = Math.hypot || ((x, y) => sqrt(x * x + y + y));
  * @see https://en.wikipedia.org/wiki/Color_difference
  * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
  */
-export function deltaE2000(lab1: ILab, lab2: ILab): number {
+export function deltaE(lab1: readonly number[], lab2: readonly number[]): number {
 
-  let {L: L1, A: A1, B: B1} = lab1;
-  let {L: L2, A: A2, B: B2} = lab2;
+  let [L1, A1, B1] = lab1;
+  let [L2, A2, B2] = lab2;
 
   L1 *= 255;
   A1 *= 127;

@@ -1,7 +1,5 @@
 /**
- * The color model creates instances of color components and defines transformation from and to RGBa color model.
- *
- * @template C The type of color components used by this color model.
+ * The color model defines transformation from and to RGBa color model.
  */
 export interface ColorModel {
 
@@ -18,7 +16,6 @@ export interface ColorModel {
    *
    * @param rgb RGBa color components.
    * @param components The color components that must be updated.
-   * @returns The updated color components or `undefined` if `components` should be used.
    */
   rgbToComponents(rgb: Rgb, components: number[]): void;
 }

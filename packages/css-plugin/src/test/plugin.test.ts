@@ -5,6 +5,6 @@ import '../main';
 describe('plugin', () => {
 
   test('creates color from CSS representation', () => {
-    expect(color('#abc').toRgbInt()).toBe(0xAA_BB_CC_FF);
+    expect(color('#abc').rgb32()).toBe(0xAA_BB_CC_FF);
   });
 });

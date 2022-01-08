@@ -1,4 +1,4 @@
-import {composeComponents, getColorComponent, normalizeComponents, setColorComponent} from '../main';
+import {composeComponents, getComponent, normalizeComponents, setComponent} from '../main';
 
 describe('normalizeComponents', () => {
 
@@ -30,41 +30,41 @@ describe('composeComponents', () => {
   });
 });
 
-describe('getColorComponent', () => {
+describe('getComponent', () => {
 
   test('gets the color byte', () => {
     const color = 0x12_34_56_AA;
 
-    expect(getColorComponent(color, 0)).toBe(0x12);
-    expect(getColorComponent(color, 1)).toBe(0x34);
-    expect(getColorComponent(color, 2)).toBe(0x56);
-    expect(getColorComponent(color, 3)).toBe(0xAA);
+    expect(getComponent(color, 0)).toBe(0x12);
+    expect(getComponent(color, 1)).toBe(0x34);
+    expect(getComponent(color, 2)).toBe(0x56);
+    expect(getComponent(color, 3)).toBe(0xAA);
   });
 });
 
-describe('setColorComponent', () => {
+describe('setComponent', () => {
 
   test('sets the color byte', () => {
-    expect(setColorComponent(0x12_34_56_78, 0, 0xAA)).toBe(0xAA_34_56_78);
-    expect(setColorComponent(0x12_34_56_78, 1, 0xAA)).toBe(0x12_AA_56_78);
-    expect(setColorComponent(0x12_34_56_78, 2, 0xAA)).toBe(0x12_34_AA_78);
-    expect(setColorComponent(0x12_34_56_78, 3, 0xAA)).toBe(0x12_34_56_AA);
+    expect(setComponent(0x12_34_56_78, 0, 0xAA)).toBe(0xAA_34_56_78);
+    expect(setComponent(0x12_34_56_78, 1, 0xAA)).toBe(0x12_AA_56_78);
+    expect(setComponent(0x12_34_56_78, 2, 0xAA)).toBe(0x12_34_AA_78);
+    expect(setComponent(0x12_34_56_78, 3, 0xAA)).toBe(0x12_34_56_AA);
 
-    expect(setColorComponent(0x12_34_56_78, 0, 0xA)).toBe(0x0A_34_56_78);
-    expect(setColorComponent(0x12_34_56_78, 1, 0xA)).toBe(0x12_0A_56_78);
-    expect(setColorComponent(0x12_34_56_78, 2, 0xA)).toBe(0x12_34_0A_78);
-    expect(setColorComponent(0x12_34_56_78, 3, 0xA)).toBe(0x12_34_56_0A);
+    expect(setComponent(0x12_34_56_78, 0, 0xA)).toBe(0x0A_34_56_78);
+    expect(setComponent(0x12_34_56_78, 1, 0xA)).toBe(0x12_0A_56_78);
+    expect(setComponent(0x12_34_56_78, 2, 0xA)).toBe(0x12_34_0A_78);
+    expect(setComponent(0x12_34_56_78, 3, 0xA)).toBe(0x12_34_56_0A);
 
-    expect(setColorComponent(0x12_34_56_78, 0, 0xA0)).toBe(0xA0_34_56_78);
-    expect(setColorComponent(0x12_34_56_78, 1, 0xA0)).toBe(0x12_A0_56_78);
-    expect(setColorComponent(0x12_34_56_78, 2, 0xA0)).toBe(0x12_34_A0_78);
-    expect(setColorComponent(0x12_34_56_78, 3, 0xA0)).toBe(0x12_34_56_A0);
+    expect(setComponent(0x12_34_56_78, 0, 0xA0)).toBe(0xA0_34_56_78);
+    expect(setComponent(0x12_34_56_78, 1, 0xA0)).toBe(0x12_A0_56_78);
+    expect(setComponent(0x12_34_56_78, 2, 0xA0)).toBe(0x12_34_A0_78);
+    expect(setComponent(0x12_34_56_78, 3, 0xA0)).toBe(0x12_34_56_A0);
   });
 
   test('prevents overflow', () => {
-    expect(setColorComponent(0x12_34_56_78, 0, 0xAA_BB)).toBe(0xFF_34_56_78);
-    expect(setColorComponent(0x12_34_56_78, 1, 0xAA_BB)).toBe(0x12_FF_56_78);
-    expect(setColorComponent(0x12_34_56_78, 2, 0xAA_BB)).toBe(0x12_34_FF_78);
-    expect(setColorComponent(0x12_34_56_78, 3, 0xAA_BB)).toBe(0x12_34_56_FF);
+    expect(setComponent(0x12_34_56_78, 0, 0xAA_BB)).toBe(0xFF_34_56_78);
+    expect(setComponent(0x12_34_56_78, 1, 0xAA_BB)).toBe(0x12_FF_56_78);
+    expect(setComponent(0x12_34_56_78, 2, 0xAA_BB)).toBe(0x12_34_FF_78);
+    expect(setComponent(0x12_34_56_78, 3, 0xAA_BB)).toBe(0x12_34_56_FF);
   });
 });

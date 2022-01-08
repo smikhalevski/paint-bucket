@@ -79,11 +79,35 @@ export function composeComponents(a: number, b: number, c: number, d: number): n
   return unsafeComposeComponents(byte(a), byte(b), byte(c), byte(d));
 }
 
-export function getColorComponent(components: number, offset: number): number {
+export function getComponent(components: number, offset: number): number {
   return 0xFF & right(components, 24 - offset * 8);
 }
 
-export function setColorComponent(components: number, offset: number, value: number): number {
+export function setComponent(components: number, offset: number, value: number): number {
   const shift = 24 - offset * 8;
   return or(left(byte(value), shift), and(xor(left(0xFF, shift), 0xFF_FF_FF_FF), components));
+}
+
+/**
+ * Converts normalized 32-bit integer color representation to components array where each component is normalized to
+ * range [0, 1].
+ */
+export function intToComponents(color: number, components: number[]): number[] {
+  components[0] = getComponent(color, 0) / 0xFF;
+  components[1] = getComponent(color, 1) / 0xFF;
+  components[2] = getComponent(color, 2) / 0xFF;
+  components[3] = getComponent(color, 3) / 0xFF;
+  return components;
+}
+
+/**
+ * Converts components that are normalized to range [0, 1] to a 32-bit integer color representation.
+ */
+export function componentsToInt(components: readonly number[]): number {
+  return composeComponents(
+      components[0] * 0xFF,
+      components[1] * 0xFF,
+      components[2] * 0xFF,
+      components[3] * 0xFF,
+  );
 }

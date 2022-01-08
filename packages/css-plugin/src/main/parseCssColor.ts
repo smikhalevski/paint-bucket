@@ -1,6 +1,5 @@
-import {Color, normalizeComponents} from '@paint-bucket/core';
-import {createHsl, Hsl} from '@paint-bucket/hsl';
-import {createRgb, intToRgb, Rgb} from '@paint-bucket/rgb';
+import {Color, intToComponents, normalizeComponents, Rgb} from '@paint-bucket/core';
+import {Hsl} from '@paint-bucket/hsl';
 
 /**
  * CSS numerical or percentage value.
@@ -23,36 +22,46 @@ export function parseCssColor(color: string): Color | undefined {
   color = color.trim();
 
   if (color.charCodeAt(0) === 35 /* # */) {
-    return Color.create(Rgb, intToRgb(normalizeComponents(parseInt(color.substr(1), 16), color.length - 1), createRgb()));
+    return new Color(Rgb, intToComponents(normalizeComponents(parseInt(color.substr(1), 16), color.length - 1), [0, 0, 0, 1]));
   }
 
   const rawColor = parseInt(color, 16);
 
   if (!isNaN(rawColor)) {
-    return Color.create(Rgb, intToRgb(normalizeComponents(rawColor, color.length), createRgb()));
+    return new Color(Rgb, intToComponents(normalizeComponents(rawColor, color.length), [0, 0, 0, 1]));
   }
 
   const tupleMatch = tupleRe.exec(color);
 
   if (tupleMatch) {
-    const colorSpaceName = tupleMatch[1].toLowerCase();
+    const colorModelName = tupleMatch[1].toLowerCase();
+    const alpha = parseAlpha(tupleMatch[5]);
 
-    const a = parseByte(tupleMatch[2]);
-    const b = parseByte(tupleMatch[3]);
-    const c = parseByte(tupleMatch[4]);
-    const d = parseAlpha(tupleMatch[5]);
-
-    if (colorSpaceName === 'rgb' || colorSpaceName === 'rgba') {
-      return Color.create(Rgb, createRgb(a, b, c, d));
+    if (colorModelName === 'rgb' || colorModelName === 'rgba') {
+      return new Color(Rgb, [
+        parseByte(tupleMatch[2]),
+        parseByte(tupleMatch[3]),
+        parseByte(tupleMatch[4]),
+        alpha,
+      ]);
     }
-    if (colorSpaceName === 'hsl' || colorSpaceName === 'hsla') {
-      return Color.create(Hsl, createHsl(a, b, c, d));
+    if (colorModelName === 'hsl' || colorModelName === 'hsla') {
+      return new Color(Hsl, [
+        parseDegrees(tupleMatch[2]),
+        parseByte(tupleMatch[3]),
+        parseByte(tupleMatch[4]),
+        alpha,
+      ]);
     }
   }
 }
 
 function parseByte(value: string): number {
   return isPercentage(value) ? parseFloat(value) / 100 : parseFloat(value) / 0xFF;
+}
+
+function parseDegrees(value: string): number {
+  return isPercentage(value) ? parseFloat(value) / 100 : parseFloat(value) / 360;
 }
 
 function parseAlpha(value: string | undefined): number {
