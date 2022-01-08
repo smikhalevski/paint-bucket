@@ -16,7 +16,8 @@
     "postbuild": "tsc --project ./tsconfig.build.json && npm run rollup && npm run terser",
     "rollup": "rollup --no-treeshake --input ./lib/index.js --file ./lib/index-cjs.js --format cjs --plugin @rollup/plugin-node-resolve",
     "terser": "for file in $(find ./lib -name '*.js'); do terser --compress --mangle toplevel --output $file -- $file; done || exit 1",
-    "postclean": "rimraf ./lib"
+    "postclean": "rimraf ./lib",
+    "perf": "[ -d ./lib ] || npm run build && node --expose-gc --max-old-space-size=4096 ./src/test/perf.js"
   },
   "repository": {
     "type": "git",
@@ -63,11 +64,15 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",
+    "@smikhalevski/perf-test": "^1.0.0",
     "@types/jest": "^27.0.1",
+    "chalk": "^4.1.2",
+    "chroma-js": "^2.1.2",
     "jest": "^27.0.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.50.5",
     "terser": "^5.7.0",
+    "tinycolor2": "^1.4.2",
     "ts-jest": "^27.0.2",
     "tslib": "^2.3.1",
     "typedoc": "^0.21.4",
