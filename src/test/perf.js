@@ -22,7 +22,7 @@ test('chroma      ', () => chroma(rgb).desaturate().rgb(), {timeout: 10000});
 gc();
 test('paint-bucket', () => color(rgb).saturation((S) => S * 0.5).rgb(), {timeout: 10000});
 
-console.log('\n' + chalk.inverse(' Spin/Lighten '));
+console.log('\n' + chalk.inverse(' Spin + Lighten '));
 gc();
 test('tinycolor2  ', () => tinycolor2(rgb).spin(90).lighten().toRgb(), {timeout: 10000});
 gc();
