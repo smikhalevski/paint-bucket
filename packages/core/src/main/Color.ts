@@ -64,7 +64,7 @@ export class Color {
   /**
    * Color color components of the current color model.
    */
-  protected readonly components;
+  protected components;
 
   /**
    * Creates a new {@link Color} instance.
@@ -97,7 +97,7 @@ export class Color {
    * @param model The color model that provides color components.
    * @returns Readonly color components.
    */
-  protected get(model: ColorModel): readonly number[] {
+  public get(model: ColorModel): readonly number[] {
     return this._getOrUpdate(model, tempComponents);
   }
 
@@ -110,7 +110,7 @@ export class Color {
    * @param model The color model that provides color components.
    * @returns Mutable color components.
    */
-  protected use(model: ColorModel): number[] {
+  public use(model: ColorModel): number[] {
     this._getOrUpdate(model, this.components);
     this.model = model;
     return this.components;

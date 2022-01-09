@@ -53,6 +53,7 @@
   "dependencies": {
     "@paint-bucket/core": "^1.0.0",
     "@paint-bucket/hsl": "^1.0.0",
-    "@paint-bucket/plugin-utils": "^1.0.0"
+    "@paint-bucket/plugin-utils": "^1.0.0",
+    "numeric-wrench": "^1.0.0"
   }
 }

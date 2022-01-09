@@ -1,4 +1,4 @@
-import {rgbToXyz, xyzToRgb} from '../main/xyz-rgb';
+import {rgbToXyz, xyzToRgb} from '../main';
 
 describe('rgbToXyz', () => {
 

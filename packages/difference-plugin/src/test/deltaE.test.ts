@@ -1,6 +1,6 @@
 import {Lab, rgbToLab} from '@paint-bucket/lab';
 import {deltaE} from '../main/deltaE';
-import {Rgb} from '@paint-bucket/core/src/main';
+import {Rgb} from '@paint-bucket/core';
 
 describe('deltaE', () => {
 

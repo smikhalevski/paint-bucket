@@ -1,4 +1,4 @@
-import {hslToRgb, rgbToHsl} from '../main/hsl-rgb';
+import {hslToRgb, rgbToHsl} from '../main';
 
 describe('rgbToHsl', () => {
 
