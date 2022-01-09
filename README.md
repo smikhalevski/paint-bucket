@@ -27,8 +27,8 @@ Results are in millions of operations per second. The higher number is better.
 
 |  | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
 | --- | ---: | ---: | ---: | 
-| Create RGB color | 10.25 | 3.39 | 1.36 |
-| Desaturate and get red component | 6.53 | 0.72 | 1.36 |
+| Create | 13.61 | 3.35 | 1.36 |
+| Desaturate | 6.53 | 0.72 | 0.51 |
 
 # ❤️
 
