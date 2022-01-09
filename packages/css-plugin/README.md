@@ -1,3 +1,3 @@
 # @paint-bucket/css-plugin
 
-CSS values support plugin for [Paint Bucket](https://github.com/smikhalevski/paint-bucket/).
+CSS color values parsing and serialization plugin for [Paint Bucket](https://github.com/smikhalevski/paint-bucket/).

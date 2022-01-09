@@ -1,7 +1,7 @@
 {
-  "name": "@paint-bucket/rgb-plugin",
+  "name": "@paint-bucket/plugin-utils",
   "version": "1.0.0",
-  "description": "RGBa color model manipulation plugin for Paint Bucket.",
+  "description": "Utils to simplify plugin development for Paint Bucket.",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "tsc --project ./tsconfig.build.json && npm run rollup && npm run terser",
-    "rollup": "rollup --external @paint-bucket/core,@paint-bucket/rgb,numeric-wrench --no-treeshake --input ./lib/index.js --file ./lib/index-cjs.js --format cjs --plugin @rollup/plugin-node-resolve",
+    "rollup": "rollup --external @paint-bucket/core,numeric-wrench --no-treeshake --input ./lib/index.js --file ./lib/index-cjs.js --format cjs --plugin @rollup/plugin-node-resolve",
     "terser": "for file in $(find ./lib -name '*.js'); do terser --compress --mangle --output $file -- $file; done || exit 1",
     "clean": "rimraf ./lib",
     "test": "jest --detectOpenHandles"
@@ -49,7 +49,6 @@
   },
   "dependencies": {
     "@paint-bucket/core": "^1.0.0",
-    "@paint-bucket/plugin-utils": "^1.0.0",
     "numeric-wrench": "^1.0.0"
   }
 }

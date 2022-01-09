@@ -1,4 +1,4 @@
-import {Color} from './Color';
+import {Color} from '@paint-bucket/core';
 
 /**
  * An applicator is a literal value that must be set or a callback that receives the previous value and return the new

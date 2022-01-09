@@ -1,4 +1,5 @@
-import {Color, intToComponents, normalizeComponents, Rgb} from '@paint-bucket/core';
+import {Color, Rgb} from '@paint-bucket/core';
+import {intToComponents, normalizeComponents} from '@paint-bucket/plugin-utils';
 import {Hsl} from '@paint-bucket/hsl';
 
 /**

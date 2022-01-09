@@ -1,14 +1,11 @@
+import {color, Color, ColorLike, Rgb} from '@paint-bucket/core';
 import {
-  color,
-  Color,
-  ColorLike,
   componentsToInt,
   createAccessor,
   intToComponents,
   normalizeComponents,
-  Rgb,
   toColor,
-} from '@paint-bucket/core';
+} from '@paint-bucket/plugin-utils';
 import {lerp, right} from 'numeric-wrench';
 
 function clamp(x: number, n = 0): number {

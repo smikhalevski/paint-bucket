@@ -1,7 +1,7 @@
 {
   "name": "@paint-bucket/core",
   "version": "1.0.0",
-  "description": "Core components for Paint Bucket color manipulation library.",
+  "description": "Core components for Paint Bucket.",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -46,8 +46,5 @@
         }
       }
     }
-  },
-  "dependencies": {
-    "numeric-wrench": "^1.0.0"
   }
 }

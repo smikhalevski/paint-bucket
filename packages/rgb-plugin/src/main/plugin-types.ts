@@ -1,4 +1,5 @@
-import {Applicator, ColorLike, Rgb} from '@paint-bucket/core';
+import {ColorLike, Rgb} from '@paint-bucket/core';
+import {Applicator} from '@paint-bucket/plugin-utils';
 
 declare module '@paint-bucket/core/lib/Color' {
 

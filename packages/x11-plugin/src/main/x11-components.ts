@@ -1,4 +1,4 @@
-import {intToComponents} from '@paint-bucket/core';
+import {intToComponents} from '@paint-bucket/plugin-utils';
 
 /**
  * X11 color name to RGBa components.

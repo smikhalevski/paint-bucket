@@ -1,5 +1,5 @@
-import {Applicator} from '@paint-bucket/core';
 import {Hsl} from '@paint-bucket/hsl';
+import {Applicator} from '@paint-bucket/plugin-utils';
 
 declare module '@paint-bucket/core/lib/Color' {
 

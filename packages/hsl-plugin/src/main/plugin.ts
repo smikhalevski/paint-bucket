@@ -1,4 +1,5 @@
-import {Color, color, componentsToInt, createAccessor, intToComponents, normalizeComponents} from '@paint-bucket/core';
+import {Color, color} from '@paint-bucket/core';
+import {componentsToInt, createAccessor, intToComponents, normalizeComponents} from '@paint-bucket/plugin-utils';
 import {Hsl} from '@paint-bucket/hsl';
 import {right} from 'numeric-wrench';
 

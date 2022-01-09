@@ -1,4 +1,3 @@
-import {Lab} from '@paint-bucket/lab';
 import {clamp, deg, pow2, rad} from 'numeric-wrench';
 
 const {abs, atan2, cos, exp, sin, sqrt} = Math;

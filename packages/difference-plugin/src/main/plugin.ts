@@ -1,4 +1,5 @@
-import {Color, toColor} from '@paint-bucket/core';
+import {Color} from '@paint-bucket/core';
+import {toColor} from '@paint-bucket/plugin-utils';
 import {Lab} from '@paint-bucket/lab';
 import {deltaE} from './deltaE';
 
