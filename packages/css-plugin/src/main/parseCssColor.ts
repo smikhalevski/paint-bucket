@@ -18,21 +18,24 @@ const TUPLE = `^(\\w+)\\s*\\(?\\s*(${VALUE})${COMMA}(${VALUE})${COMMA}(${VALUE})
 
 const tupleRe = RegExp(TUPLE);
 
-export function parseCssColor(color: string): Color | undefined {
+export function parseCssColor(value: string): Color | undefined {
 
-  color = color.trim();
+  value = value.trim();
 
-  if (color.charCodeAt(0) === 35 /* # */) {
-    return new Color(Rgb, intToComponents(normalizeComponents(parseInt(color.substr(1), 16), color.length - 1), [0, 0, 0, 1]));
+  if (value.charCodeAt(0) === 35 /* # */) {
+    return new Color(Rgb, intToComponents(normalizeComponents(parseInt(value.substr(1), 16), value.length - 1), [0, 0, 0, 1]));
+  }
+  if (value.toLowerCase() === 'transparent') {
+    return new Color(Rgb, [0, 0, 0, 0]);
   }
 
-  const rawColor = parseInt(color, 16);
+  const color = parseInt(value, 16);
 
-  if (!isNaN(rawColor)) {
-    return new Color(Rgb, intToComponents(normalizeComponents(rawColor, color.length), [0, 0, 0, 1]));
+  if (!isNaN(color)) {
+    return new Color(Rgb, intToComponents(normalizeComponents(color, value.length), [0, 0, 0, 1]));
   }
 
-  const tupleMatch = tupleRe.exec(color);
+  const tupleMatch = tupleRe.exec(value);
 
   if (tupleMatch) {
     const colorModelName = tupleMatch[1].toLowerCase();

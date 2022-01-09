@@ -5,7 +5,6 @@ import {stringifyRgb} from './stringifyRgb';
 
 declare module '@paint-bucket/core/lib/Color' {
 
-
   interface ColorFunction {
 
     /**

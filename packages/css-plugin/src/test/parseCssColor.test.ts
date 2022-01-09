@@ -3,6 +3,11 @@ import '@paint-bucket/rgb-plugin';
 
 describe('parseCssColor', () => {
 
+  test('parses transparent color', () => {
+    expect(parseCssColor('transparent')?.rgb32()).toBe(0x00_00_00_00);
+    expect(parseCssColor('TRANSPARENT')?.rgb32()).toBe(0x00_00_00_00);
+  });
+
   test('parses HEX', () => {
     expect(parseCssColor('abc')?.rgb32()).toBe(0xAA_BB_CC_FF);
     expect(parseCssColor('a1b2c3')?.rgb32()).toBe(0xA1_B2_C3_FF);
