@@ -1,1 +1,2 @@
-export * from './plugin';
+import './plugin';
+import './plugin-types';
