@@ -43,3 +43,9 @@ gc();
 test('tinycolor2  ', () => tinycolor2(rgb).spin(90).lighten().toRgb(), {timeout: 10000});
 gc();
 test('paint-bucket', () => color(rgb).hue((H) => H + 90).lightness((L) => L + 10).rgb(), {timeout: 10000});
+
+console.log('\n' + chalk.inverse(' Gradient '));
+gc();
+test('chroma      ', () => chroma.scale(['#fff', '#000'])(0.7), {timeout: 10000});
+gc();
+test('paint-bucket', () => color.gradient(['#fff', '#000']).at(0.7), {timeout: 10000});

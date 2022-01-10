@@ -3,10 +3,7 @@ import '../main';
 
 describe('plugin', () => {
 
-  test('creates color by X11 name', (done) => {
-    (function (this: Color) {
-      expect(this.get(Rgb)).toEqual([0, 1, 1, 1]);
-      done();
-    }).call(color('cyan'));
+  test('creates color by X11 name', () => {
+    expect(color('cyan').get(Rgb)).toEqual([0, 1, 1, 1]);
   });
 });

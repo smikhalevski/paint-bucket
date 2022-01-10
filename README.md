@@ -293,6 +293,7 @@ Results are in millions of operations per second. The higher number is better.
 | Parse RGBa | 1.64 | 0.86 | 0.09 |
 | Desaturate | 7.14 | 0.72 | 0.48 |
 | Spin + Lighten | 4.65 | 0.37 | — |
+| Gradient | 2.43 | — | 0.15 |
 
 # ❤️
 
