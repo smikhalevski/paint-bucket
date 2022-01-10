@@ -289,6 +289,8 @@ Results are in millions of operations per second. The higher number is better.
 |  | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
 | --- | ---: | ---: | ---: | 
 | Create | 12.61 | 3.35 | 1.45 |
+| Parse HEX | 5.21 | 0.93 | 0.97 |
+| Parse RGBa | 1.64 | 0.86 | 0.09 |
 | Desaturate | 7.14 | 0.72 | 0.48 |
 | Spin + Lighten | 4.65 | 0.37 | — |
 

@@ -6,13 +6,29 @@ const {color} = require('../../lib/index-cjs');
 
 const rgb = [111, 222, 333];
 
-console.log(chalk.inverse(' Create '));
+console.log(chalk.inverse(' Create from array '));
 gc();
 test('tinycolor2  ', () => tinycolor2(rgb), {timeout: 10000});
 gc();
 test('chroma      ', () => chroma(rgb), {timeout: 10000});
 gc();
 test('paint-bucket', () => color(rgb), {timeout: 10000});
+
+console.log('\n' + chalk.inverse(' Parse HEX '));
+gc();
+test('tinycolor2  ', () => tinycolor2('#abcdef'), {timeout: 10000});
+gc();
+test('chroma      ', () => chroma('#abcdef'), {timeout: 10000});
+gc();
+test('paint-bucket', () => color('#abcdef'), {timeout: 10000});
+
+console.log('\n' + chalk.inverse(' Parse RGBa '));
+gc();
+test('tinycolor2  ', () => tinycolor2('rgba(128,128,128,0.5)'), {timeout: 10000});
+gc();
+test('chroma      ', () => chroma('rgba(128,128,128,0.5)'), {timeout: 10000});
+gc();
+test('paint-bucket', () => color('rgba(128,128,128,0.5)'), {timeout: 10000});
 
 console.log('\n' + chalk.inverse(' Desaturate '));
 gc();
