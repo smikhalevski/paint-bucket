@@ -32,3 +32,7 @@ colorPrototype.css = createAccessor(
       return this;
     },
 );
+
+colorPrototype.toString = function (this: Color) {
+  return this.css();
+};
