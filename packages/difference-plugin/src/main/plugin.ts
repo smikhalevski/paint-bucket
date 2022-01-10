@@ -3,8 +3,15 @@ import {toColor} from '@paint-bucket/plugin-utils';
 import {Lab} from '@paint-bucket/lab';
 import {deltaE} from './deltaE';
 
-const colorPrototype = Color.prototype;
+export {_Color as Color};
 
-colorPrototype.deltaE = function (this: Color, color) {
-  return deltaE(this.get(Lab), toColor(color).get(Lab));
-};
+const _Color = function (Color) {
+
+  const colorPrototype = Color.prototype;
+
+  colorPrototype.deltaE = function (this: Color, color) {
+    return deltaE(this.get(Lab), toColor(color).get(Lab));
+  };
+
+  return Color;
+}(Color);

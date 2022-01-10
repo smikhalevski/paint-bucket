@@ -15,13 +15,20 @@ declare module '@paint-bucket/core/lib/Color' {
   }
 }
 
-Color.overrideParser((next) => (value) => {
-  if (typeof value === 'string') {
-    const components = x11Components.get(value.toLowerCase());
+export {_Color as Color};
 
-    if (components) {
-      return new Color(Rgb, components.slice(0));
+const _Color = function (Color) {
+
+  Color.overrideParser((next) => (value) => {
+    if (typeof value === 'string') {
+      const components = x11Components.get(value.toLowerCase());
+
+      if (components) {
+        return new Color(Rgb, components.slice(0));
+      }
     }
-  }
-  return next(value);
-});
+    return next(value);
+  });
+
+  return Color;
+}(Color);
