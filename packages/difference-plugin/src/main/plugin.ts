@@ -6,5 +6,5 @@ import {deltaE} from './deltaE';
 const colorPrototype = Color.prototype;
 
 colorPrototype.deltaE = function (this: Color, color) {
-  return deltaE(this.get(Lab).slice(0), toColor(color).get(Lab));
+  return deltaE(this.get(Lab), toColor(color).get(Lab));
 };

@@ -4,15 +4,15 @@ describe('Color', () => {
 
   const abcColorModel: ColorModel = {
     componentsToRgb(components, rgb) {
-      rgb[0] = components[0] * 100;
-      rgb[1] = components[1] * 100;
-      rgb[2] = components[2] * 100;
+      rgb[0] = components[0] / 0xFF;
+      rgb[1] = components[1] / 0xFF;
+      rgb[2] = components[2] / 0xFF;
       rgb[3] = components[3];
     },
     rgbToComponents(rgb, components) {
-      components[0] = rgb[0] / 100;
-      components[1] = rgb[1] / 100;
-      components[2] = rgb[2] / 100;
+      components[0] = rgb[0] * 0xFF;
+      components[1] = rgb[1] * 0xFF;
+      components[2] = rgb[2] * 0xFF;
       components[3] = rgb[3];
     },
   };
@@ -49,13 +49,8 @@ describe('Color', () => {
 
     const color = new Color();
 
-    (function (this: Color) {
-      abc1 = this.get(abcColorModel);
-    }).call(color);
-
-    (function (this: Color) {
-      abc2 = this.get(abcColorModel);
-    }).call(color);
+    abc1 = color.get(abcColorModel);
+    abc2 = color.get(abcColorModel);
 
     expect(abc1).toEqual([0, 0, 0, 1]);
     expect(abc1).toBe(abc2);
@@ -67,43 +62,62 @@ describe('Color', () => {
 
     const color = new Color();
 
-    (function (this: Color) {
-      abc1 = this.use(abcColorModel);
-    }).call(color);
-
-    (function (this: Color) {
-      abc2 = this.get(abcColorModel);
-    }).call(color);
+    abc1 = color.use(abcColorModel);
+    abc2 = color.get(abcColorModel);
 
     expect(abc1).toEqual([0, 0, 0, 1]);
     expect(abc1).toBe(abc2);
   });
 
-  test('converts color models', (done) => {
+  test('converts color models', () => {
     const color = new Color();
 
-    (function (this: Color) {
-      const abc = this.use(abcColorModel);
-      abc[0] = abc[1] = abc[2] = 1;
-    }).call(color);
+    const abc = color.use(abcColorModel);
+    abc[0] = abc[1] = abc[2] = 0xFF;
 
-    (function (this: Color) {
-      expect(this.get(Rgb)).toEqual([100, 100, 100, 1]);
-      done();
-    }).call(color);
+    expect(color.get(Rgb)).toEqual([1, 1, 1, 1]);
   });
 
-  test('returns initial color', (done) => {
-    const rgb: Rgb = [127, 127, 127, 0.77];
+  test('reuses temp components between two get calls', () => {
+    const color = new Color();
 
-    (function (this: Color) {
-      expect(this.get(Rgb)).toBe(rgb);
-      done();
-    }).call(new Color(Rgb, rgb));
+    const abcColorModelMock: ColorModel = {
+      componentsToRgb: jest.fn(abcColorModel.componentsToRgb),
+      rgbToComponents: jest.fn(abcColorModel.rgbToComponents),
+    };
+
+    color.get(abcColorModelMock);
+    color.get(abcColorModelMock);
+
+    expect(abcColorModelMock.rgbToComponents).toHaveBeenCalledTimes(1);
+  });
+
+  test('reuses temp components between get and use calls', () => {
+    const color = new Color(Rgb, [1, 1, 1, 1]);
+
+    const abcColorModelMock: ColorModel = {
+      componentsToRgb: jest.fn(abcColorModel.componentsToRgb),
+      rgbToComponents: jest.fn(abcColorModel.rgbToComponents),
+    };
+
+    const abc1 = color.get(abcColorModelMock);
+    const abc2 = color.use(abcColorModelMock);
+
+    expect(abcColorModelMock.rgbToComponents).toHaveBeenCalledTimes(1);
+
+    expect(abc1).toEqual(abc2);
+    expect(abc1).not.toBe(abc2);
+    expect(abc2).toEqual([0xFF, 0xFF, 0xFF, 1]);
+  });
+
+  test('returns initial color', () => {
+    const rgb: Rgb = [1, 1, 1, 0.77];
+
+    expect(new Color(Rgb, rgb).get(Rgb)).toBe(rgb);
   });
 
   test('clones instance', (done) => {
-    const rgb: Rgb = [127, 127, 127, 0.77];
+    const rgb: Rgb = [1, 1, 1, 0.77];
     const color = new Color(Rgb, rgb);
     const colorClone = color.clone();
 
