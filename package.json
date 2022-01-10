@@ -86,6 +86,7 @@
     "@paint-bucket/core": "^1.0.0",
     "@paint-bucket/css-plugin": "^1.0.0",
     "@paint-bucket/difference-plugin": "^1.0.0",
+    "@paint-bucket/hsv": "^1.0.0",
     "@paint-bucket/hsl-plugin": "^1.0.0",
     "@paint-bucket/rgb-plugin": "^1.0.0",
     "@paint-bucket/x11-plugin": "^1.0.0"
