@@ -95,7 +95,7 @@ export class Color {
   }
 
   /**
-   * Returns readonly color components of this {@link Color} in particular color model.
+   * Returns read-only color components of this {@link Color} in particular color model.
    *
    * Use this method to acquire color components without changing the current model of this {@link Color} instance.
    * Usually this is required if plugin method returns a computed value.
@@ -103,7 +103,7 @@ export class Color {
    * **Note:** Don't keep reference to the returned array because it is reused between {@link get} invocations.
    *
    * @param model The color model that provides color components.
-   * @returns Readonly color components.
+   * @returns Read-only color components.
    */
   public get(model: ColorModel): readonly number[] {
     let {components, tempComponents} = this;

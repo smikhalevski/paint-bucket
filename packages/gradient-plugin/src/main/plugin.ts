@@ -2,18 +2,27 @@ import {Color, color, Rgb} from '@paint-bucket/core';
 import {Gradient} from '@paint-bucket/gradient';
 import {toColor} from '@paint-bucket/plugin-utils';
 
-const unitaryDomain = [0, 1];
-
-color.gradient = (colors, domain) => new Gradient(colors.map(Color.parser), domain);
+color.gradient = (colors, domain) => new Gradient(colors.map(toColor), domain);
 
 const gradientPrototype = Gradient.prototype;
 
-gradientPrototype.at = function (this: Gradient, value) {
-  return new Color(Rgb, this.getAt(Rgb, value).slice(0));
+gradientPrototype.rgbAt = function (this: Gradient, x) {
+  return new Color(Rgb, this.at(x).slice(0));
+};
+
+gradientPrototype.palette = function (this: Gradient, n) {
+  const colors: Color[] = [];
+  const a = Math.min(...this.domain);
+  const b = Math.max(...this.domain);
+
+  for (let i = 0; i < n; ++i) {
+    colors.push(this.rgbAt(a + (b - a)));
+  }
+  return colors;
 };
 
 const colorPrototype = Color.prototype;
 
-colorPrototype.linearGradient = function (this: Color, stopColor) {
-  return new Gradient([this.clone(), Color.parser(stopColor)], unitaryDomain);
+colorPrototype.gradient = function (this: Color, stopColor) {
+  return new Gradient([this, toColor(stopColor)]);
 };

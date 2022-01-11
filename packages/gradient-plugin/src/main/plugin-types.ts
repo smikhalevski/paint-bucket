@@ -20,10 +20,10 @@ declare module '@paint-bucket/core/lib/Color' {
     /**
      * Creates the new linear {@link Gradient} of colors on [0, 1] domain.
      *
-     * @param stopColor The color stop at 1.
+     * @param color The color stop at 1.
      * @return The new {@link Gradient} instance.
      */
-    linearGradient(stopColor: ColorLike): Gradient;
+    gradient(color: ColorLike): Gradient;
   }
 }
 
@@ -37,6 +37,14 @@ declare module '@paint-bucket/gradient/lib/Gradient' {
      * @param x The value from the gradient domain for which the color is requested.
      * @return The new {@link Color} instance.
      */
-    at(x: number): Color;
+    rgbAt(x: number): Color;
+
+    /**
+     * Returns the list of equally spaced colors from the gradient.
+     *
+     * @param n The number of colors to pick.
+     * @return The list of {@link Color} instances.
+     */
+    palette(n: number): Color[];
   }
 }
