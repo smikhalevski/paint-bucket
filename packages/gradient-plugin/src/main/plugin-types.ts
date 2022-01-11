@@ -1,5 +1,4 @@
-import {Color, ColorLike, ColorModel} from '@paint-bucket/core';
-import {Gradient} from '@paint-bucket/gradient';
+import {Color, Gradient, ColorLike, ColorModel} from '@paint-bucket/core';
 
 declare module '@paint-bucket/core/lib/Color' {
 
@@ -27,7 +26,7 @@ declare module '@paint-bucket/core/lib/Color' {
   }
 }
 
-declare module '@paint-bucket/gradient/lib/Gradient' {
+declare module '@paint-bucket/core/lib/Gradient' {
 
   interface Gradient {
 

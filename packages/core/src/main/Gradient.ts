@@ -1,5 +1,7 @@
-import {Color, Rgb} from '@paint-bucket/core';
+import {ColorModel, Rgb} from './color-model';
+import {Color} from './Color';
 
+// Black RGBa color that is returned if gradient has zero domain size
 const blackRgb: Rgb = [0, 0, 0, 1];
 
 export class Gradient {
@@ -23,13 +25,13 @@ export class Gradient {
   /**
    * Returns components of the color for value from the domain.
    *
-   * **Note:** Don't keep reference to the returned array because it is reused between {@link at} invocations.
+   * **Note:** Don't keep reference to the returned array because it is reused between {@link get} invocations.
    *
    * @param value The domain value.
-   * @param [model = Rgb] The color model that provides the components for interpolation.
+   * @param model The color model that provides the components for interpolation.
    * @returns The read-only components array.
    */
-  public get(value: number, model = Rgb): readonly number[] {
+  public get(model: ColorModel, value: number): readonly number[] {
     const {colors, domain, tempComponents} = this;
 
     const domainLength = domain.length;
@@ -40,7 +42,7 @@ export class Gradient {
     }
 
     let i = 0;
-    while (i < domainLength && domain[i] < value) {
+    while (i < domainLength && domain[i] <= value) {
       i++;
     }
     if (i === 0 || domainLength === 1) {

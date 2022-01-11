@@ -13,9 +13,6 @@
       ],
       "@paint-bucket/core/lib/*": [
         "./packages/core/src/main/*"
-      ],
-      "@paint-bucket/gradient/lib/*": [
-        "./packages/gradient/src/main/*"
       ]
     }
   },

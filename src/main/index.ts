@@ -9,5 +9,4 @@ export * from '@paint-bucket/hsl';
 export * from '@paint-bucket/hsv';
 export * from '@paint-bucket/lab';
 export * from '@paint-bucket/xyz';
-export * from '@paint-bucket/gradient';
 export * from '@paint-bucket/core';

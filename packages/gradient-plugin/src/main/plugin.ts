@@ -1,5 +1,4 @@
-import {Color, color, Rgb} from '@paint-bucket/core';
-import {Gradient} from '@paint-bucket/gradient';
+import {Color, color, Gradient, Rgb} from '@paint-bucket/core';
 import {toColor} from '@paint-bucket/plugin-utils';
 import {parallelSort} from './parallelSort';
 import {linearDomain} from './linearDomain';
@@ -27,7 +26,7 @@ color.gradient = (colors, domain) => {
 const gradientPrototype = Gradient.prototype;
 
 gradientPrototype.at = function (this: Gradient, x, model = Rgb) {
-  return new Color(model, this.get(x).slice(0));
+  return new Color(model, this.get(model, x).slice(0));
 };
 
 gradientPrototype.palette = function (this: Gradient, n, model = Rgb) {
