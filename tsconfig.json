@@ -17,7 +17,6 @@
     }
   },
   "include": [
-    "./*",
     "./packages/*/src/main/**/*"
   ]
 }
