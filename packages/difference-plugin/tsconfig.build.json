@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "preserveConstEnums": true,
     "rootDir": "./src/main",
     "outDir": "./lib",
     "paths": {}

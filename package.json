@@ -1,60 +1,14 @@
 {
   "name": "paint-bucket",
-  "version": "1.0.2-next.0",
-  "description": "Highly performant and extensible color manipulation library.",
-  "main": "./lib/index-cjs.js",
-  "module": "./lib/index.js",
-  "types": "./lib/index.d.ts",
-  "sideEffects": false,
-  "files": [
-    "lib"
-  ],
+  "private": true,
   "scripts": {
     "build": "npm run build --workspaces",
     "clean": "rimraf ./docs && npm run clean --workspaces",
     "test": "jest --detectOpenHandles",
-    "postbuild": "tsc --project ./tsconfig.build.json && npm run rollup && npm run terser",
-    "rollup": "rollup --external @paint-bucket/core,@paint-bucket/hsl,@paint-bucket/hsv,@paint-bucket/lab,,@paint-bucket/xyz,@paint-bucket/rgb-plugin,@paint-bucket/hsl-plugin,@paint-bucket/x11-plugin,@paint-bucket/css-plugin,@paint-bucket/difference-plugin,@paint-bucket/gradient-plugin --input ./lib/index.js --file ./lib/index-cjs.js --format cjs --plugin @rollup/plugin-node-resolve",
-    "terser": "for file in $(find ./lib -name '*.js'); do terser --compress --mangle toplevel --output $file -- $file; done || exit 1",
-    "postclean": "rimraf ./lib ./docs",
-    "perf": "[ -d ./lib ] || npm run build && node --expose-gc --max-old-space-size=4096 ./src/test/perf.js",
     "docs": "typedoc ./packages/*/src/main/index.ts --excludePrivate",
     "publish-docs": "[ -d ./docs ] && [[ ! $(git status --porcelain) ]] && branch=$(git rev-parse --abbrev-ref HEAD) && sha=$(git rev-parse --short HEAD) && t=$(mktemp -d) && cp -R ./docs/ $t && git checkout ghpages && ls -A | grep -wv .git | xargs rm -rf && cp -R $t/ . && git add . && git commit -m \"Updated docs ($sha)\" && git push && git checkout $branch",
     "release-docs": "npm run clean && npm run docs && npm run publish-docs"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/smikhalevski/paint-bucket.git"
-  },
-  "keywords": [
-    "color",
-    "decode",
-    "hex",
-    "rgb",
-    "rgba",
-    "hsl",
-    "hsla"
-  ],
-  "author": "Savva Mikhalevski <smikhalevski@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/smikhalevski/paint-bucket/issues"
-  },
-  "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
-  "workspaces": [
-    "./packages/core",
-    "./packages/hsl",
-    "./packages/hsv",
-    "./packages/xyz",
-    "./packages/lab",
-    "./packages/plugin-utils",
-    "./packages/rgb-plugin",
-    "./packages/hsl-plugin",
-    "./packages/x11-plugin",
-    "./packages/css-plugin",
-    "./packages/difference-plugin",
-    "./packages/gradient-plugin"
-  ],
   "jest": {
     "preset": "ts-jest",
     "globals": {
@@ -67,30 +21,31 @@
       }
     }
   },
+  "workspaces": [
+    "./packages/core",
+    "./packages/hsl",
+    "./packages/hsv",
+    "./packages/xyz",
+    "./packages/lab",
+    "./packages/plugin-utils",
+    "./packages/rgb-plugin",
+    "./packages/hsl-plugin",
+    "./packages/x11-plugin",
+    "./packages/css-plugin",
+    "./packages/difference-plugin",
+    "./packages/gradient-plugin",
+    "./packages/paint-bucket"
+  ],
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",
-    "@smikhalevski/perf-test": "^1.0.0",
     "@types/jest": "^27.0.1",
-    "chalk": "^4.1.2",
-    "chroma-js": "^2.1.2",
     "jest": "^27.0.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.50.5",
     "terser": "^5.7.0",
-    "tinycolor2": "^1.4.2",
     "ts-jest": "^27.0.2",
     "tslib": "^2.3.1",
     "typedoc": "^0.22.10",
     "typescript": "^4.4.3"
-  },
-  "dependencies": {
-    "@paint-bucket/core": "^1.0.0",
-    "@paint-bucket/css-plugin": "^1.0.0",
-    "@paint-bucket/difference-plugin": "^1.0.0",
-    "@paint-bucket/hsv": "^1.0.0",
-    "@paint-bucket/hsl-plugin": "^1.0.0",
-    "@paint-bucket/rgb-plugin": "^1.0.0",
-    "@paint-bucket/x11-plugin": "^1.0.0",
-    "@paint-bucket/gradient-plugin": "^1.0.0"
   }
 }

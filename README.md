@@ -1,6 +1,6 @@
 # Paint Bucket 🪣 [![build](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml/badge.svg?branch=master&event=push)](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml)
 
-[Highly performant](#performance), [extensible](#extensibility) and
+[Highly performant](#performance), [extensible](#extensibility), and
 [tiny](https://bundlephobia.com/package/paint-bucket) color manipulation library.
 
 ```shell

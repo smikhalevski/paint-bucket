@@ -2,7 +2,7 @@ const {test} = require('@smikhalevski/perf-test');
 const chalk = require('chalk');
 const tinycolor2 = require('tinycolor2');
 const chroma = require('chroma-js');
-const {color} = require('../../lib/index-cjs');
+const {color} = require('paint-bucket');
 
 const rgb = [0xAB, 0xCD, 0xEF];
 const hexColors = ['#ffffff', '#000000'];
