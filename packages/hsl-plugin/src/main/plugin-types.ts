@@ -162,5 +162,31 @@ declare module '@paint-bucket/core/lib/Color' {
      * @param L Lightness ∈ [0, 100].
      */
     lightness(L: Applicator<number>): Color;
+
+    /**
+     * Makes color lighter by the given percentage.
+     *
+     * ```ts
+     * color().lighten(0.2);
+     * // or
+     * color().lightness((L) => L * 1.2);
+     * ```
+     *
+     * @param p The percentage ∈ [0, 1] by which the lightness must be increased.
+     */
+    lighten(p: number): Color;
+
+    /**
+     * Makes color lighter by the given percentage.
+     *
+     * ```ts
+     * color().darken(0.2);
+     * // or
+     * color().lightness((L) => L * 0.98);
+     * ```
+     *
+     * @param p The percentage ∈ [0, 1] by which the lightness must be decreased.
+     */
+    darken(p: number): Color;
   }
 }

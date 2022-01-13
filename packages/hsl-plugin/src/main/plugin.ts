@@ -89,3 +89,13 @@ colorPrototype.lightness = createAccessor(
       this.use(Hsl)[2] = clamp(value / 100);
     },
 );
+
+colorPrototype.lighten = function (this: Color, p) {
+  const hsl = this.use(Hsl);
+  hsl[2] = clamp(hsl[2] * (1 + p));
+  return this;
+};
+
+colorPrototype.darken = function (this: Color, p) {
+  return this.lighten(-p);
+};
