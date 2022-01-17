@@ -1,6 +1,6 @@
 {
   "name": "@paint-bucket/plugin-utils",
-  "version": "1.0.0",
+  "version": "1.0.2-next.1",
   "description": "Utils to simplify plugin development for Paint Bucket.",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
@@ -48,7 +48,7 @@
     }
   },
   "dependencies": {
-    "@paint-bucket/core": "^1.0.0",
+    "@paint-bucket/core": "1.0.2-next.1",
     "numeric-wrench": "^1.0.0"
   }
 }
