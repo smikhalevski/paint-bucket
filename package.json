@@ -10,6 +10,7 @@
     "release-docs": "npm run clean && npm run docs && npm run publish-docs"
   },
   "jest": {
+    "rootDir": "./packages",
     "preset": "ts-jest",
     "globals": {
       "ts-jest": {
