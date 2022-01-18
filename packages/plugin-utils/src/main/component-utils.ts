@@ -1,5 +1,7 @@
 import {and, byte, left, or, right, xor} from 'numeric-wrench';
 
+const {round} = Math;
+
 /**
  * Normalizes the size of components in the binary representation of the 24-bit color.
  *
@@ -105,9 +107,9 @@ export function intToComponents(color: number, components: number[]): number[] {
  */
 export function componentsToInt(components: readonly number[]): number {
   return composeComponents(
-      components[0] * 0xFF,
-      components[1] * 0xFF,
-      components[2] * 0xFF,
-      components[3] * 0xFF,
+      round(components[0] * 0xFF),
+      round(components[1] * 0xFF),
+      round(components[2] * 0xFF),
+      round(components[3] * 0xFF),
   );
 }

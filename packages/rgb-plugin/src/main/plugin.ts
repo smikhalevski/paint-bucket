@@ -6,12 +6,7 @@ import {
   normalizeComponents,
   toColor,
 } from '@paint-bucket/plugin-utils';
-import {lerp, right} from 'numeric-wrench';
-
-function clamp(x: number, n = 0): number {
-  x = +x;
-  return isNaN(x) ? n : x < 0 ? 0 : x > 1 ? 1 : x;
-}
+import {clamp1, isNumeric, lerp, right} from 'numeric-wrench';
 
 Color.overrideParser((next) => (value) => {
   if (typeof value === 'number') {
@@ -45,17 +40,17 @@ colorPrototype.rgb = createAccessor<Rgb, Partial<Rgb>>(
       const rgb = this.use(Rgb);
       const [R, G, B, a] = value;
 
-      if (R != null) {
-        rgb[0] = clamp(R / 0xFF);
+      if (isNumeric(R)) {
+        rgb[0] = clamp1(R / 0xFF);
       }
-      if (G != null) {
-        rgb[1] = clamp(G / 0xFF);
+      if (isNumeric(G)) {
+        rgb[1] = clamp1(G / 0xFF);
       }
-      if (B != null) {
-        rgb[2] = clamp(B / 0xFF);
+      if (isNumeric(B)) {
+        rgb[2] = clamp1(B / 0xFF);
       }
-      if (a != null) {
-        rgb[3] = clamp(a, 1);
+      if (isNumeric(a)) {
+        rgb[3] = clamp1(a);
       }
     },
 );
@@ -82,8 +77,10 @@ colorPrototype.red = createAccessor(
     function (this: Color) {
       return this.get(Rgb)[0] * 0xFF;
     },
-    function (this: Color, value) {
-      this.use(Rgb)[0] = clamp(value / 0xFF);
+    function (this: Color, R) {
+      if (isNumeric(R)) {
+        this.use(Rgb)[0] = clamp1(R / 0xFF);
+      }
     },
 );
 
@@ -91,8 +88,10 @@ colorPrototype.green = createAccessor(
     function (this: Color) {
       return this.get(Rgb)[1] * 0xFF;
     },
-    function (this: Color, value) {
-      this.use(Rgb)[1] = clamp(value / 0xFF);
+    function (this: Color, G) {
+      if (isNumeric(G)) {
+        this.use(Rgb)[1] = clamp1(G / 0xFF);
+      }
     },
 );
 
@@ -100,8 +99,10 @@ colorPrototype.blue = createAccessor(
     function (this: Color) {
       return this.get(Rgb)[2] * 0xFF;
     },
-    function (this: Color, value) {
-      this.use(Rgb)[2] = clamp(value / 0xFF);
+    function (this: Color, B) {
+      if (isNumeric(B)) {
+        this.use(Rgb)[2] = clamp1(B / 0xFF);
+      }
     },
 );
 
@@ -109,8 +110,10 @@ colorPrototype.alpha = createAccessor(
     function (this: Color) {
       return this.get(Rgb)[3];
     },
-    function (this: Color, value) {
-      this.use(Rgb)[3] = clamp(value, 1);
+    function (this: Color, a) {
+      if (isNumeric(a)) {
+        this.use(Rgb)[3] = clamp1(a);
+      }
     },
 );
 
@@ -129,22 +132,28 @@ function rotateComponent(v: number): number {
 }
 
 colorPrototype.contrast = function (this: Color, color: ColorLike) {
-  const L1 = this.luminance();
-  const L2 = toColor(color).luminance();
+  let l1 = this.luminance();
+  let l2 = toColor(color).luminance();
 
-  return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+  if (l2 > l1) {
+    const l = l2;
+    l2 = l1;
+    l1 = l;
+  }
+  return (l1 + 0.05) / (l2 + 0.05);
 };
 
 colorPrototype.mix = function (this: Color, color, ratio) {
   const rgb1 = this.use(Rgb);
   const rgb2 = toColor(color).get(Rgb);
 
-  ratio = clamp(ratio);
+  if (isNumeric(ratio)) {
+    ratio = clamp1(ratio);
 
-  rgb1[0] = lerp(ratio, rgb1[0], rgb2[0]);
-  rgb1[1] = lerp(ratio, rgb1[1], rgb2[1]);
-  rgb1[2] = lerp(ratio, rgb1[2], rgb2[2]);
-
+    rgb1[0] = lerp(ratio, rgb1[0], rgb2[0]);
+    rgb1[1] = lerp(ratio, rgb1[1], rgb2[1]);
+    rgb1[2] = lerp(ratio, rgb1[2], rgb2[2]);
+  }
   return this;
 };
 

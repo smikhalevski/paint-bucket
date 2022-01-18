@@ -164,6 +164,19 @@ declare module '@paint-bucket/core/lib/Color' {
     lightness(L: Applicator<number>): Color;
 
     /**
+     * Spins hue.
+     *
+     * ```ts
+     * color.spin(45);
+     * // or
+     * color().hue((H) => H + 45);
+     * ```
+     *
+     * @param H The hue delta ∈ [0, 360] to spin by.
+     */
+    spin(H: number): Color;
+
+    /**
      * Makes color lighter by the given percentage.
      *
      * ```ts

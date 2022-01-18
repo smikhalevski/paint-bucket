@@ -15,9 +15,9 @@ export class Gradient {
    * Creates the new {@link Gradient} instance.
    *
    * @param colors The list of colors that comprise the gradient.
-   * @param domain The stop values for each color.
+   * @param domain The stop values for each color. Values must be sorted in ascending order.
    */
-  public constructor(colors: Color[], domain: number[]) {
+  public constructor(colors: readonly Color[], domain: readonly number[]) {
     this.colors = colors;
     this.domain = domain;
   }

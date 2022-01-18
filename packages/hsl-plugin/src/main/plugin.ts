@@ -1,12 +1,7 @@
 import {Color, color} from '@paint-bucket/core';
 import {componentsToInt, createAccessor, intToComponents, normalizeComponents} from '@paint-bucket/plugin-utils';
 import {Hsl} from '@paint-bucket/hsl';
-import {right} from 'numeric-wrench';
-
-function clamp(x: number, n = 0): number {
-  x = +x;
-  return isNaN(x) ? n : x < 0 ? 0 : x > 1 ? 1 : x;
-}
+import {clamp1, cycle, isNumeric, right} from 'numeric-wrench';
 
 color.hsl = (hsl) => new Color().hsl(hsl);
 
@@ -30,17 +25,17 @@ colorPrototype.hsl = createAccessor<Hsl, Partial<Hsl>>(
       const hsl = this.use(Hsl);
       const [H, S, L, a] = value;
 
-      if (H != null) {
-        hsl[0] = clamp(H / 360);
+      if (isNumeric(H)) {
+        hsl[0] = clamp1(cycle(H / 360, 0, 1));
       }
-      if (S != null) {
-        hsl[1] = clamp(S / 100);
+      if (isNumeric(S)) {
+        hsl[1] = clamp1(S / 100);
       }
-      if (L != null) {
-        hsl[2] = clamp(L / 100);
+      if (isNumeric(L)) {
+        hsl[2] = clamp1(L / 100);
       }
-      if (a != null) {
-        hsl[3] = clamp(a, 1);
+      if (isNumeric(a)) {
+        hsl[3] = clamp1(a);
       }
     },
 );
@@ -67,8 +62,10 @@ colorPrototype.hue = createAccessor(
     function (this: Color) {
       return this.get(Hsl)[0] * 360;
     },
-    function (this: Color, value) {
-      this.use(Hsl)[0] = clamp(value / 360);
+    function (this: Color, H) {
+      if (isNumeric(H)) {
+        this.use(Hsl)[0] = clamp1(H / 360);
+      }
     },
 );
 
@@ -76,8 +73,10 @@ colorPrototype.saturation = createAccessor(
     function (this: Color) {
       return this.get(Hsl)[1] * 100;
     },
-    function (this: Color, value) {
-      this.use(Hsl)[1] = clamp(value / 100);
+    function (this: Color, S) {
+      if (isNumeric(S)) {
+        this.use(Hsl)[1] = clamp1(S / 100);
+      }
     },
 );
 
@@ -85,14 +84,26 @@ colorPrototype.lightness = createAccessor(
     function (this: Color) {
       return this.get(Hsl)[2] * 100;
     },
-    function (this: Color, value) {
-      this.use(Hsl)[2] = clamp(value / 100);
+    function (this: Color, L) {
+      if (isNumeric(L)) {
+        this.use(Hsl)[2] = clamp1(L / 100);
+      }
     },
 );
 
+colorPrototype.spin = function (this: Color, H) {
+  if (isNumeric(H)) {
+    const hsl = this.use(Hsl);
+    hsl[0] = cycle(hsl[0] + H / 360, 0, 1);
+  }
+  return this;
+};
+
 colorPrototype.lighten = function (this: Color, p) {
-  const hsl = this.use(Hsl);
-  hsl[2] = clamp(hsl[2] * (1 + p));
+  if (isNumeric(p)) {
+    const hsl = this.use(Hsl);
+    hsl[2] = clamp1(hsl[2] * (1 + +p));
+  }
   return this;
 };
 

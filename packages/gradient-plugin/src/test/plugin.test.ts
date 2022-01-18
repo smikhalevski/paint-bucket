@@ -1,7 +1,7 @@
 import {Color, color, Rgb} from '@paint-bucket/core';
 import '../main';
 
-describe('gradient', () => {
+describe('at', () => {
 
   test('returns a color instance at position', () => {
     const color1 = color.gradient([new Color(), new Color(Rgb, [1, 1, 1, 1])]).at(0.5);
