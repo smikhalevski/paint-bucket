@@ -9,7 +9,7 @@
     "lib"
   ],
   "scripts": {
-    "build": "tsc --project ./tsconfig.build.json && rollup --config && npm run terser",
+    "build": "tsc --project ./tsconfig.build.json && rollup --config ../../rollup.config.js && npm run terser",
     "terser": "for file in $(find ./lib -name '*.js'); do terser --compress --mangle --output $file -- $file; done || exit 1",
     "clean": "rimraf ./lib",
     "test": "jest --detectOpenHandles"
