@@ -322,12 +322,16 @@ Results are in millions of operations per second. The higher number is better.
 
 |  | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
 | --- | ---: | ---: | ---: | 
-| Create color | 12.61 | 3.35 | 1.45 |
-| Parse HEX | 5.21 | 0.93 | 0.97 |
-| Parse RGBa | 1.64 | 0.86 | 0.09 |
-| Desaturate | 7.14 | 0.72 | 0.48 |
-| Spin + Lighten | 4.65 | 0.37 | — |
-| Create gradient | 2.43 | — | 0.15 |
+| `color([255, 255, 255])` | 12.61 | 3.35 | 1.45 |
+| `color('#abc')` | 5.59 | 0.98 | 0.86 |
+| `color('#abcdef')` | 5.50 | 0.99 | 0.96 |
+| `color('#abcdefff')` | 4.97 | 0.97 | 0.86 |
+| `color(0xAB_CD_EF)` | 9.92 | 5.87 | 1.61 |
+| `color('rgba(128, 128, 128, 0.5)')` | 1.70 | 0.89 | 0.09 |
+| `color….saturation(50).rgb()` | 7.14 | 0.81 | 0.66 |
+| `color….hue(90).lightness(10).rgb()` | 7.35 | 0.41 | — |
+| `color.gradient(['#ffffff', '#000000'])` | 3.08 | — | 0.26 |
+| `gradient….at(0.5)` | 10.47 | — | 2.39 |
 
 # ❤️
 

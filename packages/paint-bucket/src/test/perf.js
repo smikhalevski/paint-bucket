@@ -57,45 +57,46 @@ test('paint-bucket', () => color('rgba(128,128,128,0.5)'), {timeout: 10000});
 
 console.log('\n' + chalk.inverse(' Desaturate color '));
 {
-  let color1;
+  let c;
   gc();
-  test('tinycolor2  ', () => color1.desaturate().toRgb(), {
+  test('tinycolor2  ', () => c.desaturate().toRgb(), {
     timeout: 10000,
     beforeCycle() {
-      color1 = tinycolor2(rgb);
+      c = tinycolor2(rgb);
     },
   });
   gc();
-  test('chroma      ', () => color1.desaturate().rgb(), {
+  test('chroma      ', () => c.desaturate().rgb(), {
     timeout: 10000,
     beforeCycle() {
-      color1 = chroma(rgb);
+      c = chroma(rgb);
     },
   });
   gc();
-  test('paint-bucket', () => color1.saturation(50).rgb(), {
+  test('paint-bucket', () => c.saturation(50).rgb(), {
     timeout: 10000,
     beforeCycle() {
-      color1 = color(rgb);
+      c = color(rgb);
     },
   });
 }
 
 console.log('\n' + chalk.inverse(' Spin + lighten color '));
 {
-  let color1;
+  let c
+  ;
   gc();
-  test('tinycolor2  ', () => color1.spin(90).lighten().toRgb(), {
+  test('tinycolor2  ', () => c.spin(90).lighten().toRgb(), {
     timeout: 10000,
     beforeCycle() {
-      color1 = tinycolor2(rgb);
+      c = tinycolor2(rgb);
     },
   });
   gc();
-  test('paint-bucket', () => color1.hue(90).lightness(10).rgb(), {
+  test('paint-bucket', () => c.hue(90).lightness(10).rgb(), {
     timeout: 10000,
     beforeCycle() {
-      color1 = color(rgb);
+      c = color(rgb);
     },
   });
 }
