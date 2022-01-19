@@ -2,7 +2,7 @@
 <a href="#paint-bucket-🪣-" id="paint-bucket-🪣-" style="color: inherit; text-decoration: none;">
   <h1>Paint Bucket 🪣 <a href="https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml"><img src="https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml/badge.svg?branch=master&event=push" alt="build"></a></h1>
 </a>
-<p><a href="#performance">Highly performant</a>, <a href="#extensibility">extensible</a> and
+<p><a href="#performance">Highly performant</a>, <a href="#plugins">extensible</a>, and
 <a href="https://bundlephobia.com/package/paint-bucket">tiny</a> color manipulation library.</p>
 <pre><code class="language-shell"><span class="hl-0">npm install --save-prod paint-bucket</span>
 </code></pre>
@@ -11,35 +11,70 @@
   <h1>Usage</h1>
 </a>
 <p>📚 <a href="https://smikhalevski.github.io/paint-bucket/classes/core_src_main.Color.html">API documentation is available here.</a></p>
-<pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">color</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;paint-bucket&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-4">// or cherry-pick plugins to reduce bundle size</span><br/><span class="hl-4">// import {color} from &#39;@paint-bucket/core&#39;;</span><br/><span class="hl-4">// import &#39;@paint-bucket/rgb-plugin&#39;;</span><br/><span class="hl-4">// import &#39;@paint-bucket/hsl-plugin&#39;;</span><br/><span class="hl-4">// import &#39;@paint-bucket/css-plugin&#39;;</span><br/><br/><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;#abcdef&#39;</span><span class="hl-0">).</span><span class="hl-5">saturation</span><span class="hl-0">((</span><span class="hl-2">S</span><span class="hl-0">) </span><span class="hl-6">=&gt;</span><span class="hl-0"> </span><span class="hl-7">S</span><span class="hl-0"> / </span><span class="hl-8">2</span><span class="hl-0">).</span><span class="hl-5">red</span><span class="hl-0">(); </span><span class="hl-4">// → 188</span>
+<pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">color</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;paint-bucket&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-4">// or cherry-pick plugins to reduce bundle size</span><br/><span class="hl-4">// import &#39;@paint-bucket/rgb-plugin&#39;;</span><br/><span class="hl-4">// import &#39;@paint-bucket/hsl-plugin&#39;;</span><br/><span class="hl-4">// import &#39;@paint-bucket/css-plugin&#39;;</span><br/><span class="hl-4">// import {color} from &#39;@paint-bucket/core&#39;;</span><br/><br/><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;#abcdef&#39;</span><span class="hl-0">).</span><span class="hl-5">saturation</span><span class="hl-0">((</span><span class="hl-2">S</span><span class="hl-0">) </span><span class="hl-6">=&gt;</span><span class="hl-0"> </span><span class="hl-7">S</span><span class="hl-0"> / </span><span class="hl-8">2</span><span class="hl-0">).</span><span class="hl-5">red</span><span class="hl-0">(); </span><span class="hl-4">// → 188</span>
+</code></pre>
+<p>Most methods provide getter-setter semantics:</p>
+<pre><code class="language-ts"><span class="hl-4">// Set</span><br/><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;#f00&#39;</span><span class="hl-0">).</span><span class="hl-5">red</span><span class="hl-0">(</span><span class="hl-8">127.5</span><span class="hl-0">); </span><span class="hl-4">// → Color instance</span><br/><span class="hl-4">// or</span><br/><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;#f00&#39;</span><span class="hl-0">).</span><span class="hl-5">red</span><span class="hl-0">((</span><span class="hl-2">R</span><span class="hl-0">) </span><span class="hl-6">=&gt;</span><span class="hl-0"> </span><span class="hl-7">R</span><span class="hl-0"> / </span><span class="hl-8">2</span><span class="hl-0">); </span><span class="hl-4">// → Color instance</span><br/><br/><span class="hl-4">// Get</span><br/><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;#f00&#39;</span><span class="hl-0">).</span><span class="hl-5">red</span><span class="hl-0">(); </span><span class="hl-4">// → 255</span>
+</code></pre>
+<p>Mutate multiple components at the same time:</p>
+<pre><code class="language-ts"><span class="hl-5">color</span><span class="hl-0">([</span><span class="hl-8">64</span><span class="hl-0">, </span><span class="hl-8">128</span><span class="hl-0">, </span><span class="hl-8">0</span><span class="hl-0">])</span><br/><span class="hl-0">    .</span><span class="hl-5">rgb</span><span class="hl-0">(([</span><span class="hl-2">R</span><span class="hl-0">, </span><span class="hl-2">G</span><span class="hl-0">, </span><span class="hl-2">B</span><span class="hl-0">, </span><span class="hl-2">a</span><span class="hl-0">]) </span><span class="hl-6">=&gt;</span><span class="hl-0"> [</span><span class="hl-7">R</span><span class="hl-0"> * </span><span class="hl-8">3</span><span class="hl-0">, </span><span class="hl-7">G</span><span class="hl-0"> * </span><span class="hl-8">2</span><span class="hl-0">, </span><span class="hl-7">B</span><span class="hl-0">, </span><span class="hl-2">a</span><span class="hl-0">])</span><br/><span class="hl-0">    .</span><span class="hl-5">rgb</span><span class="hl-0">();</span><br/><span class="hl-4">// → [192, 255, 0, 1]</span>
+</code></pre>
+<p><code>color</code> returns a mutable instance of <code>Color</code>. To create a copy of the <code>Color</code> instance you can use one of these
+approaches:</p>
+<pre><code class="language-ts"><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">color1</span><span class="hl-0"> = </span><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;#f00&#39;</span><span class="hl-0">);</span><br/><br/><span class="hl-4">// color2 is a copy of color1</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">color2</span><span class="hl-0"> = </span><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-2">color1</span><span class="hl-0">);</span><br/><span class="hl-4">// or</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">color3</span><span class="hl-0"> = </span><span class="hl-2">color1</span><span class="hl-0">.</span><span class="hl-5">clone</span><span class="hl-0">();</span>
+</code></pre>
+<p>Parse and serialize CSS color strings:</p>
+<pre><code class="language-ts"><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;pink&#39;</span><span class="hl-0">).</span><span class="hl-5">css</span><span class="hl-0">(); </span><span class="hl-4">// → &quot;#ffc0cb&quot;</span><br/><br/><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;rgba(255, 192, 203)&#39;</span><span class="hl-0">).</span><span class="hl-5">css</span><span class="hl-0">(); </span><span class="hl-4">// → &quot;#ffc0cb&quot;</span>
+</code></pre>
+<p>Create gradients and obtain color at arbitrary position:</p>
+<pre><code class="language-ts"><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;red&#39;</span><span class="hl-0">).</span><span class="hl-5">gradient</span><span class="hl-0">(</span><span class="hl-3">&#39;blue&#39;</span><span class="hl-0">).</span><span class="hl-5">at</span><span class="hl-0">(</span><span class="hl-8">0.70</span><span class="hl-0">).</span><span class="hl-5">css</span><span class="hl-0">(); </span><span class="hl-4">// → &quot;#4d00b3&quot;</span>
+</code></pre>
+<p>Create multi-stop gradients:</p>
+<pre><code class="language-ts"><span class="hl-2">color</span><br/><span class="hl-0">    .</span><span class="hl-5">gradient</span><span class="hl-0">([</span><span class="hl-3">&#39;red&#39;</span><span class="hl-0">, </span><span class="hl-3">&#39;pink&#39;</span><span class="hl-0">, </span><span class="hl-3">&#39;blue&#39;</span><span class="hl-0">], [</span><span class="hl-8">0</span><span class="hl-0">, </span><span class="hl-8">0.5</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">])</span><br/><span class="hl-0">    .</span><span class="hl-5">at</span><span class="hl-0">(</span><span class="hl-8">0.70</span><span class="hl-0">)</span><br/><span class="hl-0">    .</span><span class="hl-5">css</span><span class="hl-0">();</span><br/><span class="hl-4">// → &quot;#9973e0&quot;</span>
 </code></pre>
 
-<a href="#color-models" id="color-models" style="color: inherit; text-decoration: none;">
-  <h1>Color Models</h1>
+<a href="#concepts" id="concepts" style="color: inherit; text-decoration: none;">
+  <h1>Concepts</h1>
 </a>
-<p>Color manipulation isn&#39;t possible without the <a href="https://en.wikipedia.org/wiki/Color_model">Color model</a> concept and its
-components. There&#39;s a large variety of those aimed for different operations, and bundling converters for all known
-models into a single bundle would be excessive in most cases. So, to keep the reasonable size of the bundle and to make
-the code highly extensible, Paint Bucket provides pluggable color models.</p>
-<p>A color model is an object that defines methods to convert color components between its representation and RGB. Color
-components are an array of numbers.</p>
-<pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">ColorModel</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">Cmyk</span><span class="hl-0">: </span><span class="hl-9">ColorModel</span><span class="hl-0"> = {</span><br/><br/><span class="hl-0">  </span><span class="hl-5">componentsToRgb</span><span class="hl-0">(</span><span class="hl-2">components</span><span class="hl-0">, </span><span class="hl-2">rgb</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-4">// Update items of the rgb array here</span><br/><span class="hl-0">  },</span><br/><span class="hl-0">  </span><span class="hl-5">rgbToComponents</span><span class="hl-0">(</span><span class="hl-2">rgb</span><span class="hl-0">, </span><span class="hl-2">components</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-4">// Update items of the components array here</span><br/><span class="hl-0">  },</span><br/><span class="hl-0">};</span>
+<p>Color manipulation isn&#39;t possible without the color model concept.</p>
+<blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Color_model">Color model</a> is an abstract mathematical model describing the way colors
+can be represented as tuples of numbers (aka color components).</p>
+</blockquote>
+<p>There&#39;s a large variety of color models aimed for different purposes. Different color models define different color
+components. For example, RGB color model defines three color components: red, green and blue; while HSL defines hue,
+saturation and lightness color components. One color model can be converted to the other.</p>
+<blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Color_space">Color space</a> defines how color components of the particular color model
+are serialized.</p>
+</blockquote>
+<p>For example, RGB color model can be represented as Adobe RGB or sRGB color space.</p>
+<p>Paint Bucket provides an abstraction for color models which are represented as objects that define methods to convert
+color components between color model representation and RGB. Color components are an array of numbers.</p>
+<pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">ColorModel</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">Cmyk</span><span class="hl-0">: </span><span class="hl-9">ColorModel</span><span class="hl-0"> = {</span><br/><br/><span class="hl-0">  </span><span class="hl-5">componentsToRgb</span><span class="hl-0">(</span><span class="hl-2">components</span><span class="hl-0">: </span><span class="hl-6">readonly</span><span class="hl-0"> </span><span class="hl-9">number</span><span class="hl-0">[], </span><span class="hl-2">rgb</span><span class="hl-0">: </span><span class="hl-9">number</span><span class="hl-0">[]): </span><span class="hl-9">void</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-4">// Update items of the rgb array here</span><br/><span class="hl-0">  },</span><br/><span class="hl-0">  </span><span class="hl-5">rgbToComponents</span><span class="hl-0">(</span><span class="hl-2">rgb</span><span class="hl-0">: </span><span class="hl-6">readonly</span><span class="hl-0"> </span><span class="hl-9">number</span><span class="hl-0">[], </span><span class="hl-2">components</span><span class="hl-0">: </span><span class="hl-9">number</span><span class="hl-0">[]): </span><span class="hl-9">void</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-4">// Update items of the components array here</span><br/><span class="hl-0">  },</span><br/><span class="hl-0">};</span>
 </code></pre>
-<p>The <a href="./packages/core"><code>@paint-bucket/core</code></a> defines only the RGB color model. There are four more packages that define
-HSL, HSV, CIE-L<em>a</em>b*, and CIE 1931 XYZ color models: <a href="./packages/hsl"><code>@paint-bucket/hsl</code></a>,
-<a href="./packages/hsv"><code>@paint-bucket/hsv</code></a>, <a href="./packages/lab"><code>@paint-bucket/lab</code></a>, and <a href="./packages/xyz"><code>@paint-bucket/xyz</code></a>.</p>
-<p>Color models expect component values to be in [0, 1] range. Plugin APIs may return component values in any other range,
-but internally components are always normalized to [0, 1].</p>
-<pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Hsl</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/hsl&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">hsl</span><span class="hl-0">: </span><span class="hl-9">Hsl</span><span class="hl-0"> = [</span><span class="hl-4">/*H*/</span><span class="hl-0"> </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-4">/*S*/</span><span class="hl-0"> </span><span class="hl-8">0</span><span class="hl-0">, </span><span class="hl-4">/*L*/</span><span class="hl-0"> </span><span class="hl-8">0</span><span class="hl-0">, </span><span class="hl-4">/*alpha*/</span><span class="hl-0"> </span><span class="hl-8">1</span><span class="hl-0">];</span>
+<p>Since color models are pluggable, they reside in separate packages:</p>
+<ul>
+<li><a href="./packages/hsl"><code>@paint-bucket/hsl</code></a> for <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSL color model</a>;</li>
+<li><a href="./packages/hsv"><code>@paint-bucket/hsv</code></a> for <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSV color model</a>;</li>
+<li><a href="./packages/lab"><code>@paint-bucket/lab</code></a>
+for <a href="https://en.wikipedia.org/wiki/CIELAB_color_space">CIE-L*a*b* color model</a>;</li>
+<li><a href="./packages/xyz"><code>@paint-bucket/xyz</code></a>
+for <a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">CIE 1931 XYZ color model</a>;</li>
+</ul>
+<p>RGB color model is defined in <a href="./packages/core"><code>@paint-bucket/core</code></a>.</p>
+<p>Color model converters expect component values to be in [0, 1] range. Plugin APIs may return component values in any
+other range, but internally components are always normalized to [0, 1].</p>
+<pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Hsl</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/hsl&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">hsl</span><span class="hl-0">: </span><span class="hl-9">Hsl</span><span class="hl-0"> = [</span><br/><span class="hl-0">  </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-4">// Hue</span><br/><span class="hl-0">  </span><span class="hl-8">0</span><span class="hl-0">, </span><span class="hl-4">// Saturation</span><br/><span class="hl-0">  </span><span class="hl-8">0</span><span class="hl-0">, </span><span class="hl-4">// Lightness</span><br/><span class="hl-0">  </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-4">// Alpha</span><br/><span class="hl-0">];</span>
 </code></pre>
-<p>When you create a new Color instance, it uses the RGB color model and corresponding components for the black color.</p>
+<p>When you create a new <code>Color</code> instance, it uses the RGB color model and corresponding components for the black color.</p>
 <pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Color</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">(); </span><span class="hl-4">// Opaque black RGB color</span>
 </code></pre>
 <p>You can create a color with any model and components.</p>
 <pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Color</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Hsl</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/hsl&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">(</span><span class="hl-2">Hsl</span><span class="hl-0">, [</span><span class="hl-8">0.5</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">0.5</span><span class="hl-0">, </span><span class="hl-8">0.7</span><span class="hl-0">]); </span><span class="hl-4">// 70% transparent cyan HSL color</span>
 </code></pre>
 <p><code>Color</code> provides a mechanism to acquire color components in any color model via the <code>Color.get</code> method.</p>
-<pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Color</span><span class="hl-0">, </span><span class="hl-2">Rgb</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Hsl</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/hsl&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">(</span><span class="hl-2">Hsl</span><span class="hl-0">, [</span><span class="hl-8">0.5</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">0.5</span><span class="hl-0">, </span><span class="hl-8">0.7</span><span class="hl-0">]).</span><span class="hl-5">get</span><span class="hl-0">(</span><span class="hl-2">Rgb</span><span class="hl-0">);</span><br/><span class="hl-4">// → [ /*R*/ 0, /*G*/ 1, /*B*/ 1, /*alpha*/ 0.7]</span>
+<pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Color</span><span class="hl-0">, </span><span class="hl-2">Rgb</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Hsl</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/hsl&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">(</span><span class="hl-2">Hsl</span><span class="hl-0">, [</span><span class="hl-8">0.5</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">0.5</span><span class="hl-0">, </span><span class="hl-8">0.7</span><span class="hl-0">]).</span><span class="hl-5">get</span><span class="hl-0">(</span><span class="hl-2">Rgb</span><span class="hl-0">); </span><span class="hl-4">// → [0, 1, 1, 0.7]</span>
 </code></pre>
 <p>Here, we created a Color instance initialized with the components of the cyan color in the HSL color model and retrieved
 components in the RGB color model.</p>
@@ -49,14 +84,28 @@ particular color model.</p>
 <pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Color</span><span class="hl-0">, </span><span class="hl-2">Rgb</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Hsl</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/hsl&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">color</span><span class="hl-0"> = </span><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">(</span><span class="hl-2">Hsl</span><span class="hl-0">, [</span><span class="hl-8">0.5</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">0.5</span><span class="hl-0">, </span><span class="hl-8">0.5</span><span class="hl-0">]); </span><span class="hl-4">// Cyan</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">rgb</span><span class="hl-0"> = </span><span class="hl-2">color</span><span class="hl-0">.</span><span class="hl-5">use</span><span class="hl-0">(</span><span class="hl-2">Rgb</span><span class="hl-0">);</span><br/><br/><span class="hl-4">// Set blue component value to 0 </span><br/><span class="hl-2">rgb</span><span class="hl-0">[</span><span class="hl-8">2</span><span class="hl-0">] = </span><span class="hl-8">0</span><span class="hl-0">;</span><br/><br/><span class="hl-2">color</span><span class="hl-0">.</span><span class="hl-5">get</span><span class="hl-0">(</span><span class="hl-2">Hsl</span><span class="hl-0">); </span><span class="hl-4">// → Green [0.333, 1, 0.5, 0.7]</span>
 </code></pre>
 
-<a href="#extensibility" id="extensibility" style="color: inherit; text-decoration: none;">
-  <h1>Extensibility</h1>
+<a href="#plugins" id="plugins" style="color: inherit; text-decoration: none;">
+  <h1>Plugins</h1>
 </a>
 <p>Paint Bucket library relies on plugins in every aspect. The core package doesn&#39;t implement any color manipulation
-functionality.</p>
+functionality. When you import a plugin package (for example <a href="./packages/rgb-plugin"><code>@paint-bucket/rgb-plugin</code></a>)
+<code>Color</code> class prototype is automatically enriched with new functionality.</p>
+<pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/rgb-plugin&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Color</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">().</span><span class="hl-5">red</span><span class="hl-0">(</span><span class="hl-8">64</span><span class="hl-0">).</span><span class="hl-5">red</span><span class="hl-0">((</span><span class="hl-2">R</span><span class="hl-0">) </span><span class="hl-6">=&gt;</span><span class="hl-0"> </span><span class="hl-7">R</span><span class="hl-0"> * </span><span class="hl-8">2</span><span class="hl-0">).</span><span class="hl-5">red</span><span class="hl-0">(); </span><span class="hl-4">// → 128</span>
+</code></pre>
+<p>Here&#39;s a list of plugins in this repo:</p>
+<ul>
+<li><a href="./packages/rgb-plugin"><code>@paint-bucket/rgb-plugin</code></a> implements RGBa color model manipulation methods;</li>
+<li><a href="./packages/hsl-plugin"><code>@paint-bucket/hsl-plugin</code></a> implements HSLa color model manipulation methods;</li>
+<li><a href="./packages/gradient-plugin"><code>@paint-bucket/gradient-plugin</code></a> enables gradient manipulation;</li>
+<li><a href="./packages/difference-plugin"><code>@paint-bucket/difference-plugin</code></a> provides
+<a href="https://en.wikipedia.org/wiki/Color_difference">color difference</a> computation methods;</li>
+<li><a href="./packages/css-plugin"><code>@paint-bucket/css-plugin</code></a> enables <code>color</code> function to parse CSS color strings;</li>
+<li><a href="./packages/x11-plugin"><code>@paint-bucket/x11-plugin</code></a> enables <code>color</code> to recognize
+<a href="https://en.wikipedia.org/wiki/X11_color_names">X11 color names</a>.</li>
+</ul>
 
-<a href="#instance-methods" id="instance-methods" style="color: inherit; text-decoration: none;">
-  <h2>Instance Methods</h2>
+<a href="#extend-color-instance" id="extend-color-instance" style="color: inherit; text-decoration: none;">
+  <h2>Extend color instance</h2>
 </a>
 <p>Below is an example that shows how to extend the <code>Color</code> prototype to implement a color component read and write
 methods.</p>
@@ -66,8 +115,8 @@ methods.</p>
 <pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Color</span><span class="hl-0">, </span><span class="hl-2">Rgb</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">import</span><span class="hl-0"> </span><span class="hl-3">&#39;./plugin1.ts&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">color</span><span class="hl-0"> = </span><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">().</span><span class="hl-5">setRed</span><span class="hl-0">(</span><span class="hl-8">128</span><span class="hl-0">);</span><br/><br/><span class="hl-2">color</span><span class="hl-0">.</span><span class="hl-5">get</span><span class="hl-0">(</span><span class="hl-2">Rgb</span><span class="hl-0">); </span><span class="hl-4">// → [1, 0, 0, 1]</span>
 </code></pre>
 
-<a href="#color-parsing" id="color-parsing" style="color: inherit; text-decoration: none;">
-  <h2>Color Parsing</h2>
+<a href="#extend-color-parsing" id="extend-color-parsing" style="color: inherit; text-decoration: none;">
+  <h2>Extend color parsing</h2>
 </a>
 <p>Using <code>Color</code> constructor and initializing colors using arrays of components isn&#39;t the most convenient way, so
 <code>@paint-bucket/core</code> exports a <code>color</code> function to streamline this process.</p>
@@ -75,32 +124,16 @@ methods.</p>
 </code></pre>
 <p><code>color</code> function returns the <code>Color</code> instance. Using plugins, you can extend what arguments <code>color</code> function would
 accept. Below is the example, how you can implement creating <code>Color</code> by its name.</p>
-<pre><code class="language-ts"><span class="hl-4">// ./plugin2.ts</span><br/><br/><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Color</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">declare</span><span class="hl-0"> </span><span class="hl-6">module</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core/lib/Color&#39;</span><span class="hl-0"> {</span><br/><br/><span class="hl-0">  </span><span class="hl-4">// Merge declarations for the interface that the color function implements</span><br/><span class="hl-0">  </span><span class="hl-6">interface</span><span class="hl-0"> </span><span class="hl-9">ColorFunction</span><span class="hl-0"> {</span><br/><br/><span class="hl-0">    (</span><span class="hl-2">name</span><span class="hl-0">: </span><span class="hl-3">&#39;pink&#39;</span><span class="hl-0"> | </span><span class="hl-3">&#39;cyan&#39;</span><span class="hl-0"> | </span><span class="hl-3">&#39;bisque&#39;</span><span class="hl-0">): </span><span class="hl-9">Color</span><span class="hl-0">;</span><br/><span class="hl-0">  }</span><br/><span class="hl-0">}</span><br/><br/><span class="hl-4">// Add the parsing middleware</span><br/><span class="hl-2">Color</span><span class="hl-0">.</span><span class="hl-5">overrideParser</span><span class="hl-0">((</span><span class="hl-2">next</span><span class="hl-0">) </span><span class="hl-6">=&gt;</span><span class="hl-0"> (</span><span class="hl-2">name</span><span class="hl-0">) </span><span class="hl-6">=&gt;</span><span class="hl-0"> {</span><br/><span class="hl-0">  </span><span class="hl-1">switch</span><span class="hl-0"> (</span><span class="hl-2">name</span><span class="hl-0">) {</span><br/><br/><span class="hl-0">    </span><span class="hl-1">case</span><span class="hl-0"> </span><span class="hl-3">&#39;pink&#39;</span><span class="hl-0">:</span><br/><span class="hl-0">      </span><span class="hl-1">return</span><span class="hl-0"> </span><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">(</span><span class="hl-2">Rgb</span><span class="hl-0">, [</span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">]); </span><span class="hl-4">// #FFC0CB</span><br/><br/><span class="hl-0">    </span><span class="hl-1">case</span><span class="hl-0"> </span><span class="hl-3">&#39;cyan&#39;</span><span class="hl-0">:</span><br/><span class="hl-0">      </span><span class="hl-1">return</span><span class="hl-0"> </span><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">(</span><span class="hl-2">Rgb</span><span class="hl-0">, [</span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">]); </span><span class="hl-4">// #00FFFF</span><br/><br/><span class="hl-0">    </span><span class="hl-1">case</span><span class="hl-0"> </span><span class="hl-3">&#39;bisque&#39;</span><span class="hl-0">:</span><br/><span class="hl-0">      </span><span class="hl-1">return</span><span class="hl-0"> </span><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">(</span><span class="hl-2">Rgb</span><span class="hl-0">, [</span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">]); </span><span class="hl-4">// #FFE4C4</span><br/><span class="hl-0">  }</span><br/><br/><span class="hl-0">  </span><span class="hl-4">// If the name wasn&#39;t recognized then pass the argument to the next middleware</span><br/><span class="hl-0">  </span><span class="hl-4">// (if awailable) or to the default parser implementation</span><br/><span class="hl-0">  </span><span class="hl-1">return</span><span class="hl-0"> </span><span class="hl-5">next</span><span class="hl-0">(</span><span class="hl-2">value</span><span class="hl-0">);</span><br/><span class="hl-0">});</span>
+<pre><code class="language-ts"><span class="hl-4">// ./plugin2.ts</span><br/><br/><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">Color</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">declare</span><span class="hl-0"> </span><span class="hl-6">module</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core/lib/Color&#39;</span><span class="hl-0"> {</span><br/><br/><span class="hl-0">  </span><span class="hl-4">// Merge declarations for the interface that the color function implements</span><br/><span class="hl-0">  </span><span class="hl-6">interface</span><span class="hl-0"> </span><span class="hl-9">ColorFunction</span><span class="hl-0"> {</span><br/><br/><span class="hl-0">    (</span><span class="hl-2">name</span><span class="hl-0">: </span><span class="hl-3">&#39;pink&#39;</span><span class="hl-0"> | </span><span class="hl-3">&#39;cyan&#39;</span><span class="hl-0"> | </span><span class="hl-3">&#39;bisque&#39;</span><span class="hl-0">): </span><span class="hl-9">Color</span><span class="hl-0">;</span><br/><span class="hl-0">  }</span><br/><span class="hl-0">}</span><br/><br/><span class="hl-4">// Add the parsing middleware</span><br/><span class="hl-2">Color</span><span class="hl-0">.</span><span class="hl-5">overrideParser</span><span class="hl-0">((</span><span class="hl-2">next</span><span class="hl-0">) </span><span class="hl-6">=&gt;</span><span class="hl-0"> (</span><span class="hl-2">name</span><span class="hl-0">) </span><span class="hl-6">=&gt;</span><span class="hl-0"> {</span><br/><span class="hl-0">  </span><span class="hl-1">switch</span><span class="hl-0"> (</span><span class="hl-2">name</span><span class="hl-0">) {</span><br/><br/><span class="hl-0">    </span><span class="hl-1">case</span><span class="hl-0"> </span><span class="hl-3">&#39;pink&#39;</span><span class="hl-0">:</span><br/><span class="hl-0">      </span><span class="hl-1">return</span><span class="hl-0"> </span><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">(</span><span class="hl-2">Rgb</span><span class="hl-0">, [</span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">0.7529</span><span class="hl-0">, </span><span class="hl-8">0.7960</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">]); </span><span class="hl-4">// #FFC0CB</span><br/><br/><span class="hl-0">    </span><span class="hl-1">case</span><span class="hl-0"> </span><span class="hl-3">&#39;cyan&#39;</span><span class="hl-0">:</span><br/><span class="hl-0">      </span><span class="hl-1">return</span><span class="hl-0"> </span><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">(</span><span class="hl-2">Rgb</span><span class="hl-0">, [</span><span class="hl-8">0</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">]); </span><span class="hl-4">// #00FFFF</span><br/><br/><span class="hl-0">    </span><span class="hl-1">case</span><span class="hl-0"> </span><span class="hl-3">&#39;bisque&#39;</span><span class="hl-0">:</span><br/><span class="hl-0">      </span><span class="hl-1">return</span><span class="hl-0"> </span><span class="hl-6">new</span><span class="hl-0"> </span><span class="hl-5">Color</span><span class="hl-0">(</span><span class="hl-2">Rgb</span><span class="hl-0">, [</span><span class="hl-8">1</span><span class="hl-0">, </span><span class="hl-8">0.8941</span><span class="hl-0">, </span><span class="hl-8">0.7686</span><span class="hl-0">, </span><span class="hl-8">1</span><span class="hl-0">]); </span><span class="hl-4">// #FFE4C4</span><br/><span class="hl-0">  }</span><br/><br/><span class="hl-0">  </span><span class="hl-4">// If the name wasn&#39;t recognized then pass the argument to the next middleware</span><br/><span class="hl-0">  </span><span class="hl-4">// (if awailable) or to the default parser implementation</span><br/><span class="hl-0">  </span><span class="hl-1">return</span><span class="hl-0"> </span><span class="hl-5">next</span><span class="hl-0">(</span><span class="hl-2">value</span><span class="hl-0">);</span><br/><span class="hl-0">});</span>
 </code></pre>
 <p>Now we can use this plugin with the <code>color</code> function.</p>
 <pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">color</span><span class="hl-0">, </span><span class="hl-2">Rgb</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">import</span><span class="hl-0"> </span><span class="hl-3">&#39;./plugin2.ts&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;cyan&#39;</span><span class="hl-0">).</span><span class="hl-5">get</span><span class="hl-0">(</span><span class="hl-2">Rgb</span><span class="hl-0">); </span><span class="hl-4">// → [0, 1, 1, 1]</span>
 </code></pre>
 
-<a href="#color-manipulation" id="color-manipulation" style="color: inherit; text-decoration: none;">
-  <h1>Color Manipulation</h1>
-</a>
-<p>📚 <a href="https://smikhalevski.github.io/paint-bucket/classes/core_src_main.Color.html">You can find docs on all manipulation methods here.</a></p>
-<p>There&#39;s a set of packages that extend <code>Color</code> and <code>color</code> with various methods and parsing mechanisms:
-<a href="./packages/rgb-plugin"><code>@paint-bucket/rgb-plugin</code></a>, <a href="./packages/hsl-plugin"><code>@paint-bucket/hsl-plugin</code></a>,
-<a href="./packages/css-plugin"><code>@paint-bucket/css-plugin</code></a>, and
-<a href="./packages/difference-plugin"><code>@paint-bucket/difference-plugin</code></a></p>
-<p>These packages provide API with jQuery-like getter-setter methods and React-like callback support.</p>
-<pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">color</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/core&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">import</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/rgb-plugin&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">import</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/hsl-plugin&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">import</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/x11-plugin&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">import</span><span class="hl-0"> </span><span class="hl-3">&#39;@paint-bucket/css-plugin&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;pink&#39;</span><span class="hl-0">)</span><br/><span class="hl-0">    .</span><span class="hl-5">hue</span><span class="hl-0">(</span><span class="hl-8">90</span><span class="hl-0">)</span><br/><span class="hl-0">    .</span><span class="hl-5">saturation</span><span class="hl-0">((</span><span class="hl-2">S</span><span class="hl-0">) </span><span class="hl-6">=&gt;</span><span class="hl-0"> </span><span class="hl-7">S</span><span class="hl-0"> / </span><span class="hl-8">2</span><span class="hl-0">)</span><br/><span class="hl-0">    .</span><span class="hl-5">css</span><span class="hl-0">();</span><br/><span class="hl-4">// → &#39;#e0efd0&#39;</span><br/><br/><span class="hl-5">color</span><span class="hl-0">([</span><span class="hl-8">64</span><span class="hl-0">, </span><span class="hl-8">128</span><span class="hl-0">, </span><span class="hl-8">0</span><span class="hl-0">])</span><br/><span class="hl-0">    .</span><span class="hl-5">rgb</span><span class="hl-0">(([</span><span class="hl-2">R</span><span class="hl-0">, </span><span class="hl-2">G</span><span class="hl-0">, </span><span class="hl-2">B</span><span class="hl-0">, </span><span class="hl-2">a</span><span class="hl-0">]) </span><span class="hl-6">=&gt;</span><span class="hl-0"> [</span><span class="hl-7">R</span><span class="hl-0"> * </span><span class="hl-8">3</span><span class="hl-0">, </span><span class="hl-7">G</span><span class="hl-0"> * </span><span class="hl-8">2</span><span class="hl-0">, </span><span class="hl-7">B</span><span class="hl-0">, </span><span class="hl-2">a</span><span class="hl-0">])</span><br/><span class="hl-0">    .</span><span class="hl-5">rgb</span><span class="hl-0">();</span><br/><span class="hl-4">// → [192, 255, 0, 1]</span><br/><br/><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;#ffc0cb&#39;</span><span class="hl-0">)</span><br/><span class="hl-0">    .</span><span class="hl-5">hsl</span><span class="hl-0">()</span><br/><span class="hl-4">// → [ 349.52, 100, 87.64, 1 ]</span>
-</code></pre>
-<p><code>color</code> returns a mutable instance of <code>Color</code>. To create a copy of the <code>Color</code> instance you can use one of these
-approaches:</p>
-<pre><code class="language-ts"><span class="hl-1">import</span><span class="hl-0"> {</span><span class="hl-2">color</span><span class="hl-0">} </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;paint-bucket&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">color1</span><span class="hl-0"> = </span><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-3">&#39;pink&#39;</span><span class="hl-0">).</span><span class="hl-5">red</span><span class="hl-0">(</span><span class="hl-8">128</span><span class="hl-0">);</span><br/><br/><span class="hl-4">// color2 is a copy of color1</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">color2</span><span class="hl-0"> = </span><span class="hl-5">color</span><span class="hl-0">(</span><span class="hl-2">color1</span><span class="hl-0">);</span><br/><span class="hl-4">// or</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">color3</span><span class="hl-0"> = </span><span class="hl-2">color1</span><span class="hl-0">.</span><span class="hl-5">clone</span><span class="hl-0">();</span>
-</code></pre>
-
 <a href="#performance" id="performance" style="color: inherit; text-decoration: none;">
   <h1>Performance</h1>
 </a>
-<p>Clone this repo and use <code>npm ci &amp;&amp; npm run perf</code> to run the performance testsuite.</p>
+<p>Clone this repo and use <code>npm ci &amp;&amp; npm run build &amp;&amp; npm run perf</code> to run the performance testsuite.</p>
 <p>Results are in millions of operations per second. The higher number is better.</p>
 <table>
 <thead>
@@ -112,31 +145,70 @@ approaches:</p>
 </tr>
 </thead>
 <tbody><tr>
-<td>Create</td>
+<td><code>color([255, 255, 255])</code></td>
 <td align="right">12.61</td>
 <td align="right">3.35</td>
 <td align="right">1.45</td>
 </tr>
 <tr>
-<td>Desaturate</td>
-<td align="right">7.14</td>
-<td align="right">0.72</td>
-<td align="right">0.48</td>
+<td><code>color(&#39;#abc&#39;)</code></td>
+<td align="right">5.59</td>
+<td align="right">0.98</td>
+<td align="right">0.86</td>
 </tr>
 <tr>
-<td>Spin + Lighten</td>
-<td align="right">4.65</td>
-<td align="right">0.37</td>
+<td><code>color(&#39;#abcdef&#39;)</code></td>
+<td align="right">5.50</td>
+<td align="right">0.99</td>
+<td align="right">0.96</td>
+</tr>
+<tr>
+<td><code>color(&#39;#abcdefff&#39;)</code></td>
+<td align="right">4.97</td>
+<td align="right">0.97</td>
+<td align="right">0.86</td>
+</tr>
+<tr>
+<td><code>color(0xAB_CD_EF)</code></td>
+<td align="right">9.92</td>
+<td align="right">5.87</td>
+<td align="right">1.61</td>
+</tr>
+<tr>
+<td><code>color(&#39;rgba(128, 128, 128, 0.5)&#39;)</code></td>
+<td align="right">1.70</td>
+<td align="right">0.89</td>
+<td align="right">0.09</td>
+</tr>
+<tr>
+<td><code>color(…).saturation(50).rgb()</code></td>
+<td align="right">7.35</td>
+<td align="right">0.81</td>
+<td align="right">0.66</td>
+</tr>
+<tr>
+<td><code>color(…).hue(90).lightness(10).rgb()</code></td>
+<td align="right">7.28</td>
+<td align="right">0.41</td>
 <td align="right">—</td>
+</tr>
+<tr>
+<td><code>color.gradient([&#39;#fff&#39;, &#39;#000&#39;])</code></td>
+<td align="right">3.08</td>
+<td align="right">—</td>
+<td align="right">0.26</td>
+</tr>
+<tr>
+<td><code>color.gradient(…).at(0.5)</code></td>
+<td align="right">10.47</td>
+<td align="right">—</td>
+<td align="right">2.39</td>
 </tr>
 </tbody></table>
 
 <a href="#❤️" id="❤️" style="color: inherit; text-decoration: none;">
   <h1>❤️</h1>
 </a>
-<p>I cannot overestimate how much these libraries helped me to implement color model conversion algorithms:</p>
-<ul>
-<li><a href="https://github.com/jonathantneal/convert-colors">@jonathantneal/convert-colors</a></li>
-<li><a href="https://github.com/colorjs/color-space">@colorjs/color-space</a></li>
-</ul>
-</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Modules</a></li><li class=" tsd-kind-module"><a href="modules/core_src_main.html">core/src/main</a></li><li class=" tsd-kind-module"><a href="modules/css_plugin_src_main.html">css-<wbr/>plugin/src/main</a></li><li class=" tsd-kind-module"><a href="modules/difference_plugin_src_main.html">difference-<wbr/>plugin/src/main</a></li><li class=" tsd-kind-module"><a href="modules/hsl_plugin_src_main.html">hsl-<wbr/>plugin/src/main</a></li><li class=" tsd-kind-module"><a href="modules/hsl_src_main.html">hsl/src/main</a></li><li class=" tsd-kind-module"><a href="modules/hsv_src_main.html">hsv/src/main</a></li><li class=" tsd-kind-module"><a href="modules/lab_src_main.html">lab/src/main</a></li><li class=" tsd-kind-module"><a href="modules/plugin_utils_src_main.html">plugin-<wbr/>utils/src/main</a></li><li class=" tsd-kind-module"><a href="modules/rgb_plugin_src_main.html">rgb-<wbr/>plugin/src/main</a></li><li class=" tsd-kind-module"><a href="modules/x11_plugin_src_main.html">x11-<wbr/>plugin/src/main</a></li><li class=" tsd-kind-module"><a href="modules/xyz_src_main.html">xyz/src/main</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li><li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li><li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li><li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li><li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
+<p>I cannot overestimate how much <a href="https://github.com/jonathantneal/convert-colors">@jonathantneal/convert-colors</a> and
+<a href="https://github.com/colorjs/color-space">@colorjs/color-space</a> helped me to implement color model conversion algorithms.</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Modules</a></li><li class=" tsd-kind-module"><a href="modules/core_src_main.html">core/src/main</a></li><li class=" tsd-kind-module"><a href="modules/hsl_src_main.html">hsl/src/main</a></li><li class=" tsd-kind-module"><a href="modules/hsv_src_main.html">hsv/src/main</a></li><li class=" tsd-kind-module"><a href="modules/lab_src_main.html">lab/src/main</a></li><li class=" tsd-kind-module"><a href="modules/paint_bucket_src_main.html">paint-<wbr/>bucket/src/main</a></li><li class=" tsd-kind-module"><a href="modules/plugin_utils_src_main.html">plugin-<wbr/>utils/src/main</a></li><li class=" tsd-kind-module"><a href="modules/xyz_src_main.html">xyz/src/main</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li><li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li><li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li><li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li><li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
