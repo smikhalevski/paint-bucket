@@ -33,17 +33,5 @@
   "bugs": {
     "url": "https://github.com/smikhalevski/paint-bucket/issues"
   },
-  "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
-  "jest": {
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "diagnostics": {
-          "ignoreCodes": [
-            151001
-          ]
-        }
-      }
-    }
-  }
+  "homepage": "https://github.com/smikhalevski/paint-bucket#readme"
 }

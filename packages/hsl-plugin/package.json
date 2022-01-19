@@ -33,22 +33,10 @@
     "url": "https://github.com/smikhalevski/paint-bucket/issues"
   },
   "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
-  "jest": {
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "diagnostics": {
-          "ignoreCodes": [
-            151001
-          ]
-        }
-      }
-    }
-  },
   "dependencies": {
     "@paint-bucket/core": "1.0.2-next.2",
     "@paint-bucket/hsl": "1.0.2-next.2",
     "@paint-bucket/plugin-utils": "1.0.2-next.2",
-    "numeric-wrench": "2.0.0-next.0"
+    "numeric-wrench": "^2.0.0"
   }
 }
