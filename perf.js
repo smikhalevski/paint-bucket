@@ -5,7 +5,7 @@ const chroma = require('chroma-js');
 const {color} = require('paint-bucket');
 
 const rgb = [0xAB, 0xCD, 0xEF];
-const hexColors = ['#ffffff', '#000000'];
+const hexColors = ['#fff', '#000'];
 
 console.log(chalk.inverse(' Create color from components '));
 gc();

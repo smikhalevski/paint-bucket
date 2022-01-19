@@ -23,6 +23,63 @@ import {color} from 'paint-bucket';
 color('#abcdef').saturation((S) => S / 2).red(); // → 188
 ```
 
+Most methods provide getter-setter semantics:
+
+```ts
+// Set
+color('#f00').red(127.5); // → Color instance
+// or
+color('#f00').red((R) => R / 2); // → Color instance
+
+// Get
+color('#f00').red(); // → 255
+```
+
+Mutate multiple components at the same time:
+
+```ts
+color([64, 128, 0])
+    .rgb(([R, G, B, a]) => [R * 3, G * 2, B, a])
+    .rgb();
+// → [192, 255, 0, 1]
+```
+
+`color` returns a mutable instance of `Color`. To create a copy of the `Color` instance you can use one of these
+approaches:
+
+```ts
+const color1 = color('#f00');
+
+// color2 is a copy of color1
+const color2 = color(color1);
+// or
+const color3 = color1.clone();
+```
+
+Parse and serialize CSS color strings:
+
+```ts
+color('pink').css(); // → "#ffc0cb"
+
+color('rgba(255, 192, 203)').css(); // → "#ffc0cb"
+```
+
+Create gradients and obtain color at arbitrary position:
+
+```ts
+color('red').gradient('blue').at(0.70).css(); // → "#4d00b3"
+```
+
+Create multi-stop gradients:
+
+```ts
+color
+    .gradient(['red', 'pink', 'blue'], [0, 0.5, 1])
+    .at(0.70)
+    .css();
+// → "#9973e0"
+```
+
 # Concepts
 
 Color manipulation isn't possible without the color model concept.
@@ -151,50 +208,7 @@ Here's a list of plugins in this repo:
 - [`@paint-bucket/x11-plugin`](./packages/x11-plugin) enables `color` to recognize
   [X11 color names](https://en.wikipedia.org/wiki/X11_color_names).
 
-These packages provide API with jQuery-like getter-setter methods and React-like callback support.
-
-📚 [You can find docs on all manipulation methods here.](https://smikhalevski.github.io/paint-bucket/classes/core_src_main.Color.html)
-
-```ts
-import {color} from '@paint-bucket/core';
-import '@paint-bucket/rgb-plugin';
-import '@paint-bucket/hsl-plugin';
-import '@paint-bucket/x11-plugin';
-import '@paint-bucket/css-plugin';
-
-color('pink')
-    .hue(45)            // Use literal values
-    .hue((H) => H * 2)  // or modifier functions
-    .saturation((S) => S / 2)
-    .css();
-// → '#e0efd0'
-
-color([64, 128, 0])
-    .rgb(([R, G, B, a]) => [R * 3, G * 2, B, a]) // Set value
-    .rgb();                                      // or get value
-// → [192, 255, 0, 1]
-
-color('#ffc0cb').hsl()
-// → [ 349.52, 100, 87.64, 1 ]
-```
-
-`color` returns a mutable instance of `Color`. To create a copy of the `Color` instance you can use one of these
-approaches:
-
-```ts
-import {color} from 'paint-bucket';
-
-const color1 = color('pink').red(128);
-
-// color2 is a copy of color1
-const color2 = color(color1);
-// or
-const color3 = color1.clone();
-```
-
-## Writing a plugin
-
-### Extending `Color` instance methods
+## Extend color instance
 
 Below is an example that shows how to extend the `Color` prototype to implement a color component read and write
 methods.
@@ -256,7 +270,7 @@ const color = new Color().setRed(128);
 color.get(Rgb); // → [1, 0, 0, 1]
 ```
 
-### Extending color parsing
+## Extend color parsing
 
 Using `Color` constructor and initializing colors using arrays of components isn't the most convenient way, so
 `@paint-bucket/core` exports a `color` function to streamline this process.
@@ -316,7 +330,7 @@ color('cyan').get(Rgb); // → [0, 1, 1, 1]
 
 # Performance
 
-Clone this repo and use `npm ci && npm run perf` to run the performance testsuite.
+Clone this repo and use `npm ci && npm run build && npm run perf` to run the performance testsuite.
 
 Results are in millions of operations per second. The higher number is better.
 
@@ -328,10 +342,10 @@ Results are in millions of operations per second. The higher number is better.
 | `color('#abcdefff')` | 4.97 | 0.97 | 0.86 |
 | `color(0xAB_CD_EF)` | 9.92 | 5.87 | 1.61 |
 | `color('rgba(128, 128, 128, 0.5)')` | 1.70 | 0.89 | 0.09 |
-| `color….saturation(50).rgb()` | 7.14 | 0.81 | 0.66 |
-| `color….hue(90).lightness(10).rgb()` | 7.35 | 0.41 | — |
-| `color.gradient(['#ffffff', '#000000'])` | 3.08 | — | 0.26 |
-| `gradient….at(0.5)` | 10.47 | — | 2.39 |
+| `color(…).saturation(50).rgb()` | 7.35 | 0.81 | 0.66 |
+| `color(…).hue(90).lightness(10).rgb()` | 7.28 | 0.41 | — |
+| `color.gradient(['#fff', '#000'])` | 3.08 | — | 0.26 |
+| `color.gradient(…).at(0.5)` | 10.47 | — | 2.39 |
 
 # ❤️
 
