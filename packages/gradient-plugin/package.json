@@ -1,6 +1,6 @@
 {
   "name": "@paint-bucket/gradient-plugin",
-  "version": "1.0.2-next.2",
+  "version": "1.0.2",
   "description": "Gradient manipulation plugin for Paint Bucket.",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
   "dependencies": {
-    "@paint-bucket/core": "1.0.2-next.2",
-    "@paint-bucket/plugin-utils": "1.0.2-next.2"
+    "@paint-bucket/core": "^1.0.2",
+    "@paint-bucket/plugin-utils": "^1.0.2"
   }
 }

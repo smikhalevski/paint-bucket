@@ -1,6 +1,6 @@
 {
   "name": "paint-bucket",
-  "version": "1.0.2-next.2",
+  "version": "1.0.2",
   "description": "Highly performant, extensible, and tiny color manipulation library.",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
@@ -34,13 +34,13 @@
   },
   "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
   "dependencies": {
-    "@paint-bucket/core": "1.0.2-next.2",
-    "@paint-bucket/css-plugin": "1.0.2-next.2",
-    "@paint-bucket/difference-plugin": "1.0.2-next.2",
-    "@paint-bucket/gradient-plugin": "1.0.2-next.2",
-    "@paint-bucket/hsv": "1.0.2-next.2",
-    "@paint-bucket/hsl-plugin": "1.0.2-next.2",
-    "@paint-bucket/rgb-plugin": "1.0.2-next.2",
-    "@paint-bucket/x11-plugin": "1.0.2-next.2"
+    "@paint-bucket/core": "^1.0.2",
+    "@paint-bucket/css-plugin": "^1.0.2",
+    "@paint-bucket/difference-plugin": "^1.0.2",
+    "@paint-bucket/gradient-plugin": "^1.0.2",
+    "@paint-bucket/hsv": "^1.0.2",
+    "@paint-bucket/hsl-plugin": "^1.0.2",
+    "@paint-bucket/rgb-plugin": "^1.0.2",
+    "@paint-bucket/x11-plugin": "^1.0.2"
   }
 }
