@@ -1,5 +1,12 @@
 import {color} from '../main';
 
+describe('color', () => {
+
+  test('returns color by X11 name', () => {
+    expect(color('blue').rgb()).toEqual([0, 0, 255, 1]);
+  });
+});
+
 describe('rgb', () => {
 
   test('returns RGBa components', () => {

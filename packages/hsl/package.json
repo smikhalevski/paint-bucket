@@ -1,6 +1,6 @@
 {
   "name": "@paint-bucket/hsl",
-  "version": "1.0.0",
+  "version": "1.0.2-next.2",
   "description": "HSLa color model plugin for Paint Bucket.",
   "main": "./lib/index-cjs.js",
   "module": "./lib/index.js",
@@ -10,8 +10,7 @@
     "lib"
   ],
   "scripts": {
-    "build": "tsc --project ./tsconfig.build.json && npm run rollup && npm run terser",
-    "rollup": "rollup --external @paint-bucket/core --input ./lib/index.js --file ./lib/index-cjs.js --format cjs --plugin @rollup/plugin-node-resolve",
+    "build": "tsc --project ./tsconfig.build.json && rollup --config ../../rollup.config.js && npm run terser",
     "terser": "for file in $(find ./lib -name '*.js'); do terser --compress --mangle --output $file -- $file; done || exit 1",
     "clean": "rimraf ./lib",
     "test": "jest --detectOpenHandles"
@@ -35,19 +34,7 @@
     "url": "https://github.com/smikhalevski/paint-bucket/issues"
   },
   "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
-  "jest": {
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "diagnostics": {
-          "ignoreCodes": [
-            151001
-          ]
-        }
-      }
-    }
-  },
   "dependencies": {
-    "@paint-bucket/core": "^1.0.0"
+    "@paint-bucket/core": "1.0.2-next.2"
   }
 }

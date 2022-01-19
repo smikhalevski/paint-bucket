@@ -4,11 +4,11 @@ import '../main';
 describe('hue', () => {
 
   test('returns hue color component', () => {
-    expect(color().hsl([1000]).hue()).toBe(360);
+    expect(color().hsl([810]).hue()).toBe(90);
   });
 
   test('sets hue color component', () => {
-    expect(color().hue(1000).hue()).toBe(360);
+    expect(color().hue(720).hue()).toBe(360);
   });
 
   test('mutates hue color component', () => {

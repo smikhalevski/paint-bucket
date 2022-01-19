@@ -29,7 +29,7 @@ export function parseCssColor(value: string): Color | undefined {
     return new Color(Rgb, [0, 0, 0, 0]);
   }
 
-  const color = parseInt(value, 16);
+  const color = +('0x' + value);
 
   if (!isNaN(color)) {
     return new Color(Rgb, intToComponents(normalizeComponents(color, value.length), [0, 0, 0, 1]));

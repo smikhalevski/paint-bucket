@@ -1,98 +1,112 @@
 import {Color, color} from '@paint-bucket/core';
 import {componentsToInt, createAccessor, intToComponents, normalizeComponents} from '@paint-bucket/plugin-utils';
 import {Hsl} from '@paint-bucket/hsl';
-import {right} from 'numeric-wrench';
+import {clamp1, cycle, isNumeric, right} from 'numeric-wrench';
 
-function clamp(x: number, n = 0): number {
-  x = +x;
-  return isNaN(x) ? n : x < 0 ? 0 : x > 1 ? 1 : x;
-}
+color.hsl = (hsl) => new Color().hsl(hsl);
 
-export {_Color as Color};
+color.hsl24 = (hsl) => new Color().hsl24(hsl);
 
-const _Color = function (Color, color) {
+color.hsl32 = (hsl) => new Color().hsl32(hsl);
 
-  color.hsl = (hsl) => new Color().hsl(hsl);
+const colorPrototype = Color.prototype;
 
-  color.hsl24 = (hsl) => new Color().hsl24(hsl);
+colorPrototype.hsl = createAccessor<Hsl, Partial<Hsl>>(
+    function (this: Color) {
+      const hsl = this.get(Hsl);
+      return [
+        hsl[0] * 360,
+        hsl[1] * 100,
+        hsl[2] * 100,
+        hsl[3],
+      ];
+    },
+    function (this: Color, value) {
+      const hsl = this.use(Hsl);
+      const [H, S, L, a] = value;
 
-  color.hsl32 = (hsl) => new Color().hsl32(hsl);
+      if (isNumeric(H)) {
+        hsl[0] = clamp1(cycle(H / 360, 0, 1));
+      }
+      if (isNumeric(S)) {
+        hsl[1] = clamp1(S / 100);
+      }
+      if (isNumeric(L)) {
+        hsl[2] = clamp1(L / 100);
+      }
+      if (isNumeric(a)) {
+        hsl[3] = clamp1(a);
+      }
+    },
+);
 
-  const colorPrototype = Color.prototype;
+colorPrototype.hsl24 = createAccessor(
+    function (this: Color) {
+      return right(componentsToInt(this.get(Hsl)), 8);
+    },
+    function (this: Color, value) {
+      intToComponents(normalizeComponents(value, 6), this.use(Hsl));
+    },
+);
 
-  colorPrototype.hsl = createAccessor<Hsl, Partial<Hsl>>(
-      function (this: Color) {
-        const hsl = this.get(Hsl);
-        return [
-          hsl[0] * 360,
-          hsl[1] * 100,
-          hsl[2] * 100,
-          hsl[3],
-        ];
-      },
-      function (this: Color, value) {
-        const hsl = this.use(Hsl);
-        const [H, S, L, a] = value;
+colorPrototype.hsl32 = createAccessor(
+    function (this: Color) {
+      return componentsToInt(this.get(Hsl));
+    },
+    function (this: Color, value) {
+      intToComponents(normalizeComponents(value, 8), this.use(Hsl));
+    },
+);
 
-        if (H != null) {
-          hsl[0] = clamp(H / 360);
-        }
-        if (S != null) {
-          hsl[1] = clamp(S / 100);
-        }
-        if (L != null) {
-          hsl[2] = clamp(L / 100);
-        }
-        if (a != null) {
-          hsl[3] = clamp(a, 1);
-        }
-      },
-  );
+colorPrototype.hue = createAccessor(
+    function (this: Color) {
+      return this.get(Hsl)[0] * 360;
+    },
+    function (this: Color, H) {
+      if (isNumeric(H)) {
+        this.use(Hsl)[0] = clamp1(H / 360);
+      }
+    },
+);
 
-  colorPrototype.hsl24 = createAccessor(
-      function (this: Color) {
-        return right(componentsToInt(this.get(Hsl)), 8);
-      },
-      function (this: Color, value) {
-        intToComponents(normalizeComponents(value, 6), this.use(Hsl));
-      },
-  );
+colorPrototype.saturation = createAccessor(
+    function (this: Color) {
+      return this.get(Hsl)[1] * 100;
+    },
+    function (this: Color, S) {
+      if (isNumeric(S)) {
+        this.use(Hsl)[1] = clamp1(S / 100);
+      }
+    },
+);
 
-  colorPrototype.hsl32 = createAccessor(
-      function (this: Color) {
-        return componentsToInt(this.get(Hsl));
-      },
-      function (this: Color, value) {
-        intToComponents(normalizeComponents(value, 8), this.use(Hsl));
-      },
-  );
+colorPrototype.lightness = createAccessor(
+    function (this: Color) {
+      return this.get(Hsl)[2] * 100;
+    },
+    function (this: Color, L) {
+      if (isNumeric(L)) {
+        this.use(Hsl)[2] = clamp1(L / 100);
+      }
+    },
+);
 
-  colorPrototype.hue = createAccessor(
-      function (this: Color) {
-        return this.get(Hsl)[0] * 360;
-      },
-      function (this: Color, value) {
-        this.use(Hsl)[0] = clamp(value / 360);
-      },
-  );
+colorPrototype.spin = function (this: Color, H) {
+  if (isNumeric(H)) {
+    const hsl = this.use(Hsl);
+    hsl[0] = cycle(hsl[0] + H / 360, 0, 1);
+  }
+  return this;
+};
 
-  colorPrototype.saturation = createAccessor(
-      function (this: Color) {
-        return this.get(Hsl)[1] * 100;
-      },
-      function (this: Color, value) {
-        this.use(Hsl)[1] = clamp(value / 100);
-      },
-  );
+colorPrototype.lighten = function (this: Color, p) {
+  if (isNumeric(p)) {
+    const hsl = this.use(Hsl);
+    hsl[2] = clamp1(hsl[2] * (1 + +p));
+  }
+  return this;
+};
 
-  colorPrototype.lightness = createAccessor(
-      function (this: Color) {
-        return this.get(Hsl)[2] * 100;
-      },
-      function (this: Color, value) {
-        this.use(Hsl)[2] = clamp(value / 100);
-      },
-  );
-
-  return Color;
-}(Color, color);
+colorPrototype.darken = function (this: Color, p) {
+  return this.lighten(-p);
+};
