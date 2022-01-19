@@ -5,6 +5,7 @@
     "build": "npm run build --workspaces",
     "clean": "rimraf ./docs && npm run clean --workspaces",
     "test": "jest --detectOpenHandles",
+    "perf": "node --expose-gc --max-old-space-size=4096 ./perf.js",
     "docs": "typedoc ./packages/*/src/main/index.ts --excludePrivate",
     "publish-docs": "[ -d ./docs ] && [[ ! $(git status --porcelain) ]] && branch=$(git rev-parse --abbrev-ref HEAD) && sha=$(git rev-parse --short HEAD) && t=$(mktemp -d) && cp -R ./docs/ $t && git checkout ghpages && ls -A | grep -wv .git | xargs rm -rf && cp -R $t/ . && git add . && git commit -m \"Updated docs ($sha)\" && git push && git checkout $branch",
     "release-docs": "npm run clean && npm run docs && npm run publish-docs"
@@ -26,11 +27,15 @@
   ],
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",
+    "@smikhalevski/perf-test": "^1.0.0",
     "@types/jest": "^27.0.1",
+    "chalk": "^4.1.2",
+    "chroma-js": "^2.1.2",
     "jest": "^27.0.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.50.5",
     "terser": "^5.7.0",
+    "tinycolor2": "^1.4.2",
     "ts-jest": "^27.0.2",
     "tslib": "^2.3.1",
     "typedoc": "^0.22.10",
