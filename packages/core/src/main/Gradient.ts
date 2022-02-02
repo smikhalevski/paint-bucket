@@ -1,14 +1,17 @@
 import {ColorModel, Rgb} from './color-model';
 import {Color} from './Color';
+import {populateSplines, spline} from 'numeric-wrench';
 
 // Black RGBa color that is returned if gradient has zero domain size
-const blackRgb: Rgb = [0, 0, 0, 1];
+// const blackRgb: Rgb = [0, 0, 0, 1];
 
 export class Gradient {
 
   protected colors;
   protected domain;
 
+  private ccc: number[][] = [];
+  private splines: number[][] = [];
   private tempComponents: number[] = [0, 0, 0, 1];
 
   /**
@@ -32,34 +35,60 @@ export class Gradient {
    * @returns The read-only components array.
    */
   public get(model: ColorModel, value: number): readonly number[] {
-    const {colors, domain, tempComponents} = this;
+    const {colors, domain, tempComponents, ccc, splines} = this;
 
     const domainLength = domain.length;
 
-    if (domainLength === 0) {
-      model.rgbToComponents(blackRgb, tempComponents);
-      return tempComponents;
+    let splinesChanged = false;
+    let componentsLength = 0;
+    for (let i = 0; i < domainLength; ++i) {
+      const components = colors[i].get(model);
+
+      componentsLength = components.length;
+      for (let j = 0; j < componentsLength; ++j) {
+        ccc[j] ||= [];
+        if (ccc[j][i] !== components[j]) {
+          splinesChanged = true;
+          ccc[j][i] = components[j];
+        }
+      }
+    }
+    if (splinesChanged) {
+      for (let i = 0; i < componentsLength; ++i) {
+        populateSplines(domain, ccc[i], splines[i] ||= []);
+      }
     }
 
-    let i = 0;
-    while (i < domainLength && domain[i] <= value) {
-      i++;
-    }
-    if (i === 0 || domainLength === 1) {
-      return colors[0].get(model);
-    }
-    if (i === domainLength) {
-      return colors[domainLength - 1].get(model);
+    for (let i = 0; i < componentsLength; ++i) {
+      tempComponents[i] = spline(domain, ccc[i], value, splines[i]);
     }
 
-    const ratio = (value - domain[i - 1]) / (domain[i] - domain[i - 1]);
-
-    const components1 = colors[i - 1].get(model);
-    const components2 = colors[i].get(model);
-
-    for (let i = 0; i < components1.length; ++i) {
-      tempComponents[i] = components1[i] + ratio * (components2[i] - components1[i]);
-    }
+    // const domainLength = domain.length;
+    //
+    // if (domainLength === 0) {
+    //   model.rgbToComponents(blackRgb, tempComponents);
+    //   return tempComponents;
+    // }
+    //
+    // let i = 0;
+    // while (i < domainLength && domain[i] <= value) {
+    //   i++;
+    // }
+    // if (i === 0 || domainLength === 1) {
+    //   return colors[0].get(model);
+    // }
+    // if (i === domainLength) {
+    //   return colors[domainLength - 1].get(model);
+    // }
+    //
+    // const ratio = (value - domain[i - 1]) / (domain[i] - domain[i - 1]);
+    //
+    // const components1 = colors[i - 1].get(model);
+    // const components2 = colors[i].get(model);
+    //
+    // for (let i = 0; i < components1.length; ++i) {
+    //   tempComponents[i] = components1[i] + ratio * (components2[i] - components1[i]);
+    // }
 
     return tempComponents;
   }

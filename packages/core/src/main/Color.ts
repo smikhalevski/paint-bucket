@@ -67,12 +67,12 @@ export class Color {
   /**
    * The color model that was last acquired by {@link get}.
    */
-  private tempModel?: ColorModel;
+  private _tempModel?: ColorModel;
 
   /**
-   * Color components of the {@link tempModel} color model.
+   * Color components of the {@link _tempModel} color model.
    */
-  private tempComponents?: number[];
+  private _tempComponents?: number[];
 
   /**
    * Creates a new {@link Color} instance.
@@ -106,23 +106,23 @@ export class Color {
    * @returns Read-only color components.
    */
   public get(model: ColorModel): readonly number[] {
-    let {components, tempComponents} = this;
+    let {components, _tempComponents} = this;
 
-    if (this.tempModel === model && tempComponents) {
-      return tempComponents;
+    if (this._tempModel === model && _tempComponents) {
+      return _tempComponents;
     }
     if (this.model === model) {
       return components;
     }
 
-    this.tempModel = model;
-    this.tempComponents = tempComponents ||= [];
+    this._tempModel = model;
+    this._tempComponents = _tempComponents ||= [];
 
     // Convert components to the temp model
     this.model.componentsToRgb(components, tempRgb);
-    model.rgbToComponents(tempRgb, tempComponents);
+    model.rgbToComponents(tempRgb, _tempComponents);
 
-    return tempComponents;
+    return _tempComponents;
   }
 
   /**
@@ -137,19 +137,19 @@ export class Color {
    * @returns Mutable color components.
    */
   public use(model: ColorModel): number[] {
-    let {components, tempComponents} = this;
+    let {components, _tempComponents} = this;
 
     // Reuse temp components when models are matching
-    if (this.tempModel === model && tempComponents) {
+    if (this._tempModel === model && _tempComponents) {
       this.model = model;
 
-      for (let i = 0; i < tempComponents.length; ++i) {
-        components[i] = tempComponents[i];
+      for (let i = 0; i < _tempComponents.length; ++i) {
+        components[i] = _tempComponents[i];
       }
     }
 
     // Clear temp model because the returned components are intended to be updated
-    this.tempModel = undefined;
+    this._tempModel = undefined;
 
     if (this.model === model) {
       return components;
