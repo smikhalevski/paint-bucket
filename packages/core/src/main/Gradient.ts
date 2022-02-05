@@ -72,12 +72,12 @@ export class Gradient {
       return this.colors[0].get(model);
     }
 
-    const nextVersion = this.version;
+    const currVersion = this.version;
 
     // Check if component interpolators must be re-created
-    if (this._prevVersion !== nextVersion || this._model !== model || this._interpolatorFactory !== interpolatorFactory) {
+    if (this._prevVersion !== currVersion || this._model !== model || this._interpolatorFactory !== interpolatorFactory) {
 
-      this._prevVersion = nextVersion;
+      this._prevVersion = currVersion;
       this._model = model;
       this._interpolatorFactory = interpolatorFactory;
 

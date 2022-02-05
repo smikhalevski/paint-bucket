@@ -1,6 +1,6 @@
 import {Color, color, Gradient, Rgb} from '@paint-bucket/core';
 import {toColor} from '@paint-bucket/plugin-utils';
-import {lerp, parallelSort, range, swap} from 'numeric-wrench';
+import {lerp, range, sort, swap} from 'numeric-wrench';
 
 const domainCache = new Map<number, number[]>();
 
@@ -23,7 +23,7 @@ color.gradient = (colors, domain) => {
   }
 
   domain = domain.slice(0, domainLength);
-  parallelSort(domain, (i, j) => swap(mappedColors, i, j));
+  sort(domain, (i, j) => swap(mappedColors, i, j));
 
   return new Gradient(mappedColors, domain);
 };
