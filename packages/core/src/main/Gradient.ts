@@ -1,18 +1,24 @@
 import {ColorModel, Rgb} from './color-model';
 import {Color} from './Color';
-import {populateSplines, spline} from 'numeric-wrench';
 
 // Black RGBa color that is returned if gradient has zero domain size
-// const blackRgb: Rgb = [0, 0, 0, 1];
+const blackRgb: Rgb = [0, 0, 0, 1];
+
+export type Interpolator = (x: number) => number;
+
+export type InterpolatorFactory = (xs: ArrayLike<number>, ys: ArrayLike<number>) => Interpolator;
 
 export class Gradient {
 
   protected colors;
   protected domain;
 
-  private ccc: number[][] = [];
-  private splines: number[][] = [];
-  private tempComponents: number[] = [0, 0, 0, 1];
+  private _tempComponents: number[] = [0, 0, 0, 1];
+  private _prevVersion?: number;
+  private _model?: ColorModel;
+  private _interpolatorFactory?: InterpolatorFactory;
+  private _interpolators: Interpolator[] = [];
+  private _componentValues: Float32Array[] = [];
 
   /**
    * Creates the new {@link Gradient} instance.
@@ -26,70 +32,75 @@ export class Gradient {
   }
 
   /**
+   * The cumulative version of all colors used by this gradient.
+   *
+   * @see {@link Color.version}
+   */
+  public get version(): number {
+    let version = 0;
+    for (const color of this.colors) {
+      version += color.version;
+    }
+    return version;
+  }
+
+  /**
    * Returns components of the color for value from the domain.
    *
    * **Note:** Don't keep reference to the returned array because it is reused between {@link get} invocations.
    *
    * @param value The domain value.
    * @param model The color model that provides the components for interpolation.
+   * @param interpolatorFactory The function that returns an interpolator.
    * @returns The read-only components array.
    */
-  public get(model: ColorModel, value: number): readonly number[] {
-    const {colors, domain, tempComponents, ccc, splines} = this;
+  public get(model: ColorModel, value: number, interpolatorFactory: InterpolatorFactory): readonly number[] {
+    const {colors, domain, _tempComponents, _componentValues, _interpolators} = this;
 
     const domainLength = domain.length;
 
-    let splinesChanged = false;
-    let componentsLength = 0;
-    for (let i = 0; i < domainLength; ++i) {
-      const components = colors[i].get(model);
+    // Empty gradients are rendered as black
+    if (domainLength === 0) {
+      if (this._model !== model) {
+        model.rgbToComponents(blackRgb, _tempComponents);
+      }
+      this._model = model;
+      return _tempComponents;
+    }
 
-      componentsLength = components.length;
-      for (let j = 0; j < componentsLength; ++j) {
-        ccc[j] ||= [];
-        if (ccc[j][i] !== components[j]) {
-          splinesChanged = true;
-          ccc[j][i] = components[j];
+    if (domainLength === 1) {
+      return this.colors[0].get(model);
+    }
+
+    const nextVersion = this.version;
+
+    // Check if component interpolators must be re-created
+    if (this._prevVersion !== nextVersion || this._model !== model || this._interpolatorFactory !== interpolatorFactory) {
+
+      this._prevVersion = nextVersion;
+      this._model = model;
+      this._interpolatorFactory = interpolatorFactory;
+
+      for (let i = 0; i < domainLength; ++i) {
+        const components = colors[i].get(model);
+
+        for (let j = 0; j < components.length; ++j) {
+          _componentValues[j] ||= new Float32Array(domainLength);
+          _componentValues[j][i] = components[j];
         }
       }
-    }
-    if (splinesChanged) {
-      for (let i = 0; i < componentsLength; ++i) {
-        populateSplines(domain, ccc[i], splines[i] ||= []);
+
+      // Create interpolators
+      for (let i = 0; i < _componentValues.length; ++i) {
+        _interpolators[i] = interpolatorFactory(domain, _componentValues[i]);
       }
     }
 
-    for (let i = 0; i < componentsLength; ++i) {
-      tempComponents[i] = spline(domain, ccc[i], value, splines[i]);
+    // Interpolate components
+    for (let i = 0; i < _interpolators.length; ++i) {
+      _tempComponents[i] = _interpolators[i](value);
     }
 
-    // const domainLength = domain.length;
-    //
-    // if (domainLength === 0) {
-    //   model.rgbToComponents(blackRgb, tempComponents);
-    //   return tempComponents;
-    // }
-    //
-    // let i = 0;
-    // while (i < domainLength && domain[i] <= value) {
-    //   i++;
-    // }
-    // if (i === 0 || domainLength === 1) {
-    //   return colors[0].get(model);
-    // }
-    // if (i === domainLength) {
-    //   return colors[domainLength - 1].get(model);
-    // }
-    //
-    // const ratio = (value - domain[i - 1]) / (domain[i] - domain[i - 1]);
-    //
-    // const components1 = colors[i - 1].get(model);
-    // const components2 = colors[i].get(model);
-    //
-    // for (let i = 0; i < components1.length; ++i) {
-    //   tempComponents[i] = components1[i] + ratio * (components2[i] - components1[i]);
-    // }
-
-    return tempComponents;
+    return _tempComponents;
   }
 }

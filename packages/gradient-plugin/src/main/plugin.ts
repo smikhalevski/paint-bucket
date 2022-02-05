@@ -1,6 +1,6 @@
 import {Color, color, Gradient, Rgb} from '@paint-bucket/core';
 import {toColor} from '@paint-bucket/plugin-utils';
-import {parallelSort, range, swap} from 'numeric-wrench';
+import {lerp, parallelSort, range, swap} from 'numeric-wrench';
 
 const domainCache = new Map<number, number[]>();
 
@@ -10,34 +10,40 @@ for (let i = 0; i < 10; ++i) {
 
 const domain2 = [0, 1];
 
-color.gradient = (inputColors, domain) => {
-  const colors = inputColors.map(toColor);
-
-  if (domain) {
-    domain = domain.slice(0);
-    parallelSort(domain, (i, j) => swap(colors, i, j));
-  } else {
-    domain = domainCache.get(colors.length) || range(colors.length);
+color.gradient = (colors, domain) => {
+  if (!domain) {
+    return new Gradient(colors.map(toColor), domainCache.get(colors.length) || range(colors.length));
   }
-  return new Gradient(colors, domain);
+
+  const domainLength = Math.min(colors.length, domain.length);
+  const mappedColors: Color[] = [];
+
+  for (let i = 0; i < domainLength; ++i) {
+    mappedColors.push(toColor(colors[i]));
+  }
+
+  domain = domain.slice(0, domainLength);
+  parallelSort(domain, (i, j) => swap(mappedColors, i, j));
+
+  return new Gradient(mappedColors, domain);
 };
 
 const gradientPrototype = Gradient.prototype;
 
-gradientPrototype.at = function (this: Gradient, x, model = Rgb) {
-  return new Color(model, this.get(model, x).slice(0));
+gradientPrototype.at = function (this: Gradient, x, model = Rgb, interpolatorFactory = lerp) {
+  return new Color(model, this.get(model, x, interpolatorFactory).slice(0));
 };
 
 gradientPrototype.palette = function (this: Gradient, n, model = Rgb) {
   const {domain} = this;
   const colors: Color[] = [];
 
-  const minimum = domain[0];
-  const maximum = domain[domain.length - 1];
-  const d = maximum - minimum;
+  const x0 = domain[0];
+  const x1 = domain[domain.length - 1];
+  const dx = x1 - x0;
 
   for (let i = 0; i < n; ++i) {
-    colors.push(this.at(minimum + i / (n - 1) * d, model));
+    colors.push(this.at(x0 + i / (n - 1) * dx, model));
   }
   return colors;
 };

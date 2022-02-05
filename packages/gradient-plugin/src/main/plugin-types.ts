@@ -1,4 +1,4 @@
-import {Color, Gradient, ColorLike, ColorModel} from '@paint-bucket/core';
+import {Color, ColorLike, ColorModel, Gradient, InterpolatorFactory} from '@paint-bucket/core';
 
 declare module '@paint-bucket/core/lib/Color' {
 
@@ -35,9 +35,10 @@ declare module '@paint-bucket/core/lib/Gradient' {
      *
      * @param x The value from the gradient domain for which the color is requested.
      * @param [model = Rgb] The color model that should be used for interpolation.
+     * @param [interpolatorFactory = lerp] The function that returns a color component interpolator.
      * @return The new {@link Color} instance.
      */
-    at(x: number, model?: ColorModel): Color;
+    at(x: number, model?: ColorModel, interpolatorFactory?: InterpolatorFactory): Color;
 
     /**
      * Returns the list of equally spaced colors from the gradient.

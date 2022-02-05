@@ -342,10 +342,17 @@ Results are in millions of operations per second. The higher number is better.
 | `color('#abcdefff')` | 4.97 | 0.97 | 0.86 |
 | `color(0xAB_CD_EF)` | 9.92 | 5.87 | 1.61 |
 | `color('rgba(128, 128, 128, 0.5)')` | 1.70 | 0.89 | 0.09 |
-| `color(…).saturation(50).rgb()` | 7.35 | 0.81 | 0.66 |
-| `color(…).hue(90).lightness(10).rgb()` | 7.28 | 0.41 | — |
+| `c.saturation(50).rgb()` † | 7.35 | 0.81 | 0.66 |
+| `c.hue(90).lightness(10).rgb()` † | 7.28 | 0.41 | — |
 | `color.gradient(['#fff', '#000'])` | 3.08 | — | 0.26 |
-| `color.gradient(…).at(0.5)` | 10.47 | — | 2.39 |
+| `g.at(0.5, Rgb, lerp)` ‡ | 8.45 | — | 2.49 |
+| `g.at(0.5, Lab, csplineMonot)` ‡ | 7.38 | — | 2.57 |
+
+† Variable `c` holds the `Color` instance.
+
+‡ Variable `g` holds the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/numeric-wrench/#lerp)
+and [`csplineMonot`](https://github.com/smikhalevski/numeric-wrench/#csplinemonot) are linear and monotonous cubic
+spline interpolation factories respectively.
 
 # ❤️
 
