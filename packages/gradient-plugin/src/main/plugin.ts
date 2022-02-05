@@ -1,26 +1,25 @@
 import {Color, color, Gradient, Rgb} from '@paint-bucket/core';
 import {toColor} from '@paint-bucket/plugin-utils';
-import {parallelSort} from './parallelSort';
-import {linearDomain} from './linearDomain';
+import {parallelSort, range, swap} from 'numeric-wrench';
 
 const domainCache = new Map<number, number[]>();
 
 for (let i = 0; i < 10; ++i) {
-  domainCache.set(i, linearDomain(0, 1, i, []));
+  domainCache.set(i, range(i));
 }
 
 const domain2 = [0, 1];
 
-color.gradient = (colors, domain) => {
-  const c = colors.map(toColor);
+color.gradient = (inputColors, domain) => {
+  const colors = inputColors.map(toColor);
 
   if (domain) {
     domain = domain.slice(0);
-    parallelSort(c, domain);
+    parallelSort(domain, (i, j) => swap(colors, i, j));
   } else {
-    domain = domainCache.get(colors.length) || linearDomain(0, 1, colors.length, []);
+    domain = domainCache.get(colors.length) || range(colors.length);
   }
-  return new Gradient(c, domain);
+  return new Gradient(colors, domain);
 };
 
 const gradientPrototype = Gradient.prototype;
