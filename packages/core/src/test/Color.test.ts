@@ -3,6 +3,7 @@ import {color, Color, ColorModel, Rgb} from '../main';
 describe('Color', () => {
 
   const abcColorModel: ColorModel = {
+    componentCount: 4,
     componentsToRgb(components, rgb) {
       rgb[0] = components[0] / 0xFF;
       rgb[1] = components[1] / 0xFF;
@@ -92,6 +93,7 @@ describe('Color', () => {
     const color = new Color();
 
     const abcColorModelMock: ColorModel = {
+      componentCount: 4,
       componentsToRgb: jest.fn(abcColorModel.componentsToRgb),
       rgbToComponents: jest.fn(abcColorModel.rgbToComponents),
     };
@@ -106,6 +108,7 @@ describe('Color', () => {
     const color = new Color(Rgb, [1, 1, 1, 1]);
 
     const abcColorModelMock: ColorModel = {
+      componentCount: 4,
       componentsToRgb: jest.fn(abcColorModel.componentsToRgb),
       rgbToComponents: jest.fn(abcColorModel.rgbToComponents),
     };

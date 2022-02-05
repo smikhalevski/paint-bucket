@@ -1,5 +1,6 @@
 import {ColorModel, Rgb} from './color-model';
 import {Color} from './Color';
+import {clamp1} from 'numeric-wrench';
 
 // Black RGBa color that is returned if gradient has zero domain size
 const blackRgb: Rgb = [0, 0, 0, 1];
@@ -129,7 +130,7 @@ export class Gradient {
 
     // Interpolate components
     for (let i = 0; i < componentCount; ++i) {
-      _tempComponents[i] = _interpolators[i](value);
+      _tempComponents[i] = clamp1(_interpolators[i](value));
     }
 
     return _tempComponents;

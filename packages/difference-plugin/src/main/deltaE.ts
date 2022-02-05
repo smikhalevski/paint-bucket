@@ -1,8 +1,6 @@
-import {clamp, deg, sq, rad} from 'numeric-wrench';
+import {clamp, deg, hypot, rad, sq} from 'numeric-wrench';
 
 const {abs, atan2, cos, exp, sin, sqrt} = Math;
-
-const hypot = Math.hypot || ((x, y) => sqrt(x * x + y + y));
 
 /**
  * Computes the CIEDE2000 color-difference.
@@ -28,12 +26,12 @@ export function deltaE(lab1: readonly number[], lab2: readonly number[]): number
   let [L2, A2, B2] = lab2;
 
   L1 *= 255;
-  A1 *= 127;
-  B1 *= 127;
+  A1 = (A1 * 2 - 1) * 127;
+  B1 = (B1 * 2 - 1) * 127;
 
   L2 *= 255;
-  A2 *= 127;
-  B2 *= 127;
+  A2 = (A2 * 2 - 1) * 127;
+  B2 = (B2 * 2 - 1) * 127;
 
   const Cab1 = hypot(A1, B1); // (2)
   const Cab2 = hypot(A2, B2); // (2)

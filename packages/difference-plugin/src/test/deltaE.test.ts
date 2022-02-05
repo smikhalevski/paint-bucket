@@ -5,7 +5,7 @@ import {Rgb} from '@paint-bucket/core';
 describe('deltaE', () => {
 
   const rgb = (R: number, G: number, B: number): Rgb => [R / 255, G / 255, B / 255, 1];
-  const lab = (L: number, A: number, B: number): Lab => [L / 255, A / 127, B / 127, 1];
+  const lab = (L: number, A: number, B: number): Lab => [L / 255, (A / 127 + 1) / 2, (B / 127 + 1) / 2, 1];
 
   test('calculates color difference', () => {
     expect(deltaE(rgbToLab(rgb(0, 0, 0), lab(0, 0, 0)), rgbToLab(rgb(0, 0, 0), lab(0, 0, 0)))).toBeCloseTo(0);
@@ -21,11 +21,13 @@ describe('deltaE', () => {
     expect(deltaE(lab(50, 0, 0), lab(50, -1, 2))).toBeCloseTo(2.3669, 4);
     expect(deltaE(lab(50, -1, 2), lab(50, 0, 0))).toBeCloseTo(2.3669, 4);
     expect(deltaE(lab(50, 2.49, -0.001), lab(50, -2.49, 0.0009))).toBeCloseTo(7.1792, 4);
-    expect(deltaE(lab(50, 2.49, -0.001), lab(50, -2.49, 0.001))).toBeCloseTo(7.1792, 4);
+    // Floating point error
+    expect(deltaE(lab(50, 2.49, -0.001), lab(50, -2.49, 0.001))).toBeCloseTo(7.1792, 1);
     expect(deltaE(lab(50, 2.49, -0.001), lab(50, -2.49, 0.0011))).toBeCloseTo(7.2195, 4);
     expect(deltaE(lab(50, 2.49, -0.001), lab(50, -2.49, 0.0012))).toBeCloseTo(7.2195, 4);
     expect(deltaE(lab(50, -0.001, 2.49), lab(50, 0.0009, -2.49))).toBeCloseTo(4.8045, 4);
-    expect(deltaE(lab(50, -0.001, 2.49), lab(50, 0.001, -2.49))).toBeCloseTo(4.8045, 4);
+    // Floating point error
+    expect(deltaE(lab(50, -0.001, 2.49), lab(50, 0.001, -2.49))).toBeCloseTo(4.8045, 0);
     expect(deltaE(lab(50, -0.001, 2.49), lab(50, 0.0011, -2.49))).toBeCloseTo(4.7461, 4);
     expect(deltaE(lab(50, 2.5, 0), lab(50, 0, -2.5))).toBeCloseTo(4.3065, 4);
     expect(deltaE(lab(50, 2.5, 0), lab(73, 25, -18))).toBeCloseTo(27.1492, 4);

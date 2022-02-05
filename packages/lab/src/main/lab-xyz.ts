@@ -1,6 +1,6 @@
 import {Lab} from './lab';
-import {Xyz, whitepoint} from '@paint-bucket/xyz';
-import {clamp, clamp1} from 'numeric-wrench';
+import {whitepoint, Xyz} from '@paint-bucket/xyz';
+import {clamp1} from 'numeric-wrench';
 
 function pow3(x: number): number {
   return x * x * x;
@@ -29,8 +29,8 @@ export function xyzToLab(xyz: Xyz, lab: Lab, white = whitepoint[10].D65): Lab {
   const fZ = rotateXyz(Z / white[2]);
 
   lab[0] = clamp1((1.16 * fY) - 0.16);
-  lab[1] = clamp(5 * (fX - fY), -1, 1);
-  lab[2] = clamp(2 * (fY - fZ), -1, 1);
+  lab[1] = clamp1((5 * (fX - fY) + 1) / 2);
+  lab[2] = clamp1((2 * (fY - fZ) + 1) / 2);
   lab[3] = xyz[3];
 
   return lab;
@@ -48,12 +48,15 @@ export function labToXyz(lab: Lab, xyz: Xyz, white = whitepoint[10].D65): Xyz {
 
   // Compute f, starting with the luminance-related term
   const fX = (L + 0.16) / 1.16;
-  const fY = A / 5 + fX;
-  const fZ = fX - B / 2;
+  const fY = (A * 2 - 1) / 5 + fX;
+  const fZ = fX - (B * 2 - 1) / 2;
 
-  const X = pow3(fY) > E ? pow3(fY) : (1.16 * fY - 0.16) / K;
+  const pow3Fy = pow3(fY);
+  const pow3Fz = pow3(fZ);
+
+  const X = pow3Fy > E ? pow3Fy : (1.16 * fY - 0.16) / K;
   const Y = L > K * E ? pow3((L + 0.16) / 1.16) : L / K;
-  const Z = pow3(fZ) > E ? pow3(fZ) : (1.16 * fZ - 0.16) / K;
+  const Z = pow3Fz > E ? pow3Fz : (1.16 * fZ - 0.16) / K;
 
   xyz[0] = clamp1(X * white[0]);
   xyz[1] = clamp1(Y * white[1]);
