@@ -104,6 +104,10 @@ import {ColorModel} from '@paint-bucket/core';
 
 const Cmyk: ColorModel = {
 
+  // The number of color components that this model uses:
+  // cyan, magenta, yellow, black, and alpha 
+  componentCount: 5,
+
   componentsToRgb(components: readonly number[], rgb: number[]): void {
     // Update items of the rgb array here
   },
@@ -267,7 +271,7 @@ import './plugin1.ts';
 
 const color = new Color().setRed(128);
 
-color.get(Rgb); // → [1, 0, 0, 1]
+color.get(Rgb); // → [0.5, 0, 0, 1]
 ```
 
 ## Extend color parsing
@@ -279,7 +283,7 @@ Using `Color` constructor and initializing colors using arrays of components isn
 import {color, Rgb} from '@paint-bucket/core';
 import './plugin1.ts';
 
-color().setRed(128).get(Rgb); // → [1, 0, 0, 1]
+color().setRed(128).get(Rgb); // → [0.5, 0, 0, 1]
 ```
 
 `color` function returns the `Color` instance. Using plugins, you can extend what arguments `color` function would
@@ -314,7 +318,6 @@ Color.overrideParser((next) => (name) => {
   }
 
   // If the name wasn't recognized then pass the argument to the next middleware
-  // (if awailable) or to the default parser implementation
   return next(value);
 });
 ```
@@ -348,11 +351,11 @@ Results are in millions of operations per second. The higher number is better.
 | `g.at(0.5, Rgb, lerp)` ‡ | 8.45 | — | 2.49 |
 | `g.at(0.5, Lab, csplineMonot)` ‡ | 7.38 | — | 2.57 |
 
-† Variable `c` holds the `Color` instance.
+† `c` is the `Color` instance.
 
-‡ Variable `g` holds the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/numeric-wrench/#lerp)
-and [`csplineMonot`](https://github.com/smikhalevski/numeric-wrench/#csplinemonot) are linear and monotonous cubic
-spline interpolation factories respectively.
+‡ `g` is the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/numeric-wrench/#lerp) and
+[`csplineMonot`](https://github.com/smikhalevski/numeric-wrench/#csplinemonot) are linear and monotonous cubic spline
+interpolation factories respectively.
 
 # ❤️
 
