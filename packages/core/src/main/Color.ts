@@ -55,6 +55,12 @@ export class Color {
   }
 
   /**
+   * The color value version that is auto-incremented every time the {@link use} method is called. Version can be used
+   * to track that the color value was changed, for example to invalidate caches that rely on current color value.
+   */
+  public version = 0;
+
+  /**
    * The current color model.
    */
   protected model;
@@ -138,6 +144,9 @@ export class Color {
    */
   public use(model: ColorModel): number[] {
     let {components, _tempComponents} = this;
+
+    // Let others know that the change was applied
+    ++this.version;
 
     // Reuse temp components when models are matching
     if (this._tempModel === model && _tempComponents) {

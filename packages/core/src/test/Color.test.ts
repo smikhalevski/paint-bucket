@@ -78,6 +78,16 @@ describe('Color', () => {
     expect(color.get(Rgb)).toEqual([1, 1, 1, 1]);
   });
 
+  test('bumps color version', () => {
+    const color = new Color();
+
+    color.use(abcColorModel);
+    color.use(abcColorModel);
+    color.use(abcColorModel);
+
+    expect(color.version).toBe(3);
+  });
+
   test('reuses temp components between two get calls', () => {
     const color = new Color();
 
