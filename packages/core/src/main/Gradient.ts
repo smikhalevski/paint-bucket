@@ -10,8 +10,8 @@ export type Interpolator = (x: number) => number;
 /**
  * Factory that returns an interpolator function for given pivot points.
  *
- * @see [lerp](https://smikhalevski.github.io/numeric-wrench/modules.html#lerp)
- * @see [csplineMonot](https://smikhalevski.github.io/numeric-wrench/modules.html#csplineMonot)
+ * @see {@link https://smikhalevski.github.io/numeric-wrench/modules.html#lerp lerp}
+ * @see {@link https://smikhalevski.github.io/numeric-wrench/modules.html#csplineMonot csplineMonot}
  */
 export type InterpolatorFactory = (xs: ArrayLike<number>, ys: ArrayLike<number>) => Interpolator;
 
