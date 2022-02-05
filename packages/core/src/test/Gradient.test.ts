@@ -23,4 +23,16 @@ describe('get', () => {
     expect(gradient.get(Rgb, 0.5, lerp)).toEqual([0, 0, 0, 1]);
     expect(gradient.get(Rgb, 0.75, lerp)).toEqual([0.5, 0, 0, 1]);
   });
+
+  test('detects if color was changed', () => {
+    const color1 = new Color(Rgb, [1, 1, 1, 1]);
+    const color2 = new Color();
+    const gradient = new Gradient([color1, color2], [0, 1]);
+
+    expect(gradient.get(Rgb, 0.5, lerp)).toEqual([0.5, 0.5, 0.5, 1]);
+
+    color1.use(Rgb)[1] = 0.5;
+
+    expect(gradient.get(Rgb, 0.5, lerp)).toEqual([0.5, 0.25, 0.5, 1]);
+  });
 });
