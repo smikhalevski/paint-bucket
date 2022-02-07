@@ -5,7 +5,11 @@ import {clamp1} from 'numeric-wrench';
 // Black RGBa color that is returned if gradient has zero domain size
 const blackRgb: Rgb = [0, 0, 0, 1];
 
-export type Interpolator = (x: number) => number;
+export interface InterpolatorLike {
+  (x: number): number;
+
+  update?(xs: ArrayLike<number>, ys: ArrayLike<number>): void;
+}
 
 /**
  * Factory that returns an interpolator function for given pivot points.
@@ -13,7 +17,7 @@ export type Interpolator = (x: number) => number;
  * @see {@link https://smikhalevski.github.io/numeric-wrench/modules.html#lerp lerp}
  * @see {@link https://smikhalevski.github.io/numeric-wrench/modules.html#csplineMonot csplineMonot}
  */
-export type InterpolatorFactory = (xs: ArrayLike<number>, ys: ArrayLike<number>) => Interpolator;
+export type InterpolatorFactory = (xs: ArrayLike<number>, ys: ArrayLike<number>) => InterpolatorLike;
 
 /**
  * Provides color gradient manipulation API that is extensible via plugins.
@@ -47,8 +51,8 @@ export class Gradient {
    * Color component interpolators that were produced by {@link _interpolatorFactory} for components provided by
    * {@link _model} for colors with cumulative version {@link _prevVersion}.
    */
-  private _interpolators: Interpolator[] = [];
-  private _componentValues: Float32Array[] = [];
+  private _interpolators: InterpolatorLike[] = [];
+  private _componentValues: number[][] = [];
 
   /**
    * Creates the new {@link Gradient} instance.
@@ -85,7 +89,7 @@ export class Gradient {
    * @returns The read-only components array.
    */
   public get(model: ColorModel, value: number, interpolatorFactory: InterpolatorFactory): readonly number[] {
-    const {colors, domain, _tempComponents, _componentValues, _interpolators} = this;
+    const {colors, domain, _tempComponents, _componentValues, _interpolatorFactory, _interpolators} = this;
 
     const {componentCount} = model;
     const domainLength = domain.length;
@@ -111,8 +115,8 @@ export class Gradient {
       for (let i = 0; i < domainLength; ++i) {
         const components = colors[i].get(model);
 
-        for (let j = 0; j < components.length; ++j) {
-          _componentValues[j] ||= new Float32Array(domainLength);
+        for (let j = 0; j < componentCount; ++j) {
+          _componentValues[j] ||= [];
           _componentValues[j][i] = components[j];
         }
       }
@@ -120,10 +124,14 @@ export class Gradient {
       this._model = model;
     }
 
-    // Update interpolators
-    if (colorsUpdated || this._interpolatorFactory !== interpolatorFactory) {
+    // Create or update interpolators
+    if (colorsUpdated) {
       for (let i = 0; i < componentCount; ++i) {
-        _interpolators[i] = interpolatorFactory(domain, _componentValues[i]);
+        if (_interpolatorFactory === interpolatorFactory && _interpolators.length > i && _interpolators[i].update) {
+          _interpolators[i].update!(domain, _componentValues[i]);
+        } else {
+          _interpolators[i] = interpolatorFactory(domain, _componentValues[i]);
+        }
       }
       this._interpolatorFactory = interpolatorFactory;
     }

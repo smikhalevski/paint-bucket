@@ -152,7 +152,7 @@ export class Color {
     if (this._tempModel === model && _tempComponents) {
       this.model = model;
 
-      for (let i = 0; i < _tempComponents.length; ++i) {
+      for (let i = 0; i < model.componentCount; ++i) {
         components[i] = _tempComponents[i];
       }
     }
