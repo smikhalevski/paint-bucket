@@ -1,4 +1,8 @@
-# Paint Bucket 🪣 [![build](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml/badge.svg?branch=master&event=push)](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml)
+# Paint Bucket [![build](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml/badge.svg?branch=master&event=push)](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml)
+
+<a href="#readme">
+  <img alt="Red paint" src="https://github.com/smikhalevski/paint-bucket/raw/next/paint.png"/>
+</a>
 
 [Highly performant](#performance), [extensible](#plugins), and
 [tiny](https://bundlephobia.com/package/paint-bucket) color manipulation library.
@@ -9,7 +13,7 @@ npm install --save-prod paint-bucket
 
 # Usage
 
-📚 [API documentation is available here.](https://smikhalevski.github.io/paint-bucket/classes/core_src_main.Color.html)
+🪣 [API documentation is available here.](https://smikhalevski.github.io/paint-bucket/classes/core_src_main.Color.html)
 
 ```ts
 import {color} from 'paint-bucket';
