@@ -1,5 +1,5 @@
 import {ColorModel, Rgb} from './color-model';
-import {Parameter} from './utility-types';
+import {OverloadParameters} from './utility-types';
 
 // RGBa color components that are used for implicit model-to-model conversions
 const tempRgb: Rgb = [0, 0, 0, 1];
@@ -12,7 +12,7 @@ export const color = ((value) => Color.parser(value)) as ColorFunction;
 /**
  * Re-declare this interface in the plugin package to extend {@link color} function signature.
  *
- * **Note:** Only one-argument signatures are allowed.
+ * **Note:** The first argument of each overload becomes a part of {@link ColorLike} union.
  */
 export interface ColorFunction {
 
@@ -33,7 +33,7 @@ export interface ColorFunction {
 /**
  * The type of the value that can be parsed into a {@link Color} instance using {@link color} function.
  */
-export type ColorLike = Parameter<ColorFunction>;
+export type ColorLike = OverloadParameters<ColorFunction>[0];
 
 /**
  * Provides color manipulation API that is extensible via plugins.
