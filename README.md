@@ -112,10 +112,10 @@ const Cmyk: ColorModel = {
   // cyan, magenta, yellow, black, and alpha 
   componentCount: 5,
 
-  componentsToRgb(components: number[], rgb: Rgb): void {
+  componentsToRgb(components: readonly number[], rgb: Rgb): void {
     // Update elements of the rgb array
   },
-  rgbToComponents(rgb: Rgb, components: number[]): void {
+  rgbToComponents(rgb: Readonly<Rgb>, components: number[]): void {
     // Update elements of the components array
   },
 };
