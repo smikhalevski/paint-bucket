@@ -357,8 +357,8 @@ Results are in millions of operations per second. The higher number is better.
 
 † `c` is the `Color` instance.
 
-‡ `g` is the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/numeric-wrench/#lerp) and
-[`csplineMonot`](https://github.com/smikhalevski/numeric-wrench/#csplinemonot) are linear and monotonous cubic spline
+‡ `g` is the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/algomatic/#lerp) and
+[`csplineMonot`](https://github.com/smikhalevski/algomatic/#csplinemonot) are linear and monotonous cubic spline
 interpolation factories respectively.
 
 # ❤️

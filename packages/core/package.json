@@ -33,5 +33,8 @@
   "bugs": {
     "url": "https://github.com/smikhalevski/paint-bucket/issues"
   },
-  "homepage": "https://github.com/smikhalevski/paint-bucket#readme"
+  "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
+  "dependencies": {
+    "algomatic": "^3.1.0"
+  }
 }

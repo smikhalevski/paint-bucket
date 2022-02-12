@@ -1,5 +1,5 @@
 import {Color, Gradient, Rgb} from '../main';
-import {lerp} from 'numeric-wrench';
+import {lerp} from 'algomatic';
 
 describe('get', () => {
 

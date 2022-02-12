@@ -1,5 +1,5 @@
 import {componentsToInt} from '@paint-bucket/plugin-utils';
-import {right} from 'numeric-wrench';
+import {right} from 'algomatic';
 
 export function stringifyRgb(rgb: readonly number[]): string {
   const [R, G, B, a] = rgb;

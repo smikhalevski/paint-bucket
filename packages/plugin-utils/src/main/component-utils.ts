@@ -1,4 +1,4 @@
-import {and, byte, left, or, right, xor} from 'numeric-wrench';
+import {and, byte, left, or, right, xor} from 'algomatic';
 
 const {round} = Math;
 

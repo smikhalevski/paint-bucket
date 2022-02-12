@@ -1,6 +1,6 @@
 import {ColorModel, Rgb} from './color-model';
 import {Color} from './Color';
-import {clamp1} from 'numeric-wrench';
+import {clamp1} from 'algomatic';
 
 // Black RGBa color that is returned if gradient has zero domain size
 const blackRgb: Rgb = [0, 0, 0, 1];
@@ -14,8 +14,8 @@ export interface InterpolatorLike {
 /**
  * Factory that returns an interpolator function for given pivot points.
  *
- * @see {@link https://smikhalevski.github.io/numeric-wrench/modules.html#lerp lerp}
- * @see {@link https://smikhalevski.github.io/numeric-wrench/modules.html#csplineMonot csplineMonot}
+ * @see {@link https://smikhalevski.github.io/algomatic/modules.html#lerp lerp}
+ * @see {@link https://smikhalevski.github.io/algomatic/modules.html#csplineMonot csplineMonot}
  */
 export type InterpolatorFactory = (xs: ArrayLike<number>, ys: ArrayLike<number>) => InterpolatorLike;
 

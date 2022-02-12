@@ -6,7 +6,7 @@ import {
   normalizeComponents,
   toColor,
 } from '@paint-bucket/plugin-utils';
-import {clamp1, isNumeric, right} from 'numeric-wrench';
+import {clamp1, isNumeric, right} from 'algomatic';
 
 Color.overrideParser((next) => (value) => {
   if (typeof value === 'number') {

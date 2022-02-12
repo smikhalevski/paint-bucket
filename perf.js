@@ -3,7 +3,7 @@ const chalk = require('chalk');
 const tinycolor2 = require('tinycolor2');
 const chroma = require('chroma-js');
 const {color, Rgb, Lab} = require('paint-bucket');
-const {csplineMonot, lerp} = require('numeric-wrench');
+const {csplineMonot, lerp} = require('algomatic');
 
 const rgb = [0xAB, 0xCD, 0xEF];
 const hexColors = ['#fff', '#000'];

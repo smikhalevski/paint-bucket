@@ -1,6 +1,6 @@
 import {Color, color, Gradient, Rgb} from '@paint-bucket/core';
 import {toColor} from '@paint-bucket/plugin-utils';
-import {lerp, range, sort, swap} from 'numeric-wrench';
+import {lerp, range, sort, swap} from 'algomatic';
 
 const domainCache = new Map<number, number[]>();
 

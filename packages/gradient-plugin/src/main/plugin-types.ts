@@ -38,8 +38,8 @@ declare module '@paint-bucket/core/lib/Gradient' {
      * @param [interpolatorFactory = lerp] The function that returns a color component interpolator.
      * @return The new {@link Color} instance.
      *
-     * @see {@link https://smikhalevski.github.io/numeric-wrench/modules.html#lerp lerp}
-     * @see {@link https://smikhalevski.github.io/numeric-wrench/modules.html#csplineMonot csplineMonot}
+     * @see {@link https://smikhalevski.github.io/algomatic/modules.html#lerp lerp}
+     * @see {@link https://smikhalevski.github.io/algomatic/modules.html#csplineMonot csplineMonot}
      */
     at(x: number, model?: ColorModel, interpolatorFactory?: InterpolatorFactory): Color;
 
