@@ -145,7 +145,6 @@ export class Color {
   public use(model: ColorModel): number[] {
     let {components, _tempComponents} = this;
 
-    // Let others know that the change was applied
     ++this.version;
 
     // Reuse temp components when models are matching

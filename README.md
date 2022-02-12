@@ -104,7 +104,7 @@ Paint Bucket provides an abstraction for color models which are represented as o
 color components between color model representation and RGB. Color components are an array of numbers.
 
 ```ts
-import {ColorModel} from '@paint-bucket/core';
+import {ColorModel, Rgb} from '@paint-bucket/core';
 
 const Cmyk: ColorModel = {
 
@@ -112,11 +112,11 @@ const Cmyk: ColorModel = {
   // cyan, magenta, yellow, black, and alpha 
   componentCount: 5,
 
-  componentsToRgb(components: readonly number[], rgb: number[]): void {
-    // Update items of the rgb array here
+  componentsToRgb(components: number[], rgb: Rgb): void {
+    // Update elements of the rgb array
   },
-  rgbToComponents(rgb: readonly number[], components: number[]): void {
-    // Update items of the components array here
+  rgbToComponents(rgb: Rgb, components: number[]): void {
+    // Update elements of the components array
   },
 };
 ```
