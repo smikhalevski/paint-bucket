@@ -349,17 +349,17 @@ Results are in millions of operations per second. The higher number is better.
 | `color('#abcdefff')` | 4.97 | 0.97 | 0.86 |
 | `color(0xAB_CD_EF)` | 9.92 | 5.87 | 1.61 |
 | `color('rgba(128, 128, 128, 0.5)')` | 1.70 | 0.89 | 0.09 |
-| `c.saturation(50).rgb()` † | 7.35 | 0.81 | 0.66 |
-| `c.hue(90).lightness(10).rgb()` † | 7.28 | 0.41 | — |
+| `c.saturation(50).rgb()` <sup>1</sup> | 7.35 | 0.81 | 0.66 |
+| `c.hue(90).lightness(10).rgb()` <sup>1</sup> | 7.28 | 0.41 | — |
 | `color.gradient(['#fff', '#000'])` | 3.08 | — | 0.26 |
-| `g.at(0.5, Rgb, lerp)` ‡ | 8.45 | — | 2.49 |
-| `g.at(0.5, Lab, csplineMonot)` ‡ | 7.38 | — | 2.57 |
+| `g.at(0.5, Rgb, lerp)` <sup>2</sup> | 6.89 | — | 2.49 |
+| `g.at(0.5, Lab, csplineMonot)` <sup>2</sup> | 6.50 | — | 2.57 |
 
-† `c` is the `Color` instance.
+<sup>1</sup> `c` is the `Color` instance.
 
-‡ `g` is the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/algomatic/#lerp) and
+<sup>2</sup> `g` is the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/algomatic/#lerp) and
 [`csplineMonot`](https://github.com/smikhalevski/algomatic/#csplinemonot) are linear and monotonous cubic spline
-interpolation factories respectively.
+interpolation factories respectively from [Algomatic](https://github.com/smikhalevski/algomatic).
 
 # ❤️
 
