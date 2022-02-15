@@ -1,7 +1,7 @@
 # Paint Bucket [![build](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml/badge.svg?branch=master&event=push)](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml)
 
 <a href="#readme">
-  <img alt="Red paint" src="https://github.com/smikhalevski/paint-bucket/raw/next/paint.png"/>
+  <img alt="Red paint" src="https://github.com/smikhalevski/paint-bucket/raw/master/paint.png"/>
 </a>
 
 [Highly performant](#performance), [extensible](#plugins), and
