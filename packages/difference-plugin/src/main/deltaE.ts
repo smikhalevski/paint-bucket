@@ -63,15 +63,15 @@ export function deltaE(lab1: readonly number[], lab2: readonly number[]): number
       + 0.32 * cos(rad(3 * aHp + 6))
       - 0.20 * cos(rad(4 * aHp - 63)); // (15)
 
-  const q = (aHp - 275) / 25;
-  const dro = 30 * exp(-q * q); // (16)
+  const t1 = (aHp - 275) / 25;
+  const dro = 30 * exp(-t1 * t1); // (16)
 
   const aCp7 = aCp ** 7;
 
   const rC = sqrt(aCp7 / (aCp7 + 25 ** 7)); // (17)
 
-  const al50 = aL - 50
-  const aL2 = al50 * al50;
+  const t2 = aL - 50;
+  const aL2 = t2 * t2;
   const sL = 1 + 0.015 * aL2 / sqrt(20 + aL2); // (18)
 
   const sC = 1 + 0.045 * aCp; // (19)
@@ -81,9 +81,9 @@ export function deltaE(lab1: readonly number[], lab2: readonly number[]): number
 
   const dCpSc = dCp / sC;
   const dHpSh = dHp / sH;
-  const dLsL = dL / sL
+  const t3 = dL / sL;
 
-  return clamp(sqrt(dLsL * dLsL + dCpSc * dCpSc + dHpSh * dHpSh + rT * dCpSc * dHpSh), 0, 100); // (22)
+  return clamp(sqrt(t3 * t3 + dCpSc * dCpSc + dHpSh * dHpSh + rT * dCpSc * dHpSh), 0, 100); // (22)
 }
 
 // (7)
