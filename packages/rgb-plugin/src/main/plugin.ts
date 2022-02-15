@@ -6,7 +6,7 @@ import {
   normalizeComponents,
   toColor,
 } from '@paint-bucket/plugin-utils';
-import {clamp1, isNumeric, lerp, right} from 'numeric-wrench';
+import {clamp1, isNumeric, right} from 'algomatic';
 
 Color.overrideParser((next) => (value) => {
   if (typeof value === 'number') {
@@ -150,9 +150,9 @@ colorPrototype.mix = function (this: Color, color, ratio) {
   if (isNumeric(ratio)) {
     ratio = clamp1(ratio);
 
-    rgb1[0] = lerp(ratio, rgb1[0], rgb2[0]);
-    rgb1[1] = lerp(ratio, rgb1[1], rgb2[1]);
-    rgb1[2] = lerp(ratio, rgb1[2], rgb2[2]);
+    rgb1[0] += ratio * (rgb2[0] - rgb1[0]);
+    rgb1[1] += ratio * (rgb2[1] - rgb1[1]);
+    rgb1[2] += ratio * (rgb2[2] - rgb1[2]);
   }
   return this;
 };

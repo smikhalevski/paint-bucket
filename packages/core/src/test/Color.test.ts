@@ -3,6 +3,7 @@ import {color, Color, ColorModel, Rgb} from '../main';
 describe('Color', () => {
 
   const abcColorModel: ColorModel = {
+    componentCount: 4,
     componentsToRgb(components, rgb) {
       rgb[0] = components[0] / 0xFF;
       rgb[1] = components[1] / 0xFF;
@@ -78,10 +79,31 @@ describe('Color', () => {
     expect(color.get(Rgb)).toEqual([1, 1, 1, 1]);
   });
 
+  test('bumps color version on use', () => {
+    const color = new Color();
+
+    color.use(abcColorModel);
+    color.use(abcColorModel);
+    color.use(abcColorModel);
+
+    expect(color.version).toBe(3);
+  });
+
+  test('does not bump color version on get', () => {
+    const color = new Color();
+
+    color.get(abcColorModel);
+    color.get(abcColorModel);
+    color.get(abcColorModel);
+
+    expect(color.version).toBe(0);
+  });
+
   test('reuses temp components between two get calls', () => {
     const color = new Color();
 
     const abcColorModelMock: ColorModel = {
+      componentCount: 4,
       componentsToRgb: jest.fn(abcColorModel.componentsToRgb),
       rgbToComponents: jest.fn(abcColorModel.rgbToComponents),
     };
@@ -96,6 +118,7 @@ describe('Color', () => {
     const color = new Color(Rgb, [1, 1, 1, 1]);
 
     const abcColorModelMock: ColorModel = {
+      componentCount: 4,
       componentsToRgb: jest.fn(abcColorModel.componentsToRgb),
       rgbToComponents: jest.fn(abcColorModel.rgbToComponents),
     };

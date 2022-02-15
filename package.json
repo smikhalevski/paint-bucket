@@ -26,19 +26,19 @@
     "./packages/paint-bucket"
   ],
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^13.1.3",
     "@smikhalevski/perf-test": "^1.0.0",
-    "@types/jest": "^27.0.1",
+    "@types/jest": "^27.4.0",
     "chalk": "^4.1.2",
-    "chroma-js": "^2.1.2",
-    "jest": "^27.0.2",
+    "chroma-js": "^2.4.2",
+    "jest": "^27.5.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.50.5",
-    "terser": "^5.7.0",
+    "rollup": "^2.67.0",
+    "terser": "^5.10.0",
     "tinycolor2": "^1.4.2",
-    "ts-jest": "^27.0.2",
+    "ts-jest": "^27.1.3",
     "tslib": "^2.3.1",
-    "typedoc": "^0.22.10",
-    "typescript": "^4.4.3"
+    "typedoc": "^0.22.11",
+    "typescript": "^4.5.5"
   }
 }

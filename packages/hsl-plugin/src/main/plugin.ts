@@ -1,7 +1,7 @@
 import {Color, color} from '@paint-bucket/core';
 import {componentsToInt, createAccessor, intToComponents, normalizeComponents} from '@paint-bucket/plugin-utils';
 import {Hsl} from '@paint-bucket/hsl';
-import {clamp1, cycle, isNumeric, right} from 'numeric-wrench';
+import {clamp1, cycle, isNumeric, right} from 'algomatic';
 
 color.hsl = (hsl) => new Color().hsl(hsl);
 

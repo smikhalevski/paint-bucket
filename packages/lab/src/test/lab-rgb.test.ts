@@ -5,8 +5,8 @@ describe('rgbToLab', () => {
   test('converts black RGB to LAB', () => {
     expect(rgbToLab([0, 0, 0, 1], [0, 0, 0, 1])).toEqual([
       0,
-      0,
-      0,
+      0.5,
+      0.5,
       1,
     ]);
   });
@@ -14,8 +14,8 @@ describe('rgbToLab', () => {
   test('converts white RGB to LAB', () => {
     expect(rgbToLab([1, 1, 1, 1], [0, 0, 0, 1])).toEqual([
       0.9999999999999999,
-      0.011787084034966533,
-      0.056074162172674136,
+      0.5058935420174833,
+      0.5280370810863371,
       1,
     ]);
   });
@@ -29,7 +29,7 @@ describe('labToRgb', () => {
     expect(labToRgb(rgb, [0, 0, 0, 1])).toEqual([
       0.24381703043403744,
       0.40000000000000097,
-      0.15556194104213547,
+      0.15556194104213536,
       1,
     ]);
   });

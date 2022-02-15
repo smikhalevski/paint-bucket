@@ -1,5 +1,5 @@
 import {ColorModel, Rgb} from './color-model';
-import {Parameter} from './utility-types';
+import {OverloadParameters} from './utility-types';
 
 // RGBa color components that are used for implicit model-to-model conversions
 const tempRgb: Rgb = [0, 0, 0, 1];
@@ -12,7 +12,7 @@ export const color = ((value) => Color.parser(value)) as ColorFunction;
 /**
  * Re-declare this interface in the plugin package to extend {@link color} function signature.
  *
- * **Note:** Only one-argument signatures are allowed.
+ * **Note:** The first argument of each overload becomes a part of {@link ColorLike} union.
  */
 export interface ColorFunction {
 
@@ -33,7 +33,7 @@ export interface ColorFunction {
 /**
  * The type of the value that can be parsed into a {@link Color} instance using {@link color} function.
  */
-export type ColorLike = Parameter<ColorFunction>;
+export type ColorLike = OverloadParameters<ColorFunction>[0];
 
 /**
  * Provides color manipulation API that is extensible via plugins.
@@ -55,6 +55,12 @@ export class Color {
   }
 
   /**
+   * The color value version that is auto-incremented every time the {@link use} method is called. This version can be
+   * used to track that the color value was changed, for example to invalidate caches that rely on current color value.
+   */
+  public version = 0;
+
+  /**
    * The current color model.
    */
   protected model;
@@ -67,12 +73,12 @@ export class Color {
   /**
    * The color model that was last acquired by {@link get}.
    */
-  private tempModel?: ColorModel;
+  private _tempModel?: ColorModel;
 
   /**
-   * Color components of the {@link tempModel} color model.
+   * Color components of the {@link _tempModel} color model.
    */
-  private tempComponents?: number[];
+  private _tempComponents?: number[];
 
   /**
    * Creates a new {@link Color} instance.
@@ -106,23 +112,23 @@ export class Color {
    * @returns Read-only color components.
    */
   public get(model: ColorModel): readonly number[] {
-    let {components, tempComponents} = this;
+    let {components, _tempComponents} = this;
 
-    if (this.tempModel === model && tempComponents) {
-      return tempComponents;
+    if (this._tempModel === model && _tempComponents) {
+      return _tempComponents;
     }
     if (this.model === model) {
       return components;
     }
 
-    this.tempModel = model;
-    this.tempComponents = tempComponents ||= [];
+    this._tempModel = model;
+    this._tempComponents = _tempComponents ||= [];
 
     // Convert components to the temp model
     this.model.componentsToRgb(components, tempRgb);
-    model.rgbToComponents(tempRgb, tempComponents);
+    model.rgbToComponents(tempRgb, _tempComponents);
 
-    return tempComponents;
+    return _tempComponents;
   }
 
   /**
@@ -137,19 +143,21 @@ export class Color {
    * @returns Mutable color components.
    */
   public use(model: ColorModel): number[] {
-    let {components, tempComponents} = this;
+    let {components, _tempComponents} = this;
+
+    ++this.version;
 
     // Reuse temp components when models are matching
-    if (this.tempModel === model && tempComponents) {
+    if (this._tempModel === model && _tempComponents) {
       this.model = model;
 
-      for (let i = 0; i < tempComponents.length; ++i) {
-        components[i] = tempComponents[i];
+      for (let i = 0; i < model.componentCount; ++i) {
+        components[i] = _tempComponents[i];
       }
     }
 
     // Clear temp model because the returned components are intended to be updated
-    this.tempModel = undefined;
+    this._tempModel = undefined;
 
     if (this.model === model) {
       return components;

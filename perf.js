@@ -2,7 +2,8 @@ const {test} = require('@smikhalevski/perf-test');
 const chalk = require('chalk');
 const tinycolor2 = require('tinycolor2');
 const chroma = require('chroma-js');
-const {color} = require('paint-bucket');
+const {color, Rgb, Lab} = require('paint-bucket');
+const {csplineMonot, lerp} = require('algomatic');
 
 const rgb = [0xAB, 0xCD, 0xEF];
 const hexColors = ['#fff', '#000'];
@@ -107,10 +108,22 @@ test('chroma      ', () => chroma.scale(hexColors), {timeout: 10000});
 gc();
 test('paint-bucket', () => color.gradient(hexColors), {timeout: 10000});
 
-console.log('\n' + chalk.inverse(' Linear interpolate gradient '));
-gc();
-const chromaGradient = chroma.scale(hexColors);
-test('chroma      ', () => chromaGradient(0.7), {timeout: 10000});
-gc();
-const paintBucketGradient = color.gradient(hexColors);
-test('paint-bucket', () => paintBucketGradient.at(0.7), {timeout: 10000});
+console.log('\n' + chalk.inverse(' Interpolate linear RGB gradient '));
+{
+  gc();
+  const linearChromaGradient = chroma.scale(hexColors).mode('lrgb');
+  test('chroma      ', () => linearChromaGradient(0.7), {timeout: 10000});
+  gc();
+  const paintBucketGradient = color.gradient(hexColors);
+  test('paint-bucket', () => paintBucketGradient.at(0.7, Rgb, lerp), {timeout: 10000});
+}
+
+console.log('\n' + chalk.inverse(' Interpolate spline LAB gradient '));
+{
+  gc();
+  const linearChromaGradient = chroma.scale(hexColors).mode('lab');
+  test('chroma      ', () => linearChromaGradient(0.7), {timeout: 10000});
+  gc();
+  const paintBucketGradient = color.gradient(hexColors);
+  test('paint-bucket', () => paintBucketGradient.at(0.7, Lab, csplineMonot), {timeout: 10000});
+}

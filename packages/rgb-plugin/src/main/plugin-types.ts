@@ -225,7 +225,7 @@ declare module '@paint-bucket/core/lib/Color' {
     contrast(color: ColorLike): number;
 
     /**
-     * Mixes colors in given proportion.
+     * Mixes colors in given proportion. Alpha is left unchanged.
      *
      * @param color The color to mix.
      * @param ratio The percentage ∈ [0, 1] of the mix between colors.

@@ -1,4 +1,8 @@
-# Paint Bucket 🪣 [![build](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml/badge.svg?branch=master&event=push)](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml)
+# Paint Bucket [![build](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml/badge.svg?branch=master&event=push)](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml)
+
+<a href="#readme">
+  <img alt="Red paint" src="https://github.com/smikhalevski/paint-bucket/raw/next/paint.png"/>
+</a>
 
 [Highly performant](#performance), [extensible](#plugins), and
 [tiny](https://bundlephobia.com/package/paint-bucket) color manipulation library.
@@ -9,7 +13,7 @@ npm install --save-prod paint-bucket
 
 # Usage
 
-📚 [API documentation is available here.](https://smikhalevski.github.io/paint-bucket/classes/core_src_main.Color.html)
+🪣 [API documentation is available here.](https://smikhalevski.github.io/paint-bucket/classes/core_src_main.Color.html)
 
 ```ts
 import {color} from 'paint-bucket';
@@ -100,15 +104,19 @@ Paint Bucket provides an abstraction for color models which are represented as o
 color components between color model representation and RGB. Color components are an array of numbers.
 
 ```ts
-import {ColorModel} from '@paint-bucket/core';
+import {ColorModel, Rgb} from '@paint-bucket/core';
 
 const Cmyk: ColorModel = {
 
-  componentsToRgb(components: readonly number[], rgb: number[]): void {
-    // Update items of the rgb array here
+  // The number of color components that this model uses:
+  // cyan, magenta, yellow, black, and alpha 
+  componentCount: 5,
+
+  componentsToRgb(components: readonly number[], rgb: Rgb): void {
+    // Update elements of the rgb array
   },
-  rgbToComponents(rgb: readonly number[], components: number[]): void {
-    // Update items of the components array here
+  rgbToComponents(rgb: Readonly<Rgb>, components: number[]): void {
+    // Update elements of the components array
   },
 };
 ```
@@ -267,7 +275,7 @@ import './plugin1.ts';
 
 const color = new Color().setRed(128);
 
-color.get(Rgb); // → [1, 0, 0, 1]
+color.get(Rgb); // → [0.5, 0, 0, 1]
 ```
 
 ## Extend color parsing
@@ -279,7 +287,7 @@ Using `Color` constructor and initializing colors using arrays of components isn
 import {color, Rgb} from '@paint-bucket/core';
 import './plugin1.ts';
 
-color().setRed(128).get(Rgb); // → [1, 0, 0, 1]
+color().setRed(128).get(Rgb); // → [0.5, 0, 0, 1]
 ```
 
 `color` function returns the `Color` instance. Using plugins, you can extend what arguments `color` function would
@@ -314,7 +322,6 @@ Color.overrideParser((next) => (name) => {
   }
 
   // If the name wasn't recognized then pass the argument to the next middleware
-  // (if awailable) or to the default parser implementation
   return next(value);
 });
 ```
@@ -342,10 +349,17 @@ Results are in millions of operations per second. The higher number is better.
 | `color('#abcdefff')` | 4.97 | 0.97 | 0.86 |
 | `color(0xAB_CD_EF)` | 9.92 | 5.87 | 1.61 |
 | `color('rgba(128, 128, 128, 0.5)')` | 1.70 | 0.89 | 0.09 |
-| `color(…).saturation(50).rgb()` | 7.35 | 0.81 | 0.66 |
-| `color(…).hue(90).lightness(10).rgb()` | 7.28 | 0.41 | — |
+| `c.saturation(50).rgb()` <sup>1</sup> | 7.35 | 0.81 | 0.66 |
+| `c.hue(90).lightness(10).rgb()` <sup>1</sup> | 7.28 | 0.41 | — |
 | `color.gradient(['#fff', '#000'])` | 3.08 | — | 0.26 |
-| `color.gradient(…).at(0.5)` | 10.47 | — | 2.39 |
+| `g.at(0.5, Rgb, lerp)` <sup>2</sup> | 6.89 | — | 2.49 |
+| `g.at(0.5, Lab, csplineMonot)` <sup>2</sup> | 6.50 | — | 2.57 |
+
+<sup>1</sup> `c` is the `Color` instance.
+
+<sup>2</sup> `g` is the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/algomatic/#lerp) and
+[`csplineMonot`](https://github.com/smikhalevski/algomatic/#csplinemonot) are linear and monotonous cubic spline
+interpolation factories respectively from [Algomatic](https://github.com/smikhalevski/algomatic).
 
 # ❤️
 

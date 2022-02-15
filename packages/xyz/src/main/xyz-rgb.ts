@@ -1,6 +1,6 @@
 import {Rgb} from '@paint-bucket/core';
 import {Xyz} from './xyz';
-import {clamp1} from 'numeric-wrench';
+import {clamp1} from 'algomatic';
 import {whitepoint} from './whitepoint';
 
 /**

@@ -1,8 +1,6 @@
-import {clamp, deg, sq, rad} from 'numeric-wrench';
+import {clamp, deg, hypot, rad} from 'algomatic';
 
 const {abs, atan2, cos, exp, sin, sqrt} = Math;
-
-const hypot = Math.hypot || ((x, y) => sqrt(x * x + y + y));
 
 /**
  * Computes the CIEDE2000 color-difference.
@@ -28,12 +26,12 @@ export function deltaE(lab1: readonly number[], lab2: readonly number[]): number
   let [L2, A2, B2] = lab2;
 
   L1 *= 255;
-  A1 *= 127;
-  B1 *= 127;
+  A1 = (A1 * 2 - 1) * 127;
+  B1 = (B1 * 2 - 1) * 127;
 
   L2 *= 255;
-  A2 *= 127;
-  B2 *= 127;
+  A2 = (A2 * 2 - 1) * 127;
+  B2 = (B2 * 2 - 1) * 127;
 
   const Cab1 = hypot(A1, B1); // (2)
   const Cab2 = hypot(A2, B2); // (2)
@@ -65,13 +63,15 @@ export function deltaE(lab1: readonly number[], lab2: readonly number[]): number
       + 0.32 * cos(rad(3 * aHp + 6))
       - 0.20 * cos(rad(4 * aHp - 63)); // (15)
 
-  const dro = 30 * exp(-sq((aHp - 275) / 25)); // (16)
+  const t1 = (aHp - 275) / 25;
+  const dro = 30 * exp(-t1 * t1); // (16)
 
   const aCp7 = aCp ** 7;
 
   const rC = sqrt(aCp7 / (aCp7 + 25 ** 7)); // (17)
 
-  const aL2 = sq(aL - 50);
+  const t2 = aL - 50;
+  const aL2 = t2 * t2;
   const sL = 1 + 0.015 * aL2 / sqrt(20 + aL2); // (18)
 
   const sC = 1 + 0.045 * aCp; // (19)
@@ -81,8 +81,9 @@ export function deltaE(lab1: readonly number[], lab2: readonly number[]): number
 
   const dCpSc = dCp / sC;
   const dHpSh = dHp / sH;
+  const t3 = dL / sL;
 
-  return clamp(sqrt(sq(dL / sL) + sq(dCpSc) + sq(dHpSh) + rT * dCpSc * dHpSh), 0, 100); // (22)
+  return clamp(sqrt(t3 * t3 + dCpSc * dCpSc + dHpSh * dHpSh + rT * dCpSc * dHpSh), 0, 100); // (22)
 }
 
 // (7)
