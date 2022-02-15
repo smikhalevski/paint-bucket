@@ -55,8 +55,8 @@ export class Color {
   }
 
   /**
-   * The color value version that is auto-incremented every time the {@link use} method is called. Version can be used
-   * to track that the color value was changed, for example to invalidate caches that rely on current color value.
+   * The color value version that is auto-incremented every time the {@link use} method is called. This version can be
+   * used to track that the color value was changed, for example to invalidate caches that rely on current color value.
    */
   public version = 0;
 

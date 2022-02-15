@@ -79,7 +79,7 @@ describe('Color', () => {
     expect(color.get(Rgb)).toEqual([1, 1, 1, 1]);
   });
 
-  test('bumps color version', () => {
+  test('bumps color version on use', () => {
     const color = new Color();
 
     color.use(abcColorModel);
@@ -87,6 +87,16 @@ describe('Color', () => {
     color.use(abcColorModel);
 
     expect(color.version).toBe(3);
+  });
+
+  test('does not bump color version on get', () => {
+    const color = new Color();
+
+    color.get(abcColorModel);
+    color.get(abcColorModel);
+    color.get(abcColorModel);
+
+    expect(color.version).toBe(0);
   });
 
   test('reuses temp components between two get calls', () => {

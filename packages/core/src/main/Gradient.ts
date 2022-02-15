@@ -15,6 +15,7 @@ export interface InterpolatorLike {
  * Factory that returns an interpolator function for given pivot points.
  *
  * @see {@link https://smikhalevski.github.io/algomatic/modules.html#lerp lerp}
+ * @see {@link https://smikhalevski.github.io/algomatic/modules.html#cspline cspline}
  * @see {@link https://smikhalevski.github.io/algomatic/modules.html#csplineMonot csplineMonot}
  */
 export type InterpolatorFactory = (xs: ArrayLike<number>, ys: ArrayLike<number>) => InterpolatorLike;
@@ -35,7 +36,7 @@ export class Gradient {
   /**
    * The cumulative version of colors in this gradient instance that was computed during the last {@link get} call.
    */
-  private _prevVersion?: number;
+  private _prevColorsVersion?: number;
 
   /**
    * The model that was requested during the last {@link get} call.
@@ -49,7 +50,7 @@ export class Gradient {
 
   /**
    * Color component interpolators that were produced by {@link _interpolatorFactory} for components provided by
-   * {@link _model} for colors with cumulative version {@link _prevVersion}.
+   * {@link _model} for colors with cumulative version {@link _prevColorsVersion}.
    */
   private _interpolators: InterpolatorLike[] = [];
   private _componentValues: number[][] = [];
@@ -58,24 +59,12 @@ export class Gradient {
    * Creates the new {@link Gradient} instance.
    *
    * @param colors The list of colors that comprise the gradient.
-   * @param domain The stop values for each color. Values must be sorted in ascending order.
+   * @param domain The stop values for each color. Values must be sorted in ascending order. The number of domain
+   *     values must exactly match the number of provided colors.
    */
   public constructor(colors: readonly Color[], domain: readonly number[]) {
     this.colors = colors;
     this.domain = domain;
-  }
-
-  /**
-   * The cumulative version of all colors used by this gradient.
-   *
-   * @see {@link Color.version}
-   */
-  public get version(): number {
-    let version = 0;
-    for (const color of this.colors) {
-      version += color.version;
-    }
-    return version;
   }
 
   /**
@@ -89,7 +78,15 @@ export class Gradient {
    * @returns The read-only components array.
    */
   public get(model: ColorModel, value: number, interpolatorFactory: InterpolatorFactory): readonly number[] {
-    const {colors, domain, _tempComponents, _componentValues, _interpolatorFactory, _interpolators} = this;
+    const {
+      colors,
+      domain,
+
+      _tempComponents,
+      _componentValues,
+      _interpolatorFactory,
+      _interpolators,
+    } = this;
 
     const {componentCount} = model;
     const domainLength = domain.length;
@@ -107,25 +104,23 @@ export class Gradient {
       return this.colors[0].get(model);
     }
 
-    const currVersion = this.version;
-    const colorsUpdated = this._prevVersion !== currVersion || this._model !== model;
+    const currColorsVersion = getColorsVersion(this.colors);
+    const colorsUpdated = this._prevColorsVersion !== currColorsVersion || this._model !== model;
 
-    // Update color components
     if (colorsUpdated) {
+
+      // Update color components
       for (let i = 0; i < domainLength; ++i) {
         const components = colors[i].get(model);
 
         for (let j = 0; j < componentCount; ++j) {
-          _componentValues[j] ||= [];
-          _componentValues[j][i] = components[j];
+          (_componentValues[j] ||= [])[i] = components[j];
         }
       }
-      this._prevVersion = currVersion;
+      this._prevColorsVersion = currColorsVersion;
       this._model = model;
-    }
 
-    // Create or update interpolators
-    if (colorsUpdated) {
+      // Create or update interpolators
       for (let i = 0; i < componentCount; ++i) {
         if (_interpolatorFactory === interpolatorFactory && _interpolators.length > i && _interpolators[i].update) {
           _interpolators[i].update!(domain, _componentValues[i]);
@@ -143,4 +138,12 @@ export class Gradient {
 
     return _tempComponents;
   }
+}
+
+function getColorsVersion(colors: readonly Color[]): number {
+  let version = 0;
+  for (const color of colors) {
+    version += color.version;
+  }
+  return version;
 }
