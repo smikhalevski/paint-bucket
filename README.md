@@ -132,6 +132,10 @@ Since color models are pluggable, they reside in separate packages:
 
 RGB color model is defined in [`@paint-bucket/core`](./packages/core).
 
+[@csstools/convert-colors](https://github.com/jonathantneal/convert-colors)
+and [color-space](https://github.com/colorjs/color-space) were used as a reference implementation of color model
+conversion algorithms.
+
 Color model converters expect component values to be in [0, 1] range. Plugin APIs may return component values in any
 other range, but internally components are always normalized to [0, 1].
 
@@ -349,19 +353,14 @@ Results are in millions of operations per second. The higher number is better.
 | `color('#abcdefff')` | 4.97 | 0.97 | 0.86 |
 | `color(0xAB_CD_EF)` | 9.92 | 5.87 | 1.61 |
 | `color('rgba(128, 128, 128, 0.5)')` | 1.70 | 0.89 | 0.09 |
-| `c.saturation(50).rgb()` <sup>1</sup> | 7.35 | 0.81 | 0.66 |
-| `c.hue(90).lightness(10).rgb()` <sup>1</sup> | 7.28 | 0.41 | — |
+| `c.saturation(50).rgb()` [^1] | 7.35 | 0.81 | 0.66 |
+| `c.hue(90).lightness(10).rgb()` [^1] | 7.28 | 0.41 | — |
 | `color.gradient(['#fff', '#000'])` | 3.08 | — | 0.26 |
-| `g.at(0.5, Rgb, lerp)` <sup>2</sup> | 6.89 | — | 2.49 |
-| `g.at(0.5, Lab, csplineMonot)` <sup>2</sup> | 6.50 | — | 2.57 |
+| `g.at(0.5, Rgb, lerp)` [^2] | 6.89 | — | 2.49 |
+| `g.at(0.5, Lab, csplineMonot)` [^2] | 6.50 | — | 2.57 |
 
-<sup>1</sup> `c` is the `Color` instance.
+[^1]: `c` is the `Color` instance.
 
-<sup>2</sup> `g` is the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/algomatic/#lerp) and
+[^2]: `g` is the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/algomatic/#lerp) and
 [`csplineMonot`](https://github.com/smikhalevski/algomatic/#csplinemonot) are linear and monotonous cubic spline
 interpolation factories respectively from [Algomatic](https://github.com/smikhalevski/algomatic).
-
-# ❤️
-
-I cannot overestimate how much [@jonathantneal/convert-colors](https://github.com/jonathantneal/convert-colors) and
-[@colorjs/color-space](https://github.com/colorjs/color-space) helped me to implement color model conversion algorithms.
