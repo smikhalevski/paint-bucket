@@ -23,6 +23,7 @@
     "./packages/css-plugin",
     "./packages/difference-plugin",
     "./packages/gradient-plugin",
+    "./packages/palette-plugin",
     "./packages/paint-bucket"
   ],
   "devDependencies": {
