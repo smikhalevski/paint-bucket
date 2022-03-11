@@ -55,34 +55,34 @@ export function hsvToRgb(hsv: Hsv, rgb: Rgb): Rgb {
 
   switch (i % 6) {
     case 0:
-      R = p;
+      R = V;
       G = t;
-      B = V;
+      B = p;
       break;
     case 1:
-      R = p;
+      R = q;
       G = V;
-      B = q;
+      B = p;
       break;
     case 2:
-      R = t;
+      R = p;
       G = V;
-      B = p;
-      break;
-    case 3:
-      R = V;
-      G = q;
-      B = p;
-      break;
-    case 4:
-      R = V;
-      G = p;
       B = t;
       break;
-    case 5:
-      R = q;
+    case 3:
+      R = p;
+      G = q;
+      B = V;
+      break;
+    case 4:
+      R = t;
       G = p;
       B = V;
+      break;
+    case 5:
+      R = V;
+      G = p;
+      B = q;
       break;
   }
 
