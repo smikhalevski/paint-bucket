@@ -20,3 +20,10 @@ describe('deltaE', () => {
     expect(color('#aaa').deltaE(0xAA_BB_CC)).toBeCloseTo(12.9222);
   });
 });
+
+describe('monochromatic palette', () => {
+
+  test('returns deltaE', () => {
+    expect(color('#f00').complement().css()).toBe('#00ffff');
+  });
+});

@@ -4,6 +4,7 @@ import '@paint-bucket/rgb-plugin';
 import '@paint-bucket/hsl-plugin';
 import '@paint-bucket/difference-plugin';
 import '@paint-bucket/gradient-plugin';
+import '@paint-bucket/palette-plugin';
 
 export * from '@paint-bucket/hsl';
 export * from '@paint-bucket/hsv';
