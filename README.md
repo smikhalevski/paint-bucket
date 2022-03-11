@@ -214,6 +214,7 @@ Here's a list of plugins in this repo:
 - [`@paint-bucket/rgb-plugin`](./packages/rgb-plugin) implements RGBa color model manipulation methods;
 - [`@paint-bucket/hsl-plugin`](./packages/hsl-plugin) implements HSLa color model manipulation methods;
 - [`@paint-bucket/gradient-plugin`](./packages/gradient-plugin) enables gradient manipulation;
+- [`@paint-bucket/palette-plugin`](./packages/palette-plugin) creates various color palettes from the base color;
 - [`@paint-bucket/difference-plugin`](./packages/difference-plugin) provides
   [color difference](https://en.wikipedia.org/wiki/Color_difference) computation methods;
 - [`@paint-bucket/css-plugin`](./packages/css-plugin) enables `color` function to parse CSS color strings;
