@@ -1,129 +1,227 @@
-const {test} = require('@smikhalevski/perf-test');
-const chalk = require('chalk');
 const tinycolor2 = require('tinycolor2');
-const chroma = require('chroma-js');
+const chromaJs = require('chroma-js');
 const {color, Rgb, Lab} = require('paint-bucket');
 const {csplineMonot, lerp} = require('algomatic');
 
-const rgb = [0xAB, 0xCD, 0xEF];
-const hexColors = ['#fff', '#000'];
+// Create color from components
+describe('color([255, 255, 255])', () => {
 
-console.log(chalk.inverse(' Create color from components '));
-gc();
-test('tinycolor2  ', () => tinycolor2(rgb), {timeout: 10000});
-gc();
-test('chroma      ', () => chroma(rgb), {timeout: 10000});
-gc();
-test('paint-bucket', () => color(rgb), {timeout: 10000});
-
-console.log('\n' + chalk.inverse(' Parse color from short HEX '));
-gc();
-test('tinycolor2  ', () => tinycolor2('#abc'), {timeout: 10000});
-gc();
-test('chroma      ', () => chroma('#abc'), {timeout: 10000});
-gc();
-test('paint-bucket', () => color('#abc'), {timeout: 10000});
-
-console.log('\n' + chalk.inverse(' Parse color from 24-bit HEX '));
-gc();
-test('tinycolor2  ', () => tinycolor2('#abcdef'), {timeout: 10000});
-gc();
-test('chroma      ', () => chroma('#abcdef'), {timeout: 10000});
-gc();
-test('paint-bucket', () => color('#abcdef'), {timeout: 10000});
-
-console.log('\n' + chalk.inverse(' Parse color from 32-bit HEX '));
-gc();
-test('tinycolor2  ', () => tinycolor2('#abcdefff'), {timeout: 10000});
-gc();
-test('chroma      ', () => chroma('#abcdefff'), {timeout: 10000});
-gc();
-test('paint-bucket', () => color('#abcdefff'), {timeout: 10000});
-
-console.log('\n' + chalk.inverse(' Parse color from 24-bit integer '));
-gc();
-test('tinycolor2  ', () => tinycolor2(0xAB_CD_EF), {timeout: 10000});
-gc();
-test('chroma      ', () => chroma(0xAB_CD_EF), {timeout: 10000});
-gc();
-test('paint-bucket', () => color(0xAB_CD_EF), {timeout: 10000});
-
-console.log('\n' + chalk.inverse(' Parse color from RGBa '));
-gc();
-test('tinycolor2  ', () => tinycolor2('rgba(128,128,128,0.5)'), {timeout: 10000});
-gc();
-test('chroma      ', () => chroma('rgba(128,128,128,0.5)'), {timeout: 10000});
-gc();
-test('paint-bucket', () => color('rgba(128,128,128,0.5)'), {timeout: 10000});
-
-console.log('\n' + chalk.inverse(' Desaturate color '));
-{
-  let c;
-  gc();
-  test('tinycolor2  ', () => c.desaturate().toRgb(), {
-    timeout: 10000,
-    beforeCycle() {
-      c = tinycolor2(rgb);
-    },
+  test('tinycolor2', (measure) => {
+    const rgb = {r: 0xAB, g: 0xCD, b: 0xEF};
+    measure(() => tinycolor2(rgb));
   });
-  gc();
-  test('chroma      ', () => c.desaturate().rgb(), {
-    timeout: 10000,
-    beforeCycle() {
-      c = chroma(rgb);
-    },
-  });
-  gc();
-  test('paint-bucket', () => c.saturation(50).rgb(), {
-    timeout: 10000,
-    beforeCycle() {
-      c = color(rgb);
-    },
-  });
-}
 
-console.log('\n' + chalk.inverse(' Spin + lighten color '));
-{
-  let c
-  ;
-  gc();
-  test('tinycolor2  ', () => c.spin(90).lighten().toRgb(), {
-    timeout: 10000,
-    beforeCycle() {
-      c = tinycolor2(rgb);
-    },
+  test('chroma.js', (measure) => {
+    const rgb = [0xAB, 0xCD, 0xEF];
+    measure(() => chromaJs(rgb));
   });
-  gc();
-  test('paint-bucket', () => c.hue(90).lightness(10).rgb(), {
-    timeout: 10000,
-    beforeCycle() {
-      c = color(rgb);
-    },
+
+  test('paint-bucket', (measure) => {
+    const rgb = [0xAB, 0xCD, 0xEF];
+    measure(() => color(rgb));
   });
-}
+}, {targetRme: 0.005});
 
-console.log('\n' + chalk.inverse(' Create gradient from HEX '));
-gc();
-test('chroma      ', () => chroma.scale(hexColors), {timeout: 10000});
-gc();
-test('paint-bucket', () => color.gradient(hexColors), {timeout: 10000});
+// Parse color from short HEX
+describe('color(\'#abc\')', () => {
 
-console.log('\n' + chalk.inverse(' Interpolate linear RGB gradient '));
-{
-  gc();
-  const linearChromaGradient = chroma.scale(hexColors).mode('lrgb');
-  test('chroma      ', () => linearChromaGradient(0.7), {timeout: 10000});
-  gc();
-  const paintBucketGradient = color.gradient(hexColors);
-  test('paint-bucket', () => paintBucketGradient.at(0.7, Rgb, lerp), {timeout: 10000});
-}
+  test('tinycolor2', (measure) => {
+    measure(() => tinycolor2('#abc'));
+  });
 
-console.log('\n' + chalk.inverse(' Interpolate spline LAB gradient '));
-{
-  gc();
-  const linearChromaGradient = chroma.scale(hexColors).mode('lab');
-  test('chroma      ', () => linearChromaGradient(0.7), {timeout: 10000});
-  gc();
-  const paintBucketGradient = color.gradient(hexColors);
-  test('paint-bucket', () => paintBucketGradient.at(0.7, Lab, csplineMonot), {timeout: 10000});
-}
+  test('chroma.js', (measure) => {
+    measure(() => chromaJs('#abc'));
+  });
+
+  test('paint-bucket', (measure) => {
+    measure(() => color('#abc'));
+  });
+}, {targetRme: 0.005});
+
+// Parse color from 24-bit HEX
+describe('color(\'#abcdef\')', () => {
+
+  test('tinycolor2', (measure) => {
+    measure(() => tinycolor2('#abcdef'));
+  });
+
+  test('chroma.js', (measure) => {
+    measure(() => chromaJs('#abcdef'));
+  });
+
+  test('paint-bucket', (measure) => {
+    measure(() => color('#abcdef'));
+  });
+}, {targetRme: 0.005});
+
+// Parse color from 32-bit HEX
+describe('color(\'#abcdefff\')', () => {
+
+  test('tinycolor2', (measure) => {
+    measure(() => tinycolor2('#abcdefff'));
+  });
+
+  test('chroma.js', (measure) => {
+    measure(() => chromaJs('#abcdefff'));
+  });
+
+  test('paint-bucket', (measure) => {
+    measure(() => color('#abcdefff'));
+  });
+}, {targetRme: 0.005});
+
+// Parse color from 24-bit integer
+describe('color(0xAB_CD_EF)', () => {
+
+  // Not supported
+  // test('tinycolor2', (measure) => {
+  //   measure(() => tinycolor2(0xAB_CD_EF));
+  // });
+
+  test('chroma.js', (measure) => {
+    measure(() => chromaJs(0xAB_CD_EF));
+  });
+
+  test('paint-bucket', (measure) => {
+    measure(() => color(0xAB_CD_EF));
+  });
+}, {targetRme: 0.005});
+
+// Parse color from 32-bit integer
+describe('color.rgb32(0xAB_CD_EF_FF)', () => {
+
+  // Not supported
+  // test('tinycolor2', (measure) => {
+  //   measure(() => tinycolor2(0xAB_CD_EF_FF));
+  // });
+
+  // Not supported
+  // test('chroma.js', (measure) => {
+  //   measure(() => chromaJs(0xAB_CD_EF_FF));
+  // });
+
+  test('paint-bucket', (measure) => {
+    measure(() => color.rgb32(0xAB_CD_EF_FF));
+  });
+}, {targetRme: 0.005});
+
+// Parse color from RGBa
+describe('color(\'rgba(128, 128, 128, 0.5)\')', () => {
+
+  test('tinycolor2', (measure) => {
+    measure(() => tinycolor2('rgba(128,128,128,0.5)'));
+  });
+
+  test('chroma.js', (measure) => {
+    measure(() => chromaJs('rgba(128,128,128,0.5)'));
+  });
+
+  test('paint-bucket', (measure) => {
+    measure(() => color('rgba(128,128,128,0.5)'));
+  });
+}, {targetRme: 0.005});
+
+// Desaturate color
+describe('c.saturation(50).rgb()', () => {
+
+  test('tinycolor2', (measure) => {
+    const rgb = {r: 0xAB, g: 0xCD, b: 0xEF};
+    let c;
+    measure(() => c.desaturate().toRgb(), {
+      beforeIteration() {
+        c = tinycolor2(rgb);
+      },
+    });
+  });
+
+  test('chroma.js', (measure) => {
+    const rgb = [0xAB, 0xCD, 0xEF];
+    let c;
+    measure(() => c.desaturate().rgb(), {
+      beforeIteration() {
+        c = chromaJs(rgb);
+      },
+    });
+  });
+
+  test('paint-bucket', (measure) => {
+    const rgb = [0xAB, 0xCD, 0xEF];
+    let c;
+    measure(() => c.saturation(50).rgb(), {
+      beforeIteration() {
+        c = color(rgb);
+      },
+    });
+  });
+}, {targetRme: 0.005});
+
+// Spin + lighten color
+describe('c.hue(90).lightness(10).rgb()', () => {
+
+  test('tinycolor2', (measure) => {
+    const rgb = {r: 0xAB, g: 0xCD, b: 0xEF};
+    let c;
+    measure(() => c.spin(90).lighten().toRgb(), {
+      beforeIteration() {
+        c = tinycolor2(rgb);
+      },
+    });
+  });
+
+  test('paint-bucket', (measure) => {
+    const rgb = [0xAB, 0xCD, 0xEF];
+    let c;
+    measure(() => c.hue(90).lightness(10).rgb(), {
+      beforeIteration() {
+        c = color(rgb);
+      },
+    });
+  });
+}, {targetRme: 0.005});
+
+// Create gradient from HEX
+describe('color.gradient([\'#fff\', \'#000\'])', () => {
+
+  const hexColors = ['#fff', '#000'];
+
+  test('chroma.js', (measure) => {
+    measure(() => chromaJs.scale(hexColors));
+  });
+
+  test('paint-bucket', (measure) => {
+    measure(() => color.gradient(hexColors));
+  });
+}, {targetRme: 0.005});
+
+
+// Interpolate linear RGB gradient
+describe('g.at(0.5, Rgb, lerp)', () => {
+
+  const hexColors = ['#fff', '#000'];
+
+  test('chroma.js', (measure) => {
+    const g = chromaJs.scale(hexColors).mode('lrgb');
+    measure(() => g(0.7));
+  });
+
+  test('paint-bucket', (measure) => {
+    const g = color.gradient(hexColors);
+    measure(() => g.at(0.7, Rgb, lerp));
+  });
+}, {targetRme: 0.005});
+
+// Interpolate spline LAB gradient
+describe('g.at(0.5, Lab, csplineMonot)', () => {
+
+  const hexColors = ['#fff', '#000'];
+
+  test('chroma.js', (measure) => {
+    const g = chromaJs.scale(hexColors).mode('lab');
+    measure(() => g(0.7));
+  });
+
+  test('paint-bucket', (measure) => {
+    const g = color.gradient(hexColors);
+    measure(() => g.at(0.7, Lab, csplineMonot));
+  });
+}, {targetRme: 0.005});

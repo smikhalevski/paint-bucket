@@ -344,24 +344,27 @@ color('cyan').get(Rgb); // → [0, 1, 1, 1]
 
 Clone this repo and use `npm ci && npm run build && npm run perf` to run the performance testsuite.
 
-Results are in millions of operations per second. The higher number is better.
+Results are in millions of operations per second [^1]. The higher number is better.
 
-|  | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
-| --- | ---: | ---: | ---: | 
-| `color([255, 255, 255])` | 12.61 | 3.35 | 1.45 |
-| `color('#abc')` | 5.59 | 0.98 | 0.86 |
-| `color('#abcdef')` | 5.50 | 0.99 | 0.96 |
-| `color('#abcdefff')` | 4.97 | 0.97 | 0.86 |
-| `color(0xAB_CD_EF)` | 9.92 | 5.87 | 1.61 |
-| `color('rgba(128, 128, 128, 0.5)')` | 1.70 | 0.89 | 0.09 |
-| `c.saturation(50).rgb()` [^1] | 7.35 | 0.81 | 0.66 |
-| `c.hue(90).lightness(10).rgb()` [^1] | 7.28 | 0.41 | — |
-| `color.gradient(['#fff', '#000'])` | 3.08 | — | 0.26 |
-| `g.at(0.5, Rgb, lerp)` [^2] | 6.89 | — | 2.49 |
-| `g.at(0.5, Lab, csplineMonot)` [^2] | 6.50 | — | 2.57 |
+|                                      | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
+|--------------------------------------|-------------:|--------------------------------------------------:|----------------------------------------------:| 
+| `color([255, 255, 255])`             |        47.65 |                                              4.05 |                                          2.51 |
+| `color('#abc')`                      |        10.02 |                                              1.80 |                                          1.90 |
+| `color('#abcdef')`                   |         9.54 |                                              1.86 |                                          2.24 |
+| `color('#abcdefff')`                 |         9.14 |                                              1.82 |                                          1.96 |
+| `color(0xAB_CD_EF)`                  |         6.30 |                                                 — |                                          3.90 |
+| `color.rgb32(0xAB_CD_EF_FF)`         |         6.31 |                                                 — |                                             — |
+| `color('rgba(128, 128, 128, 0.5)')`  |         2.69 |                                              1.66 |                                          0.24 |
+| `c.saturation(50).rgb()` [^2]        |        22.96 |                                              0.95 |                                          1.04 |
+| `c.hue(90).lightness(10).rgb()` [^2] |        17.71 |                                              0.65 |                                             — |
+| `color.gradient(['#fff', '#000'])`   |         5.02 |                                                 — |                                          0.52 |
+| `g.at(0.5, Rgb, lerp)` [^3]          |        13.95 |                                                 — |                                          4.86 |
+| `g.at(0.5, Lab, csplineMonot)` [^3]  |        12.26 |                                                 — |                                          4.80 |
 
-[^1]: `c` is the `Color` instance.
+[^1]: Performance was measured on Apple M1 Max using [TooFast](https://github.com/smikhalevski/toofast).
 
-[^2]: `g` is the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/algomatic/#lerp) and
+[^2]: `c` is the `Color` instance.
+
+[^3]: `g` is the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/algomatic/#lerp) and
 [`csplineMonot`](https://github.com/smikhalevski/algomatic/#csplinemonot) are linear and monotonous cubic spline
 interpolation factories respectively from [Algomatic](https://github.com/smikhalevski/algomatic).
