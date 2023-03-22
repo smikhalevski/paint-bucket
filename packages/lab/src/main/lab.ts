@@ -1,6 +1,9 @@
 import { ColorModel } from '@paint-bucket/core';
 import { labToRgb, rgbToLab } from './lab-rgb';
 
+/**
+ * CIE-L*a*b* color components.
+ */
 export type Lab = [L: number, A: number, B: number, a: number];
 
 /**

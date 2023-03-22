@@ -1,7 +1,7 @@
 import { Color } from '@paint-bucket/core';
 
 declare module '@paint-bucket/core/lib/Color' {
-  interface ColorFunction {
+  interface ColorParse {
     /**
      * Creates a new color using its [X11 color name](https://en.wikipedia.org/wiki/X11_color_names).
      *

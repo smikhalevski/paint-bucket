@@ -5,7 +5,7 @@ export interface ColorModel {
   /**
    * The number of color components that this model uses.
    */
-  componentCount: number;
+  readonly componentCount: number;
 
   /**
    * Converts color components to RGBa color model.

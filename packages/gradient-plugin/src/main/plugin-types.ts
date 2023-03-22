@@ -1,7 +1,7 @@
 import { Color, ColorLike, ColorModel, Gradient, InterpolatorFactory } from '@paint-bucket/core';
 
 declare module '@paint-bucket/core/lib/Color' {
-  interface ColorFunction {
+  namespace Color {
     /**
      * Creates the new {@link Gradient} of colors.
      *
@@ -9,7 +9,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * @param domain The list of color position in the gradient.
      * @return The new {@link Gradient} instance.
      */
-    gradient(colors: ColorLike[], domain?: number[]): Gradient;
+    export function gradient(colors: ColorLike[], domain?: number[]): Gradient;
   }
 
   interface Color {

@@ -1,42 +1,76 @@
-/**
- * Infers a union of parameters of function overload signatures.
- *
- * ```ts
- * declare function foo(): void;
- * declare function foo(a: string): void;
- * declare function foo(a: boolean, b: number): void;
- *
- * OverloadParameters<typeof foo>;
- * // → [] | [a: string] | [a: boolean, b: number]
- * ```
- *
- * @see https://github.com/microsoft/TypeScript/issues/32164#issuecomment-890824817
- */
-export type OverloadParameters<T> = _TupleArrayUnion<_ExcludeUnknowns<_Parameters<T>>>;
-
-// unknown[] is inferred for any additional overloads that were not actually declared
-type _Parameters<T> = T extends {
-  (...args: infer A1): unknown;
-  (...args: infer A2): unknown;
-  (...args: infer A3): unknown;
-  (...args: infer A4): unknown;
-  (...args: infer A5): unknown;
-  (...args: infer A6): unknown;
-  (...args: infer A7): unknown;
-  (...args: infer A8): unknown;
-  (...args: infer A9): unknown;
-}
-  ? [A1, A2, A3, A4, A5, A6, A7, A8, A9]
+type OverloadProps<TOverload> = Pick<TOverload, keyof TOverload>;
+type OverloadUnionRecursive<TOverload, TPartialOverload = unknown> = TOverload extends (
+  ...args: infer TArgs
+) => infer TReturn
+  ? // Prevent infinite recursion by stopping recursion when TPartialOverload
+    // has accumulated all of the TOverload signatures.
+    TPartialOverload extends TOverload
+    ? never
+    :
+        | OverloadUnionRecursive<
+            TPartialOverload & TOverload,
+            TPartialOverload & ((...args: TArgs) => TReturn) & OverloadProps<TOverload>
+          >
+        | ((...args: TArgs) => TReturn)
   : never;
 
-// type T1 = _ExcludeUnknowns<[unknown[], string[]]>;
-// → [string[]]
-type _ExcludeUnknowns<T> = T extends [infer A, ...infer R]
-  ? unknown[] extends A
-    ? _ExcludeUnknowns<R>
-    : [A, ..._ExcludeUnknowns<R>]
-  : T;
+type OverloadUnion<TOverload extends (...args: any[]) => any> = Exclude<
+  OverloadUnionRecursive<
+    // The "() => never" signature must be hoisted to the "front" of the
+    // intersection, for two reasons: a) because recursion stops when it is
+    // encountered, and b) it seems to prevent the collapse of subsequent
+    // "compatible" signatures (eg. "() => void" into "(a?: 1) => void"),
+    // which gives a direct conversion to a union.
+    (() => never) & TOverload
+  >,
+  TOverload extends () => never ? never : () => never
+>;
 
-// type T1 = _TupleArrayUnion<[[], [string], [string, number]]>;
-// → [] | [string] | [string, number]
-type _TupleArrayUnion<A extends readonly unknown[][]> = A extends (infer T)[] ? (T extends unknown[] ? T : []) : [];
+/*
+The tricks to the above recursion are...
+
+a) Inferring the parameter and return types of an overloaded function will use
+the last overload signature, which is apparently an explicit design choice.
+
+b) Intersecting a single signature with the original intersection, can reorder
+the intersection (possibly an undocumented side effect?).
+
+c) Intersections can only be re-ordered, not narrowed (reduced), So, the
+intersection has to be rebuilt in the "TPartialOverload" generic, then
+recursion can be stopped when the full intersection has been rebuilt.
+Otherwise, this would result in an infinite recursion.
+*/
+
+// Eureka!
+type TestA1 = OverloadUnion<{
+  (): void;
+  (a: 1): 1;
+  (a: 2, b: 2): 2;
+}>;
+
+// Edge Case: "() => never" signature must be hoisted.
+type TestA2 = OverloadUnion<{
+  (): void;
+  (a: 1): 1;
+  (a: 2, b: 2): 2;
+  (): never;
+}>;
+
+// Edge Case: Duplicate signatures are omitted.
+type TestA3 = OverloadUnion<{
+  (): void;
+  (a: 1): 1;
+  (): void; // duplicate
+  (a: 2, b: 2): 2;
+  (a: 1): 1; // duplicate
+}>;
+
+// Note that the order of overloads is maintained in the union, which means
+// that it's reversible using a UnionToIntersection type where the overload
+// order matters. The exception is "() => never", which has to be hoisted
+// to the front of the intersection. However, it's the most specific signature,
+// which means hoisting it should be safe if the union is converted back to an
+// intersection.
+
+// Inferring a union of parameter tuples or return types is now possible.
+export type OverloadParameters<T extends (...args: any[]) => any> = Parameters<OverloadUnion<T>>;

@@ -24,25 +24,25 @@ import {color} from 'paint-bucket';
 // import '@paint-bucket/css-plugin';
 // import {color} from '@paint-bucket/core';
 
-color('#abcdef').saturation((S) => S / 2).red(); // → 188
+Color.parse('#abcdef').saturation((S) => S / 2).red(); // → 188
 ```
 
 Most methods provide getter-setter semantics:
 
 ```ts
 // Set
-color('#f00').red(127.5); // → Color instance
+Color.parse('#f00').red(127.5); // → Color instance
 // or
-color('#f00').red((R) => R / 2); // → Color instance
+Color.parse('#f00').red((R) => R / 2); // → Color instance
 
 // Get
-color('#f00').red(); // → 255
+Color.parse('#f00').red(); // → 255
 ```
 
 Mutate multiple components at the same time:
 
 ```ts
-color([64, 128, 0])
+Color.parse([64, 128, 0])
     .rgb(([R, G, B, a]) => [R * 3, G * 2, B, a])
     .rgb();
 // → [192, 255, 0, 1]
@@ -52,10 +52,10 @@ color([64, 128, 0])
 approaches:
 
 ```ts
-const color1 = color('#f00');
+const color1 = Color.parse('#f00');
 
 // color2 is a copy of color1
-const color2 = color(color1);
+const color2 = Color.parse(color1);
 // or
 const color3 = color1.clone();
 ```
@@ -63,15 +63,15 @@ const color3 = color1.clone();
 Parse and serialize CSS color strings:
 
 ```ts
-color('pink').css(); // → "#ffc0cb"
+Color.parse('pink').css(); // → "#ffc0cb"
 
-color('rgba(255, 192, 203)').css(); // → "#ffc0cb"
+Color.parse('rgba(255, 192, 203)').css(); // → "#ffc0cb"
 ```
 
 Create gradients and obtain color at arbitrary position:
 
 ```ts
-color('red').gradient('blue').at(0.70).css(); // → "#4d00b3"
+Color.parse('red').gradient('blue').at(0.70).css(); // → "#4d00b3"
 ```
 
 Create multi-stop gradients:
@@ -249,7 +249,7 @@ declare module '@paint-bucket/core/lib/Color' {
   }
 }
 
-Color.prototype.getRed = function (this: Color) {
+Color.prototype.getRed = function () {
 
   // Get read-only array of RGB color components where each component
   // is in [0, 1] range
@@ -258,7 +258,7 @@ Color.prototype.getRed = function (this: Color) {
   return rgb[0] * 255;
 };
 
-Color.prototype.setRed = function (this: Color, value) {
+Color.prototype.setRed = function (value) {
 
   // Get writable array of RGB color components where each component
   // is in [0, 1] range
@@ -292,7 +292,7 @@ Using `Color` constructor and initializing colors using arrays of components isn
 import {color, Rgb} from '@paint-bucket/core';
 import './plugin1.ts';
 
-color().setRed(128).get(Rgb); // → [0.5, 0, 0, 1]
+new Color().setRed(128).get(Rgb); // → [0.5, 0, 0, 1]
 ```
 
 `color` function returns the `Color` instance. Using plugins, you can extend what arguments `color` function would
@@ -306,14 +306,14 @@ import {Color} from '@paint-bucket/core';
 declare module '@paint-bucket/core/lib/Color' {
 
   // Merge declarations for the interface that the color function implements
-  interface ColorFunction {
+  interface ColorParse {
 
     (name: 'pink' | 'cyan' | 'bisque'): Color;
   }
 }
 
 // Add the parsing middleware
-Color.overrideParser((next) => (name) => {
+Color._enhanceParser((next) => (name) => {
   switch (name) {
 
     case 'pink':
@@ -337,7 +337,7 @@ Now we can use this plugin with the `color` function.
 import {color, Rgb} from '@paint-bucket/core';
 import './plugin2.ts';
 
-color('cyan').get(Rgb); // → [0, 1, 1, 1]
+Color.parse('cyan').get(Rgb); // → [0, 1, 1, 1]
 ```
 
 # Performance
@@ -346,20 +346,20 @@ Clone this repo and use `npm ci && npm run build && npm run perf` to run the per
 
 Results are in millions of operations per second [^1]. The higher number is better.
 
-|                                      | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
-|--------------------------------------|-------------:|--------------------------------------------------:|----------------------------------------------:| 
-| `color([255, 255, 255])`             |        47.65 |                                              4.05 |                                          2.51 |
-| `color('#abc')`                      |        10.02 |                                              1.80 |                                          1.90 |
-| `color('#abcdef')`                   |         9.54 |                                              1.86 |                                          2.24 |
-| `color('#abcdefff')`                 |         9.14 |                                              1.82 |                                          1.96 |
-| `color(0xab_cd_ef)`                  |         6.30 |                                                 — |                                          3.90 |
-| `color.rgb32(0xab_cd_ef_ff)`         |         6.31 |                                                 — |                                             — |
-| `color('rgba(128, 128, 128, 0.5)')`  |         2.69 |                                              1.66 |                                          0.24 |
-| `c.saturation(50).rgb()` [^2]        |        22.96 |                                              0.95 |                                          1.04 |
-| `c.hue(90).lightness(10).rgb()` [^2] |        17.71 |                                              0.65 |                                             — |
-| `color.gradient(['#fff', '#000'])`   |         5.02 |                                                 — |                                          0.52 |
-| `g.at(0.5, Rgb, lerp)` [^3]          |        13.95 |                                                 — |                                          4.86 |
-| `g.at(0.5, Lab, csplineMonot)` [^3]  |        12.26 |                                                 — |                                          4.80 |
+|                                           | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
+|-------------------------------------------|-------------:|--------------------------------------------------:|----------------------------------------------:| 
+| `Color.parse([255, 255, 255])`            |        47.65 |                                              4.05 |                                          2.51 |
+| `Color.parse('#abc')`                     |        10.02 |                                              1.80 |                                          1.90 |
+| `Color.parse('#abcdef')`                  |         9.54 |                                              1.86 |                                          2.24 |
+| `Color.parse('#abcdefff')`                |         9.14 |                                              1.82 |                                          1.96 |
+| `Color.parse(0xab_cd_ef)`                 |         6.30 |                                                 — |                                          3.90 |
+| `Color.rgb32(0xab_cd_ef_ff)`              |         6.31 |                                                 — |                                             — |
+| `Color.parse('rgba(128, 128, 128, 0.5)')` |         2.69 |                                              1.66 |                                          0.24 |
+| `c.saturation(50).rgb()` [^2]             |        22.96 |                                              0.95 |                                          1.04 |
+| `c.hue(90).lightness(10).rgb()` [^2]      |        17.71 |                                              0.65 |                                             — |
+| `Color.gradient(['#fff', '#000'])`        |         5.02 |                                                 — |                                          0.52 |
+| `g.at(0.5, Rgb, lerp)` [^3]               |        13.95 |                                                 — |                                          4.86 |
+| `g.at(0.5, Lab, csplineMonot)` [^3]       |        12.26 |                                                 — |                                          4.80 |
 
 [^1]: Performance was measured on Apple M1 Max using [TooFast](https://github.com/smikhalevski/toofast).
 

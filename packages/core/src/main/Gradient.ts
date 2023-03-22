@@ -5,27 +5,36 @@ import { clamp1 } from 'algomatic';
 // Black RGBa color that is returned if gradient has zero domain size
 const blackRgb: Rgb = [0, 0, 0, 1];
 
-export interface InterpolatorLike {
+/**
+ * The interpolator function that returns an interpolated value for the given argument.
+ */
+export interface Interpolator {
   (x: number): number;
 
-  update?(xs: ArrayLike<number>, ys: ArrayLike<number>): void;
+  /**
+   * An optional callback to update the interpolation domain. Used if stop colors in the gradient are changed.
+   */
+  update?(xs: readonly number[], ys: readonly number[]): void;
 }
 
 /**
  * Factory that returns an interpolator function for given pivot points.
- *
- * @see {@link https://smikhalevski.github.io/algomatic/modules.html#lerp lerp}
- * @see {@link https://smikhalevski.github.io/algomatic/modules.html#cspline cspline}
- * @see {@link https://smikhalevski.github.io/algomatic/modules.html#csplineMonot csplineMonot}
  */
-export type InterpolatorFactory = (xs: ArrayLike<number>, ys: ArrayLike<number>) => InterpolatorLike;
+export type InterpolatorFactory = (xs: readonly number[], ys: readonly number[]) => Interpolator;
 
 /**
  * Provides color gradient manipulation API that is extensible via plugins.
  */
 export class Gradient {
-  protected colors;
-  protected domain;
+  /**
+   * The list of colors that comprise the gradient.
+   */
+  protected _colors;
+
+  /**
+   * The stop values for each color.
+   */
+  protected _domain;
 
   /**
    * Color components returned by the {@link get} method.
@@ -48,10 +57,10 @@ export class Gradient {
   private _interpolatorFactory?: InterpolatorFactory;
 
   /**
-   * Color component interpolators that were produced by {@link _interpolatorFactory} for components provided by
+   * Color component interpolators that were produced by {@link _interpolatorFactory} for components provided by the
    * {@link _model} for colors with cumulative version {@link _prevColorsVersion}.
    */
-  private _interpolators: InterpolatorLike[] = [];
+  private _interpolators: Interpolator[] = [];
   private _componentValues: number[][] = [];
 
   /**
@@ -61,9 +70,9 @@ export class Gradient {
    * @param domain The stop values for each color. Values must be sorted in ascending order. The number of domain
    *     values must exactly match the number of provided colors.
    */
-  public constructor(colors: readonly Color[], domain: readonly number[]) {
-    this.colors = colors;
-    this.domain = domain;
+  constructor(colors: readonly Color[], domain: readonly number[]) {
+    this._colors = colors;
+    this._domain = domain;
   }
 
   /**
@@ -76,19 +85,11 @@ export class Gradient {
    * @param interpolatorFactory The function that returns an interpolator.
    * @returns The read-only components array.
    */
-  public get(model: ColorModel, value: number, interpolatorFactory: InterpolatorFactory): readonly number[] {
-    const {
-      colors,
-      domain,
-
-      _tempComponents,
-      _componentValues,
-      _interpolatorFactory,
-      _interpolators,
-    } = this;
+  get(model: ColorModel, value: number, interpolatorFactory: InterpolatorFactory): readonly number[] {
+    const { _colors, _domain, _tempComponents, _componentValues, _interpolatorFactory, _interpolators } = this;
 
     const { componentCount } = model;
-    const domainLength = domain.length;
+    const domainLength = _domain.length;
 
     // Empty gradients are rendered as black
     if (domainLength === 0) {
@@ -100,30 +101,35 @@ export class Gradient {
     }
 
     if (domainLength === 1) {
-      return this.colors[0].get(model);
+      return this._colors[0].get(model);
     }
 
-    const currColorsVersion = getColorsVersion(this.colors);
+    const currColorsVersion = getColorsVersion(this._colors);
     const colorsUpdated = this._prevColorsVersion !== currColorsVersion || this._model !== model;
 
     if (colorsUpdated) {
       // Update color components
       for (let i = 0; i < domainLength; ++i) {
-        const components = colors[i].get(model);
+        const components = _colors[i].get(model);
 
         for (let j = 0; j < componentCount; ++j) {
           (_componentValues[j] ||= [])[i] = components[j];
         }
       }
+
       this._prevColorsVersion = currColorsVersion;
       this._model = model;
 
       // Create or update interpolators
-      for (let i = 0; i < componentCount; ++i) {
-        if (_interpolatorFactory === interpolatorFactory && _interpolators.length > i && _interpolators[i].update) {
-          _interpolators[i].update!(domain, _componentValues[i]);
+      for (let i = 0, update; i < componentCount; ++i) {
+        if (
+          _interpolatorFactory === interpolatorFactory &&
+          _interpolators.length > i &&
+          (update = _interpolators[i].update) !== undefined
+        ) {
+          update(_domain, _componentValues[i]);
         } else {
-          _interpolators[i] = interpolatorFactory(domain, _componentValues[i]);
+          _interpolators[i] = interpolatorFactory(_domain, _componentValues[i]);
         }
       }
       this._interpolatorFactory = interpolatorFactory;

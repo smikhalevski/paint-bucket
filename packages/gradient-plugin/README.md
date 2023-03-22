@@ -11,5 +11,5 @@ color.gradient(['#fff', '#000']).at(0.7).css(); // → #4d4d4d
 
 color.gradient(['#fff', '#000'], [0, 100]).at(70).css(); // → #4d4d4d
 
-color('#fff').gradient('#000').at(0.7).css(); // → #4d4d4d
+Color.parse('#fff').gradient('#000').at(0.7).css(); // → #4d4d4d
 ```

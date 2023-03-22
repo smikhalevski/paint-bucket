@@ -3,7 +3,7 @@ import { intToComponents } from '@paint-bucket/plugin-utils';
 /**
  * X11 color name to RGBa components.
  */
-export const x11Components = new Map(
+export const x11Colors = new Map(
   [
     ['aliceblue', 'f0f8ff'],
     ['antiquewhite', 'faebd7'],

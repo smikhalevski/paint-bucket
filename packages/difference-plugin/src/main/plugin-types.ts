@@ -15,10 +15,10 @@ declare module '@paint-bucket/core/lib/Color' {
      *
      * Alpha channel is ignored.
      *
-     * @see http://zschuessler.github.io/DeltaE/learn
-     * @see http://www.ece.rochester.edu/~gsharma/ciede2000/
-     * @see https://en.wikipedia.org/wiki/Color_difference
-     * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
+     * @see {@link http://zschuessler.github.io/DeltaE/learn Learn about Delta E 101}
+     * @see {@link http://www.ece.rochester.edu/~gsharma/ciede2000 The CIEDE2000 Color-Difference formula}
+     * @see {@link https://en.wikipedia.org/wiki/Color_difference Color difference on Wikipedia}
+     * @see {@link https://en.wikipedia.org/wiki/Just-noticeable_difference Just-noticeable difference on Wikipedia}
      */
     deltaE(color: ColorLike): number;
   }

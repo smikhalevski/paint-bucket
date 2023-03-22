@@ -9,5 +9,5 @@ export function stringifyRgb(rgb: readonly number[]): string {
     return str.length === 6 ? '#' + str : '#000000'.substr(0, 7 - str.length) + str;
   }
 
-  return `rgba(${Math.round(R * 0xff)},${Math.round(G * 0xff)},${Math.round(B * 0xff)},${a.toFixed(2)})`;
+  return `rgba(${(R * 0xff) | 0},${(G * 0xff) | 0},${(B * 0xff) | 0},${((a * 100) | 0) / 100})`;
 }

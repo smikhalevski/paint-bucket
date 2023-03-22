@@ -1,12 +1,14 @@
 /**
  * White point reference values with observer/illuminant.
  *
- * @see http://en.wikipedia.org/wiki/Standard_illuminant
- * @see https://github.com/colorjs/color-space/blob/master/xyz.js
- * @see https://www.mathworks.com/help/images/ref/whitepoint.html
+ * @see {@link http://en.wikipedia.org/wiki/Standard_illuminant Standard illuminant on Wikipedia}
+ * @see {@link https://www.mathworks.com/help/images/ref/whitepoint.html White point on MathWorks}
  */
+// https://github.com/colorjs/color-space/blob/master/xyz.js
 export const WhitePoint = {
-  //1931 2°
+  /**
+   * 1931 2°
+   */
   deg2: {
     // Incandescent light
 
@@ -51,7 +53,9 @@ export const WhitePoint = {
     E: [1, 1, 1] as WhitePoint,
   },
 
-  //1964 10°
+  /**
+   * 1964 10°
+   */
   deg10: {
     // Incandescent light
 
@@ -102,4 +106,7 @@ export const WhitePoint = {
   },
 } as const;
 
+/**
+ * White point components.
+ */
 export type WhitePoint = readonly [number, number, number];

@@ -3,6 +3,16 @@ import { and, byte, left, or, right, xor } from 'algomatic';
 const { round } = Math;
 
 /**
+ * Clamps component to [0, 1] range.
+ *
+ * @param x The value to clamp.
+ */
+export function clamp(x: number): number {
+  x = +x;
+  return x <= 1 ? (x >= 0 ? x : 0) : 1;
+}
+
+/**
  * Normalizes the size of components in the binary representation of the 24-bit color.
  *
  * ```ts

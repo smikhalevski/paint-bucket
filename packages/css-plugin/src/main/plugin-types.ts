@@ -1,12 +1,12 @@
 import { Applicator } from '@paint-bucket/plugin-utils';
 
 declare module '@paint-bucket/core/lib/Color' {
-  interface ColorFunction {
+  interface ColorParse {
     /**
      * Parses color from CSS string.
      *
      * ```ts
-     * color('hsl(290, 20%, 50% / 80%)').css(); // rgba(145,102,153,0.80)
+     * Color.parse('hsl(290, 20%, 50% / 80%)').css(); // rgba(145,102,153,0.80)
      * ```
      */
     (color: string): Color;
@@ -17,9 +17,9 @@ declare module '@paint-bucket/core/lib/Color' {
      * Returns color as a CSS string.
      *
      * ```ts
-     * color('#abc').css(); // #aabbcc
+     * Color.parse('#abc').css(); // #aabbcc
      *
-     * color([26, 51, 89, 0.5]).css(); // rgba(26,51,89,0.50)
+     * Color.parse([26, 51, 89, 0.5]).css(); // rgba(26,51,89,0.50)
      * ```
      */
     css(): string;
@@ -28,7 +28,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Sets color from CSS string.
      *
      * ```ts
-     * color().css('hsl(290, 20%, 50% / 80%)').css(); // rgba(145,102,153,0.80)
+     * new Color().css('hsl(290, 20%, 50% / 80%)').css(); // rgba(145,102,153,0.80)
      * ```
      */
     css(color: Applicator<string>): Color;

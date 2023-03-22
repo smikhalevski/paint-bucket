@@ -32,9 +32,9 @@ function rotateRgbToXyz(v: number): number {
 /**
  * Convert XYZa to RGBa.
  *
- * @see https://www.w3.org/TR/css-color-4/#rgb-to-lab
- * @see https://www.w3.org/TR/css-color-4/#color-conversion-code
- * @see http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
+ * @see {@link https://www.w3.org/TR/css-color-4/#rgb-to-lab RGB to LAB on W3C}
+ * @see {@link https://www.w3.org/TR/css-color-4/#color-conversion-code Color conversion code on W3C}
+ * @see {@link http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html RGB/XYZ Matrices}
  */
 export function xyzToRgb(xyz: Xyz, rgb: Rgb, whitePoint = WhitePoint.deg2.D65): Rgb {
   const [X, Y, Z] = xyz;

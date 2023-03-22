@@ -1,9 +1,9 @@
 import { Color, Rgb } from '@paint-bucket/core';
-import { createAccessor } from '@paint-bucket/plugin-utils';
+import { createAccessor, enhanceColorParse } from '@paint-bucket/plugin-utils';
 import { parseCssColor } from './parseCssColor';
 import { stringifyRgb } from './stringifyRgb';
 
-Color.overrideParser(next => value => {
+enhanceColorParse(next => value => {
   if (typeof value === 'string') {
     const color = parseCssColor(value);
 
@@ -14,25 +14,22 @@ Color.overrideParser(next => value => {
   return next(value);
 });
 
-const colorPrototype = Color.prototype;
+Color.prototype.css = createAccessor(
+  color => stringifyRgb(color.get(Rgb)),
 
-colorPrototype.css = createAccessor(
-  function (this: Color) {
-    return stringifyRgb(this.get(Rgb));
-  },
-  function (this: Color, value) {
+  (color0, value) => {
     const color = parseCssColor(value);
     if (color) {
-      this.model = color.model;
-      this.components = color.components;
+      color0['_model'] = color['_model'];
+      color0['_components'] = color['_components'];
     } else {
-      this.model = Rgb;
-      this.components = [0, 0, 0, 1];
+      color0['_model'] = Rgb;
+      color0['_components'] = [0, 0, 0, 1];
     }
-    return this;
+    return color0;
   }
 );
 
-colorPrototype.toString = function (this: Color) {
+Color.prototype.toString = function () {
   return this.css();
 };

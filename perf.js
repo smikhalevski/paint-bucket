@@ -4,7 +4,7 @@ const { color, Rgb, Lab } = require('paint-bucket');
 const { csplineMonot, lerp } = require('algomatic');
 
 // Create color from components
-describe('color([255, 255, 255])', () => {
+describe('Color.parse([255, 255, 255])', () => {
   test('tinycolor2', measure => {
     const rgb = { r: 0xab, g: 0xcd, b: 0xef };
     measure(() => tinycolor2(rgb));
@@ -17,12 +17,12 @@ describe('color([255, 255, 255])', () => {
 
   test('paint-bucket', measure => {
     const rgb = [0xab, 0xcd, 0xef];
-    measure(() => color(rgb));
+    measure(() => Color.parse(rgb));
   });
 });
 
 // Parse color from short HEX
-describe("color('#abc')", () => {
+describe("Color.parse('#abc')", () => {
   test('tinycolor2', measure => {
     measure(() => tinycolor2('#abc'));
   });
@@ -32,12 +32,12 @@ describe("color('#abc')", () => {
   });
 
   test('paint-bucket', measure => {
-    measure(() => color('#abc'));
+    measure(() => Color.parse('#abc'));
   });
 });
 
 // Parse color from 24-bit HEX
-describe("color('#abcdef')", () => {
+describe("Color.parse('#abcdef')", () => {
   test('tinycolor2', measure => {
     measure(() => tinycolor2('#abcdef'));
   });
@@ -47,12 +47,12 @@ describe("color('#abcdef')", () => {
   });
 
   test('paint-bucket', measure => {
-    measure(() => color('#abcdef'));
+    measure(() => Color.parse('#abcdef'));
   });
 });
 
 // Parse color from 32-bit HEX
-describe("color('#abcdefff')", () => {
+describe("Color.parse('#abcdefff')", () => {
   test('tinycolor2', measure => {
     measure(() => tinycolor2('#abcdefff'));
   });
@@ -62,12 +62,12 @@ describe("color('#abcdefff')", () => {
   });
 
   test('paint-bucket', measure => {
-    measure(() => color('#abcdefff'));
+    measure(() => Color.parse('#abcdefff'));
   });
 });
 
 // Parse color from 24-bit integer
-describe('color(0xab_cd_ef)', () => {
+describe('Color.parse(0xab_cd_ef)', () => {
   // Not supported
   // test('tinycolor2', (measure) => {
   //   measure(() => tinycolor2(0xab_cd_ef));
@@ -78,7 +78,7 @@ describe('color(0xab_cd_ef)', () => {
   });
 
   test('paint-bucket', measure => {
-    measure(() => color(0xab_cd_ef));
+    measure(() => Color.parse(0xab_cd_ef));
   });
 });
 
@@ -100,7 +100,7 @@ describe('color.rgb32(0xab_cd_ef_ff)', () => {
 });
 
 // Parse color from RGBa
-describe("color('rgba(128, 128, 128, 0.5)')", () => {
+describe("Color.parse('rgba(128, 128, 128, 0.5)')", () => {
   test('tinycolor2', measure => {
     measure(() => tinycolor2('rgba(128,128,128,0.5)'));
   });
@@ -110,7 +110,7 @@ describe("color('rgba(128, 128, 128, 0.5)')", () => {
   });
 
   test('paint-bucket', measure => {
-    measure(() => color('rgba(128,128,128,0.5)'));
+    measure(() => Color.parse('rgba(128,128,128,0.5)'));
   });
 });
 
@@ -141,7 +141,7 @@ describe('c.saturation(50).rgb()', () => {
     let c;
     measure(() => c.saturation(50).rgb(), {
       beforeIteration() {
-        c = color(rgb);
+        c = Color.parse(rgb);
       },
     });
   });
@@ -164,7 +164,7 @@ describe('c.hue(90).lightness(10).rgb()', () => {
     let c;
     measure(() => c.hue(90).lightness(10).rgb(), {
       beforeIteration() {
-        c = color(rgb);
+        c = Color.parse(rgb);
       },
     });
   });

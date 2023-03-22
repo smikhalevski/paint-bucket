@@ -1,5 +1,4 @@
-import { Color, color, Gradient, Rgb } from '@paint-bucket/core';
-import { toColor } from '@paint-bucket/plugin-utils';
+import { Color, Gradient, Rgb } from '@paint-bucket/core';
 import { lerp, range, sort, swap } from 'algomatic';
 
 const domainCache = new Map<number, number[]>();
@@ -10,16 +9,16 @@ for (let i = 0; i < 10; ++i) {
 
 const domain2 = [0, 1];
 
-color.gradient = (colors, domain) => {
+Color.gradient = (colors, domain) => {
   if (!domain) {
-    return new Gradient(colors.map(toColor), domainCache.get(colors.length) || range(colors.length));
+    return new Gradient(colors.map(Color.parse), domainCache.get(colors.length) || range(colors.length));
   }
 
   const domainLength = Math.min(colors.length, domain.length);
   const mappedColors: Color[] = [];
 
   for (let i = 0; i < domainLength; ++i) {
-    mappedColors.push(toColor(colors[i]));
+    mappedColors.push(Color.parse(colors[i]));
   }
 
   domain = domain.slice(0, domainLength);
@@ -28,18 +27,15 @@ color.gradient = (colors, domain) => {
   return new Gradient(mappedColors, domain);
 };
 
-const gradientPrototype = Gradient.prototype;
-
-gradientPrototype.at = function (this: Gradient, x, model = Rgb, interpolatorFactory = lerp) {
+Gradient.prototype.at = function (this: Gradient, x, model = Rgb, interpolatorFactory = lerp) {
   return new Color(model, this.get(model, x, interpolatorFactory).slice(0));
 };
 
-gradientPrototype.palette = function (this: Gradient, n, model = Rgb) {
-  const { domain } = this;
+Gradient.prototype.palette = function (this: Gradient, n, model = Rgb) {
   const colors: Color[] = [];
 
-  const x0 = domain[0];
-  const x1 = domain[domain.length - 1];
+  const x0 = this['_domain'][0];
+  const x1 = this['_domain'][this['_domain'].length - 1];
   const dx = x1 - x0;
 
   for (let i = 0; i < n; ++i) {
@@ -48,8 +44,6 @@ gradientPrototype.palette = function (this: Gradient, n, model = Rgb) {
   return colors;
 };
 
-const colorPrototype = Color.prototype;
-
-colorPrototype.gradient = function (this: Color, color) {
-  return new Gradient([this, toColor(color)], domain2);
+Color.prototype.gradient = function (color) {
+  return new Gradient([this, Color.parse(color)], domain2);
 };

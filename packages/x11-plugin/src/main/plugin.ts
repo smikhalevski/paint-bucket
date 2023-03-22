@@ -1,11 +1,12 @@
 import { Color, Rgb } from '@paint-bucket/core';
-import { x11Components } from './x11-components';
+import { x11Colors } from './x11-colors';
+import { enhanceColorParse } from '@paint-bucket/plugin-utils';
 
-Color.overrideParser(next => value => {
+enhanceColorParse(next => value => {
   if (typeof value === 'string') {
-    const components = x11Components.get(value.toLowerCase());
+    const components = x11Colors.get(value.toLowerCase());
 
-    if (components) {
+    if (components !== undefined) {
       return new Color(Rgb, components.slice(0));
     }
   }

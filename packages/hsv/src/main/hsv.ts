@@ -1,6 +1,9 @@
 import { hsvToRgb, rgbToHsv } from './hsv-rgb';
 import { ColorModel } from '@paint-bucket/core';
 
+/**
+ * HSVa color components.
+ */
 export type Hsv = [H: number, S: number, V: number, a: number];
 
 /**

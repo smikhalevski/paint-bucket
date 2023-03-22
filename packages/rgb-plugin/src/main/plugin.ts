@@ -1,158 +1,138 @@
-import { color, Color, ColorLike, Rgb } from '@paint-bucket/core';
+import { Color, Rgb } from '@paint-bucket/core';
 import {
+  clamp,
   componentsToInt,
   createAccessor,
+  enhanceColorParse,
   intToComponents,
   normalizeComponents,
-  toColor,
 } from '@paint-bucket/plugin-utils';
-import { clamp1, isNumeric, right } from 'algomatic';
+import { right } from 'algomatic';
 
-Color.overrideParser(next => value => {
+enhanceColorParse(next => value => {
   if (typeof value === 'number') {
-    return new Color().rgb24(value);
+    return Color.rgb24(value);
   }
   if (Array.isArray(value)) {
-    return new Color().rgb(value as Rgb);
+    return Color.rgb(value);
   }
   return next(value);
 });
 
-color.rgb = rgb => new Color().rgb(rgb);
+Color.rgb = rgb => new Color().rgb(rgb);
 
-color.rgb24 = rgb => new Color().rgb24(rgb);
+Color.rgb24 = rgb => new Color().rgb24(rgb);
 
-color.rgb32 = rgb => new Color().rgb32(rgb);
+Color.rgb32 = rgb => new Color().rgb32(rgb);
 
-const colorPrototype = Color.prototype;
-
-colorPrototype.rgb = createAccessor<Rgb, Partial<Rgb>>(
-  function (this: Color) {
-    const rgb = this.get(Rgb);
+Color.prototype.rgb = createAccessor<Rgb, Partial<Rgb>>(
+  color => {
+    const rgb = color.get(Rgb);
     return [rgb[0] * 0xff, rgb[1] * 0xff, rgb[2] * 0xff, rgb[3]];
   },
-  function (this: Color, value) {
-    const rgb = this.use(Rgb);
+
+  (color, value) => {
+    const rgb = color.use(Rgb);
     const [R, G, B, a] = value;
 
-    if (isNumeric(R)) {
-      rgb[0] = clamp1(R / 0xff);
+    if (R !== undefined) {
+      rgb[0] = clamp(R / 0xff);
     }
-    if (isNumeric(G)) {
-      rgb[1] = clamp1(G / 0xff);
+    if (G !== undefined) {
+      rgb[1] = clamp(G / 0xff);
     }
-    if (isNumeric(B)) {
-      rgb[2] = clamp1(B / 0xff);
+    if (B !== undefined) {
+      rgb[2] = clamp(B / 0xff);
     }
-    if (isNumeric(a)) {
-      rgb[3] = clamp1(a);
-    }
-  }
-);
-
-colorPrototype.rgb24 = createAccessor(
-  function (this: Color) {
-    return right(componentsToInt(this.get(Rgb)), 8);
-  },
-  function (this: Color, value) {
-    intToComponents(normalizeComponents(value, 6), this.use(Rgb));
-  }
-);
-
-colorPrototype.rgb32 = createAccessor(
-  function (this: Color) {
-    return componentsToInt(this.get(Rgb));
-  },
-  function (this: Color, value) {
-    intToComponents(normalizeComponents(value, 8), this.use(Rgb));
-  }
-);
-
-colorPrototype.red = createAccessor(
-  function (this: Color) {
-    return this.get(Rgb)[0] * 0xff;
-  },
-  function (this: Color, R) {
-    if (isNumeric(R)) {
-      this.use(Rgb)[0] = clamp1(R / 0xff);
+    if (a !== undefined) {
+      rgb[3] = clamp(a);
     }
   }
 );
 
-colorPrototype.green = createAccessor(
-  function (this: Color) {
-    return this.get(Rgb)[1] * 0xff;
-  },
-  function (this: Color, G) {
-    if (isNumeric(G)) {
-      this.use(Rgb)[1] = clamp1(G / 0xff);
-    }
+Color.prototype.rgb24 = createAccessor(
+  color => right(componentsToInt(color.get(Rgb)), 8),
+
+  (color, value) => {
+    intToComponents(normalizeComponents(value, 6), color.use(Rgb));
   }
 );
 
-colorPrototype.blue = createAccessor(
-  function (this: Color) {
-    return this.get(Rgb)[2] * 0xff;
-  },
-  function (this: Color, B) {
-    if (isNumeric(B)) {
-      this.use(Rgb)[2] = clamp1(B / 0xff);
-    }
+Color.prototype.rgb32 = createAccessor(
+  color => componentsToInt(color.get(Rgb)),
+
+  (color, value) => {
+    intToComponents(normalizeComponents(value, 8), color.use(Rgb));
   }
 );
 
-colorPrototype.alpha = createAccessor(
-  function (this: Color) {
-    return this.get(Rgb)[3];
-  },
-  function (this: Color, a) {
-    if (isNumeric(a)) {
-      this.use(Rgb)[3] = clamp1(a);
-    }
+Color.prototype.red = createAccessor(
+  color => color.get(Rgb)[0] * 0xff,
+
+  (color, R) => {
+    color.use(Rgb)[0] = clamp(R / 0xff);
   }
 );
 
-colorPrototype.brightness = function (this: Color) {
+Color.prototype.green = createAccessor(
+  color => color.get(Rgb)[1] * 0xff,
+
+  (color, G) => {
+    color.use(Rgb)[1] = clamp(G / 0xff);
+  }
+);
+
+Color.prototype.blue = createAccessor(
+  color => color.get(Rgb)[2] * 0xff,
+
+  (color, B) => {
+    color.use(Rgb)[2] = clamp(B / 0xff);
+  }
+);
+
+Color.prototype.alpha = createAccessor(
+  color => color.get(Rgb)[3],
+
+  (color, a) => {
+    color.use(Rgb)[3] = clamp(a);
+  }
+);
+
+Color.prototype.brightness = function () {
   const rgb = this.get(Rgb);
   return rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114;
 };
 
-colorPrototype.luminance = function (this: Color) {
+Color.prototype.luminance = function () {
   const rgb = this.get(Rgb);
-  return rotateComponent(rgb[0]) * 0.2126 + rotateComponent(rgb[1]) * 0.7152 + rotateComponent(rgb[2]) * 0.0722;
+  return rotate(rgb[0]) * 0.2126 + rotate(rgb[1]) * 0.7152 + rotate(rgb[2]) * 0.0722;
 };
 
-function rotateComponent(v: number): number {
+function rotate(v: number): number {
   return v > 0.03928 ? Math.pow((v + 0.055) / 1.055, 2.4) : v / 12.92;
 }
 
-colorPrototype.contrast = function (this: Color, color: ColorLike) {
-  let l1 = this.luminance();
-  let l2 = toColor(color).luminance();
+Color.prototype.contrast = function (color) {
+  let a = 0.05 + this.luminance();
+  let b = 0.05 + Color.parse(color).luminance();
 
-  if (l2 > l1) {
-    const l = l2;
-    l2 = l1;
-    l1 = l;
-  }
-  return (l1 + 0.05) / (l2 + 0.05);
+  return a < b ? a / b : b / a;
 };
 
-colorPrototype.mix = function (this: Color, color, ratio) {
+Color.prototype.mix = function (color, ratio) {
   const rgb1 = this.use(Rgb);
-  const rgb2 = toColor(color).get(Rgb);
+  const rgb2 = Color.parse(color).get(Rgb);
 
-  if (isNumeric(ratio)) {
-    ratio = clamp1(ratio);
+  ratio = clamp(ratio);
 
-    rgb1[0] += ratio * (rgb2[0] - rgb1[0]);
-    rgb1[1] += ratio * (rgb2[1] - rgb1[1]);
-    rgb1[2] += ratio * (rgb2[2] - rgb1[2]);
-  }
+  rgb1[0] += ratio * (rgb2[0] - rgb1[0]);
+  rgb1[1] += ratio * (rgb2[1] - rgb1[1]);
+  rgb1[2] += ratio * (rgb2[2] - rgb1[2]);
+
   return this;
 };
 
-colorPrototype.greyscale = function (this: Color) {
+Color.prototype.greyscale = function () {
   const rgb = this.use(Rgb);
   const [R, G, B] = rgb;
   const value = Math.sqrt(R * R * 0.299 + G * G * 0.587 + B * B * 0.114);

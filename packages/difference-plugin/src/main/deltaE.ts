@@ -1,24 +1,9 @@
-import { clamp, deg, hypot, rad } from 'algomatic';
+import { deg, hypot, rad } from 'algomatic';
 
 const { abs, atan2, cos, exp, sin, sqrt } = Math;
 
 /**
  * Computes the CIEDE2000 color-difference.
- *
- * Returns number in range [0, 100] where 2.3 is considered to be just noticeable difference (JND).
- *
- * - [0, 1)    Not perceptible by human eyes.
- * - [1, 2)    Perceptible through close observation.
- * - [2, 10)   Perceptible at a glance.
- * - [10, 50)  Colors are more similar than opposite.
- * - [50, 100] Colors are exact opposite.
- *
- * Alpha channel is ignored.
- *
- * @see http://zschuessler.github.io/DeltaE/learn
- * @see http://www.ece.rochester.edu/~gsharma/ciede2000/
- * @see https://en.wikipedia.org/wiki/Color_difference
- * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
  */
 export function deltaE(lab1: readonly number[], lab2: readonly number[]): number {
   let [L1, A1, B1] = lab1;
@@ -83,7 +68,9 @@ export function deltaE(lab1: readonly number[], lab2: readonly number[]): number
   const dHpSh = dHp / sH;
   const t3 = dL / sL;
 
-  return clamp(sqrt(t3 * t3 + dCpSc * dCpSc + dHpSh * dHpSh + rT * dCpSc * dHpSh), 0, 100); // (22)
+  const v = sqrt(t3 * t3 + dCpSc * dCpSc + dHpSh * dHpSh + rT * dCpSc * dHpSh); // (22)
+
+  return v < 0 ? 0 : v > 100 ? 100 : v;
 }
 
 // (7)

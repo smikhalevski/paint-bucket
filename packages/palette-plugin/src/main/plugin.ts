@@ -2,15 +2,13 @@ import { Color } from '@paint-bucket/core';
 import { Hsl } from '@paint-bucket/hsl';
 import { Hsv } from '@paint-bucket/hsv';
 
-const colorPrototype = Color.prototype;
-
-colorPrototype.complement = function () {
+Color.prototype.complement = function () {
   const [H, S, L, a] = this.get(Hsl);
 
   return new Color(Hsl, [(H + 0.5) % 1, S, L, a]);
 };
 
-colorPrototype.triad = function () {
+Color.prototype.triad = function () {
   const [H, S, L, a] = this.get(Hsl);
 
   return [
@@ -20,7 +18,7 @@ colorPrototype.triad = function () {
   ];
 };
 
-colorPrototype.tetrad = function () {
+Color.prototype.tetrad = function () {
   const [H, S, L, a] = this.get(Hsl);
 
   return [
@@ -31,7 +29,7 @@ colorPrototype.tetrad = function () {
   ];
 };
 
-colorPrototype.splitComplement = function () {
+Color.prototype.splitComplement = function () {
   const [H, S, L, a] = this.get(Hsl);
 
   return [
@@ -41,7 +39,7 @@ colorPrototype.splitComplement = function () {
   ];
 };
 
-colorPrototype.analogous = function (n = 6, slices = 30) {
+Color.prototype.analogous = function (n = 6, slices = 30) {
   const [H, S, L, a] = this.get(Hsl);
 
   const part = 1 / slices;
@@ -56,7 +54,7 @@ colorPrototype.analogous = function (n = 6, slices = 30) {
   return colors;
 };
 
-colorPrototype.monochromatic = function (n = 6) {
+Color.prototype.monochromatic = function (n = 6) {
   const [H, S, V, a] = this.get(Hsv);
 
   const colors: Color[] = [];

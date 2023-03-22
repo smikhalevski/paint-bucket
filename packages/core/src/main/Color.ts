@@ -5,34 +5,24 @@ import { OverloadParameters } from './utility-types';
 const tempRgb: Rgb = [0, 0, 0, 1];
 
 /**
- * Returns the new {@link Color} instance.
- */
-export const color = (value => Color.parser(value)) as ColorFunction;
-
-/**
- * Re-declare this interface in the plugin package to extend {@link color} function signature.
+ * Re-declare this interface in the plugin package to extend {@link Color.parse} function signature.
  *
  * **Note:** The first argument of each overload becomes a part of {@link ColorLike} union.
  */
-export interface ColorFunction {
-  /**
-   * Creates the new black color.
-   */
-  (): Color;
-
+export interface ColorParse {
   /**
    * Clones the {@link Color} instance.
    *
-   * @param color The color to clone.
+   * @param color The color instance to clone.
    * @returns The new color instance.
    */
   (color: Color): Color;
 }
 
 /**
- * The type of the value that can be parsed into a {@link Color} instance using {@link color} function.
+ * The type of the value that can be parsed into a {@link Color} instance using {@link Color.parse} function.
  */
-export type ColorLike = OverloadParameters<ColorFunction>[0];
+export type ColorLike = OverloadParameters<ColorParse>[0];
 
 /**
  * Provides color manipulation API that is extensible via plugins.
@@ -42,14 +32,25 @@ export class Color {
    * The color value version that is auto-incremented every time the {@link use} method is called. This version can be
    * used to track that the color value was changed, for example to invalidate caches that rely on current color value.
    */
-  public version = 0;
+  version = 0;
+
+  /**
+   * The current color model.
+   */
+  private _model: ColorModel;
+
+  /**
+   * Color components of the {@link _model}.
+   */
+  private _components: number[];
 
   /**
    * The color model that was last acquired by {@link get}.
    */
   private _tempModel?: ColorModel;
+
   /**
-   * Color components of the {@link _tempModel} color model.
+   * Color components of the {@link _tempModel}.
    */
   private _tempComponents?: number[];
 
@@ -59,44 +60,27 @@ export class Color {
    * @param model The initial color model.
    * @param components The initial color components.
    */
-  public constructor(
-    /**
-     * The current color model.
-     */
-    protected model: ColorModel = Rgb,
-    /**
-     * Color components of the current color model.
-     */
-    protected components = [0, 0, 0, 1]
-  ) {}
+  constructor(model = Rgb, components = [0, 0, 0, 1]) {
+    this._model = model;
+    this._components = components;
+  }
 
   /**
    * Parser that transforms input values into {@link Color} instances.
    */
-  public static parser(value: unknown): Color {
-    return value instanceof Color ? value.clone() : new Color();
-  }
-
-  /**
-   * Overrides parsing implementation that backs the {@link color} function.
-   *
-   * Use this in plugins to add new parsing mechanisms or static methods for {@link color} function.
-   */
-  public static overrideParser(cb: (next: (value: unknown) => Color) => (value: unknown) => Color): void {
-    this.parser = cb(this.parser);
-  }
+  static parse: ColorParse = value => (value instanceof Color ? value.clone() : new Color());
 
   /**
    * Creates a clone of this {@link Color} instance.
    *
    * @returns The cloned instance.
    */
-  public clone(): Color {
-    return new Color(this.model, this.components.slice(0));
+  clone(): Color {
+    return new Color(this._model, this._components.slice(0));
   }
 
   /**
-   * Returns read-only color components of this {@link Color} in particular color model.
+   * Returns read-only color components of this {@link Color} in a particular color model.
    *
    * Use this method to acquire color components without changing the current model of this {@link Color} instance.
    * Usually this is required if plugin method returns a computed value.
@@ -106,28 +90,28 @@ export class Color {
    * @param model The color model that provides color components.
    * @returns Read-only color components.
    */
-  public get(model: ColorModel): readonly number[] {
-    let { components, _tempComponents } = this;
+  get(model: ColorModel): readonly number[] {
+    let { _components, _tempComponents } = this;
 
     if (this._tempModel === model && _tempComponents) {
       return _tempComponents;
     }
-    if (this.model === model) {
-      return components;
+    if (this._model === model) {
+      return _components;
     }
 
     this._tempModel = model;
     this._tempComponents = _tempComponents ||= [];
 
     // Convert components to the temp model
-    this.model.componentsToRgb(components, tempRgb);
+    this._model.componentsToRgb(_components, tempRgb);
     model.rgbToComponents(tempRgb, _tempComponents);
 
     return _tempComponents;
   }
 
   /**
-   * Returns mutable color components of this {@link Color} in particular color model.
+   * Returns mutable color components of this {@link Color} in a particular color model.
    *
    * Use this method in plugins if you want {@link Color} instance to switch the current color model or if you want to
    * update color components.
@@ -137,34 +121,34 @@ export class Color {
    * @param model The color model that provides color components.
    * @returns Mutable color components.
    */
-  public use(model: ColorModel): number[] {
-    let { components, _tempComponents } = this;
+  use(model: ColorModel): number[] {
+    let { _components, _tempComponents } = this;
 
     ++this.version;
 
     // Reuse temp components when models are matching
     if (this._tempModel === model && _tempComponents) {
-      this.model = model;
+      this._model = model;
 
       for (let i = 0; i < model.componentCount; ++i) {
-        components[i] = _tempComponents[i];
+        _components[i] = _tempComponents[i];
       }
     }
 
     // Clear temp model because the returned components are intended to be updated
     this._tempModel = undefined;
 
-    if (this.model === model) {
-      return components;
+    if (this._model === model) {
+      return _components;
     }
 
     // Convert components to the new model
-    this.model.componentsToRgb(components, tempRgb);
-    model.rgbToComponents(tempRgb, components);
+    this._model.componentsToRgb(_components, tempRgb);
+    model.rgbToComponents(tempRgb, _components);
 
     // Update current model
-    this.model = model;
+    this._model = model;
 
-    return components;
+    return _components;
   }
 }
