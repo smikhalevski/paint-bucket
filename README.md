@@ -352,8 +352,8 @@ Results are in millions of operations per second [^1]. The higher number is bett
 | `color('#abc')`                      |        10.02 |                                              1.80 |                                          1.90 |
 | `color('#abcdef')`                   |         9.54 |                                              1.86 |                                          2.24 |
 | `color('#abcdefff')`                 |         9.14 |                                              1.82 |                                          1.96 |
-| `color(0xAB_CD_EF)`                  |         6.30 |                                                 — |                                          3.90 |
-| `color.rgb32(0xAB_CD_EF_FF)`         |         6.31 |                                                 — |                                             — |
+| `color(0xab_cd_ef)`                  |         6.30 |                                                 — |                                          3.90 |
+| `color.rgb32(0xab_cd_ef_ff)`         |         6.31 |                                                 — |                                             — |
 | `color('rgba(128, 128, 128, 0.5)')`  |         2.69 |                                              1.66 |                                          0.24 |
 | `c.saturation(50).rgb()` [^2]        |        22.96 |                                              0.95 |                                          1.04 |
 | `c.hue(90).lightness(10).rgb()` [^2] |        17.71 |                                              0.65 |                                             — |

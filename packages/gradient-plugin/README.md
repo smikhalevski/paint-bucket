@@ -3,7 +3,7 @@
 Gradient manipulation plugin for [Paint Bucket](https://github.com/smikhalevski/paint-bucket/).
 
 ```ts
-import {color} from '@paint-bucket/core';
+import { color } from '@paint-bucket/core';
 import '@paint-bucket/gradient-plugin';
 import '@paint-bucket/css-plugin';
 

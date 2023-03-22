@@ -1,6 +1,6 @@
-import {Color, color, Gradient, Rgb} from '@paint-bucket/core';
-import {toColor} from '@paint-bucket/plugin-utils';
-import {lerp, range, sort, swap} from 'algomatic';
+import { Color, color, Gradient, Rgb } from '@paint-bucket/core';
+import { toColor } from '@paint-bucket/plugin-utils';
+import { lerp, range, sort, swap } from 'algomatic';
 
 const domainCache = new Map<number, number[]>();
 
@@ -35,7 +35,7 @@ gradientPrototype.at = function (this: Gradient, x, model = Rgb, interpolatorFac
 };
 
 gradientPrototype.palette = function (this: Gradient, n, model = Rgb) {
-  const {domain} = this;
+  const { domain } = this;
   const colors: Color[] = [];
 
   const x0 = domain[0];
@@ -43,7 +43,7 @@ gradientPrototype.palette = function (this: Gradient, n, model = Rgb) {
   const dx = x1 - x0;
 
   for (let i = 0; i < n; ++i) {
-    colors.push(this.at(x0 + i / (n - 1) * dx, model));
+    colors.push(this.at(x0 + (i / (n - 1)) * dx, model));
   }
   return colors;
 };

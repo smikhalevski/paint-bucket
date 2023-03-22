@@ -1,60 +1,58 @@
-import {and, byte, left, or, right, xor} from 'algomatic';
+import { and, byte, left, or, right, xor } from 'algomatic';
 
-const {round} = Math;
+const { round } = Math;
 
 /**
  * Normalizes the size of components in the binary representation of the 24-bit color.
  *
  * ```ts
- * normalizeComponents(0x1, 1) // → 0x11_11_11_FF
- * normalizeComponents(0x12, 2) // → 0x12_12_12_FF
- * normalizeComponents(0x123, 3) // → 0x11_22_33_FF
+ * normalizeComponents(0x1, 1) // → 0x11_11_11_ff
+ * normalizeComponents(0x12, 2) // → 0x12_12_12_ff
+ * normalizeComponents(0x123, 3) // → 0x11_22_33_ff
  * normalizeComponents(0x1234, 4) // → 0x11_22_33_44
  * normalizeComponents(0x12345, 5) // → 0
- * normalizeComponents(0x123456, 6) // → 0x12_34_56_FF
+ * normalizeComponents(0x123456, 6) // → 0x12_34_56_ff
  * normalizeComponents(0x1234567, 7) // → 0
  * normalizeComponents(0x12345678, 8) // → 0x12_34_56_78
  * ```
  *
- * @param components The input color to normalize, ex. `0xFF_FF_FF` for white in RGB space.
+ * @param components The input color to normalize, ex. `0xff_ff_ff` for white in RGB space.
  * @param nibbleCount The number (1, 2, 3, 4, 6 or 8) of nibbles the input color.
  * @return A valid raw color.
  */
 export function normalizeComponents(components: number, nibbleCount: number): number {
-
   components = Math.abs(components);
 
   let a, b, c, d;
 
   switch (nibbleCount) {
-
     case 1:
-      // 0x1 → 0x11_11_11_FF
-      a = 0xF & components;
+      // 0x1 → 0x11_11_11_ff
+      a = 0xf & components;
       a += a << 4;
-      return unsafeComposeComponents(a, a, a, 0xFF);
+      return unsafeComposeComponents(a, a, a, 0xff);
 
     case 2:
-      // 0x12 → 0x12_12_12_FF
-      a = 0xFF & components;
-      return unsafeComposeComponents(a, a, a, 0xFF);
+      // 0x12 → 0x12_12_12_ff
+      a = 0xff & components;
+      return unsafeComposeComponents(a, a, a, 0xff);
 
     case 3:
-      // 0x123 → 0x11_22_33_FF
-      a = 0xF & right(components, 8);
-      b = 0xF & right(components, 4);
-      c = 0xF & components;
+      // 0x123 → 0x11_22_33_ff
+      a = 0xf & right(components, 8);
+      b = 0xf & right(components, 4);
+      c = 0xf & components;
       a += a << 4;
       b += b << 4;
       c += c << 4;
-      return unsafeComposeComponents(a, b, c, 0xFF);
+      return unsafeComposeComponents(a, b, c, 0xff);
 
     case 4:
       // 0x1234 → 0x11_22_33_44
-      a = 0xF & right(components, 12);
-      b = 0xF & right(components, 8);
-      c = 0xF & right(components, 4);
-      d = 0xF & components;
+      a = 0xf & right(components, 12);
+      b = 0xf & right(components, 8);
+      c = 0xf & right(components, 4);
+      d = 0xf & components;
       a += a << 4;
       b += b << 4;
       c += c << 4;
@@ -62,12 +60,12 @@ export function normalizeComponents(components: number, nibbleCount: number): nu
       return unsafeComposeComponents(a, b, c, d);
 
     case 6:
-      // 0x12_34_56 → 0x12_34_56_FF
-      return left(0xFF_FF_FF & components, 8) + 0xFF;
+      // 0x12_34_56 → 0x12_34_56_ff
+      return left(0xff_ff_ff & components, 8) + 0xff;
 
     case 8:
       // 0x12_34_56_78
-      return and(0xFF_FF_FF_FF, components);
+      return and(0xff_ff_ff_ff, components);
   }
 
   return 0;
@@ -82,12 +80,12 @@ export function composeComponents(a: number, b: number, c: number, d: number): n
 }
 
 export function getComponent(components: number, offset: number): number {
-  return 0xFF & right(components, 24 - offset * 8);
+  return 0xff & right(components, 24 - offset * 8);
 }
 
 export function setComponent(components: number, offset: number, value: number): number {
   const shift = 24 - offset * 8;
-  return or(left(byte(value), shift), and(xor(left(0xFF, shift), 0xFF_FF_FF_FF), components));
+  return or(left(byte(value), shift), and(xor(left(0xff, shift), 0xff_ff_ff_ff), components));
 }
 
 /**
@@ -95,10 +93,10 @@ export function setComponent(components: number, offset: number, value: number):
  * range [0, 1].
  */
 export function intToComponents(color: number, components: number[]): number[] {
-  components[0] = getComponent(color, 0) / 0xFF;
-  components[1] = getComponent(color, 1) / 0xFF;
-  components[2] = getComponent(color, 2) / 0xFF;
-  components[3] = getComponent(color, 3) / 0xFF;
+  components[0] = getComponent(color, 0) / 0xff;
+  components[1] = getComponent(color, 1) / 0xff;
+  components[2] = getComponent(color, 2) / 0xff;
+  components[3] = getComponent(color, 3) / 0xff;
   return components;
 }
 
@@ -107,9 +105,9 @@ export function intToComponents(color: number, components: number[]): number[] {
  */
 export function componentsToInt(components: readonly number[]): number {
   return composeComponents(
-      round(components[0] * 0xFF),
-      round(components[1] * 0xFF),
-      round(components[2] * 0xFF),
-      round(components[3] * 0xFF),
+    round(components[0] * 0xff),
+    round(components[1] * 0xff),
+    round(components[2] * 0xff),
+    round(components[3] * 0xff)
   );
 }

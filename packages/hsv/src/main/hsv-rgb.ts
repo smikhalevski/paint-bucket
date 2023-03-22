@@ -1,5 +1,5 @@
-import {Rgb} from '@paint-bucket/core';
-import {Hsv} from './hsv';
+import { Rgb } from '@paint-bucket/core';
+import { Hsv } from './hsv';
 
 /**
  * Convert RGBa to HSVa.

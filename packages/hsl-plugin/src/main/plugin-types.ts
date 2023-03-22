@@ -1,10 +1,8 @@
-import {Hsl} from '@paint-bucket/hsl';
-import {Applicator} from '@paint-bucket/plugin-utils';
+import { Hsl } from '@paint-bucket/hsl';
+import { Applicator } from '@paint-bucket/plugin-utils';
 
 declare module '@paint-bucket/core/lib/Color' {
-
   interface ColorFunction {
-
     /**
      * Creates the new color from HSLa components.
      *
@@ -24,7 +22,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Creates the new color from HSL components represented as 24-bit integer.
      *
      * ```ts
-     * color.hsl24(0xFF_FF_FF).hsl() // → [255, 255, 255, 1]
+     * color.hsl24(0xff_ff_ff).hsl() // → [255, 255, 255, 1]
      * ```
      *
      * @param hsl The 24-bit integer, representing color in HSL model (without alpha component).
@@ -36,7 +34,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Creates the new color from HSLa components represented as 32-bit integer.
      *
      * ```ts
-     * color.hsl32(0xAA_BB_CC_DD).hsl();
+     * color.hsl32(0xaa_bb_cc_dd).hsl();
      * ```
      *
      * @param hsl The 32-bit integer, representing color in HSLa model (with alpha component).
@@ -46,7 +44,6 @@ declare module '@paint-bucket/core/lib/Color' {
   }
 
   interface Color {
-
     /**
      * Returns HSLa components as an array where H ∈ [0, 360], S and L ∈ [0, 100] and a ∈ [0, 1] (0 = transparent, 1 =
      * opaque).
@@ -84,7 +81,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Sets HSL components from 24-bit integer representation.
      *
      * ```ts
-     * color().hsl24(0xFF_FF_FF).hsl();
+     * color().hsl24(0xff_ff_ff).hsl();
      * ```
      *
      * @param hsl The 24-bit integer, representing color in HSL model.
@@ -95,7 +92,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Returns 32-bit integer representing HSLa components.
      *
      * ```ts
-     * color().hsl32(); // → 0x00_00_00_FF
+     * color().hsl32(); // → 0x00_00_00_ff
      * ```
      */
     hsl32(): number;
@@ -104,7 +101,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Sets HSLa components from 32-bit integer representation.
      *
      * ```ts
-     * color().hsl32(0xAA_BB_CC_DD).hsl();
+     * color().hsl32(0xaa_bb_cc_dd).hsl();
      * ```
      *
      * @param hsl The 32-bit integer, representing color in HSLa model.

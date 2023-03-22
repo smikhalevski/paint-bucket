@@ -1,5 +1,5 @@
-import {ColorModel, Rgb} from './color-model';
-import {OverloadParameters} from './utility-types';
+import { ColorModel, Rgb } from './color-model';
+import { OverloadParameters } from './utility-types';
 
 // RGBa color components that are used for implicit model-to-model conversions
 const tempRgb: Rgb = [0, 0, 0, 1];
@@ -7,7 +7,7 @@ const tempRgb: Rgb = [0, 0, 0, 1];
 /**
  * Returns the new {@link Color} instance.
  */
-export const color = ((value) => Color.parser(value)) as ColorFunction;
+export const color = (value => Color.parser(value)) as ColorFunction;
 
 /**
  * Re-declare this interface in the plugin package to extend {@link color} function signature.
@@ -15,7 +15,6 @@ export const color = ((value) => Color.parser(value)) as ColorFunction;
  * **Note:** The first argument of each overload becomes a part of {@link ColorLike} union.
  */
 export interface ColorFunction {
-
   /**
    * Creates the new black color.
    */
@@ -39,21 +38,6 @@ export type ColorLike = OverloadParameters<ColorFunction>[0];
  * Provides color manipulation API that is extensible via plugins.
  */
 export class Color {
-
-  /**
-   * Parser that transforms input values into {@link Color} instances.
-   */
-  public static parser = (value: unknown): Color => value instanceof Color ? value.clone() : new Color();
-
-  /**
-   * Overrides parsing implementation that backs the {@link color} function.
-   *
-   * Use this in plugins to add new parsing mechanisms or static methods for {@link color} function.
-   */
-  public static overrideParser(cb: (next: (value: unknown) => Color) => (value: unknown) => Color): void {
-    this.parser = cb(this.parser);
-  }
-
   /**
    * The color value version that is auto-incremented every time the {@link use} method is called. This version can be
    * used to track that the color value was changed, for example to invalidate caches that rely on current color value.
@@ -61,20 +45,9 @@ export class Color {
   public version = 0;
 
   /**
-   * The current color model.
-   */
-  protected model;
-
-  /**
-   * Color components of the current color model.
-   */
-  protected components;
-
-  /**
    * The color model that was last acquired by {@link get}.
    */
   private _tempModel?: ColorModel;
-
   /**
    * Color components of the {@link _tempModel} color model.
    */
@@ -86,9 +59,31 @@ export class Color {
    * @param model The initial color model.
    * @param components The initial color components.
    */
-  public constructor(model: ColorModel = Rgb, components = [0, 0, 0, 1]) {
-    this.model = model;
-    this.components = components;
+  public constructor(
+    /**
+     * The current color model.
+     */
+    protected model: ColorModel = Rgb,
+    /**
+     * Color components of the current color model.
+     */
+    protected components = [0, 0, 0, 1]
+  ) {}
+
+  /**
+   * Parser that transforms input values into {@link Color} instances.
+   */
+  public static parser(value: unknown): Color {
+    return value instanceof Color ? value.clone() : new Color();
+  }
+
+  /**
+   * Overrides parsing implementation that backs the {@link color} function.
+   *
+   * Use this in plugins to add new parsing mechanisms or static methods for {@link color} function.
+   */
+  public static overrideParser(cb: (next: (value: unknown) => Color) => (value: unknown) => Color): void {
+    this.parser = cb(this.parser);
   }
 
   /**
@@ -112,7 +107,7 @@ export class Color {
    * @returns Read-only color components.
    */
   public get(model: ColorModel): readonly number[] {
-    let {components, _tempComponents} = this;
+    let { components, _tempComponents } = this;
 
     if (this._tempModel === model && _tempComponents) {
       return _tempComponents;
@@ -143,7 +138,7 @@ export class Color {
    * @returns Mutable color components.
    */
   public use(model: ColorModel): number[] {
-    let {components, _tempComponents} = this;
+    let { components, _tempComponents } = this;
 
     ++this.version;
 

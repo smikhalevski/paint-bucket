@@ -1,19 +1,18 @@
-import {color, Color, ColorModel, Rgb} from '../main';
+import { color, Color, ColorModel, Rgb } from '../main';
 
 describe('Color', () => {
-
   const abcColorModel: ColorModel = {
     componentCount: 4,
     componentsToRgb(components, rgb) {
-      rgb[0] = components[0] / 0xFF;
-      rgb[1] = components[1] / 0xFF;
-      rgb[2] = components[2] / 0xFF;
+      rgb[0] = components[0] / 0xff;
+      rgb[1] = components[1] / 0xff;
+      rgb[2] = components[2] / 0xff;
       rgb[3] = components[3];
     },
     rgbToComponents(rgb, components) {
-      components[0] = rgb[0] * 0xFF;
-      components[1] = rgb[1] * 0xFF;
-      components[2] = rgb[2] * 0xFF;
+      components[0] = rgb[0] * 0xff;
+      components[1] = rgb[1] * 0xff;
+      components[2] = rgb[2] * 0xff;
       components[3] = rgb[3];
     },
   };
@@ -74,7 +73,7 @@ describe('Color', () => {
     const color = new Color();
 
     const abc = color.use(abcColorModel);
-    abc[0] = abc[1] = abc[2] = 0xFF;
+    abc[0] = abc[1] = abc[2] = 0xff;
 
     expect(color.get(Rgb)).toEqual([1, 1, 1, 1]);
   });
@@ -130,7 +129,7 @@ describe('Color', () => {
 
     expect(abc1).toEqual(abc2);
     expect(abc1).not.toBe(abc2);
-    expect(abc2).toEqual([0xFF, 0xFF, 0xFF, 1]);
+    expect(abc2).toEqual([0xff, 0xff, 0xff, 1]);
   });
 
   test('returns initial color', () => {
@@ -139,7 +138,7 @@ describe('Color', () => {
     expect(new Color(Rgb, rgb).get(Rgb)).toBe(rgb);
   });
 
-  test('clones instance', (done) => {
+  test('clones instance', done => {
     const rgb: Rgb = [1, 1, 1, 0.77];
     const color = new Color(Rgb, rgb);
     const colorClone = color.clone();
@@ -151,5 +150,4 @@ describe('Color', () => {
       done();
     }).call(colorClone);
   });
-
 });

@@ -1,6 +1,6 @@
-import {clamp, deg, hypot, rad} from 'algomatic';
+import { clamp, deg, hypot, rad } from 'algomatic';
 
-const {abs, atan2, cos, exp, sin, sqrt} = Math;
+const { abs, atan2, cos, exp, sin, sqrt } = Math;
 
 /**
  * Computes the CIEDE2000 color-difference.
@@ -21,7 +21,6 @@ const {abs, atan2, cos, exp, sin, sqrt} = Math;
  * @see https://en.wikipedia.org/wiki/Just-noticeable_difference
  */
 export function deltaE(lab1: readonly number[], lab2: readonly number[]): number {
-
   let [L1, A1, B1] = lab1;
   let [L2, A2, B2] = lab2;
 
@@ -57,11 +56,12 @@ export function deltaE(lab1: readonly number[], lab2: readonly number[]): number
 
   const aHp = calcAHp(Cab1, Cab2, Hp1, Hp2); // (14)
 
-  const T = 1
-      - 0.17 * cos(rad(aHp - 30))
-      + 0.24 * cos(rad(2 * aHp))
-      + 0.32 * cos(rad(3 * aHp + 6))
-      - 0.20 * cos(rad(4 * aHp - 63)); // (15)
+  const T =
+    1 -
+    0.17 * cos(rad(aHp - 30)) +
+    0.24 * cos(rad(2 * aHp)) +
+    0.32 * cos(rad(3 * aHp + 6)) -
+    0.2 * cos(rad(4 * aHp - 63)); // (15)
 
   const t1 = (aHp - 275) / 25;
   const dro = 30 * exp(-t1 * t1); // (16)
@@ -72,7 +72,7 @@ export function deltaE(lab1: readonly number[], lab2: readonly number[]): number
 
   const t2 = aL - 50;
   const aL2 = t2 * t2;
-  const sL = 1 + 0.015 * aL2 / sqrt(20 + aL2); // (18)
+  const sL = 1 + (0.015 * aL2) / sqrt(20 + aL2); // (18)
 
   const sC = 1 + 0.045 * aCp; // (19)
   const sH = 1 + 0.015 * aCp * T; // (20)

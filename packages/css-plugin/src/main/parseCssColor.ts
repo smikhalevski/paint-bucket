@@ -1,6 +1,6 @@
-import {Color, Rgb} from '@paint-bucket/core';
-import {intToComponents, normalizeComponents} from '@paint-bucket/plugin-utils';
-import {Hsl} from '@paint-bucket/hsl';
+import { Color, Rgb } from '@paint-bucket/core';
+import { intToComponents, normalizeComponents } from '@paint-bucket/plugin-utils';
+import { Hsl } from '@paint-bucket/hsl';
 
 /**
  * CSS numerical or percentage value.
@@ -19,11 +19,13 @@ const TUPLE = `^(\\w+)\\s*\\(?\\s*(${VALUE})${COMMA}(${VALUE})${COMMA}(${VALUE})
 const tupleRe = RegExp(TUPLE);
 
 export function parseCssColor(value: string): Color | undefined {
-
   value = value.trim();
 
   if (value.charCodeAt(0) === 35 /* # */) {
-    return new Color(Rgb, intToComponents(normalizeComponents(parseInt(value.substr(1), 16), value.length - 1), [0, 0, 0, 1]));
+    return new Color(
+      Rgb,
+      intToComponents(normalizeComponents(parseInt(value.substr(1), 16), value.length - 1), [0, 0, 0, 1])
+    );
   }
   if (value.toLowerCase() === 'transparent') {
     return new Color(Rgb, [0, 0, 0, 0]);
@@ -42,26 +44,16 @@ export function parseCssColor(value: string): Color | undefined {
     const alpha = parseAlpha(tupleMatch[5]);
 
     if (colorModelName === 'rgb' || colorModelName === 'rgba') {
-      return new Color(Rgb, [
-        parseByte(tupleMatch[2]),
-        parseByte(tupleMatch[3]),
-        parseByte(tupleMatch[4]),
-        alpha,
-      ]);
+      return new Color(Rgb, [parseByte(tupleMatch[2]), parseByte(tupleMatch[3]), parseByte(tupleMatch[4]), alpha]);
     }
     if (colorModelName === 'hsl' || colorModelName === 'hsla') {
-      return new Color(Hsl, [
-        parseDegrees(tupleMatch[2]),
-        parseByte(tupleMatch[3]),
-        parseByte(tupleMatch[4]),
-        alpha,
-      ]);
+      return new Color(Hsl, [parseDegrees(tupleMatch[2]), parseByte(tupleMatch[3]), parseByte(tupleMatch[4]), alpha]);
     }
   }
 }
 
 function parseByte(value: string): number {
-  return isPercentage(value) ? parseFloat(value) / 100 : parseFloat(value) / 0xFF;
+  return isPercentage(value) ? parseFloat(value) / 100 : parseFloat(value) / 0xff;
 }
 
 function parseDegrees(value: string): number {

@@ -1,5 +1,5 @@
-import {componentsToInt} from '@paint-bucket/plugin-utils';
-import {right} from 'algomatic';
+import { componentsToInt } from '@paint-bucket/plugin-utils';
+import { right } from 'algomatic';
 
 export function stringifyRgb(rgb: readonly number[]): string {
   const [R, G, B, a] = rgb;
@@ -9,5 +9,5 @@ export function stringifyRgb(rgb: readonly number[]): string {
     return str.length === 6 ? '#' + str : '#000000'.substr(0, 7 - str.length) + str;
   }
 
-  return `rgba(${Math.round(R * 0xFF)},${Math.round(G * 0xFF)},${Math.round(B * 0xFF)},${a.toFixed(2)})`;
+  return `rgba(${Math.round(R * 0xff)},${Math.round(G * 0xff)},${Math.round(B * 0xff)},${a.toFixed(2)})`;
 }

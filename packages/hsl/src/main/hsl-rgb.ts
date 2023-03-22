@@ -1,5 +1,5 @@
-import {Rgb} from '@paint-bucket/core';
-import {Hsl} from './hsl';
+import { Rgb } from '@paint-bucket/core';
+import { Hsl } from './hsl';
 
 /**
  * Convert RGBa to HSLa.

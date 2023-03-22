@@ -1,6 +1,6 @@
-import {Color} from '@paint-bucket/core';
-import {Hsl} from '@paint-bucket/hsl';
-import {Hsv} from '@paint-bucket/hsv';
+import { Color } from '@paint-bucket/core';
+import { Hsl } from '@paint-bucket/hsl';
+import { Hsv } from '@paint-bucket/hsv';
 
 const colorPrototype = Color.prototype;
 
@@ -45,11 +45,9 @@ colorPrototype.analogous = function (n = 6, slices = 30) {
   const [H, S, L, a] = this.get(Hsl);
 
   const part = 1 / slices;
-  const colors = [
-    new Color(Hsl, [H, S, L, a]),
-  ];
+  const colors = [new Color(Hsl, [H, S, L, a])];
 
-  let nextH = ((H - (part * n / 2)) + 2) % 1;
+  let nextH = (H - (part * n) / 2 + 2) % 1;
 
   while (--n > 0) {
     nextH = (nextH + part) % 1;

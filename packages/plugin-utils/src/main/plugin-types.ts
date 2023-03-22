@@ -1,4 +1,4 @@
-import {Color} from '@paint-bucket/core';
+import { Color } from '@paint-bucket/core';
 
 /**
  * An applicator is a literal value that must be set or a callback that receives the previous value and return the new
@@ -11,7 +11,6 @@ export type Applicator<O, I = O> = I | ((prevValue: O) => I);
  * {@link Applicator} argument.
  */
 export interface Accessor<O, I = O> {
-
   // getter
   (): O;
 

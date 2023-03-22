@@ -1,8 +1,7 @@
-import {Color, Gradient, Rgb} from '../main';
-import {Interpolator, lerp} from 'algomatic';
+import { Color, Gradient, Rgb } from '../main';
+import { Interpolator, lerp } from 'algomatic';
 
 describe('get', () => {
-
   test('returns black color for an empty gradient', () => {
     const gradient = new Gradient([], []);
 
@@ -29,7 +28,10 @@ describe('get', () => {
   });
 
   test('supports multiple stops', () => {
-    const gradient = new Gradient([new Color(Rgb, [1, 1, 1, 1]), new Color(), new Color(Rgb, [1, 0, 0, 1])], [0, 0.5, 1]);
+    const gradient = new Gradient(
+      [new Color(Rgb, [1, 1, 1, 1]), new Color(), new Color(Rgb, [1, 0, 0, 1])],
+      [0, 0.5, 1]
+    );
 
     expect(gradient.get(Rgb, 0.25, lerp)).toEqual([0.5, 0.5, 0.5, 1]);
     expect(gradient.get(Rgb, 0.5, lerp)).toEqual([0, 0, 0, 1]);
@@ -68,7 +70,7 @@ describe('get', () => {
     const interpolatorFactoryMock = jest.fn(() => () => 0);
 
     gradient.get(Rgb, 0.5, interpolatorFactoryMock);
-    gradient.get({...Rgb}, 0.5, interpolatorFactoryMock);
+    gradient.get({ ...Rgb }, 0.5, interpolatorFactoryMock);
 
     expect(interpolatorFactoryMock).toHaveBeenCalledTimes(8);
   });

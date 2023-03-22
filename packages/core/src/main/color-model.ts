@@ -2,7 +2,6 @@
  * The color model defines transformation from and to RGBa color model.
  */
 export interface ColorModel {
-
   /**
    * The number of color components that this model uses.
    */

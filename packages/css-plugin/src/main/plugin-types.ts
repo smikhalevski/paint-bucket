@@ -1,10 +1,7 @@
-import {Color} from '@paint-bucket/core';
-import {Applicator} from '@paint-bucket/plugin-utils';
+import { Applicator } from '@paint-bucket/plugin-utils';
 
 declare module '@paint-bucket/core/lib/Color' {
-
   interface ColorFunction {
-
     /**
      * Parses color from CSS string.
      *
@@ -16,7 +13,6 @@ declare module '@paint-bucket/core/lib/Color' {
   }
 
   interface Color {
-
     /**
      * Returns color as a CSS string.
      *

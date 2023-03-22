@@ -1,9 +1,8 @@
-import {Lab, rgbToLab} from '@paint-bucket/lab';
-import {deltaE} from '../main/deltaE';
-import {Rgb} from '@paint-bucket/core';
+import { Lab, rgbToLab } from '@paint-bucket/lab';
+import { deltaE } from '../main/deltaE';
+import { Rgb } from '@paint-bucket/core';
 
 describe('deltaE', () => {
-
   const rgb = (R: number, G: number, B: number): Rgb => [R / 255, G / 255, B / 255, 1];
   const lab = (L: number, A: number, B: number): Lab => [L / 255, (A / 127 + 1) / 2, (B / 127 + 1) / 2, 1];
 

@@ -1,6 +1,6 @@
-import {ColorModel, Rgb} from './color-model';
-import {Color} from './Color';
-import {clamp1} from 'algomatic';
+import { ColorModel, Rgb } from './color-model';
+import { Color } from './Color';
+import { clamp1 } from 'algomatic';
 
 // Black RGBa color that is returned if gradient has zero domain size
 const blackRgb: Rgb = [0, 0, 0, 1];
@@ -24,7 +24,6 @@ export type InterpolatorFactory = (xs: ArrayLike<number>, ys: ArrayLike<number>)
  * Provides color gradient manipulation API that is extensible via plugins.
  */
 export class Gradient {
-
   protected colors;
   protected domain;
 
@@ -88,7 +87,7 @@ export class Gradient {
       _interpolators,
     } = this;
 
-    const {componentCount} = model;
+    const { componentCount } = model;
     const domainLength = domain.length;
 
     // Empty gradients are rendered as black
@@ -108,7 +107,6 @@ export class Gradient {
     const colorsUpdated = this._prevColorsVersion !== currColorsVersion || this._model !== model;
 
     if (colorsUpdated) {
-
       // Update color components
       for (let i = 0; i < domainLength; ++i) {
         const components = colors[i].get(model);

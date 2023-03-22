@@ -1,4 +1,4 @@
-import {color, Color, ColorLike, Rgb} from '@paint-bucket/core';
+import { color, Color, ColorLike, Rgb } from '@paint-bucket/core';
 import {
   componentsToInt,
   createAccessor,
@@ -6,9 +6,9 @@ import {
   normalizeComponents,
   toColor,
 } from '@paint-bucket/plugin-utils';
-import {clamp1, isNumeric, right} from 'algomatic';
+import { clamp1, isNumeric, right } from 'algomatic';
 
-Color.overrideParser((next) => (value) => {
+Color.overrideParser(next => value => {
   if (typeof value === 'number') {
     return new Color().rgb24(value);
   }
@@ -18,103 +18,98 @@ Color.overrideParser((next) => (value) => {
   return next(value);
 });
 
-color.rgb = (rgb) => new Color().rgb(rgb);
+color.rgb = rgb => new Color().rgb(rgb);
 
-color.rgb24 = (rgb) => new Color().rgb24(rgb);
+color.rgb24 = rgb => new Color().rgb24(rgb);
 
-color.rgb32 = (rgb) => new Color().rgb32(rgb);
+color.rgb32 = rgb => new Color().rgb32(rgb);
 
 const colorPrototype = Color.prototype;
 
 colorPrototype.rgb = createAccessor<Rgb, Partial<Rgb>>(
-    function (this: Color) {
-      const rgb = this.get(Rgb);
-      return [
-        rgb[0] * 0xFF,
-        rgb[1] * 0xFF,
-        rgb[2] * 0xFF,
-        rgb[3],
-      ];
-    },
-    function (this: Color, value) {
-      const rgb = this.use(Rgb);
-      const [R, G, B, a] = value;
+  function (this: Color) {
+    const rgb = this.get(Rgb);
+    return [rgb[0] * 0xff, rgb[1] * 0xff, rgb[2] * 0xff, rgb[3]];
+  },
+  function (this: Color, value) {
+    const rgb = this.use(Rgb);
+    const [R, G, B, a] = value;
 
-      if (isNumeric(R)) {
-        rgb[0] = clamp1(R / 0xFF);
-      }
-      if (isNumeric(G)) {
-        rgb[1] = clamp1(G / 0xFF);
-      }
-      if (isNumeric(B)) {
-        rgb[2] = clamp1(B / 0xFF);
-      }
-      if (isNumeric(a)) {
-        rgb[3] = clamp1(a);
-      }
-    },
+    if (isNumeric(R)) {
+      rgb[0] = clamp1(R / 0xff);
+    }
+    if (isNumeric(G)) {
+      rgb[1] = clamp1(G / 0xff);
+    }
+    if (isNumeric(B)) {
+      rgb[2] = clamp1(B / 0xff);
+    }
+    if (isNumeric(a)) {
+      rgb[3] = clamp1(a);
+    }
+  }
 );
 
 colorPrototype.rgb24 = createAccessor(
-    function (this: Color) {
-      return right(componentsToInt(this.get(Rgb)), 8);
-    },
-    function (this: Color, value) {
-      intToComponents(normalizeComponents(value, 6), this.use(Rgb));
-    },
+  function (this: Color) {
+    return right(componentsToInt(this.get(Rgb)), 8);
+  },
+  function (this: Color, value) {
+    intToComponents(normalizeComponents(value, 6), this.use(Rgb));
+  }
 );
 
 colorPrototype.rgb32 = createAccessor(
-    function (this: Color) {
-      return componentsToInt(this.get(Rgb));
-    },
-    function (this: Color, value) {
-      intToComponents(normalizeComponents(value, 8), this.use(Rgb));
-    },
+  function (this: Color) {
+    return componentsToInt(this.get(Rgb));
+  },
+  function (this: Color, value) {
+    intToComponents(normalizeComponents(value, 8), this.use(Rgb));
+  }
 );
 
 colorPrototype.red = createAccessor(
-    function (this: Color) {
-      return this.get(Rgb)[0] * 0xFF;
-    },
-    function (this: Color, R) {
-      if (isNumeric(R)) {
-        this.use(Rgb)[0] = clamp1(R / 0xFF);
-      }
-    },
+  function (this: Color) {
+    return this.get(Rgb)[0] * 0xff;
+  },
+  function (this: Color, R) {
+    if (isNumeric(R)) {
+      this.use(Rgb)[0] = clamp1(R / 0xff);
+    }
+  }
 );
 
 colorPrototype.green = createAccessor(
-    function (this: Color) {
-      return this.get(Rgb)[1] * 0xFF;
-    },
-    function (this: Color, G) {
-      if (isNumeric(G)) {
-        this.use(Rgb)[1] = clamp1(G / 0xFF);
-      }
-    },
+  function (this: Color) {
+    return this.get(Rgb)[1] * 0xff;
+  },
+  function (this: Color, G) {
+    if (isNumeric(G)) {
+      this.use(Rgb)[1] = clamp1(G / 0xff);
+    }
+  }
 );
 
 colorPrototype.blue = createAccessor(
-    function (this: Color) {
-      return this.get(Rgb)[2] * 0xFF;
-    },
-    function (this: Color, B) {
-      if (isNumeric(B)) {
-        this.use(Rgb)[2] = clamp1(B / 0xFF);
-      }
-    },
+  function (this: Color) {
+    return this.get(Rgb)[2] * 0xff;
+  },
+  function (this: Color, B) {
+    if (isNumeric(B)) {
+      this.use(Rgb)[2] = clamp1(B / 0xff);
+    }
+  }
 );
 
 colorPrototype.alpha = createAccessor(
-    function (this: Color) {
-      return this.get(Rgb)[3];
-    },
-    function (this: Color, a) {
-      if (isNumeric(a)) {
-        this.use(Rgb)[3] = clamp1(a);
-      }
-    },
+  function (this: Color) {
+    return this.get(Rgb)[3];
+  },
+  function (this: Color, a) {
+    if (isNumeric(a)) {
+      this.use(Rgb)[3] = clamp1(a);
+    }
+  }
 );
 
 colorPrototype.brightness = function (this: Color) {

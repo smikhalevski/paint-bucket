@@ -1,10 +1,8 @@
-import {ColorLike, Rgb} from '@paint-bucket/core';
-import {Applicator} from '@paint-bucket/plugin-utils';
+import { Rgb } from '@paint-bucket/core';
+import { Applicator } from '@paint-bucket/plugin-utils';
 
 declare module '@paint-bucket/core/lib/Color' {
-
   interface ColorFunction {
-
     /**
      * Creates the new color from RGBa components.
      *
@@ -13,7 +11,7 @@ declare module '@paint-bucket/core/lib/Color' {
      *
      * color([, , 255]); // Opaque blue color
      *
-     * color(0x00_00_FF);
+     * color(0x00_00_ff);
      * ```
      *
      * @param rgb The 24-bit integer RGBa color or separate components where R, G and B ∈ [0, 255] and a ∈ [0, 1]
@@ -42,7 +40,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Creates the new color from RGB components represented as 24-bit integer.
      *
      * ```ts
-     * color.rgb24(0xFF_FF_FF).rgb() // → [255, 255, 255, 1]
+     * color.rgb24(0xff_ff_ff).rgb() // → [255, 255, 255, 1]
      * ```
      *
      * @param rgb The 24-bit integer, representing color in RGB model (without alpha component).
@@ -54,7 +52,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Creates the new color from RGBa components represented as 32-bit integer.
      *
      * ```ts
-     * color.rgb32(0xAA_BB_CC_DD).rgb() // → [170, 187, 204, 0.86]
+     * color.rgb32(0xaa_bb_cc_dd).rgb() // → [170, 187, 204, 0.86]
      * ```
      *
      * @param rgb The 32-bit integer, representing color in RGBa model (with alpha component).
@@ -64,7 +62,6 @@ declare module '@paint-bucket/core/lib/Color' {
   }
 
   interface Color {
-
     /**
      * Returns RGBa components as an array where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
      *
@@ -101,7 +98,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Sets RGB components from 24-bit integer representation.
      *
      * ```ts
-     * color().rgb24(0xFF_FF_FF).rgb(); // → [255, 255, 255, 1]
+     * color().rgb24(0xff_ff_ff).rgb(); // → [255, 255, 255, 1]
      * ```
      *
      * @param rgb The 24-bit integer, representing color in RGB model.
@@ -112,7 +109,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Returns 32-bit integer representing RGBa components.
      *
      * ```ts
-     * color().rgb32(); // → 0x00_00_00_FF
+     * color().rgb32(); // → 0x00_00_00_ff
      * ```
      */
     rgb32(): number;
@@ -121,7 +118,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Sets RGBa components from 32-bit integer representation.
      *
      * ```ts
-     * color().rgb32(0xAA_BB_CC_DD).rgb(); // → [170, 187, 204, 0.86]
+     * color().rgb32(0xaa_bb_cc_dd).rgb(); // → [170, 187, 204, 0.86]
      * ```
      *
      * @param rgb The 32-bit integer, representing color in RGBa model.
@@ -217,7 +214,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Returns the color contrast ∈ [1, 21].
      *
      * ```ts
-     * color(0x00_00_00).contrast(0xFF_FF_FF); // → 21
+     * color(0x00_00_00).contrast(0xff_ff_ff); // → 21
      * ```
      *
      * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef WCAG Contrast Ratio}

@@ -1,5 +1,5 @@
-import {ColorModel} from '@paint-bucket/core';
-import {rgbToXyz, xyzToRgb} from './xyz-rgb';
+import { ColorModel } from '@paint-bucket/core';
+import { rgbToXyz, xyzToRgb } from './xyz-rgb';
 
 export type Xyz = [X: number, Y: number, Z: number, a: number];
 

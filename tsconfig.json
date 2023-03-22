@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
-    "importHelpers": true,
+    "esModuleInterop": true,
     "noUnusedParameters": true,
-    "noUnusedLocals": true,
     "moduleResolution": "Node",
     "strict": true,
     "target": "ES5",

@@ -1,7 +1,7 @@
-import {Color, Rgb} from '@paint-bucket/core';
-import {x11Components} from './x11-components';
+import { Color, Rgb } from '@paint-bucket/core';
+import { x11Components } from './x11-components';
 
-Color.overrideParser((next) => (value) => {
+Color.overrideParser(next => value => {
   if (typeof value === 'string') {
     const components = x11Components.get(value.toLowerCase());
 

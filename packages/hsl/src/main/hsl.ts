@@ -1,5 +1,5 @@
-import {hslToRgb, rgbToHsl} from './hsl-rgb';
-import {ColorModel} from '@paint-bucket/core';
+import { hslToRgb, rgbToHsl } from './hsl-rgb';
+import { ColorModel } from '@paint-bucket/core';
 
 export type Hsl = [H: number, S: number, L: number, a: number];
 

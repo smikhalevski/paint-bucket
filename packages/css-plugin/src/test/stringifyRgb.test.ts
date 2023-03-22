@@ -1,7 +1,6 @@
-import {stringifyRgb} from '../main/stringifyRgb';
+import { stringifyRgb } from '../main/stringifyRgb';
 
 describe('stringifyRgb', () => {
-
   test('stringifies black RGB', () => {
     expect(stringifyRgb([0, 0, 0, 1])).toBe('#000000');
   });
