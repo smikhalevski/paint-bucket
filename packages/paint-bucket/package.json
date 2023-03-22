@@ -2,17 +2,22 @@
   "name": "paint-bucket",
   "version": "1.1.0",
   "description": "Highly performant, extensible, and tiny color manipulation library.",
-  "main": "./lib/index-cjs.js",
-  "module": "./lib/index.js",
+  "main": "./lib/index.js",
+  "module": "./lib/index.mjs",
   "types": "./lib/index.d.ts",
+  "typedoc": {
+    "entryPoint": "./src/main/index.ts",
+    "displayName": "paint-bucket",
+    "readmeFile": "none"
+  },
+  "sideEffects": false,
   "files": [
     "lib"
   ],
   "scripts": {
-    "build": "tsc --project ./tsconfig.build.json && rollup --config ../../rollup.config.js && npm run terser",
-    "terser": "for file in $(find ./lib -name '*.js'); do terser --compress --mangle --output $file -- $file; done || exit 1",
+    "build": "rollup --config ../../rollup.config.mjs",
     "clean": "rimraf ./lib",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --config ../../jest.config.js"
   },
   "repository": {
     "type": "git",

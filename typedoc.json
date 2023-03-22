@@ -1,0 +1,12 @@
+{
+  "name": "Paint Bucket",
+  "entryPoints": [
+    "./packages/*"
+  ],
+  "excludePrivate": true,
+  "excludeExternals": true,
+  "excludeInternal": true,
+  "entryPointStrategy": "packages",
+  "disableSources": true,
+  "readme": "none"
+}
