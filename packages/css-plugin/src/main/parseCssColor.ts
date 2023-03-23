@@ -1,6 +1,6 @@
 import { Color, RGB } from '@paint-bucket/core';
-import { convertColorIntToComponents, normalizeColorInt } from '@paint-bucket/plugin-utils';
 import { HSL } from '@paint-bucket/hsl';
+import { convertColorIntToComponents, normalizeColorInt } from '@paint-bucket/plugin-utils';
 
 /**
  * CSS numerical or percentage value.

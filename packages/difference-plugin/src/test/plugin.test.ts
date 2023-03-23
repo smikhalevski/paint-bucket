@@ -1,6 +1,6 @@
+import { Color } from '@paint-bucket/core';
 import '@paint-bucket/rgb-plugin';
 import '../main';
-import { Color } from '@paint-bucket/core';
 
 describe('plugin', () => {
   test('returns delta E2000', () => {

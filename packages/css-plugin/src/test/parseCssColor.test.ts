@@ -1,5 +1,5 @@
-import { parseCssColor } from '../main/parseCssColor';
 import '@paint-bucket/rgb-plugin';
+import { parseCssColor } from '../main/parseCssColor';
 
 describe('parseCssColor', () => {
   test('parses transparent color', () => {

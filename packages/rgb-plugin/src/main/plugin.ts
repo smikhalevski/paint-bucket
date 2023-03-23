@@ -7,10 +7,17 @@ import {
   normalizeColorInt,
 } from '@paint-bucket/plugin-utils';
 
-const { parse } = Color;
+const parseColor = Color.parse;
 
-Color.parse = value =>
-  typeof value === 'number' ? Color.rgb24(value) : Array.isArray(value) ? Color.rgb(value) : parse(value);
+Color.parse = value => {
+  if (typeof value === 'number') {
+    return Color.rgb24(value);
+  }
+  if (Array.isArray(value)) {
+    return Color.rgb(value);
+  }
+  return parseColor(value);
+};
 
 Color.rgb = rgb => new Color().rgb(rgb);
 

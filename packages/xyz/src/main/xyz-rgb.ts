@@ -1,7 +1,7 @@
 import { RGB } from '@paint-bucket/core';
-import { XYZ } from './xyz';
-import { WhitePoint } from './WhitePoint';
 import { clamp } from '@paint-bucket/plugin-utils';
+import { WhitePoint } from './WhitePoint';
+import { XYZ } from './xyz';
 
 /**
  * Convert RGBa to XYZa.

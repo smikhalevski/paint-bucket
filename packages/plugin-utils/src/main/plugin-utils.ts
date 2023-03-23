@@ -1,4 +1,4 @@
-import { Color, ColorLike } from '@paint-bucket/core';
+import { Color } from '@paint-bucket/core';
 import { Accessor } from './plugin-types';
 
 export function createAccessor<O, I>(get: (color: Color) => O, set: (color: Color, value: I) => void): Accessor<O, I> {

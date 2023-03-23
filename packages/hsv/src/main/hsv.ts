@@ -1,5 +1,5 @@
-import { convertHSVToRGB, convertRGBToHSV } from './hsv-rgb';
 import { ColorModel } from '@paint-bucket/core';
+import { convertHSVToRGB, convertRGBToHSV } from './hsv-rgb';
 
 /**
  * HSVa color components.

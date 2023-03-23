@@ -1,5 +1,5 @@
-import { convertHSLToRGB, convertRGBToHSL } from './hsl-rgb';
 import { ColorModel } from '@paint-bucket/core';
+import { convertHSLToRGB, convertRGBToHSL } from './hsl-rgb';
 
 /**
  * HSLa color components.

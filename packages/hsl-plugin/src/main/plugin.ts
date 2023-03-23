@@ -1,4 +1,5 @@
 import { Color } from '@paint-bucket/core';
+import { HSL } from '@paint-bucket/hsl';
 import {
   clamp,
   convertColorIntToComponents,
@@ -6,7 +7,6 @@ import {
   createAccessor,
   normalizeColorInt,
 } from '@paint-bucket/plugin-utils';
-import { HSL } from '@paint-bucket/hsl';
 
 Color.hsl = hsl => new Color().hsl(hsl);
 

@@ -1,6 +1,6 @@
-import { LAB, convertRGBToLAB } from '@paint-bucket/lab';
-import { deltaE } from '../main/deltaE';
 import { RGB } from '@paint-bucket/core';
+import { convertRGBToLAB, LAB } from '@paint-bucket/lab';
+import { deltaE } from '../main/deltaE';
 
 describe('deltaE', () => {
   const rgb = (R: number, G: number, B: number): RGB => [R / 255, G / 255, B / 255, 1];

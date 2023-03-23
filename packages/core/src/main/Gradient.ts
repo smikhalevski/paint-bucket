@@ -1,6 +1,6 @@
-import { ColorModel, RGB } from './color-model';
-import { Color } from './Color';
 import { clamp } from '@paint-bucket/plugin-utils';
+import { Color } from './Color';
+import { ColorModel, RGB } from './color-model';
 
 // Black RGBa color that is returned if gradient has zero domain size
 const blackRGB: RGB = [0, 0, 0, 1];

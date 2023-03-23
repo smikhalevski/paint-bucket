@@ -1,6 +1,6 @@
-import { LAB } from './lab';
-import { WhitePoint, XYZ } from '@paint-bucket/xyz';
 import { clamp } from '@paint-bucket/plugin-utils';
+import { WhitePoint, XYZ } from '@paint-bucket/xyz';
+import { LAB } from './lab';
 
 function pow3(x: number): number {
   return x * x * x;
@@ -16,9 +16,8 @@ const enum Coefficient {
 /**
  * Convert XYZa to CIELAB.
  *
- * @see https://www.w3.org/TR/css-color-4/#rgb-to-lab
- * @see https://www.w3.org/TR/css-color-4/#color-conversion-code
- * @see https://www.easyrgb.com/en/math.php
+ * @see {@link https://www.w3.org/TR/css-color-4/#color-conversion-code CSS Color Module Level 4 on W3C}
+ * @see {@link https://www.easyrgb.com/en/math.php Color math and programming code examples}
  */
 export function convertXYZToLAB(xyz: XYZ, lab: LAB, whitePoint = WhitePoint.deg10.D65): LAB {
   const [X, Y, Z] = xyz;
