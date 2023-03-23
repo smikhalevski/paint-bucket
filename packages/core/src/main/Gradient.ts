@@ -1,9 +1,9 @@
-import { ColorModel, Rgb } from './color-model';
+import { ColorModel, RGB } from './color-model';
 import { Color } from './Color';
 import { clamp1 } from 'algomatic';
 
 // Black RGBa color that is returned if gradient has zero domain size
-const blackRgb: Rgb = [0, 0, 0, 1];
+const blackRGB: RGB = [0, 0, 0, 1];
 
 /**
  * The interpolator function that returns an interpolated value for the given argument.
@@ -26,16 +26,6 @@ export type InterpolatorFactory = (xs: readonly number[], ys: readonly number[])
  * Provides color gradient manipulation API that is extensible via plugins.
  */
 export class Gradient {
-  /**
-   * The list of colors that comprise the gradient.
-   */
-  protected _colors;
-
-  /**
-   * The stop values for each color.
-   */
-  protected _domain;
-
   /**
    * Color components returned by the {@link get} method.
    */
@@ -70,10 +60,16 @@ export class Gradient {
    * @param domain The stop values for each color. Values must be sorted in ascending order. The number of domain
    *     values must exactly match the number of provided colors.
    */
-  constructor(colors: readonly Color[], domain: readonly number[]) {
-    this._colors = colors;
-    this._domain = domain;
-  }
+  constructor(
+    /**
+     * The list of colors that comprise the gradient.
+     */
+    readonly colors: readonly Color[],
+    /**
+     * The stop values for each color.
+     */
+    readonly domain: readonly number[]
+  ) {}
 
   /**
    * Returns components of the color for value from the domain.
@@ -86,31 +82,31 @@ export class Gradient {
    * @returns The read-only components array.
    */
   get(model: ColorModel, value: number, interpolatorFactory: InterpolatorFactory): readonly number[] {
-    const { _colors, _domain, _tempComponents, _componentValues, _interpolatorFactory, _interpolators } = this;
+    const { colors, domain, _tempComponents, _componentValues, _interpolatorFactory, _interpolators } = this;
 
     const { componentCount } = model;
-    const domainLength = _domain.length;
+    const domainLength = domain.length;
 
     // Empty gradients are rendered as black
     if (domainLength === 0) {
       if (this._model !== model) {
-        model.rgbToComponents(blackRgb, _tempComponents);
+        model.convertRGBToComponents(blackRGB, _tempComponents);
       }
       this._model = model;
       return _tempComponents;
     }
 
     if (domainLength === 1) {
-      return this._colors[0].get(model);
+      return this.colors[0].get(model);
     }
 
-    const currColorsVersion = getColorsVersion(this._colors);
+    const currColorsVersion = getColorsVersion(this.colors);
     const colorsUpdated = this._prevColorsVersion !== currColorsVersion || this._model !== model;
 
     if (colorsUpdated) {
       // Update color components
       for (let i = 0; i < domainLength; ++i) {
-        const components = _colors[i].get(model);
+        const components = colors[i].get(model);
 
         for (let j = 0; j < componentCount; ++j) {
           (_componentValues[j] ||= [])[i] = components[j];
@@ -127,9 +123,9 @@ export class Gradient {
           _interpolators.length > i &&
           (update = _interpolators[i].update) !== undefined
         ) {
-          update(_domain, _componentValues[i]);
+          update(domain, _componentValues[i]);
         } else {
-          _interpolators[i] = interpolatorFactory(_domain, _componentValues[i]);
+          _interpolators[i] = interpolatorFactory(domain, _componentValues[i]);
         }
       }
       this._interpolatorFactory = interpolatorFactory;

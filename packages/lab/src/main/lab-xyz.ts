@@ -1,5 +1,5 @@
-import { Lab } from './lab';
-import { WhitePoint, Xyz } from '@paint-bucket/xyz';
+import { LAB } from './lab';
+import { WhitePoint, XYZ } from '@paint-bucket/xyz';
 import { clamp1 } from 'algomatic';
 
 function pow3(x: number): number {
@@ -20,12 +20,12 @@ const enum Coefficient {
  * @see https://www.w3.org/TR/css-color-4/#color-conversion-code
  * @see https://www.easyrgb.com/en/math.php
  */
-export function xyzToLab(xyz: Xyz, lab: Lab, whitePoint = WhitePoint.deg10.D65): Lab {
+export function convertXYZToLAB(xyz: XYZ, lab: LAB, whitePoint = WhitePoint.deg10.D65): LAB {
   const [X, Y, Z] = xyz;
 
-  const fX = rotateXyz(X / whitePoint[0]);
-  const fY = rotateXyz(Y / whitePoint[1]);
-  const fZ = rotateXyz(Z / whitePoint[2]);
+  const fX = rotateXYZ(X / whitePoint[0]);
+  const fY = rotateXYZ(Y / whitePoint[1]);
+  const fZ = rotateXYZ(Z / whitePoint[2]);
 
   lab[0] = clamp1(1.16 * fY - 0.16);
   lab[1] = clamp1((5 * (fX - fY) + 1) / 2);
@@ -35,14 +35,14 @@ export function xyzToLab(xyz: Xyz, lab: Lab, whitePoint = WhitePoint.deg10.D65):
   return lab;
 }
 
-function rotateXyz(v: number): number {
+function rotateXYZ(v: number): number {
   return v > Coefficient.EPSILON ? cbrt(v) : Coefficient.KAPPA * v + 16 / 116;
 }
 
 /**
  * Convert CIELAB to XYZa.
  */
-export function labToXyz(lab: Lab, xyz: Xyz, whitePoint = WhitePoint.deg10.D65): Xyz {
+export function convertLABToXYZ(lab: LAB, xyz: XYZ, whitePoint = WhitePoint.deg10.D65): XYZ {
   const [L, A, B] = lab;
 
   // Compute f, starting with the luminance-related term

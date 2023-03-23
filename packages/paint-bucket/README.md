@@ -9,5 +9,5 @@ This package is a shortcut to install all plugins for [Paint Bucket](https://git
 ```ts
 import {color} from 'paint-bucket';
 
-Color.parse('#abcdef').saturation((S) => S / 2).red(); // → 188
+Color.parse('#abcdef').saturation((S) => S / 2).red(); // ⮕ 188
 ```

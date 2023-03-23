@@ -1,16 +1,16 @@
-import { hslToRgb, rgbToHsl } from './hsl-rgb';
+import { convertHSLToRGB, convertRGBToHSL } from './hsl-rgb';
 import { ColorModel } from '@paint-bucket/core';
 
 /**
  * HSLa color components.
  */
-export type Hsl = [H: number, S: number, L: number, a: number];
+export type HSL = [H: number, S: number, L: number, a: number];
 
 /**
  * HSLa color model definition.
  */
-export const Hsl: ColorModel = {
+export const HSL: ColorModel = {
   componentCount: 4,
-  componentsToRgb: hslToRgb,
-  rgbToComponents: rgbToHsl,
+  convertComponentsToRGB: convertHSLToRGB,
+  convertRGBToComponents: convertRGBToHSL,
 };

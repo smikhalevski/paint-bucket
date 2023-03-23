@@ -1,6 +1,6 @@
 const tinycolor2 = require('tinycolor2');
 const chromaJs = require('chroma-js');
-const { color, Rgb, Lab } = require('paint-bucket');
+const { Color, RGB, LAB } = require('paint-bucket');
 const { csplineMonot, lerp } = require('algomatic');
 
 // Create color from components
@@ -119,7 +119,7 @@ describe('c.saturation(50).rgb()', () => {
   test('tinycolor2', measure => {
     const rgb = { r: 0xab, g: 0xcd, b: 0xef };
     let c;
-    measure(() => c.desaturate().toRgb(), {
+    measure(() => c.desaturate().toRGB(), {
       beforeIteration() {
         c = tinycolor2(rgb);
       },
@@ -152,7 +152,7 @@ describe('c.hue(90).lightness(10).rgb()', () => {
   test('tinycolor2', measure => {
     const rgb = { r: 0xab, g: 0xcd, b: 0xef };
     let c;
-    measure(() => c.spin(90).lighten().toRgb(), {
+    measure(() => c.spin(90).lighten().toRGB(), {
       beforeIteration() {
         c = tinycolor2(rgb);
       },
@@ -184,7 +184,7 @@ describe("color.gradient(['#fff', '#000'])", () => {
 });
 
 // Interpolate linear RGB gradient
-describe('g.at(0.5, Rgb, lerp)', () => {
+describe('g.at(0.5, RGB, lerp)', () => {
   const hexColors = ['#fff', '#000'];
 
   test('chroma.js', measure => {
@@ -194,12 +194,12 @@ describe('g.at(0.5, Rgb, lerp)', () => {
 
   test('paint-bucket', measure => {
     const g = color.gradient(hexColors);
-    measure(() => g.at(0.7, Rgb, lerp));
+    measure(() => g.at(0.7, RGB, lerp));
   });
 });
 
 // Interpolate spline LAB gradient
-describe('g.at(0.5, Lab, csplineMonot)', () => {
+describe('g.at(0.5, LAB, csplineMonot)', () => {
   const hexColors = ['#fff', '#000'];
 
   test('chroma.js', measure => {
@@ -209,6 +209,6 @@ describe('g.at(0.5, Lab, csplineMonot)', () => {
 
   test('paint-bucket', measure => {
     const g = color.gradient(hexColors);
-    measure(() => g.at(0.7, Lab, csplineMonot));
+    measure(() => g.at(0.7, LAB, csplineMonot));
   });
 });

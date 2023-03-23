@@ -1,14 +1,18 @@
-import { Lab, rgbToLab } from '@paint-bucket/lab';
+import { LAB, convertRGBToLAB } from '@paint-bucket/lab';
 import { deltaE } from '../main/deltaE';
-import { Rgb } from '@paint-bucket/core';
+import { RGB } from '@paint-bucket/core';
 
 describe('deltaE', () => {
-  const rgb = (R: number, G: number, B: number): Rgb => [R / 255, G / 255, B / 255, 1];
-  const lab = (L: number, A: number, B: number): Lab => [L / 255, (A / 127 + 1) / 2, (B / 127 + 1) / 2, 1];
+  const rgb = (R: number, G: number, B: number): RGB => [R / 255, G / 255, B / 255, 1];
+  const lab = (L: number, A: number, B: number): LAB => [L / 255, (A / 127 + 1) / 2, (B / 127 + 1) / 2, 1];
 
   test('calculates color difference', () => {
-    expect(deltaE(rgbToLab(rgb(0, 0, 0), lab(0, 0, 0)), rgbToLab(rgb(0, 0, 0), lab(0, 0, 0)))).toBeCloseTo(0);
-    expect(deltaE(rgbToLab(rgb(0, 0, 0), lab(0, 0, 0)), rgbToLab(rgb(255, 255, 255), lab(0, 0, 0)))).toBeCloseTo(100);
+    expect(
+      deltaE(convertRGBToLAB(rgb(0, 0, 0), lab(0, 0, 0)), convertRGBToLAB(rgb(0, 0, 0), lab(0, 0, 0)))
+    ).toBeCloseTo(0);
+    expect(
+      deltaE(convertRGBToLAB(rgb(0, 0, 0), lab(0, 0, 0)), convertRGBToLAB(rgb(255, 255, 255), lab(0, 0, 0)))
+    ).toBeCloseTo(100);
 
     // http://www2.ece.rochester.edu/~gsharma/ciede2000/dataNprograms/ciede2000testdata.txt
     expect(deltaE(lab(50, 2.6772, -79.7751), lab(50, 0, -82.7485))).toBeCloseTo(2.0425, 4);

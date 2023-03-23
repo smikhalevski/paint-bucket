@@ -1,7 +1,7 @@
 import { componentsToInt } from '@paint-bucket/plugin-utils';
 import { right } from 'algomatic';
 
-export function stringifyRgb(rgb: readonly number[]): string {
+export function stringifyRGB(rgb: readonly number[]): string {
   const [R, G, B, a] = rgb;
 
   if (a === 1) {

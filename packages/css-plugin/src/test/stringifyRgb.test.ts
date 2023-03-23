@@ -1,15 +1,15 @@
-import { stringifyRgb } from '../main/stringifyRgb';
+import { stringifyRGB } from '../main/stringifyRGB';
 
-describe('stringifyRgb', () => {
+describe('stringifyRGB', () => {
   test('stringifies black RGB', () => {
-    expect(stringifyRgb([0, 0, 0, 1])).toBe('#000000');
+    expect(stringifyRGB([0, 0, 0, 1])).toBe('#000000');
   });
 
   test('stringifies RGB', () => {
-    expect(stringifyRgb([0.1, 0.2, 0.35, 1])).toBe('#1a3359');
+    expect(stringifyRGB([0.1, 0.2, 0.35, 1])).toBe('#1a3359');
   });
 
   test('stringifies RGBa', () => {
-    expect(stringifyRgb([0.1, 0.2, 0.35, 0.5])).toBe('rgba(26,51,89,0.50)');
+    expect(stringifyRGB([0.1, 0.2, 0.35, 0.5])).toBe('rgba(26,51,89,0.50)');
   });
 });

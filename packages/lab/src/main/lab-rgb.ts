@@ -1,14 +1,14 @@
-import { labToXyz, xyzToLab } from './lab-xyz';
-import { rgbToXyz, WhitePoint, Xyz, xyzToRgb } from '@paint-bucket/xyz';
-import { Rgb } from '@paint-bucket/core';
-import { Lab } from './lab';
+import { convertLABToXYZ, convertXYZToLAB } from './lab-xyz';
+import { convertRGBToXYZ, WhitePoint, XYZ, convertXYZToRGB } from '@paint-bucket/xyz';
+import { RGB } from '@paint-bucket/core';
+import { LAB } from './lab';
 
-const tempXyz: Xyz = [0, 0, 0, 1];
+const tempXYZ: XYZ = [0, 0, 0, 1];
 
-export function rgbToLab(rgb: Rgb, lab: Lab, whitePoint = WhitePoint.deg2.D65): Lab {
-  return xyzToLab(rgbToXyz(rgb, tempXyz, whitePoint), lab, whitePoint);
+export function convertRGBToLAB(rgb: RGB, lab: LAB, whitePoint = WhitePoint.deg2.D65): LAB {
+  return convertXYZToLAB(convertRGBToXYZ(rgb, tempXYZ, whitePoint), lab, whitePoint);
 }
 
-export function labToRgb(lab: Lab, rgb: Rgb, whitePoint = WhitePoint.deg2.D65): Rgb {
-  return xyzToRgb(labToXyz(lab, tempXyz, whitePoint), rgb, whitePoint);
+export function convertLABToRGB(lab: LAB, rgb: RGB, whitePoint = WhitePoint.deg2.D65): RGB {
+  return convertXYZToRGB(convertLABToXYZ(lab, tempXYZ, whitePoint), rgb, whitePoint);
 }

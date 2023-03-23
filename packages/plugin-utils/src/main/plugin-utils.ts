@@ -14,12 +14,3 @@ export function createAccessor<O, I>(get: (color: Color) => O, set: (color: Colo
     return this;
   };
 }
-
-/**
- * Overrides parsing implementation that backs the {@link Color.parse} function.
- *
- * Use this in plugins to add new parsing mechanisms or static methods for {@link Color.parse} function.
- */
-export function enhanceColorParse(cb: (next: (value: ColorLike) => Color) => (value: ColorLike) => Color): void {
-  Color.parse = cb(Color.parse);
-}

@@ -1,6 +1,6 @@
-import { Color, Rgb } from '@paint-bucket/core';
+import { Color, RGB } from '@paint-bucket/core';
 import { intToComponents, normalizeComponents } from '@paint-bucket/plugin-utils';
-import { Hsl } from '@paint-bucket/hsl';
+import { HSL } from '@paint-bucket/hsl';
 
 /**
  * CSS numerical or percentage value.
@@ -23,18 +23,18 @@ export function parseCssColor(value: string): Color | undefined {
 
   if (value.charCodeAt(0) === 35 /* # */) {
     return new Color(
-      Rgb,
+      RGB,
       intToComponents(normalizeComponents(parseInt(value.substr(1), 16), value.length - 1), [0, 0, 0, 1])
     );
   }
   if (value.toLowerCase() === 'transparent') {
-    return new Color(Rgb, [0, 0, 0, 0]);
+    return new Color(RGB, [0, 0, 0, 0]);
   }
 
   const color = +('0x' + value);
 
   if (color === color) {
-    return new Color(Rgb, intToComponents(normalizeComponents(color, value.length), [0, 0, 0, 1]));
+    return new Color(RGB, intToComponents(normalizeComponents(color, value.length), [0, 0, 0, 1]));
   }
 
   const tupleMatch = tupleRe.exec(value);
@@ -44,10 +44,10 @@ export function parseCssColor(value: string): Color | undefined {
     const alpha = parseAlpha(tupleMatch[5]);
 
     if (colorModelName === 'rgb' || colorModelName === 'rgba') {
-      return new Color(Rgb, [parseByte(tupleMatch[2]), parseByte(tupleMatch[3]), parseByte(tupleMatch[4]), alpha]);
+      return new Color(RGB, [parseByte(tupleMatch[2]), parseByte(tupleMatch[3]), parseByte(tupleMatch[4]), alpha]);
     }
     if (colorModelName === 'hsl' || colorModelName === 'hsla') {
-      return new Color(Hsl, [parseDegrees(tupleMatch[2]), parseByte(tupleMatch[3]), parseByte(tupleMatch[4]), alpha]);
+      return new Color(HSL, [parseDegrees(tupleMatch[2]), parseByte(tupleMatch[3]), parseByte(tupleMatch[4]), alpha]);
     }
   }
 }

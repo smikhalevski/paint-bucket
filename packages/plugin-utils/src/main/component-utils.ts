@@ -16,14 +16,14 @@ export function clamp(x: number): number {
  * Normalizes the size of components in the binary representation of the 24-bit color.
  *
  * ```ts
- * normalizeComponents(0x1, 1) // → 0x11_11_11_ff
- * normalizeComponents(0x12, 2) // → 0x12_12_12_ff
- * normalizeComponents(0x123, 3) // → 0x11_22_33_ff
- * normalizeComponents(0x1234, 4) // → 0x11_22_33_44
- * normalizeComponents(0x12345, 5) // → 0
- * normalizeComponents(0x123456, 6) // → 0x12_34_56_ff
- * normalizeComponents(0x1234567, 7) // → 0
- * normalizeComponents(0x12345678, 8) // → 0x12_34_56_78
+ * normalizeComponents(0x1, 1) // ⮕ 0x11_11_11_ff
+ * normalizeComponents(0x12, 2) // ⮕ 0x12_12_12_ff
+ * normalizeComponents(0x123, 3) // ⮕ 0x11_22_33_ff
+ * normalizeComponents(0x1234, 4) // ⮕ 0x11_22_33_44
+ * normalizeComponents(0x12345, 5) // ⮕ 0
+ * normalizeComponents(0x123456, 6) // ⮕ 0x12_34_56_ff
+ * normalizeComponents(0x1234567, 7) // ⮕ 0
+ * normalizeComponents(0x12345678, 8) // ⮕ 0x12_34_56_78
  * ```
  *
  * @param components The input color to normalize, ex. `0xff_ff_ff` for white in RGB space.
@@ -37,18 +37,18 @@ export function normalizeComponents(components: number, nibbleCount: number): nu
 
   switch (nibbleCount) {
     case 1:
-      // 0x1 → 0x11_11_11_ff
+      // 0x1 ⮕ 0x11_11_11_ff
       a = 0xf & components;
       a += a << 4;
       return unsafeComposeComponents(a, a, a, 0xff);
 
     case 2:
-      // 0x12 → 0x12_12_12_ff
+      // 0x12 ⮕ 0x12_12_12_ff
       a = 0xff & components;
       return unsafeComposeComponents(a, a, a, 0xff);
 
     case 3:
-      // 0x123 → 0x11_22_33_ff
+      // 0x123 ⮕ 0x11_22_33_ff
       a = 0xf & right(components, 8);
       b = 0xf & right(components, 4);
       c = 0xf & components;
@@ -58,7 +58,7 @@ export function normalizeComponents(components: number, nibbleCount: number): nu
       return unsafeComposeComponents(a, b, c, 0xff);
 
     case 4:
-      // 0x1234 → 0x11_22_33_44
+      // 0x1234 ⮕ 0x11_22_33_44
       a = 0xf & right(components, 12);
       b = 0xf & right(components, 8);
       c = 0xf & right(components, 4);
@@ -70,7 +70,7 @@ export function normalizeComponents(components: number, nibbleCount: number): nu
       return unsafeComposeComponents(a, b, c, d);
 
     case 6:
-      // 0x12_34_56 → 0x12_34_56_ff
+      // 0x12_34_56 ⮕ 0x12_34_56_ff
       return left(0xff_ff_ff & components, 8) + 0xff;
 
     case 8:

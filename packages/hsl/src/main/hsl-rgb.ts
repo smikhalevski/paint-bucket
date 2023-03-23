@@ -1,10 +1,10 @@
-import { Rgb } from '@paint-bucket/core';
-import { Hsl } from './hsl';
+import { RGB } from '@paint-bucket/core';
+import { HSL } from './hsl';
 
 /**
  * Convert RGBa to HSLa.
  */
-export function rgbToHsl(rgb: Rgb, hsl: Hsl): Hsl {
+export function convertRGBToHSL(rgb: RGB, hsl: HSL): HSL {
   const [R, G, B] = rgb;
 
   const max = Math.max(R, G, B);
@@ -45,7 +45,7 @@ export function rgbToHsl(rgb: Rgb, hsl: Hsl): Hsl {
 /**
  * Convert HSLa to RGBa.
  */
-export function hslToRgb(hsl: Hsl, rgb: Rgb): Rgb {
+export function convertHSLToRGB(hsl: HSL, rgb: RGB): RGB {
   const [H, S, L] = hsl;
 
   let R = L;
@@ -56,9 +56,9 @@ export function hslToRgb(hsl: Hsl, rgb: Rgb): Rgb {
     const q = L < 0.5 ? L * (1 + S) : L + S - L * S;
     const p = 2 * L - q;
 
-    R = hueToRgb(p, q, H + 1 / 3);
-    G = hueToRgb(p, q, H);
-    B = hueToRgb(p, q, H - 1 / 3);
+    R = convertHueToRGB(p, q, H + 1 / 3);
+    G = convertHueToRGB(p, q, H);
+    B = convertHueToRGB(p, q, H - 1 / 3);
   }
 
   rgb[0] = R;
@@ -69,7 +69,7 @@ export function hslToRgb(hsl: Hsl, rgb: Rgb): Rgb {
   return rgb;
 }
 
-function hueToRgb(p: number, q: number, t: number): number {
+function convertHueToRGB(p: number, q: number, t: number): number {
   if (t < 0) {
     t += 1;
   }

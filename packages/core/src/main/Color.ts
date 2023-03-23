@@ -1,7 +1,7 @@
-import { ColorModel, Rgb } from './color-model';
+import { ColorModel, RGB } from './color-model';
 
 // RGBa color components that are used for implicit model-to-model conversions
-const tempRgb: Rgb = [0, 0, 0, 1];
+const tempRGB: RGB = [0, 0, 0, 1];
 
 /**
  * Merge declaration with this interface to add more types to {@link ColorLike} type.
@@ -51,7 +51,7 @@ export class Color {
    * @param model The initial color model.
    * @param components The initial color components.
    */
-  constructor(model = Rgb, components = [0, 0, 0, 1]) {
+  constructor(model = RGB, components = [0, 0, 0, 1]) {
     this._model = model;
     this._components = components;
   }
@@ -100,8 +100,8 @@ export class Color {
     this._tempComponents = _tempComponents ||= [];
 
     // Convert components to the temp model
-    this._model.componentsToRgb(_components, tempRgb);
-    model.rgbToComponents(tempRgb, _tempComponents);
+    this._model.convertComponentsToRGB(_components, tempRGB);
+    model.convertRGBToComponents(tempRGB, _tempComponents);
 
     return _tempComponents;
   }
@@ -139,8 +139,8 @@ export class Color {
     }
 
     // Convert components to the new model
-    this._model.componentsToRgb(_components, tempRgb);
-    model.rgbToComponents(tempRgb, _components);
+    this._model.convertComponentsToRGB(_components, tempRGB);
+    model.convertRGBToComponents(tempRGB, _components);
 
     // Update current model
     this._model = model;

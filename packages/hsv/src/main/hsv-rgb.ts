@@ -1,10 +1,10 @@
-import { Rgb } from '@paint-bucket/core';
-import { Hsv } from './hsv';
+import { RGB } from '@paint-bucket/core';
+import { HSV } from './hsv';
 
 /**
  * Convert RGBa to HSVa.
  */
-export function rgbToHsv(rgb: Rgb, hsv: Hsv): Hsv {
+export function convertRGBToHSV(rgb: RGB, hsv: HSV): HSV {
   const [R, G, B] = rgb;
 
   const V = Math.max(R, G, B);
@@ -40,7 +40,7 @@ export function rgbToHsv(rgb: Rgb, hsv: Hsv): Hsv {
 /**
  * Convert HSVa to RGBa.
  */
-export function hsvToRgb(hsv: Hsv, rgb: Rgb): Rgb {
+export function convertHSVToRGB(hsv: HSV, rgb: RGB): RGB {
   const [H, S, V] = hsv;
 
   const i = Math.floor(H);

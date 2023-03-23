@@ -3,7 +3,7 @@
  */
 export interface ColorModel {
   /**
-   * The number of color components that this model uses.
+   * The number of color components that the model uses.
    */
   readonly componentCount: number;
 
@@ -13,7 +13,7 @@ export interface ColorModel {
    * @param components The color components.
    * @param rgb The RGBa color components to update.
    */
-  componentsToRgb(components: readonly number[], rgb: Rgb): void;
+  convertComponentsToRGB(components: readonly number[], rgb: RGB): void;
 
   /**
    * Converts color components from RGBa color model to this color model.
@@ -21,24 +21,24 @@ export interface ColorModel {
    * @param rgb RGBa color components.
    * @param components The color components that must be updated.
    */
-  rgbToComponents(rgb: Readonly<Rgb>, components: number[]): void;
+  convertRGBToComponents(rgb: Readonly<RGB>, components: number[]): void;
 }
 
 /**
  * Color components of the RGBa color model.
  */
-export type Rgb = [R: number, G: number, B: number, a: number];
+export type RGB = [R: number, G: number, B: number, a: number];
 
 /**
  * RGBa color model definition.
  */
-export const Rgb: ColorModel = {
+export const RGB: ColorModel = {
   componentCount: 4,
-  componentsToRgb: copyComponents,
-  rgbToComponents: copyComponents,
+  convertComponentsToRGB: copyComponents,
+  convertRGBToComponents: copyComponents,
 };
 
-function copyComponents(components: readonly number[], rgb: Rgb): void {
+function copyComponents(components: readonly number[], rgb: RGB): void {
   rgb[0] = components[0];
   rgb[1] = components[1];
   rgb[2] = components[2];

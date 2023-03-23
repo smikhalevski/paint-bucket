@@ -1,16 +1,16 @@
 import { ColorModel } from '@paint-bucket/core';
-import { labToRgb, rgbToLab } from './lab-rgb';
+import { convertLABToRGB, convertRGBToLAB } from './lab-rgb';
 
 /**
  * CIE-L*a*b* color components.
  */
-export type Lab = [L: number, A: number, B: number, a: number];
+export type LAB = [L: number, A: number, B: number, a: number];
 
 /**
  * CIE-L*a*b* color model definition.
  */
-export const Lab: ColorModel = {
+export const LAB: ColorModel = {
   componentCount: 4,
-  componentsToRgb: labToRgb,
-  rgbToComponents: rgbToLab,
+  convertComponentsToRGB: convertLABToRGB,
+  convertRGBToComponents: convertRGBToLAB,
 };

@@ -29,7 +29,7 @@ declare module '@paint-bucket/core/lib/Gradient' {
      * Returns the color at the given position in the gradient.
      *
      * @param x The value from the gradient domain for which the color is requested.
-     * @param [model = Rgb] The color model that should be used for interpolation.
+     * @param [model = RGB] The color model that should be used for interpolation.
      * @param [interpolatorFactory = lerp] The function that returns a color component interpolator.
      * @return The new {@link Color} instance.
      *
@@ -42,7 +42,7 @@ declare module '@paint-bucket/core/lib/Gradient' {
      * Returns the list of equally spaced colors from the gradient.
      *
      * @param n The number of colors to pick.
-     * @param [model = Rgb] The color model that should be used for interpolation.
+     * @param [model = RGB] The color model that should be used for interpolation.
      * @return The list of {@link Color} instances.
      */
     palette(n: number, model?: ColorModel): Color[];

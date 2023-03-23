@@ -1,4 +1,4 @@
-import { Hsl } from '@paint-bucket/hsl';
+import { HSL } from '@paint-bucket/hsl';
 import { Applicator } from '@paint-bucket/plugin-utils';
 
 declare module '@paint-bucket/core' {
@@ -16,13 +16,13 @@ declare module '@paint-bucket/core' {
      *     component is omitted it is set to 0. If alpha component is omitted it is set to 1.
      * @returns The new color instance.
      */
-    export function hsl(hsl: Partial<Hsl>): Color;
+    export function hsl(hsl: Partial<HSL>): Color;
 
     /**
      * Creates the new color from HSL components represented as 24-bit integer.
      *
      * ```ts
-     * Color.hsl24(0xff_ff_ff).hsl() // → [255, 255, 255, 1]
+     * Color.hsl24(0xff_ff_ff).hsl() // ⮕ [255, 255, 255, 1]
      * ```
      *
      * @param hsl The 24-bit integer, representing color in HSL model (without alpha component).
@@ -49,10 +49,10 @@ declare module '@paint-bucket/core' {
      * opaque).
      *
      * ```ts
-     * new Color().hsl(); // → [0, 0, 0, 1]
+     * new Color().hsl(); // ⮕ [0, 0, 0, 1]
      * ```
      */
-    hsl(): Hsl;
+    hsl(): HSL;
 
     /**
      * Sets HSLa components.
@@ -66,13 +66,13 @@ declare module '@paint-bucket/core' {
      * @param hsl The tuple of H ∈ [0, 360], S and L ∈ [0, 100] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a H, S
      *     or L component is omitted it is set to 0. If alpha component is omitted it is set to 1.
      */
-    hsl(hsl: Applicator<Hsl, Partial<Hsl>>): Color;
+    hsl(hsl: Applicator<HSL, Partial<HSL>>): Color;
 
     /**
      * Returns 24-bit integer representing HSL components without alpha.
      *
      * ```ts
-     * new Color().hsl24(); // → 0x00_00_00
+     * new Color().hsl24(); // ⮕ 0x00_00_00
      * ```
      */
     hsl24(): number;
@@ -92,7 +92,7 @@ declare module '@paint-bucket/core' {
      * Returns 32-bit integer representing HSLa components.
      *
      * ```ts
-     * new Color().hsl32(); // → 0x00_00_00_ff
+     * new Color().hsl32(); // ⮕ 0x00_00_00_ff
      * ```
      */
     hsl32(): number;
@@ -119,7 +119,7 @@ declare module '@paint-bucket/core' {
      * Sets hue color component.
      *
      * ```ts
-     * new Color().hue(90).hue((H) => H * 2).hue(); // → 180
+     * new Color().hue(90).hue((H) => H * 2).hue(); // ⮕ 180
      * ```
      *
      * @param H Hue ∈ [0, 360].
@@ -137,7 +137,7 @@ declare module '@paint-bucket/core' {
      * Sets saturation color component.
      *
      * ```ts
-     * new Color().saturation(20).saturation((S) => S * 2).saturation(); // → 40
+     * new Color().saturation(20).saturation((S) => S * 2).saturation(); // ⮕ 40
      * ```
      * @param S Saturation ∈ [0, 100].
      */
@@ -154,7 +154,7 @@ declare module '@paint-bucket/core' {
      * Sets lightness color component.
      *
      * ```ts
-     * new Color().lightness(20).lightness((L) => L * 2).lightness(); // → 40
+     * new Color().lightness(20).lightness((L) => L * 2).lightness(); // ⮕ 40
      * ```
      * @param L Lightness ∈ [0, 100].
      */
