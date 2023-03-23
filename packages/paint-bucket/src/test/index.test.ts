@@ -1,4 +1,5 @@
 import { Color } from '@paint-bucket/core';
+import '../main';
 
 describe('color', () => {
   test('returns color by X11 name', () => {

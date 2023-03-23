@@ -1,10 +1,12 @@
 import { ColorLike, Rgb } from '@paint-bucket/core';
 import { Applicator } from '@paint-bucket/plugin-utils';
 
-declare module '@paint-bucket/core/lib/Color' {
-  interface ColorParse {
+declare module '@paint-bucket/core' {
+  interface InjectColorLike {
     /**
-     * Creates the new color from RGBa components.
+     * Creates the new color from RGBa components. Components can be represented as a 24-bit integer RGBa color or
+     * an array of separate component values where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
+     * If the R, G or B component is omitted it is set to 0. If alpha component is omitted it is set to 1.
      *
      * ```ts
      * Color.parse([255, 255, 255, 0.5]);
@@ -13,13 +15,8 @@ declare module '@paint-bucket/core/lib/Color' {
      *
      * Color.parse(0x00_00_ff);
      * ```
-     *
-     * @param rgb The 24-bit integer RGBa color or separate components where R, G and B ∈ [0, 255] and a ∈ [0, 1]
-     *     (0 = transparent, 1 = opaque). If the R, G or B component is omitted it is set to 0. If alpha component is
-     *     omitted it is set to 1.
-     * @returns The new color instance.
      */
-    (rgb: number | Partial<Rgb>): Color;
+    '@paint-bucket/rgb-plugin': number | Partial<Rgb>;
   }
 
   namespace Color {

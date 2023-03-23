@@ -9,22 +9,19 @@
   },
   "workspaces": [
     "./packages/core",
-    "./packages/plugin-utils",
-    "./packages/rgb-plugin"
-  ],
-  "qqq": [
     "./packages/hsl",
     "./packages/hsv",
     "./packages/xyz",
     "./packages/lab",
+    "./packages/plugin-utils",
+    "./packages/rgb-plugin",
     "./packages/hsl-plugin",
-    "./packages/x11-plugin",
     "./packages/css-plugin",
+    "./packages/x11-plugin",
     "./packages/difference-plugin",
     "./packages/gradient-plugin",
     "./packages/palette-plugin",
     "./packages/paint-bucket"
-
   ],
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.1",

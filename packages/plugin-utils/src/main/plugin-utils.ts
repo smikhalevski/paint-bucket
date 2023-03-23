@@ -1,4 +1,4 @@
-import { Color, ColorParse } from '@paint-bucket/core';
+import { Color, ColorLike } from '@paint-bucket/core';
 import { Accessor } from './plugin-types';
 
 export function createAccessor<O, I>(get: (color: Color) => O, set: (color: Color, value: I) => void): Accessor<O, I> {
@@ -20,6 +20,6 @@ export function createAccessor<O, I>(get: (color: Color) => O, set: (color: Colo
  *
  * Use this in plugins to add new parsing mechanisms or static methods for {@link Color.parse} function.
  */
-export function enhanceColorParse(cb: (next: (value: any) => Color) => ColorParse): void {
+export function enhanceColorParse(cb: (next: (value: ColorLike) => Color) => (value: ColorLike) => Color): void {
   Color.parse = cb(Color.parse);
 }

@@ -33,7 +33,7 @@ export function parseCssColor(value: string): Color | undefined {
 
   const color = +('0x' + value);
 
-  if (!isNaN(color)) {
+  if (color === color) {
     return new Color(Rgb, intToComponents(normalizeComponents(color, value.length), [0, 0, 0, 1]));
   }
 

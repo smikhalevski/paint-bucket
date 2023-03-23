@@ -1,6 +1,6 @@
 import { Color, ColorLike, ColorModel, Gradient, InterpolatorFactory } from '@paint-bucket/core';
 
-declare module '@paint-bucket/core/lib/Color' {
+declare module '@paint-bucket/core' {
   namespace Color {
     /**
      * Creates the new {@link Gradient} of colors.

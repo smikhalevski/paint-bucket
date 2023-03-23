@@ -1,7 +1,7 @@
 import { Hsl } from '@paint-bucket/hsl';
 import { Applicator } from '@paint-bucket/plugin-utils';
 
-declare module '@paint-bucket/core/lib/Color' {
+declare module '@paint-bucket/core' {
   namespace Color {
     /**
      * Creates the new color from HSLa components.

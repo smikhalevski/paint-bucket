@@ -1,6 +1,6 @@
 import { ColorLike } from '@paint-bucket/core';
 
-declare module '@paint-bucket/core/lib/Color' {
+declare module '@paint-bucket/core' {
   interface Color {
     /**
      * Computes the CIEDE2000 color-difference.

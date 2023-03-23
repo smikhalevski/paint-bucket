@@ -1,13 +1,14 @@
-import { Color } from '@paint-bucket/core';
+import '@paint-bucket/core';
 
-declare module '@paint-bucket/core/lib/Color' {
-  interface ColorParse {
+declare module '@paint-bucket/core' {
+  interface InjectColorLike {
     /**
      * Creates a new color using its [X11 color name](https://en.wikipedia.org/wiki/X11_color_names).
      *
-     * @param name The case-insensitive color name.
-     * @return The new {@link Color} instance.
+     * ```ts
+     * Color.parse('royalblue');
+     * ```
      */
-    (name: string): Color;
+    '@paint-bucket/x11-plugin': string;
   }
 }

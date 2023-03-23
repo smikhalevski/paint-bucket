@@ -1,28 +1,19 @@
 import { ColorModel, Rgb } from './color-model';
-import { OverloadParameters } from './utility-types';
 
 // RGBa color components that are used for implicit model-to-model conversions
 const tempRgb: Rgb = [0, 0, 0, 1];
 
 /**
- * Re-declare this interface in the plugin package to extend {@link Color.parse} function signature.
- *
- * **Note:** The first argument of each overload becomes a part of {@link ColorLike} union.
+ * Merge declaration with this interface to add more types to {@link ColorLike} type.
  */
-export interface ColorParse {
-  /**
-   * Clones the {@link Color} instance.
-   *
-   * @param color The color instance to clone.
-   * @returns The new color instance.
-   */
-  (color: Color): Color;
+export interface InjectColorLike {
+  '@paint-bucket/core': Color;
 }
 
 /**
  * The type of the value that can be parsed into a {@link Color} instance using {@link Color.parse} function.
  */
-export type ColorLike = OverloadParameters<ColorParse>[0];
+export type ColorLike = InjectColorLike[keyof InjectColorLike];
 
 /**
  * Provides color manipulation API that is extensible via plugins.
@@ -67,8 +58,13 @@ export class Color {
 
   /**
    * Parser that transforms input values into {@link Color} instances.
+   *
+   * @param value The value to parse.
+   * @return The parsed color, or black color if value is invalid.
    */
-  static parse: ColorParse = value => (value instanceof Color ? value.clone() : new Color());
+  static parse(value: ColorLike): Color {
+    return value instanceof Color ? value : new Color();
+  }
 
   /**
    * Creates a clone of this {@link Color} instance.

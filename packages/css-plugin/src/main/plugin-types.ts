@@ -1,7 +1,7 @@
 import { Applicator } from '@paint-bucket/plugin-utils';
 
-declare module '@paint-bucket/core/lib/Color' {
-  interface ColorParse {
+declare module '@paint-bucket/core' {
+  interface InjectColorLike {
     /**
      * Parses color from CSS string.
      *
@@ -9,7 +9,7 @@ declare module '@paint-bucket/core/lib/Color' {
      * Color.parse('hsl(290, 20%, 50% / 80%)').css(); // rgba(145,102,153,0.80)
      * ```
      */
-    (color: string): Color;
+    '@paint-bucket/css-plugin': string;
   }
 
   interface Color {

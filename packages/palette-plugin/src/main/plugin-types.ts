@@ -1,6 +1,6 @@
 import { Color } from '@paint-bucket/core';
 
-declare module '@paint-bucket/core/lib/Color' {
+declare module '@paint-bucket/core' {
   interface Color {
     /**
      * Returns a new complement color.
