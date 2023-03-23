@@ -1,6 +1,6 @@
 import { ColorModel, RGB } from './color-model';
 import { Color } from './Color';
-import { clamp1 } from 'algomatic';
+import { clamp } from '@paint-bucket/plugin-utils';
 
 // Black RGBa color that is returned if gradient has zero domain size
 const blackRGB: RGB = [0, 0, 0, 1];
@@ -133,7 +133,7 @@ export class Gradient {
 
     // Interpolate components
     for (let i = 0; i < componentCount; ++i) {
-      _tempComponents[i] = clamp1(_interpolators[i](value));
+      _tempComponents[i] = clamp(_interpolators[i](value));
     }
 
     return _tempComponents;

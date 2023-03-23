@@ -1,11 +1,10 @@
-import { componentsToInt } from '@paint-bucket/plugin-utils';
-import { right } from 'algomatic';
+import { convertComponentsToColorInt } from '@paint-bucket/plugin-utils';
 
 export function stringifyRGB(rgb: readonly number[]): string {
   const [R, G, B, a] = rgb;
 
   if (a === 1) {
-    const str = right(componentsToInt(rgb), 8).toString(16);
+    const str = (convertComponentsToColorInt(rgb) >>> 8).toString(16);
     return str.length === 6 ? '#' + str : '#000000'.substr(0, 7 - str.length) + str;
   }
 

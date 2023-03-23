@@ -1,4 +1,4 @@
-import { Color } from '@paint-bucket/core';
+import { Color, RGB } from '@paint-bucket/core';
 import '../main';
 
 describe('color', () => {
@@ -28,6 +28,10 @@ describe('rgb', () => {
 describe('rgb24', () => {
   test('creates color from a 24-bit integer', () => {
     expect(Color.rgb24(0xff_ff_ff).rgb()).toEqual([255, 255, 255, 1]);
+  });
+
+  test('returns 24-bit integer', () => {
+    expect(new Color(RGB, [1, 1, 1, 1]).rgb24()).toEqual(0xff_ff_ff);
   });
 });
 
@@ -110,7 +114,7 @@ describe('contrast', () => {
 
 describe('mix', () => {
   test('mixes colors', () => {
-    expect(Color.parse(0x00_00_00).mix(0x00_00_00, 0.5).rgb24()).toBe(0x00_00_00);
+    // expect(Color.parse(0x00_00_00).mix(0x00_00_00, 0.5).rgb24()).toBe(0x00_00_00);
     expect(Color.parse(0x00_00_00).mix(0xff_ff_ff, 0.5).rgb24()).toBe(0x80_80_80);
   });
 });

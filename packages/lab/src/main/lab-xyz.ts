@@ -1,6 +1,6 @@
 import { LAB } from './lab';
 import { WhitePoint, XYZ } from '@paint-bucket/xyz';
-import { clamp1 } from 'algomatic';
+import { clamp } from '@paint-bucket/plugin-utils';
 
 function pow3(x: number): number {
   return x * x * x;
@@ -27,9 +27,9 @@ export function convertXYZToLAB(xyz: XYZ, lab: LAB, whitePoint = WhitePoint.deg1
   const fY = rotateXYZ(Y / whitePoint[1]);
   const fZ = rotateXYZ(Z / whitePoint[2]);
 
-  lab[0] = clamp1(1.16 * fY - 0.16);
-  lab[1] = clamp1((5 * (fX - fY) + 1) / 2);
-  lab[2] = clamp1((2 * (fY - fZ) + 1) / 2);
+  lab[0] = clamp(1.16 * fY - 0.16);
+  lab[1] = clamp((5 * (fX - fY) + 1) / 2);
+  lab[2] = clamp((2 * (fY - fZ) + 1) / 2);
   lab[3] = xyz[3];
 
   return lab;
@@ -57,9 +57,9 @@ export function convertLABToXYZ(lab: LAB, xyz: XYZ, whitePoint = WhitePoint.deg1
   const Y = L > Coefficient.EPSILON * Coefficient.KAPPA ? pow3((L + 0.16) / 1.16) : L / Coefficient.KAPPA;
   const Z = pow3Fz > Coefficient.EPSILON ? pow3Fz : (1.16 * fZ - 0.16) / Coefficient.KAPPA;
 
-  xyz[0] = clamp1(X * whitePoint[0]);
-  xyz[1] = clamp1(Y * whitePoint[1]);
-  xyz[2] = clamp1(Z * whitePoint[2]);
+  xyz[0] = clamp(X * whitePoint[0]);
+  xyz[1] = clamp(Y * whitePoint[1]);
+  xyz[2] = clamp(Z * whitePoint[2]);
   xyz[3] = lab[3];
 
   return xyz;

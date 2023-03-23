@@ -1,13 +1,12 @@
 import { Color } from '@paint-bucket/core';
 import {
   clamp,
-  componentsToInt,
+  convertColorIntToComponents,
+  convertComponentsToColorInt,
   createAccessor,
-  intToComponents,
-  normalizeComponents,
+  normalizeColorInt,
 } from '@paint-bucket/plugin-utils';
 import { HSL } from '@paint-bucket/hsl';
-import { right } from 'algomatic';
 
 Color.hsl = hsl => new Color().hsl(hsl);
 
@@ -41,18 +40,18 @@ Color.prototype.hsl = createAccessor<HSL, Partial<HSL>>(
 );
 
 Color.prototype.hsl24 = createAccessor(
-  color => right(componentsToInt(color.get(HSL)), 8),
+  color => convertComponentsToColorInt(color.get(HSL)) >>> 8,
 
   (color, value) => {
-    intToComponents(normalizeComponents(value, 6), color.use(HSL));
+    convertColorIntToComponents(normalizeColorInt(value, 6), color.use(HSL));
   }
 );
 
 Color.prototype.hsl32 = createAccessor(
-  color => componentsToInt(color.get(HSL)),
+  color => convertComponentsToColorInt(color.get(HSL)),
 
   (color, value) => {
-    intToComponents(normalizeComponents(value, 8), color.use(HSL));
+    convertColorIntToComponents(normalizeColorInt(value, 8), color.use(HSL));
   }
 );
 

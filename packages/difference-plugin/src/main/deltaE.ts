@@ -1,6 +1,4 @@
-import { deg, hypot, rad } from 'algomatic';
-
-const { abs, atan2, cos, exp, sin, sqrt } = Math;
+const { abs, atan2, cos, exp, sin, sqrt, hypot, PI } = Math;
 
 /**
  * Computes the CIEDE2000 color-difference.
@@ -124,4 +122,18 @@ function calcAHp(Cab1: number, Cab2: number, Hp1: number, Hp2: number): number {
     return (lHp - 360) / 2;
   }
   throw new Error();
+}
+
+/**
+ * Converts radians to degrees.
+ */
+function rad(x: number): number {
+  return (x * PI) / 180;
+}
+
+/**
+ * Converts degrees to radians.
+ */
+function deg(x: number): number {
+  return (x / PI) * 180;
 }

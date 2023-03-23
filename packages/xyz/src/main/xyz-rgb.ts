@@ -1,7 +1,7 @@
 import { RGB } from '@paint-bucket/core';
 import { XYZ } from './xyz';
-import { clamp1 } from 'algomatic';
 import { WhitePoint } from './WhitePoint';
+import { clamp } from '@paint-bucket/plugin-utils';
 
 /**
  * Convert RGBa to XYZa.
@@ -11,9 +11,9 @@ export function convertRGBToXYZ(rgb: RGB, xyz: XYZ, whitePoint = WhitePoint.deg2
   const g = rotateRGBToXYZ(rgb[1]) / whitePoint[1];
   const b = rotateRGBToXYZ(rgb[2]) / whitePoint[2];
 
-  xyz[0] = clamp1(r * 0.41239079926595 + g * 0.35758433938387 + b * 0.18048078840183);
-  xyz[1] = clamp1(r * 0.21263900587151 + g * 0.71516867876775 + b * 0.072192315360733);
-  xyz[2] = clamp1(r * 0.019330818715591 + g * 0.11919477979462 + b * 0.95053215224966);
+  xyz[0] = clamp(r * 0.41239079926595 + g * 0.35758433938387 + b * 0.18048078840183);
+  xyz[1] = clamp(r * 0.21263900587151 + g * 0.71516867876775 + b * 0.072192315360733);
+  xyz[2] = clamp(r * 0.019330818715591 + g * 0.11919477979462 + b * 0.95053215224966);
   xyz[3] = rgb[3];
 
   return xyz;
@@ -43,9 +43,9 @@ export function convertXYZToRGB(xyz: XYZ, rgb: RGB, whitePoint = WhitePoint.deg2
   const g = X * -0.96924363628087 + Y * +1.87596750150772 + Z * +0.041555057407175;
   const b = X * +0.055630079696993 + Y * -0.20397695888897 + Z * +1.056971514242878;
 
-  rgb[0] = clamp1(rotateXYZToRGB(r) * whitePoint[0]);
-  rgb[1] = clamp1(rotateXYZToRGB(g) * whitePoint[1]);
-  rgb[2] = clamp1(rotateXYZToRGB(b) * whitePoint[2]);
+  rgb[0] = clamp(rotateXYZToRGB(r) * whitePoint[0]);
+  rgb[1] = clamp(rotateXYZToRGB(g) * whitePoint[1]);
+  rgb[2] = clamp(rotateXYZToRGB(b) * whitePoint[2]);
   rgb[3] = xyz[3];
 
   return rgb;

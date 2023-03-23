@@ -1,4 +1,4 @@
-import { intToComponents } from '@paint-bucket/plugin-utils';
+import { convertColorIntToComponents } from '@paint-bucket/plugin-utils';
 
 /**
  * X11 color name to RGBa components.
@@ -154,5 +154,5 @@ export const x11Colors = new Map(
     ['whitesmoke', 'f5f5f5'],
     ['yellow', 'ffff00'],
     ['yellowgreen', '9acd32'],
-  ].map(([name, rgb]) => [name, intToComponents(parseInt(rgb + 'FF', 16), [])])
+  ].map(([name, rgb]) => [name, convertColorIntToComponents(parseInt(rgb + 'FF', 16), [])])
 );

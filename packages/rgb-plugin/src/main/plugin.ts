@@ -1,12 +1,11 @@
 import { Color, RGB } from '@paint-bucket/core';
 import {
   clamp,
-  componentsToInt,
+  convertColorIntToComponents,
+  convertComponentsToColorInt,
   createAccessor,
-  intToComponents,
-  normalizeComponents,
+  normalizeColorInt,
 } from '@paint-bucket/plugin-utils';
-import { right } from 'algomatic';
 
 const { parse } = Color;
 
@@ -45,18 +44,18 @@ Color.prototype.rgb = createAccessor<RGB, Partial<RGB>>(
 );
 
 Color.prototype.rgb24 = createAccessor(
-  color => right(componentsToInt(color.get(RGB)), 8),
+  color => convertComponentsToColorInt(color.get(RGB)) >>> 8,
 
   (color, value) => {
-    intToComponents(normalizeComponents(value, 6), color.use(RGB));
+    convertColorIntToComponents(normalizeColorInt(value, 6), color.use(RGB));
   }
 );
 
 Color.prototype.rgb32 = createAccessor(
-  color => componentsToInt(color.get(RGB)),
+  color => convertComponentsToColorInt(color.get(RGB)),
 
   (color, value) => {
-    intToComponents(normalizeComponents(value, 8), color.use(RGB));
+    convertColorIntToComponents(normalizeColorInt(value, 8), color.use(RGB));
   }
 );
 
@@ -107,10 +106,10 @@ function rotate(v: number): number {
 }
 
 Color.prototype.contrast = function (color) {
-  let a = 0.05 + this.luminance();
-  let b = 0.05 + Color.parse(color).luminance();
+  let a = this.luminance() + 0.05;
+  let b = Color.parse(color).luminance() + 0.05;
 
-  return a < b ? a / b : b / a;
+  return a > b ? a / b : b / a;
 };
 
 Color.prototype.mix = function (color, ratio) {
