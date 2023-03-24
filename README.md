@@ -167,20 +167,20 @@ import {HSL} from '@paint-bucket/hsl';
 new Color(HSL, [0.5, 1, 0.5, 0.7]); // 70% transparent cyan HSL color
 ```
 
-`Color` provides a mechanism to acquire color components in any color model via the `Color.get` method.
+`Color` provides a mechanism to acquire color components in any color model via the `Color.getComponents` method.
 
 ```ts
 import {Color, RGB} from '@paint-bucket/core';
 import {HSL} from '@paint-bucket/hsl';
 
-new Color(HSL, [0.5, 1, 0.5, 0.7]).get(RGB); // ⮕ [0, 1, 1, 0.7]
+new Color(HSL, [0.5, 1, 0.5, 0.7]).getComponents(RGB); // ⮕ [0, 1, 1, 0.7]
 ```
 
 Here, we created a Color instance initialized with the components of the cyan color in the HSL color model and retrieved
 components in the RGB color model.
 
-`Color.get` method returns read-only color components, which are computed on the fly. To update the color components of
-the `Color` instance, you should use the `Color.use` method. This method returns a writable array of components in a
+`Color.getComponents` method returns read-only color components, which are computed on the fly. To update the color components of
+the `Color` instance, you should useComponents the `Color.useComponents` method. This method returns a writable array of components in a
 particular color model.
 
 ```ts
@@ -188,12 +188,12 @@ import {Color, RGB} from '@paint-bucket/core';
 import {HSL} from '@paint-bucket/hsl';
 
 const color = new Color(HSL, [0.5, 1, 0.5, 0.5]); // Cyan
-const rgb = color.use(RGB);
+const rgb = color.useComponents(RGB);
 
 // Set blue component value to 0 
 rgb[2] = 0;
 
-color.get(HSL); // ⮕ Green [0.333, 1, 0.5, 0.7]
+color.getComponents(HSL); // ⮕ Green [0.333, 1, 0.5, 0.7]
 ```
 
 # Plugins
@@ -253,7 +253,7 @@ Color.prototype.getRed = function () {
 
   // Get read-only array of RGB color components where each component
   // is in [0, 1] range
-  const rgb = this.get(RGB);
+  const rgb = this.getComponents(RGB);
 
   return rgb[0] * 255;
 };
@@ -262,7 +262,7 @@ Color.prototype.setRed = function (value) {
 
   // Get writable array of RGB color components where each component
   // is in [0, 1] range
-  const rgb = this.use(RGB);
+  const rgb = this.useComponents(RGB);
 
   // Update the red component
   rgb[0] = value / 255;
@@ -280,7 +280,7 @@ import './plugin1.ts';
 
 const color = new Color().setRed(128);
 
-color.get(RGB); // ⮕ [0.5, 0, 0, 1]
+color.getComponents(RGB); // ⮕ [0.5, 0, 0, 1]
 ```
 
 ## Extend color parsing
@@ -292,7 +292,7 @@ Using `Color` constructor and initializing colors using arrays of components isn
 import {color, RGB} from '@paint-bucket/core';
 import './plugin1.ts';
 
-new Color().setRed(128).get(RGB); // ⮕ [0.5, 0, 0, 1]
+new Color().setRed(128).getComponents(RGB); // ⮕ [0.5, 0, 0, 1]
 ```
 
 `color` function returns the `Color` instance. Using plugins, you can extend what arguments `color` function would
@@ -337,7 +337,7 @@ Now we can use this plugin with the `color` function.
 import {color, RGB} from '@paint-bucket/core';
 import './plugin2.ts';
 
-Color.parse('cyan').get(RGB); // ⮕ [0, 1, 1, 1]
+Color.parse('cyan').getComponents(RGB); // ⮕ [0, 1, 1, 1]
 ```
 
 # Performance

@@ -13,14 +13,14 @@ describe('rgb', () => {
   });
 });
 
-describe('deltaE', () => {
-  test('returns deltaE', () => {
+describe('getDeltaE', () => {
+  test('returns getDeltaE', () => {
     expect(Color.parse('#aaa').deltaE(0xaa_bb_cc)).toBeCloseTo(12.9222);
   });
 });
 
 describe('monochromatic palette', () => {
-  test('returns deltaE', () => {
+  test('returns getDeltaE', () => {
     expect(Color.parse('#f00').complement().css()).toBe('#00ffff');
   });
 });

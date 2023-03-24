@@ -16,10 +16,10 @@ const enum Coefficient {
 /**
  * Convert XYZa to CIELAB.
  *
- * @see {@link https://www.w3.org/TR/css-color-4/#color-conversion-code CSS Color Module Level 4 on W3C}
+ * @see {@link https://www.w3.org/TR/css-color-4/#color-conversion-code CSS Color Module Level 4}
  * @see {@link https://www.easyrgb.com/en/math.php Color math and programming code examples}
  */
-export function convertXYZToLAB(xyz: XYZ, lab: LAB, whitePoint = WhitePoint.deg10.D65): LAB {
+export function convertXYZToLAB(xyz: XYZ, lab: LAB, whitePoint = WhitePoint.CIE1964.D65): LAB {
   const [X, Y, Z] = xyz;
 
   const fX = rotateXYZ(X / whitePoint[0]);
@@ -41,7 +41,7 @@ function rotateXYZ(v: number): number {
 /**
  * Convert CIELAB to XYZa.
  */
-export function convertLABToXYZ(lab: LAB, xyz: XYZ, whitePoint = WhitePoint.deg10.D65): XYZ {
+export function convertLABToXYZ(lab: LAB, xyz: XYZ, whitePoint = WhitePoint.CIE1964.D65): XYZ {
   const [L, A, B] = lab;
 
   // Compute f, starting with the luminance-related term

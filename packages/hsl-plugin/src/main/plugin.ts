@@ -16,12 +16,12 @@ Color.hsl32 = hsl => new Color().hsl32(hsl);
 
 Color.prototype.hsl = createAccessor<HSL, Partial<HSL>>(
   color => {
-    const hsl = color.get(HSL);
+    const hsl = color.getComponents(HSL);
     return [hsl[0] * 360, hsl[1] * 100, hsl[2] * 100, hsl[3]];
   },
 
   (color, value) => {
-    const hsl = color.use(HSL);
+    const hsl = color.useComponents(HSL);
     const [H, S, L, a] = value;
 
     if (H !== undefined) {
@@ -40,53 +40,53 @@ Color.prototype.hsl = createAccessor<HSL, Partial<HSL>>(
 );
 
 Color.prototype.hsl24 = createAccessor(
-  color => convertComponentsToColorInt(color.get(HSL)) >>> 8,
+  color => convertComponentsToColorInt(color.getComponents(HSL)) >>> 8,
 
   (color, value) => {
-    convertColorIntToComponents(normalizeColorInt(value, 6), color.use(HSL));
+    convertColorIntToComponents(normalizeColorInt(value, 6), color.useComponents(HSL));
   }
 );
 
 Color.prototype.hsl32 = createAccessor(
-  color => convertComponentsToColorInt(color.get(HSL)),
+  color => convertComponentsToColorInt(color.getComponents(HSL)),
 
   (color, value) => {
-    convertColorIntToComponents(normalizeColorInt(value, 8), color.use(HSL));
+    convertColorIntToComponents(normalizeColorInt(value, 8), color.useComponents(HSL));
   }
 );
 
 Color.prototype.hue = createAccessor(
-  color => color.get(HSL)[0] * 360,
+  color => color.getComponents(HSL)[0] * 360,
 
   (color, H) => {
-    color.use(HSL)[0] = clamp(H / 360);
+    color.useComponents(HSL)[0] = clamp(H / 360);
   }
 );
 
 Color.prototype.saturation = createAccessor(
-  color => color.get(HSL)[1] * 100,
+  color => color.getComponents(HSL)[1] * 100,
 
   (color, S) => {
-    color.use(HSL)[1] = clamp(S / 100);
+    color.useComponents(HSL)[1] = clamp(S / 100);
   }
 );
 
 Color.prototype.lightness = createAccessor(
-  color => color.get(HSL)[2] * 100,
+  color => color.getComponents(HSL)[2] * 100,
 
   (color, L) => {
-    color.use(HSL)[2] = clamp(L / 100);
+    color.useComponents(HSL)[2] = clamp(L / 100);
   }
 );
 
 Color.prototype.spin = function (H) {
-  const hsl = this.use(HSL);
+  const hsl = this.useComponents(HSL);
   hsl[0] = clamp(((hsl[0] + H) / 360) % 1);
   return this;
 };
 
 Color.prototype.lighten = function (p) {
-  const hsl = this.use(HSL);
+  const hsl = this.useComponents(HSL);
   hsl[2] = clamp(hsl[2] * (1 + +p));
   return this;
 };

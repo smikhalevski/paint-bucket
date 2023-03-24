@@ -20,8 +20,9 @@ export type ColorLike = InjectColorLike[keyof InjectColorLike];
  */
 export class Color {
   /**
-   * The color value version that is auto-incremented every time the {@link use} method is called. This version can be
-   * used to track that the color value was changed, for example to invalidate caches that rely on current color value.
+   * The color value version that is auto-incremented every time the {@link useComponents} method is called. This
+   * version can be used to track that the color value was changed, for example to invalidate caches that rely on
+   * current color value.
    */
   version = 0;
 
@@ -36,7 +37,7 @@ export class Color {
   private _components: number[];
 
   /**
-   * The color model that was last acquired by {@link get}.
+   * The color model that was last acquired by {@link getComponents}.
    */
   private _tempModel?: ColorModel;
 
@@ -81,12 +82,13 @@ export class Color {
    * Use this method to acquire color components without changing the current model of this {@link Color} instance.
    * Usually this is required if plugin method returns a computed value.
    *
-   * **Note:** Don't keep reference to the returned array because it is reused between {@link get} invocations.
+   * **Note:** Don't keep reference to the returned array because it is reused between {@link getComponents}
+   * invocations.
    *
    * @param model The color model that provides color components.
    * @returns Read-only color components.
    */
-  get(model: ColorModel): readonly number[] {
+  getComponents(model: ColorModel): readonly number[] {
     let { _components, _tempComponents } = this;
 
     if (this._tempModel === model && _tempComponents) {
@@ -112,12 +114,13 @@ export class Color {
    * Use this method in plugins if you want {@link Color} instance to switch the current color model or if you want to
    * update color components.
    *
-   * **Note:** Don't keep reference to the returned array because it is reused between {@link use} invocations.
+   * **Note:** Don't keep reference to the returned array because it is reused between {@link useComponents}
+   * invocations.
    *
    * @param model The color model that provides color components.
    * @returns Mutable color components.
    */
-  use(model: ColorModel): number[] {
+  useComponents(model: ColorModel): number[] {
     let { _components, _tempComponents } = this;
 
     ++this.version;

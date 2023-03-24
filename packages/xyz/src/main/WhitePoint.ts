@@ -1,15 +1,16 @@
 /**
  * White point reference values with observer/illuminant.
  *
- * @see {@link http://en.wikipedia.org/wiki/Standard_illuminant Standard illuminant on Wikipedia}
- * @see {@link https://www.mathworks.com/help/images/ref/whitepoint.html White point on MathWorks}
+ * @see {@link https://en.wikipedia.org/wiki/Template:Color_temperature_white_points Color temperature white points}
+ * @see {@link http://en.wikipedia.org/wiki/Standard_illuminant Standard illuminant}
+ * @see {@link https://www.mathworks.com/help/images/ref/whitepoint.html White point}
  */
 // https://github.com/colorjs/color-space/blob/master/xyz.js
 export const WhitePoint = {
   /**
-   * 1931 2°
+   * CIE 1931 color space, 2°
    */
-  deg2: {
+  CIE1931: {
     // Incandescent light
 
     /**
@@ -37,6 +38,8 @@ export const WhitePoint = {
 
     /**
      * Simulates noon daylight with correlated color temperature of 6504 K.
+     *
+     * @see {@link https://en.wikipedia.org/wiki/Illuminant_D65 Illuminant D65}
      */
     D65: [0.95045592705167, 1, 1.089057750759878] as WhitePoint,
     D75: [0.94972, 1, 1.22638] as WhitePoint,
@@ -54,9 +57,9 @@ export const WhitePoint = {
   },
 
   /**
-   * 1964 10°
+   * CIE 1964 color space, 10°
    */
-  deg10: {
+  CIE1964: {
     // Incandescent light
 
     /**

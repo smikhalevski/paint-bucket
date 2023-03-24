@@ -110,7 +110,7 @@ export function setColorIntComponent(color: number, offset: number, value: numbe
  * Converts a normalized 32-bit color integer to components array where each component is normalized to the [0, 1]
  * range.
  */
-export function convertColorIntToComponents(color: number, components: number[]): number[] {
+export function convertColorIntToComponents(color: number, components: number[] = [0, 0, 0, 0]): number[] {
   components[0] = getColorIntComponent(color, 0) / 0xff;
   components[1] = getColorIntComponent(color, 1) / 0xff;
   components[2] = getColorIntComponent(color, 2) / 0xff;

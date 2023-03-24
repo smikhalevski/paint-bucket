@@ -27,12 +27,12 @@ Color.rgb32 = rgb => new Color().rgb32(rgb);
 
 Color.prototype.rgb = createAccessor<RGB, Partial<RGB>>(
   color => {
-    const rgb = color.get(RGB);
+    const rgb = color.getComponents(RGB);
     return [rgb[0] * 0xff, rgb[1] * 0xff, rgb[2] * 0xff, rgb[3]];
   },
 
   (color, value) => {
-    const rgb = color.use(RGB);
+    const rgb = color.useComponents(RGB);
     const [R, G, B, a] = value;
 
     if (R !== undefined) {
@@ -51,60 +51,60 @@ Color.prototype.rgb = createAccessor<RGB, Partial<RGB>>(
 );
 
 Color.prototype.rgb24 = createAccessor(
-  color => convertComponentsToColorInt(color.get(RGB)) >>> 8,
+  color => convertComponentsToColorInt(color.getComponents(RGB)) >>> 8,
 
   (color, value) => {
-    convertColorIntToComponents(normalizeColorInt(value, 6), color.use(RGB));
+    convertColorIntToComponents(normalizeColorInt(value, 6), color.useComponents(RGB));
   }
 );
 
 Color.prototype.rgb32 = createAccessor(
-  color => convertComponentsToColorInt(color.get(RGB)),
+  color => convertComponentsToColorInt(color.getComponents(RGB)),
 
   (color, value) => {
-    convertColorIntToComponents(normalizeColorInt(value, 8), color.use(RGB));
+    convertColorIntToComponents(normalizeColorInt(value, 8), color.useComponents(RGB));
   }
 );
 
 Color.prototype.red = createAccessor(
-  color => color.get(RGB)[0] * 0xff,
+  color => color.getComponents(RGB)[0] * 0xff,
 
   (color, R) => {
-    color.use(RGB)[0] = clamp(R / 0xff);
+    color.useComponents(RGB)[0] = clamp(R / 0xff);
   }
 );
 
 Color.prototype.green = createAccessor(
-  color => color.get(RGB)[1] * 0xff,
+  color => color.getComponents(RGB)[1] * 0xff,
 
   (color, G) => {
-    color.use(RGB)[1] = clamp(G / 0xff);
+    color.useComponents(RGB)[1] = clamp(G / 0xff);
   }
 );
 
 Color.prototype.blue = createAccessor(
-  color => color.get(RGB)[2] * 0xff,
+  color => color.getComponents(RGB)[2] * 0xff,
 
   (color, B) => {
-    color.use(RGB)[2] = clamp(B / 0xff);
+    color.useComponents(RGB)[2] = clamp(B / 0xff);
   }
 );
 
 Color.prototype.alpha = createAccessor(
-  color => color.get(RGB)[3],
+  color => color.getComponents(RGB)[3],
 
   (color, a) => {
-    color.use(RGB)[3] = clamp(a);
+    color.useComponents(RGB)[3] = clamp(a);
   }
 );
 
 Color.prototype.brightness = function () {
-  const rgb = this.get(RGB);
+  const rgb = this.getComponents(RGB);
   return rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114;
 };
 
 Color.prototype.luminance = function () {
-  const rgb = this.get(RGB);
+  const rgb = this.getComponents(RGB);
   return rotate(rgb[0]) * 0.2126 + rotate(rgb[1]) * 0.7152 + rotate(rgb[2]) * 0.0722;
 };
 
@@ -120,8 +120,8 @@ Color.prototype.contrast = function (color) {
 };
 
 Color.prototype.mix = function (color, ratio) {
-  const rgb1 = this.use(RGB);
-  const rgb2 = Color.parse(color).get(RGB);
+  const rgb1 = this.useComponents(RGB);
+  const rgb2 = Color.parse(color).getComponents(RGB);
 
   ratio = clamp(ratio);
 
@@ -133,7 +133,7 @@ Color.prototype.mix = function (color, ratio) {
 };
 
 Color.prototype.greyscale = function () {
-  const rgb = this.use(RGB);
+  const rgb = this.useComponents(RGB);
   const [R, G, B] = rgb;
   const value = Math.sqrt(R * R * 0.299 + G * G * 0.587 + B * B * 0.114);
 

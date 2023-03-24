@@ -57,7 +57,7 @@ describe('get', () => {
     expect(interpolatorFactoryMock).toHaveBeenCalledTimes(4);
     expect(interpolatorUpdateMock).not.toHaveBeenCalled();
 
-    color1.use(RGB)[1] = 0.5;
+    color1.useComponents(RGB)[1] = 0.5;
     gradient.get(RGB, 0.5, interpolatorFactoryMock);
 
     expect(interpolatorFactoryMock).toHaveBeenCalledTimes(4);
@@ -83,7 +83,7 @@ describe('get', () => {
     const interpolatorFactoryMock = jest.fn(() => () => 0);
 
     gradient.get(RGB, 0.5, interpolatorFactoryMock);
-    color1.use(RGB)[1] = 0.5;
+    color1.useComponents(RGB)[1] = 0.5;
     gradient.get(RGB, 0.5, interpolatorFactoryMock);
 
     expect(interpolatorFactoryMock).toHaveBeenCalledTimes(8);

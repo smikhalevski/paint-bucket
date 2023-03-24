@@ -8,7 +8,7 @@ const { parse } = Color;
 Color.parse = value => (typeof value === 'string' ? parseCssColor(value) || parse(value) : parse(value));
 
 Color.prototype.css = createAccessor(
-  color => stringifyRGB(color.get(RGB)),
+  color => stringifyRGB(color.getComponents(RGB)),
 
   (color0, value) => {
     const color = parseCssColor(value);

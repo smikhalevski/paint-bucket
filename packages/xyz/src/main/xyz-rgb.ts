@@ -6,7 +6,7 @@ import { XYZ } from './xyz';
 /**
  * Convert RGBa to XYZa.
  */
-export function convertRGBToXYZ(rgb: RGB, xyz: XYZ, whitePoint = WhitePoint.deg2.D65): XYZ {
+export function convertRGBToXYZ(rgb: RGB, xyz: XYZ, whitePoint = WhitePoint.CIE1931.D65): XYZ {
   const r = rotateRGBToXYZ(rgb[0]) / whitePoint[0];
   const g = rotateRGBToXYZ(rgb[1]) / whitePoint[1];
   const b = rotateRGBToXYZ(rgb[2]) / whitePoint[2];
@@ -32,11 +32,11 @@ function rotateRGBToXYZ(v: number): number {
 /**
  * Convert XYZa to RGBa.
  *
- * @see {@link https://www.w3.org/TR/css-color-4/#rgb-to-lab RGB to LAB on W3C}
- * @see {@link https://www.w3.org/TR/css-color-4/#color-conversion-code Color conversion code on W3C}
+ * @see {@link https://www.w3.org/TR/css-color-4/#rgb-to-lab RGB to LAB}
+ * @see {@link https://www.w3.org/TR/css-color-4/#color-conversion-code Color conversion code}
  * @see {@link http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html RGB/XYZ Matrices}
  */
-export function convertXYZToRGB(xyz: XYZ, rgb: RGB, whitePoint = WhitePoint.deg2.D65): RGB {
+export function convertXYZToRGB(xyz: XYZ, rgb: RGB, whitePoint = WhitePoint.CIE1931.D65): RGB {
   const [X, Y, Z] = xyz;
 
   const r = X * +3.240969941904521 + Y * -1.537383177570093 + Z * -0.498610760293;

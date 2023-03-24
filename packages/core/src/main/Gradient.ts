@@ -97,7 +97,7 @@ export class Gradient {
     }
 
     if (domainLength === 1) {
-      return this.colors[0].get(model);
+      return this.colors[0].getComponents(model);
     }
 
     const currColorsVersion = getColorsVersion(this.colors);
@@ -106,7 +106,7 @@ export class Gradient {
     if (colorsUpdated) {
       // Update color components
       for (let i = 0; i < domainLength; ++i) {
-        const components = colors[i].get(model);
+        const components = colors[i].getComponents(model);
 
         for (let j = 0; j < componentCount; ++j) {
           (_componentValues[j] ||= [])[i] = components[j];

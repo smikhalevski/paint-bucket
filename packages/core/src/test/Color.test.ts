@@ -49,8 +49,8 @@ describe('Color', () => {
 
     const color = new Color();
 
-    abc1 = color.get(abcColorModel);
-    abc2 = color.get(abcColorModel);
+    abc1 = color.getComponents(abcColorModel);
+    abc2 = color.getComponents(abcColorModel);
 
     expect(abc1).toEqual([0, 0, 0, 1]);
     expect(abc1).toBe(abc2);
@@ -62,8 +62,8 @@ describe('Color', () => {
 
     const color = new Color();
 
-    abc1 = color.use(abcColorModel);
-    abc2 = color.get(abcColorModel);
+    abc1 = color.useComponents(abcColorModel);
+    abc2 = color.getComponents(abcColorModel);
 
     expect(abc1).toEqual([0, 0, 0, 1]);
     expect(abc1).toBe(abc2);
@@ -72,18 +72,18 @@ describe('Color', () => {
   test('converts color models', () => {
     const color = new Color();
 
-    const abc = color.use(abcColorModel);
+    const abc = color.useComponents(abcColorModel);
     abc[0] = abc[1] = abc[2] = 0xff;
 
-    expect(color.get(RGB)).toEqual([1, 1, 1, 1]);
+    expect(color.getComponents(RGB)).toEqual([1, 1, 1, 1]);
   });
 
   test('bumps color version on use', () => {
     const color = new Color();
 
-    color.use(abcColorModel);
-    color.use(abcColorModel);
-    color.use(abcColorModel);
+    color.useComponents(abcColorModel);
+    color.useComponents(abcColorModel);
+    color.useComponents(abcColorModel);
 
     expect(color.version).toBe(3);
   });
@@ -91,9 +91,9 @@ describe('Color', () => {
   test('does not bump color version on get', () => {
     const color = new Color();
 
-    color.get(abcColorModel);
-    color.get(abcColorModel);
-    color.get(abcColorModel);
+    color.getComponents(abcColorModel);
+    color.getComponents(abcColorModel);
+    color.getComponents(abcColorModel);
 
     expect(color.version).toBe(0);
   });
@@ -107,8 +107,8 @@ describe('Color', () => {
       convertRGBToComponents: jest.fn(abcColorModel.convertRGBToComponents),
     };
 
-    color.get(abcColorModelMock);
-    color.get(abcColorModelMock);
+    color.getComponents(abcColorModelMock);
+    color.getComponents(abcColorModelMock);
 
     expect(abcColorModelMock.convertRGBToComponents).toHaveBeenCalledTimes(1);
   });
@@ -122,8 +122,8 @@ describe('Color', () => {
       convertRGBToComponents: jest.fn(abcColorModel.convertRGBToComponents),
     };
 
-    const abc1 = color.get(abcColorModelMock);
-    const abc2 = color.use(abcColorModelMock);
+    const abc1 = color.getComponents(abcColorModelMock);
+    const abc2 = color.useComponents(abcColorModelMock);
 
     expect(abcColorModelMock.convertRGBToComponents).toHaveBeenCalledTimes(1);
 
@@ -135,7 +135,7 @@ describe('Color', () => {
   test('returns initial color', () => {
     const rgb: RGB = [1, 1, 1, 0.77];
 
-    expect(new Color(RGB, rgb).get(RGB)).toBe(rgb);
+    expect(new Color(RGB, rgb).getComponents(RGB)).toBe(rgb);
   });
 
   test('clones instance', () => {

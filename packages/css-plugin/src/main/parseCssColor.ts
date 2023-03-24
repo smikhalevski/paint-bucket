@@ -24,7 +24,7 @@ export function parseCssColor(value: string): Color | undefined {
   if (value.charCodeAt(0) === 35 /* # */) {
     return new Color(
       RGB,
-      convertColorIntToComponents(normalizeColorInt(parseInt(value.substr(1), 16), value.length - 1), [0, 0, 0, 1])
+      convertColorIntToComponents(normalizeColorInt(parseInt(value.substr(1), 16), value.length - 1))
     );
   }
   if (value.toLowerCase() === 'transparent') {
@@ -34,7 +34,7 @@ export function parseCssColor(value: string): Color | undefined {
   const color = +('0x' + value);
 
   if (color === color) {
-    return new Color(RGB, convertColorIntToComponents(normalizeColorInt(color, value.length), [0, 0, 0, 1]));
+    return new Color(RGB, convertColorIntToComponents(normalizeColorInt(color, value.length)));
   }
 
   const tupleMatch = tupleRe.exec(value);
