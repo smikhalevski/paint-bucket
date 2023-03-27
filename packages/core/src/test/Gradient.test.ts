@@ -1,5 +1,5 @@
-import { Interpolator, lerp } from 'algomatic';
-import { Color, Gradient, RGB } from '../main';
+import { lerp } from 'algomatic';
+import { Interpolator, Color, Gradient, RGB } from '../main';
 
 describe('get', () => {
   test('returns black color for an empty gradient', () => {

@@ -23,7 +23,7 @@ declare module '@paint-bucket/core' {
   }
 }
 
-declare module '@paint-bucket/core/lib/Gradient' {
+declare module '@paint-bucket/core' {
   interface Gradient {
     /**
      * Returns the color at the given position in the gradient.

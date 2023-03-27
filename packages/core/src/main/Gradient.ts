@@ -35,7 +35,7 @@ export class Gradient {
    * The cumulative version of colors in this gradient instance that was computed during the last {@link getComponents}
    * call.
    */
-  private _prevColorsVersion?: number;
+  private _gradientVersion?: number;
 
   /**
    * The model that was requested during the last {@link getComponents} call.
@@ -49,7 +49,7 @@ export class Gradient {
 
   /**
    * Color component interpolators that were produced by {@link _interpolatorFactory} for components provided by the
-   * {@link _model} for colors with cumulative version {@link _prevColorsVersion}.
+   * {@link _model} for colors with cumulative version {@link _gradientVersion}.
    */
   private _interpolators: Interpolator[] = [];
   private _componentValues: number[][] = [];
@@ -89,6 +89,8 @@ export class Gradient {
     const { componentCount } = model;
     const domainLength = domain.length;
 
+    let gradientVersion = 0;
+
     // Empty gradients are rendered as black
     if (domainLength === 0) {
       if (this._model !== model) {
@@ -102,11 +104,13 @@ export class Gradient {
       return this.colors[0].getComponents(model);
     }
 
-    const currColorsVersion = getColorsVersion(this.colors);
-    const colorsUpdated = this._prevColorsVersion !== currColorsVersion || this._model !== model;
+    for (const color of this.colors) {
+      gradientVersion += color.version;
+    }
 
-    if (colorsUpdated) {
-      // Update color components
+    if (this._gradientVersion !== gradientVersion || this._model !== model) {
+      // Update color component interpolators
+
       for (let i = 0; i < domainLength; ++i) {
         const components = colors[i].getComponents(model);
 
@@ -115,7 +119,7 @@ export class Gradient {
         }
       }
 
-      this._prevColorsVersion = currColorsVersion;
+      this._gradientVersion = gradientVersion;
       this._model = model;
 
       // Create or update interpolators
@@ -140,12 +144,4 @@ export class Gradient {
 
     return _tempComponents;
   }
-}
-
-function getColorsVersion(colors: readonly Color[]): number {
-  let version = 0;
-  for (const color of colors) {
-    version += color.version;
-  }
-  return version;
 }
