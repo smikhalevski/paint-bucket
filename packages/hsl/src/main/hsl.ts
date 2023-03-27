@@ -10,6 +10,7 @@ export type HSL = [H: number, S: number, L: number, a: number];
  * HSLa color model definition.
  */
 export const HSL: ColorModel = {
+  name: 'hsl',
   componentCount: 4,
   convertComponentsToRGB: convertHSLToRGB,
   convertRGBToComponents: convertRGBToHSL,

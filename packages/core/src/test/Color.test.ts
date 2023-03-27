@@ -2,6 +2,7 @@ import { Color, ColorModel, RGB } from '../main';
 
 describe('Color', () => {
   const abcColorModel: ColorModel = {
+    name: 'abc',
     componentCount: 4,
     convertComponentsToRGB(components, rgb) {
       rgb[0] = components[0] / 0xff;
@@ -102,6 +103,7 @@ describe('Color', () => {
     const color = new Color();
 
     const abcColorModelMock: ColorModel = {
+      name: 'abc',
       componentCount: 4,
       convertComponentsToRGB: jest.fn(abcColorModel.convertComponentsToRGB),
       convertRGBToComponents: jest.fn(abcColorModel.convertRGBToComponents),
@@ -117,6 +119,7 @@ describe('Color', () => {
     const color = new Color(RGB, [1, 1, 1, 1]);
 
     const abcColorModelMock: ColorModel = {
+      name: 'abc',
       componentCount: 4,
       convertComponentsToRGB: jest.fn(abcColorModel.convertComponentsToRGB),
       convertRGBToComponents: jest.fn(abcColorModel.convertRGBToComponents),

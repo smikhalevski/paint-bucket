@@ -10,6 +10,7 @@ export type LAB = [L: number, A: number, B: number, a: number];
  * CIE-L*a*b* color model definition.
  */
 export const LAB: ColorModel = {
+  name: 'lab',
   componentCount: 4,
   convertComponentsToRGB: convertLABToRGB,
   convertRGBToComponents: convertRGBToLAB,

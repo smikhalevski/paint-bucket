@@ -77,7 +77,8 @@ export class Color {
   }
 
   /**
-   * Returns read-only color components of this {@link Color} in a particular color model.
+   * Returns read-only color components of this {@link Color} in a particular color model. Components are in [0, 1]
+   * range.
    *
    * Use this method to acquire color components without changing the current model of this {@link Color} instance.
    * Usually this is required if plugin method returns a computed value.
@@ -109,7 +110,7 @@ export class Color {
   }
 
   /**
-   * Returns mutable color components of this {@link Color} in a particular color model.
+   * Returns mutable color components of this {@link Color} in a particular color model. Components are in [0, 1] range.
    *
    * Use this method in plugins if you want {@link Color} instance to switch the current color model or if you want to
    * update color components.

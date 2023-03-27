@@ -28,7 +28,7 @@ Color.gradient = (colors, domain) => {
 };
 
 Gradient.prototype.at = function (this: Gradient, x, model = RGB, interpolatorFactory = lerp) {
-  return new Color(model, this.get(model, x, interpolatorFactory).slice(0));
+  return new Color(model, this.getComponents(model, x, interpolatorFactory).slice(0));
 };
 
 Gradient.prototype.palette = function (this: Gradient, n, model = RGB) {

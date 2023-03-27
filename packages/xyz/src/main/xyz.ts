@@ -10,6 +10,7 @@ export type XYZ = [X: number, Y: number, Z: number, a: number];
  * CIE 1931 XYZa color model definition.
  */
 export const XYZ: ColorModel = {
+  name: 'xyz',
   componentCount: 4,
   convertComponentsToRGB: convertXYZToRGB,
   convertRGBToComponents: convertRGBToXYZ,

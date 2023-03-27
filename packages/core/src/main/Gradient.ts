@@ -27,22 +27,23 @@ export type InterpolatorFactory = (xs: readonly number[], ys: readonly number[])
  */
 export class Gradient {
   /**
-   * Color components returned by the {@link get} method.
+   * Color components returned by the {@link getComponents} method.
    */
   private _tempComponents: number[] = [0, 0, 0, 1];
 
   /**
-   * The cumulative version of colors in this gradient instance that was computed during the last {@link get} call.
+   * The cumulative version of colors in this gradient instance that was computed during the last {@link getComponents}
+   * call.
    */
   private _prevColorsVersion?: number;
 
   /**
-   * The model that was requested during the last {@link get} call.
+   * The model that was requested during the last {@link getComponents} call.
    */
   private _model?: ColorModel;
 
   /**
-   * The interpolation factory that was used during the last {@link get} call.
+   * The interpolation factory that was used during the last {@link getComponents} call.
    */
   private _interpolatorFactory?: InterpolatorFactory;
 
@@ -72,16 +73,17 @@ export class Gradient {
   ) {}
 
   /**
-   * Returns components of the color for value from the domain.
+   * Returns color components that correspond to a value from the gradient domain.
    *
-   * **Note:** Don't keep reference to the returned array because it is reused between {@link get} invocations.
+   * **Note:** Don't keep reference to the returned array because it is reused between {@link getComponents}
+   * invocations.
    *
    * @param value The domain value.
    * @param model The color model that provides the components for interpolation.
    * @param interpolatorFactory The function that returns an interpolator.
    * @returns The read-only components array.
    */
-  get(model: ColorModel, value: number, interpolatorFactory: InterpolatorFactory): readonly number[] {
+  getComponents(model: ColorModel, value: number, interpolatorFactory: InterpolatorFactory): readonly number[] {
     const { colors, domain, _tempComponents, _componentValues, _interpolatorFactory, _interpolators } = this;
 
     const { componentCount } = model;

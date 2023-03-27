@@ -107,6 +107,7 @@ color components between color model representation and RGB. Color components ar
 import {ColorModel, RGB} from '@paint-bucket/core';
 
 const Cmyk: ColorModel = {
+  name: 'cmyk',
 
   // The number of color components that this model uses:
   // cyan, magenta, yellow, black, and alpha 

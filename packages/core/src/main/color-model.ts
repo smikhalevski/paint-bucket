@@ -3,6 +3,11 @@
  */
 export interface ColorModel {
   /**
+   * The name of the color model.
+   */
+  readonly name: string;
+
+  /**
    * The number of color components that the model uses.
    */
   readonly componentCount: number;
@@ -33,6 +38,7 @@ export type RGB = [R: number, G: number, B: number, a: number];
  * RGBa color model definition.
  */
 export const RGB: ColorModel = {
+  name: 'rgb',
   componentCount: 4,
   convertComponentsToRGB: copyComponents,
   convertRGBToComponents: copyComponents,
