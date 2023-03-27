@@ -1,7 +1,7 @@
 import { Color, RGB } from '@paint-bucket/core';
 import { x11Components } from './x11-components';
 
-const parseColor = Color.parse;
+const _parseColor = Color.parse;
 
 Color.parse = value => {
   if (typeof value === 'string') {
@@ -11,5 +11,5 @@ Color.parse = value => {
       return new Color(RGB, components.slice(0));
     }
   }
-  return parseColor(value);
+  return _parseColor(value);
 };

@@ -39,7 +39,8 @@
   },
   "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
   "devDependencies": {
-    "@paint-bucket/rgb-plugin": "^1.1.0"
+    "@paint-bucket/rgb-plugin": "^1.1.0",
+    "ts-node": "^10.9.1"
   },
   "dependencies": {
     "@paint-bucket/core": "^1.1.0",

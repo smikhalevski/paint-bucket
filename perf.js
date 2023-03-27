@@ -3,38 +3,38 @@ const chromaJs = require('chroma-js');
 const { Color, RGB, LAB } = require('paint-bucket');
 const { csplineMonot, lerp } = require('algomatic');
 
-// Create color from components
-describe('Color.parse([255, 255, 255])', () => {
-  test('tinycolor2', measure => {
-    const rgb = { r: 0xab, g: 0xcd, b: 0xef };
-    measure(() => tinycolor2(rgb));
-  });
-
-  test('chroma.js', measure => {
-    const rgb = [0xab, 0xcd, 0xef];
-    measure(() => chromaJs(rgb));
-  });
-
-  test('paint-bucket', measure => {
-    const rgb = [0xab, 0xcd, 0xef];
-    measure(() => Color.parse(rgb));
-  });
-});
-
-// Parse color from short HEX
-describe("Color.parse('#abc')", () => {
-  test('tinycolor2', measure => {
-    measure(() => tinycolor2('#abc'));
-  });
-
-  test('chroma.js', measure => {
-    measure(() => chromaJs('#abc'));
-  });
-
-  test('paint-bucket', measure => {
-    measure(() => Color.parse('#abc'));
-  });
-});
+// // Create color from components
+// describe('Color.parse([255, 255, 255])', () => {
+//   test('tinycolor2', measure => {
+//     const rgb = { r: 0xab, g: 0xcd, b: 0xef };
+//     measure(() => tinycolor2(rgb));
+//   });
+//
+//   test('chroma.js', measure => {
+//     const rgb = [0xab, 0xcd, 0xef];
+//     measure(() => chromaJs(rgb));
+//   });
+//
+//   test('paint-bucket', measure => {
+//     const rgb = [0xab, 0xcd, 0xef];
+//     measure(() => Color.parse(rgb));
+//   });
+// });
+//
+// // Parse color from short HEX
+// describe("Color.parse('#abc')", () => {
+//   test('tinycolor2', measure => {
+//     measure(() => tinycolor2('#abc'));
+//   });
+//
+//   test('chroma.js', measure => {
+//     measure(() => chromaJs('#abc'));
+//   });
+//
+//   test('paint-bucket', measure => {
+//     measure(() => Color.parse('#abc'));
+//   });
+// });
 
 // Parse color from 24-bit HEX
 describe("Color.parse('#abcdef')", () => {
@@ -51,53 +51,53 @@ describe("Color.parse('#abcdef')", () => {
   });
 });
 
-// Parse color from 32-bit HEX
-describe("Color.parse('#abcdefff')", () => {
-  test('tinycolor2', measure => {
-    measure(() => tinycolor2('#abcdefff'));
-  });
-
-  test('chroma.js', measure => {
-    measure(() => chromaJs('#abcdefff'));
-  });
-
-  test('paint-bucket', measure => {
-    measure(() => Color.parse('#abcdefff'));
-  });
-});
-
-// Parse color from 24-bit integer
-describe('Color.parse(0xab_cd_ef)', () => {
-  // Not supported
-  // test('tinycolor2', (measure) => {
-  //   measure(() => tinycolor2(0xab_cd_ef));
-  // });
-
-  test('chroma.js', measure => {
-    measure(() => chromaJs(0xab_cd_ef));
-  });
-
-  test('paint-bucket', measure => {
-    measure(() => Color.parse(0xab_cd_ef));
-  });
-});
-
-// Parse color from 32-bit integer
-describe('color.rgb32(0xab_cd_ef_ff)', () => {
-  // Not supported
-  // test('tinycolor2', (measure) => {
-  //   measure(() => tinycolor2(0xab_cd_ef_ff));
-  // });
-
-  // Not supported
-  // test('chroma.js', (measure) => {
-  //   measure(() => chromaJs(0xab_cd_ef_ff));
-  // });
-
-  test('paint-bucket', measure => {
-    measure(() => color.rgb32(0xab_cd_ef_ff));
-  });
-});
+// // Parse color from 32-bit HEX
+// describe("Color.parse('#abcdefff')", () => {
+//   test('tinycolor2', measure => {
+//     measure(() => tinycolor2('#abcdefff'));
+//   });
+//
+//   test('chroma.js', measure => {
+//     measure(() => chromaJs('#abcdefff'));
+//   });
+//
+//   test('paint-bucket', measure => {
+//     measure(() => Color.parse('#abcdefff'));
+//   });
+// });
+//
+// // Parse color from 24-bit integer
+// describe('Color.parse(0xab_cd_ef)', () => {
+//   // Not supported
+//   // test('tinycolor2', (measure) => {
+//   //   measure(() => tinycolor2(0xab_cd_ef));
+//   // });
+//
+//   test('chroma.js', measure => {
+//     measure(() => chromaJs(0xab_cd_ef));
+//   });
+//
+//   test('paint-bucket', measure => {
+//     measure(() => Color.parse(0xab_cd_ef));
+//   });
+// });
+//
+// // Parse color from 32-bit integer
+// describe('Color.rgb32(0xab_cd_ef_ff)', () => {
+//   // Not supported
+//   // test('tinycolor2', (measure) => {
+//   //   measure(() => tinycolor2(0xab_cd_ef_ff));
+//   // });
+//
+//   // Not supported
+//   // test('chroma.js', (measure) => {
+//   //   measure(() => chromaJs(0xab_cd_ef_ff));
+//   // });
+//
+//   test('paint-bucket', measure => {
+//     measure(() => Color.rgb32(0xab_cd_ef_ff));
+//   });
+// });
 
 // Parse color from RGBa
 describe("Color.parse('rgba(128, 128, 128, 0.5)')", () => {

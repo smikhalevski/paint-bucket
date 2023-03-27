@@ -1,4 +1,10 @@
 {
+  "ts-node": {
+    "files": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
   "compilerOptions": {
     "esModuleInterop": true,
     "noUnusedParameters": true,

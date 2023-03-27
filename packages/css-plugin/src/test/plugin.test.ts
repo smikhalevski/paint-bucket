@@ -18,10 +18,14 @@ describe('css', () => {
   });
 
   test('stringifies color as RGBa', () => {
-    expect(Color.parse('#abc').alpha(0.5).css()).toBe('rgba(170,187,204,0.50)');
+    expect(Color.parse('#abc').alpha(0.5).css()).toBe('rgba(170,187,204,0.5)');
+  });
+
+  test('stringifies color as HSLa', () => {
+    expect(Color.parse('#abc').alpha(0.5).cssHSL()).toBe('hsla(210,25%,73%,0.5)');
   });
 
   test('readme example', () => {
-    expect(new Color().css('hsl(290, 20%, 50% / 80%)').css()).toBe('rgba(145,102,153,0.80)');
+    expect(new Color().css('hsl(290, 20%, 50% / 80%)').css()).toBe('rgba(145,102,153,0.8)');
   });
 });

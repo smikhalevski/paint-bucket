@@ -10,7 +10,6 @@
     "displayName": "paint-bucket",
     "readmeFile": "none"
   },
-  "sideEffects": false,
   "files": [
     "lib"
   ],

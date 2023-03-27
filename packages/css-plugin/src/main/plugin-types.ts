@@ -14,7 +14,7 @@ declare module '@paint-bucket/core' {
 
   interface Color {
     /**
-     * Returns color as a CSS string.
+     * Returns color as an RGBa CSS string.
      *
      * ```ts
      * Color.parse('#abc').css(); // #aabbcc
@@ -32,5 +32,14 @@ declare module '@paint-bucket/core' {
      * ```
      */
     css(color: Applicator<string>): Color;
+
+    /**
+     * Returns color as an HSLa CSS string.
+     *
+     * ```ts
+     * Color.parse('#abc').cssHSL(); // hsla(210,25%,73%,0.5)
+     * ```
+     */
+    cssHSL(): string;
   }
 }

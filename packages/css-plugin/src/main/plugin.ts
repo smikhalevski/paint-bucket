@@ -1,27 +1,24 @@
 import { Color, RGB } from '@paint-bucket/core';
+import { HSL } from '@paint-bucket/hsl';
 import { createAccessor } from '@paint-bucket/plugin-utils';
-import { parseCssColor } from './parseCssColor';
-import { stringifyRGB } from './stringifyRGB';
+import { parseColor } from './parseColor';
+import { stringifyColor } from './stringifyColor';
 
-const { parse } = Color;
+const _parseColor = Color.parse;
 
-Color.parse = value => (typeof value === 'string' ? parseCssColor(value) || parse(value) : parse(value));
+Color.parse = value => (typeof value === 'string' && parseColor(value)) || _parseColor(value);
 
 Color.prototype.css = createAccessor(
-  color => stringifyRGB(color.getComponents(RGB)),
+  color => stringifyColor(color, RGB),
 
-  (color0, value) => {
-    const color = parseCssColor(value);
-    if (color) {
-      color0['_model'] = color['_model'];
-      color0['_components'] = color['_components'];
-    } else {
-      color0['_model'] = RGB;
-      color0['_components'] = [0, 0, 0, 1];
-    }
-    return color0;
+  (color, value) => {
+    parseColor(value, color);
   }
 );
+
+Color.prototype.cssHSL = function () {
+  return stringifyColor(this, HSL);
+};
 
 Color.prototype.toString = function () {
   return this.css();
