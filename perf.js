@@ -1,6 +1,6 @@
 const tinycolor2 = require('tinycolor2');
 const chromaJs = require('chroma-js');
-const { Color, RGB, LAB } = require('paint-bucket');
+const { Color, RGB, LAB } = require('./lib');
 const { csplineMonot, lerp } = require('algomatic');
 
 // // Create color from components

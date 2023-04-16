@@ -1,29 +1,16 @@
 {
-  "ts-node": {
-    "files": true,
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  },
   "compilerOptions": {
-    "esModuleInterop": true,
-    "noUnusedParameters": true,
+    "declaration": true,
+    "importHelpers": true,
     "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
     "strict": true,
     "target": "ES5",
     "module": "ES6",
-    "rootDir": ".",
-    "baseUrl": ".",
-    "paths": {
-      "@paint-bucket/*": [
-        "./packages/*/src/main"
-      ],
-      "@paint-bucket/core/lib/*": [
-        "./packages/core/src/main/*"
-      ]
-    }
+    "outDir": "./gen"
   },
   "include": [
-    "./packages/*/src/main/**/*"
+    "./src/**/*"
   ]
 }

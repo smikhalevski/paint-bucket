@@ -1,12 +1,12 @@
 {
   "name": "Paint Bucket",
-  "entryPoints": [
-    "./packages/*"
-  ],
+  "includeVersion": true,
   "excludePrivate": true,
   "excludeExternals": true,
   "excludeInternal": true,
-  "entryPointStrategy": "packages",
   "disableSources": true,
-  "readme": "none"
+  "hideGenerator": true,
+  "readme": "none",
+  "tsconfig": "./tsconfig.build.json",
+  "customCss": "./node_modules/typedoc-custom-css/custom.css"
 }
