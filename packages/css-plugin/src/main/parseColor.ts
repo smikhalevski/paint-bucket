@@ -1,6 +1,6 @@
-import { Color, RGB } from '@paint-bucket/core';
+import { Color, RGB, clamp } from '@paint-bucket/core';
 import { HSL } from '@paint-bucket/hsl';
-import { clamp, getColorIntComponent, normalizeColorInt } from '@paint-bucket/plugin-utils';
+import { getColorIntComponent, normalizeColorInt } from '@paint-bucket/plugin-utils';
 
 const valuePattern = '\\s*(\\d+(?:\\.\\d+)?%?)';
 

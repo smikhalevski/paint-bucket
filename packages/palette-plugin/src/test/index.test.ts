@@ -1,6 +1,11 @@
 import { Color } from '@paint-bucket/core';
-import '@paint-bucket/css-plugin';
-import '../main';
+import cssPlugin from '@paint-bucket/css-plugin';
+import rgbPlugin from '@paint-bucket/rgb-plugin';
+import palettePlugin from '../main';
+
+Color.applyPlugin(rgbPlugin);
+Color.applyPlugin(cssPlugin);
+Color.applyPlugin(palettePlugin);
 
 function toCss(color: Color): string {
   return color.css();

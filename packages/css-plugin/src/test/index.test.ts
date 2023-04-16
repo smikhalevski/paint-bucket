@@ -1,6 +1,9 @@
 import { Color } from '@paint-bucket/core';
-import '@paint-bucket/rgb-plugin';
-import '../main';
+import rgbPlugin from '@paint-bucket/rgb-plugin';
+import cssPlugin from '../main';
+
+Color.applyPlugin(rgbPlugin);
+Color.applyPlugin(cssPlugin);
 
 describe('plugin', () => {
   test('creates color from CSS representation', () => {

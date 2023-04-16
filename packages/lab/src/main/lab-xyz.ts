@@ -1,4 +1,4 @@
-import { clamp } from '@paint-bucket/plugin-utils';
+import { clamp } from '@paint-bucket/core';
 import { WhitePoint, XYZ } from '@paint-bucket/xyz';
 import { LAB } from './lab';
 

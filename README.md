@@ -24,25 +24,25 @@ import {color} from 'paint-bucket';
 // import '@paint-bucket/css-plugin';
 // import {color} from '@paint-bucket/core';
 
-Color.parse('#abcdef').saturation((S) => S / 2).red(); // ⮕ 188
+Color('#abcdef').saturation((S) => S / 2).red(); // ⮕ 188
 ```
 
 Most methods provide getter-setter semantics:
 
 ```ts
 // Set
-Color.parse('#f00').red(127.5); // ⮕ Color instance
+Color('#f00').red(127.5); // ⮕ Color instance
 // or
-Color.parse('#f00').red((R) => R / 2); // ⮕ Color instance
+Color('#f00').red((R) => R / 2); // ⮕ Color instance
 
 // Get
-Color.parse('#f00').red(); // ⮕ 255
+Color('#f00').red(); // ⮕ 255
 ```
 
 Mutate multiple components at the same time:
 
 ```ts
-Color.parse([64, 128, 0])
+Color([64, 128, 0])
     .rgb(([R, G, B, a]) => [R * 3, G * 2, B, a])
     .rgb();
 // ⮕ [192, 255, 0, 1]
@@ -52,10 +52,10 @@ Color.parse([64, 128, 0])
 approaches:
 
 ```ts
-const color1 = Color.parse('#f00');
+const color1 = Color('#f00');
 
 // color2 is a copy of color1
-const color2 = Color.parse(color1);
+const color2 = Color(color1);
 // or
 const color3 = color1.clone();
 ```
@@ -63,15 +63,15 @@ const color3 = color1.clone();
 Parse and serialize CSS color strings:
 
 ```ts
-Color.parse('pink').css(); // ⮕ "#ffc0cb"
+Color('pink').css(); // ⮕ "#ffc0cb"
 
-Color.parse('rgba(255, 192, 203)').css(); // ⮕ "#ffc0cb"
+Color('rgba(255, 192, 203)').css(); // ⮕ "#ffc0cb"
 ```
 
 Create gradients and obtain color at arbitrary position:
 
 ```ts
-Color.parse('red').gradient('blue').at(0.70).css(); // ⮕ "#4d00b3"
+Color('red').gradient('blue').at(0.70).css(); // ⮕ "#4d00b3"
 ```
 
 Create multi-stop gradients:
@@ -338,7 +338,7 @@ Now we can use this plugin with the `color` function.
 import {color, RGB} from '@paint-bucket/core';
 import './plugin2.ts';
 
-Color.parse('cyan').getComponents(RGB); // ⮕ [0, 1, 1, 1]
+Color('cyan').getComponents(RGB); // ⮕ [0, 1, 1, 1]
 ```
 
 # Performance
@@ -349,13 +349,13 @@ Results are in millions of operations per second [^1]. The higher number is bett
 
 |                                           | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
 |-------------------------------------------|-------------:|--------------------------------------------------:|----------------------------------------------:| 
-| `Color.parse([255, 255, 255])`            |        47.65 |                                              4.05 |                                          2.51 |
-| `Color.parse('#abc')`                     |        10.02 |                                              1.80 |                                          1.90 |
-| `Color.parse('#abcdef')`                  |         9.54 |                                              1.86 |                                          2.24 |
-| `Color.parse('#abcdefff')`                |         9.14 |                                              1.82 |                                          1.96 |
-| `Color.parse(0xab_cd_ef)`                 |         6.30 |                                                 — |                                          3.90 |
+| `Color([255, 255, 255])`            |        47.65 |                                              4.05 |                                          2.51 |
+| `Color('#abc')`                     |        10.02 |                                              1.80 |                                          1.90 |
+| `Color('#abcdef')`                  |         9.54 |                                              1.86 |                                          2.24 |
+| `Color('#abcdefff')`                |         9.14 |                                              1.82 |                                          1.96 |
+| `Color(0xab_cd_ef)`                 |         6.30 |                                                 — |                                          3.90 |
 | `Color.rgb32(0xab_cd_ef_ff)`              |         6.31 |                                                 — |                                             — |
-| `Color.parse('rgba(128, 128, 128, 0.5)')` |         2.69 |                                              1.66 |                                          0.24 |
+| `Color('rgba(128, 128, 128, 0.5)')` |         2.69 |                                              1.66 |                                          0.24 |
 | `c.saturation(50).rgb()` [^2]             |        22.96 |                                              0.95 |                                          1.04 |
 | `c.hue(90).lightness(10).rgb()` [^2]      |        17.71 |                                              0.65 |                                             — |
 | `Color.gradient(['#fff', '#000'])`        |         5.02 |                                                 — |                                          0.52 |

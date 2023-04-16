@@ -1,5 +1,7 @@
 import { Color } from '@paint-bucket/core';
-import '../main';
+import hslPlugin from '../main';
+
+Color.applyPlugin(hslPlugin);
 
 describe('hue', () => {
   test('returns hue color component', () => {

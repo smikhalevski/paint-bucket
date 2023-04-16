@@ -1,5 +1,7 @@
 import { Color, RGB } from '@paint-bucket/core';
-import '../main';
+import gradientPlugin from '../main';
+
+Color.applyPlugin(gradientPlugin);
 
 describe('at', () => {
   test('returns a color instance at position', () => {

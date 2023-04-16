@@ -1,14 +1,6 @@
 const { round } = Math;
 
 /**
- * Clamps value to [0, 1] range.
- */
-export function clamp(x: number): number {
-  x = +x;
-  return x >= 0 ? (x <= 1 ? x : 1) : 0;
-}
-
-/**
  * Normalizes the size of components in the 32-bit color integer.
  *
  * ```ts

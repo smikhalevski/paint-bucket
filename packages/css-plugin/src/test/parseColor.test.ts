@@ -1,5 +1,8 @@
-import '@paint-bucket/rgb-plugin';
+import { Color } from '@paint-bucket/core';
+import rgbPlugin from '@paint-bucket/rgb-plugin';
 import { parseColor } from '../main/parseColor';
+
+Color.applyPlugin(rgbPlugin);
 
 describe('parseColor', () => {
   test('parses transparent color', () => {

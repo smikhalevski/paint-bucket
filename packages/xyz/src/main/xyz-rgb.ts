@@ -1,5 +1,4 @@
-import { RGB } from '@paint-bucket/core';
-import { clamp } from '@paint-bucket/plugin-utils';
+import { clamp, RGB } from '@paint-bucket/core';
 import { WhitePoint } from './WhitePoint';
 import { XYZ } from './xyz';
 
