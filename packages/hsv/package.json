@@ -29,8 +29,7 @@
     "hex",
     "rgb",
     "rgba",
-    "hsl",
-    "hsla"
+    "hsv"
   ],
   "author": "Savva Mikhalevski <smikhalevski@gmail.com>",
   "license": "MIT",

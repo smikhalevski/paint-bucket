@@ -10,6 +10,7 @@
     "displayName": "paint-bucket",
     "readmeFile": "none"
   },
+  "sideEffects": false,
   "files": [
     "lib"
   ],
@@ -42,8 +43,8 @@
     "@paint-bucket/css-plugin": "^1.1.0",
     "@paint-bucket/difference-plugin": "^1.1.0",
     "@paint-bucket/gradient-plugin": "^1.1.0",
-    "@paint-bucket/hsv": "^1.1.0",
     "@paint-bucket/hsl-plugin": "^1.1.0",
+    "@paint-bucket/hsv": "^1.1.0",
     "@paint-bucket/palette-plugin": "^1.1.0",
     "@paint-bucket/rgb-plugin": "^1.1.0",
     "@paint-bucket/x11-plugin": "^1.1.0"

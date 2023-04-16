@@ -13,12 +13,14 @@ export * from '@paint-bucket/lab';
 export * from '@paint-bucket/xyz';
 export * from '@paint-bucket/core';
 
-Color.applyPlugin(cssPlugin);
-Color.applyPlugin(differencePlugin);
-Color.applyPlugin(gradientPlugin);
-Color.applyPlugin(hslPlugin);
-Color.applyPlugin(palettePlugin);
-Color.applyPlugin(rgbPlugin);
-Color.applyPlugin(x11Plugin);
+const Color_ = Color.applyPlugins(
+  cssPlugin,
+  differencePlugin,
+  gradientPlugin,
+  hslPlugin,
+  palettePlugin,
+  rgbPlugin,
+  x11Plugin
+);
 
-export { Color };
+export { Color_ as Color };

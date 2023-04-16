@@ -1,7 +1,7 @@
 import { Color, RGB } from '@paint-bucket/core';
 import rgbPlugin from '../main';
 
-Color.applyPlugin(rgbPlugin);
+Color.applyPlugins(rgbPlugin);
 
 describe('color', () => {
   test('creates color from component array', () => {

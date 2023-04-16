@@ -2,8 +2,7 @@ import { Color } from '@paint-bucket/core';
 import rgbPlugin from '@paint-bucket/rgb-plugin';
 import differencePlugin from '../main';
 
-Color.applyPlugin(rgbPlugin);
-Color.applyPlugin(differencePlugin);
+Color.applyPlugins(rgbPlugin, differencePlugin);
 
 describe('deltaE', () => {
   test('returns color difference', () => {

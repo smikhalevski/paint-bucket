@@ -52,9 +52,9 @@ export interface ColorConstructor {
   /**
    * Applies plugin to the {@link ColorConstructor}.
    *
-   * @param plugin The plugin to apply.
+   * @param plugins Plugins to apply.
    */
-  applyPlugin(plugin: (constructor: ColorConstructor) => void): void;
+  applyPlugins(...plugins: Array<(constructor: ColorConstructor) => void>): ColorConstructor;
 }
 
 /**
@@ -192,8 +192,11 @@ class Color_ {
     return value instanceof Color ? value.clone() : new Color();
   }
 
-  static applyPlugin(plugin: (constructor: ColorConstructor) => void): void {
-    plugin(Color);
+  static applyPlugins(...plugins: Array<(constructor: ColorConstructor) => void>): ColorConstructor {
+    for (const plugin of plugins) {
+      plugin(Color);
+    }
+    return Color;
   }
 
   clone(): Color {

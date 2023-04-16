@@ -1,7 +1,7 @@
 import { Color, RGB } from '@paint-bucket/core';
 import x11Plugin from '../main';
 
-Color.applyPlugin(x11Plugin);
+Color.applyPlugins(x11Plugin);
 
 describe('parse', () => {
   test('creates color by X11 name', () => {

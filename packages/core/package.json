@@ -39,6 +39,6 @@
   },
   "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
   "dependencies": {
-    "algomatic": "^3.1.0"
+    "algomatic": "^3.2.1"
   }
 }
