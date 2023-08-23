@@ -1,5 +1,5 @@
 import { Color, RGB } from '../../core';
-import { clamp, getColorIntComponent, normalizeColorInt } from '../../utils';
+import { clamp, getColorInt32Component, normalizeColorInt } from '../../utils';
 import { HSL } from '../../color-model/hsl';
 
 const valuePattern = '\\s*(\\d+(?:\\.\\d+)?%?)';
@@ -25,7 +25,7 @@ const colorRegex = new RegExp(
   'i',
 );
 
-export function parseColor(str: string, color = new Color()): Color | null {
+export function parseColor(str: string, color: Color): Color | null {
   str = str.trim();
 
   let match;
@@ -46,10 +46,10 @@ export function parseColor(str: string, color = new Color()): Color | null {
       return null;
     }
 
-    components[0] = getColorIntComponent(value, 0) / 0xff;
-    components[1] = getColorIntComponent(value, 1) / 0xff;
-    components[2] = getColorIntComponent(value, 2) / 0xff;
-    components[3] = getColorIntComponent(value, 3) / 0xff;
+    components[0] = getColorInt32Component(value, 0) / 0xff;
+    components[1] = getColorInt32Component(value, 1) / 0xff;
+    components[2] = getColorInt32Component(value, 2) / 0xff;
+    components[3] = getColorInt32Component(value, 3) / 0xff;
 
     return color;
   }

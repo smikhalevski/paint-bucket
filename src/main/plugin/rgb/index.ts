@@ -6,10 +6,9 @@
 import { Applicator, Color, ColorLike, RGB } from '../../core';
 import {
   clamp,
-  convertColorIntToComponents,
-  convertComponentsToColorInt,
+  convertColorInt32ToComponents,
+  convertComponentsToColorInt32,
   createAccessor,
-  enhanceParse,
   normalizeColorInt,
 } from '../../utils';
 
@@ -296,7 +295,9 @@ declare module '../../core' {
 }
 
 export default function (colorConstructor: typeof Color): void {
-  enhanceParse(colorConstructor, parse => value => {
+  const parse = colorConstructor.parse;
+
+  colorConstructor.parse = value => {
     if (typeof value === 'number') {
       return colorConstructor.rgb24(value);
     }
@@ -304,7 +305,7 @@ export default function (colorConstructor: typeof Color): void {
       return colorConstructor.rgb(value);
     }
     return parse(value);
-  });
+  };
 
   colorConstructor.rgb = rgb => new colorConstructor().rgb(rgb);
 
@@ -338,18 +339,18 @@ export default function (colorConstructor: typeof Color): void {
   );
 
   colorConstructor.prototype.rgb24 = createAccessor(
-    color => convertComponentsToColorInt(color.getComponents(RGB)) >>> 8,
+    color => convertComponentsToColorInt32(color.getComponents(RGB)) >>> 8,
 
     (color, value) => {
-      convertColorIntToComponents(normalizeColorInt(value, 6), color.useComponents(RGB));
+      convertColorInt32ToComponents(normalizeColorInt(value, 6), color.useComponents(RGB));
     }
   );
 
   colorConstructor.prototype.rgb32 = createAccessor(
-    color => convertComponentsToColorInt(color.getComponents(RGB)),
+    color => convertComponentsToColorInt32(color.getComponents(RGB)),
 
     (color, value) => {
-      convertColorIntToComponents(normalizeColorInt(value, 8), color.useComponents(RGB));
+      convertColorInt32ToComponents(normalizeColorInt(value, 8), color.useComponents(RGB));
     }
   );
 

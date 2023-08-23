@@ -8,8 +8,8 @@ import { HSL } from '../../color-model/hsl';
 import { Applicator, Color } from '../../core';
 import {
   clamp,
-  convertColorIntToComponents,
-  convertComponentsToColorInt,
+  convertColorInt32ToComponents,
+  convertComponentsToColorInt32,
   createAccessor,
   normalizeColorInt,
 } from '../../utils';
@@ -286,18 +286,18 @@ export default function (colorConstructor: typeof Color): void {
   );
 
   colorConstructor.prototype.hsl24 = createAccessor(
-    color => convertComponentsToColorInt(color.getComponents(HSL)) >>> 8,
+    color => convertComponentsToColorInt32(color.getComponents(HSL)) >>> 8,
 
     (color, value) => {
-      convertColorIntToComponents(normalizeColorInt(value, 6), color.useComponents(HSL));
+      convertColorInt32ToComponents(normalizeColorInt(value, 6), color.useComponents(HSL));
     }
   );
 
   colorConstructor.prototype.hsl32 = createAccessor(
-    color => convertComponentsToColorInt(color.getComponents(HSL)),
+    color => convertComponentsToColorInt32(color.getComponents(HSL)),
 
     (color, value) => {
-      convertColorIntToComponents(normalizeColorInt(value, 8), color.useComponents(HSL));
+      convertColorInt32ToComponents(normalizeColorInt(value, 8), color.useComponents(HSL));
     }
   );
 

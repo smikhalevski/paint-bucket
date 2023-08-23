@@ -12,7 +12,6 @@
  */
 
 import { Color, RGB } from '../../core';
-import { enhanceParse } from '../../utils';
 import { x11Components } from './x11-components';
 
 declare module '../../core' {
@@ -23,16 +22,15 @@ declare module '../../core' {
      * ```ts
      * Color.parse('royalblue');
      * ```
-     *
-     * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/x11!}
      */
     'paint-bucket/plugin/x11': string;
   }
 }
 
 export default function (colorConstructor: typeof Color): void {
-  enhanceParse(colorConstructor, parse => value => {
+  const parse = colorConstructor.parse;
+
+  colorConstructor.parse = value => {
     if (typeof value !== 'string') {
       return parse(value);
     }
@@ -43,5 +41,5 @@ export default function (colorConstructor: typeof Color): void {
       return new colorConstructor(RGB, components.slice(0));
     }
     return parse(value);
-  });
+  };
 }

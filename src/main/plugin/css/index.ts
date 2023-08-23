@@ -6,7 +6,7 @@
 
 import { HSL } from '../../color-model/hsl';
 import { Applicator, Color, RGB } from '../../core';
-import { createAccessor, enhanceParse } from '../../utils';
+import { createAccessor } from '../../utils';
 import { parseColor } from './parseColor';
 import { stringifyColor } from './stringifyColor';
 
@@ -64,9 +64,9 @@ declare module '../../core' {
 }
 
 export default function (colorConstructor: typeof Color): void {
-  enhanceParse(colorConstructor, parse => value => {
-    return (typeof value === 'string' && parseColor(value)) || parse(value);
-  });
+  const parse = colorConstructor.parse;
+
+  colorConstructor.parse = value => (typeof value === 'string' && parseColor(value, new Color())) || parse(value);
 
   colorConstructor.prototype.css = createAccessor(
     color => stringifyColor(color, RGB),

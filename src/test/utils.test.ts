@@ -1,4 +1,10 @@
-import { clamp, composeColorInt, getColorIntComponent, normalizeColorInt, setColorIntComponent } from '../main/utils';
+import {
+  clamp,
+  composeColorInt32,
+  getColorInt32Component,
+  normalizeColorInt,
+  setColorInt32Component,
+} from '../main/utils';
 
 describe('clamp', () => {
   test('clamps value', () => {
@@ -34,11 +40,11 @@ describe('normalizeColorInt', () => {
 
 describe('composeColorInt', () => {
   test('assembles color from bytes', () => {
-    expect(composeColorInt(0x12, 0x34, 0x56, 0x78)).toBe(0x12345678);
+    expect(composeColorInt32(0x12, 0x34, 0x56, 0x78)).toBe(0x12345678);
   });
 
   test('clamps bytes', () => {
-    expect(composeColorInt(0x12, 0xaa_34, 0x56, 0xaa_78)).toBe(0x12345678);
+    expect(composeColorInt32(0x12, 0xaa_34, 0x56, 0xaa_78)).toBe(0x12345678);
   });
 });
 
@@ -46,35 +52,35 @@ describe('getColorIntComponent', () => {
   test('gets the color byte', () => {
     const color = 0x12_34_56_aa;
 
-    expect(getColorIntComponent(color, 0)).toBe(0x12);
-    expect(getColorIntComponent(color, 1)).toBe(0x34);
-    expect(getColorIntComponent(color, 2)).toBe(0x56);
-    expect(getColorIntComponent(color, 3)).toBe(0xaa);
+    expect(getColorInt32Component(color, 0)).toBe(0x12);
+    expect(getColorInt32Component(color, 1)).toBe(0x34);
+    expect(getColorInt32Component(color, 2)).toBe(0x56);
+    expect(getColorInt32Component(color, 3)).toBe(0xaa);
   });
 });
 
 describe('setColorIntComponent', () => {
   test('sets the color byte', () => {
-    expect(setColorIntComponent(0x12_34_56_78, 0, 0xaa)).toBe(0xaa_34_56_78);
-    expect(setColorIntComponent(0x12_34_56_78, 1, 0xaa)).toBe(0x12_aa_56_78);
-    expect(setColorIntComponent(0x12_34_56_78, 2, 0xaa)).toBe(0x12_34_aa_78);
-    expect(setColorIntComponent(0x12_34_56_78, 3, 0xaa)).toBe(0x12_34_56_aa);
+    expect(setColorInt32Component(0x12_34_56_78, 0, 0xaa)).toBe(0xaa_34_56_78);
+    expect(setColorInt32Component(0x12_34_56_78, 1, 0xaa)).toBe(0x12_aa_56_78);
+    expect(setColorInt32Component(0x12_34_56_78, 2, 0xaa)).toBe(0x12_34_aa_78);
+    expect(setColorInt32Component(0x12_34_56_78, 3, 0xaa)).toBe(0x12_34_56_aa);
 
-    expect(setColorIntComponent(0x12_34_56_78, 0, 0xa)).toBe(0x0a_34_56_78);
-    expect(setColorIntComponent(0x12_34_56_78, 1, 0xa)).toBe(0x12_0a_56_78);
-    expect(setColorIntComponent(0x12_34_56_78, 2, 0xa)).toBe(0x12_34_0a_78);
-    expect(setColorIntComponent(0x12_34_56_78, 3, 0xa)).toBe(0x12_34_56_0a);
+    expect(setColorInt32Component(0x12_34_56_78, 0, 0xa)).toBe(0x0a_34_56_78);
+    expect(setColorInt32Component(0x12_34_56_78, 1, 0xa)).toBe(0x12_0a_56_78);
+    expect(setColorInt32Component(0x12_34_56_78, 2, 0xa)).toBe(0x12_34_0a_78);
+    expect(setColorInt32Component(0x12_34_56_78, 3, 0xa)).toBe(0x12_34_56_0a);
 
-    expect(setColorIntComponent(0x12_34_56_78, 0, 0xa0)).toBe(0xa0_34_56_78);
-    expect(setColorIntComponent(0x12_34_56_78, 1, 0xa0)).toBe(0x12_a0_56_78);
-    expect(setColorIntComponent(0x12_34_56_78, 2, 0xa0)).toBe(0x12_34_a0_78);
-    expect(setColorIntComponent(0x12_34_56_78, 3, 0xa0)).toBe(0x12_34_56_a0);
+    expect(setColorInt32Component(0x12_34_56_78, 0, 0xa0)).toBe(0xa0_34_56_78);
+    expect(setColorInt32Component(0x12_34_56_78, 1, 0xa0)).toBe(0x12_a0_56_78);
+    expect(setColorInt32Component(0x12_34_56_78, 2, 0xa0)).toBe(0x12_34_a0_78);
+    expect(setColorInt32Component(0x12_34_56_78, 3, 0xa0)).toBe(0x12_34_56_a0);
   });
 
   test('prevents overflow', () => {
-    expect(setColorIntComponent(0x12_34_56_78, 0, 0xaa_bb)).toBe(0xbb_34_56_78);
-    expect(setColorIntComponent(0x12_34_56_78, 1, 0xaa_bb)).toBe(0x12_bb_56_78);
-    expect(setColorIntComponent(0x12_34_56_78, 2, 0xaa_bb)).toBe(0x12_34_bb_78);
-    expect(setColorIntComponent(0x12_34_56_78, 3, 0xaa_bb)).toBe(0x12_34_56_bb);
+    expect(setColorInt32Component(0x12_34_56_78, 0, 0xaa_bb)).toBe(0xbb_34_56_78);
+    expect(setColorInt32Component(0x12_34_56_78, 1, 0xaa_bb)).toBe(0x12_bb_56_78);
+    expect(setColorInt32Component(0x12_34_56_78, 2, 0xaa_bb)).toBe(0x12_34_bb_78);
+    expect(setColorInt32Component(0x12_34_56_78, 3, 0xaa_bb)).toBe(0x12_34_56_bb);
   });
 });

@@ -3,7 +3,7 @@
  */
 
 import { Color } from './Color';
-import type { Accessor, ColorLike } from './types';
+import type { Accessor } from './types';
 
 const { round } = Math;
 
@@ -32,13 +32,6 @@ export function createAccessor<Output, Input>(
   };
 }
 
-export function enhanceParse(
-  constructor: typeof Color,
-  enhancer: (parse: (value: ColorLike) => Color) => (value: ColorLike) => Color
-): void {
-  constructor.parse = enhancer(constructor.parse);
-}
-
 /**
  * Clamps value to [0, 1] range. `NaN` values are converted to 0.
  *
@@ -64,8 +57,8 @@ export function clamp(x: number): number {
  * ```
  *
  * @param color The input color to normalize, ex. `0xff_ff_ff` for white in RGB space.
- * @param nibbleCount The number (1, 2, 3, 4, 6 or 8) of nibbles the input color.
- * @return A valid raw color.
+ * @param nibbleCount The number (1, 2, 3, 4, 6, or 8) of nibbles the input color.
+ * @return A valid 32-bit color integer.
  */
 export function normalizeColorInt(color: number, nibbleCount: number): number {
   let a, b, c, d;
@@ -75,12 +68,12 @@ export function normalizeColorInt(color: number, nibbleCount: number): number {
       // 0x1 ⮕ 0x11_11_11_ff
       a = 0xf & color;
       a += a << 4;
-      return composeColorInt(a, a, a, 0xff);
+      return composeColorInt32(a, a, a, 0xff);
 
     case 2:
       // 0x12 ⮕ 0x12_12_12_ff
       a = 0xff & color;
-      return composeColorInt(a, a, a, 0xff);
+      return composeColorInt32(a, a, a, 0xff);
 
     case 3:
       // 0x123 ⮕ 0x11_22_33_ff
@@ -90,7 +83,7 @@ export function normalizeColorInt(color: number, nibbleCount: number): number {
       a += a << 4;
       b += b << 4;
       c += c << 4;
-      return composeColorInt(a, b, c, 0xff);
+      return composeColorInt32(a, b, c, 0xff);
 
     case 4:
       // 0x1234 ⮕ 0x11_22_33_44
@@ -102,7 +95,7 @@ export function normalizeColorInt(color: number, nibbleCount: number): number {
       b += b << 4;
       c += c << 4;
       d += d << 4;
-      return composeColorInt(a, b, c, d);
+      return composeColorInt32(a, b, c, d);
 
     case 6:
       // 0x12_34_56 ⮕ 0x12_34_56_ff
@@ -119,7 +112,7 @@ export function normalizeColorInt(color: number, nibbleCount: number): number {
 /**
  * Composes a 32-bit color integer from 8-bit components.
  */
-export function composeColorInt(a: number, b: number, c: number, d: number): number {
+export function composeColorInt32(a: number, b: number, c: number, d: number): number {
   return ((a << 24) >>> 0) + (((0xff & b) << 16) >>> 0) + (((0xff & c) << 8) >>> 0) + ((0xff & d) >>> 0);
 }
 
@@ -130,7 +123,7 @@ export function composeColorInt(a: number, b: number, c: number, d: number): num
  * getColorIntComponent(0x12_34_56_78, 2); // ⮕ 0x56
  * ```
  */
-export function getColorIntComponent(color: number, offset: number): number {
+export function getColorInt32Component(color: number, offset: number): number {
   return 0xff & (color >>> (24 - offset * 8));
 }
 
@@ -141,7 +134,7 @@ export function getColorIntComponent(color: number, offset: number): number {
  * setColorIntComponent(0x12_34_56_78, 2, 0xab); // ⮕ 0x12_34_ab_78
  * ```
  */
-export function setColorIntComponent(color: number, offset: number, value: number): number {
+export function setColorInt32Component(color: number, offset: number, value: number): number {
   const shift = 24 - (offset << 3);
 
   return (((0xff & value) << shift) | (((0xff << shift) ^ 0xff_ff_ff_ff) & color)) >>> 0;
@@ -151,19 +144,19 @@ export function setColorIntComponent(color: number, offset: number, value: numbe
  * Converts a normalized 32-bit color integer to components array where each component is normalized to the [0, 1]
  * range.
  */
-export function convertColorIntToComponents(color: number, components: number[] = [0, 0, 0, 0]): number[] {
-  components[0] = getColorIntComponent(color, 0) / 0xff;
-  components[1] = getColorIntComponent(color, 1) / 0xff;
-  components[2] = getColorIntComponent(color, 2) / 0xff;
-  components[3] = getColorIntComponent(color, 3) / 0xff;
+export function convertColorInt32ToComponents(color: number, components: number[] = [0, 0, 0, 0]): number[] {
+  components[0] = getColorInt32Component(color, 0) / 0xff;
+  components[1] = getColorInt32Component(color, 1) / 0xff;
+  components[2] = getColorInt32Component(color, 2) / 0xff;
+  components[3] = getColorInt32Component(color, 3) / 0xff;
   return components;
 }
 
 /**
  * Converts components from the [0, 1] range to a 32-bit color integer.
  */
-export function convertComponentsToColorInt(components: readonly number[]): number {
-  return composeColorInt(
+export function convertComponentsToColorInt32(components: readonly number[]): number {
+  return composeColorInt32(
     round(components[0] * 0xff),
     round(components[1] * 0xff),
     round(components[2] * 0xff),

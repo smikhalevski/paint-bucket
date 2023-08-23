@@ -1,6 +1,6 @@
 import { HSL } from '../../color-model/hsl';
 import { Color, ColorModel, RGB } from '../../core';
-import { convertComponentsToColorInt } from '../../utils';
+import { convertComponentsToColorInt32 } from '../../utils';
 
 const { round } = Math;
 
@@ -12,7 +12,7 @@ export function stringifyColor(color: Color, model: ColorModel): string {
   if (model === RGB) {
     if (d === 1) {
       // Alpha channel can be discarded
-      let hex = (convertComponentsToColorInt(components) >>> 8).toString(16);
+      let hex = (convertComponentsToColorInt32(components) >>> 8).toString(16);
 
       while (hex.length !== 6) {
         hex = '0' + hex;
