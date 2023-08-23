@@ -59,13 +59,14 @@ export class Color {
 
   /**
    * Parser that transforms input values into {@link Color} instances. When another color instance is provided, it is
-   * cloned.
+   * returned as is.
    *
    * @param value The value to parse.
    * @return The parsed color, or black color if value is invalid.
+   * @see {@link clr}
    */
   static parse(value: ColorLike): Color {
-    return value instanceof Color ? value.clone() : new Color();
+    return value instanceof Color ? value : new Color();
   }
 
   /**

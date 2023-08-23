@@ -5,7 +5,7 @@ import type { RGB } from './rgb';
  * Merge declaration with this interface to add more types to {@link ColorLike} type.
  */
 export interface ColorLikeSource {
-  'paint-bucket': Color;
+  'paint-bucket': Color | undefined | null;
 }
 
 /**

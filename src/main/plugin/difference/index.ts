@@ -4,7 +4,6 @@
 
 import { LAB } from '../../color-model/lab';
 import { Color, ColorLike } from '../../core';
-import { toColor } from '../../utils';
 import { getDeltaE } from './getDeltaE';
 
 declare module '../../core' {
@@ -35,6 +34,6 @@ declare module '../../core' {
 
 export default function (colorConstructor: typeof Color): void {
   colorConstructor.prototype.deltaE = function (color) {
-    return getDeltaE(this.getComponents(LAB), toColor(color).getComponents(LAB));
+    return getDeltaE(this.getComponents(LAB), Color.parse(color).getComponents(LAB));
   };
 }

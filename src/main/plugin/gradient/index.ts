@@ -16,7 +16,6 @@
 
 import { lerp, range, sort, swap } from 'algomatic';
 import { Color, ColorLike, ColorModel, Gradient, InterpolatorFactory, RGB } from '../../core';
-import { toColor } from '../../utils';
 
 declare module '../../core' {
   namespace Color {
@@ -84,7 +83,7 @@ export default function (colorConstructor: typeof Color, gradientConstructor: ty
       domain = range(colors.length);
     }
 
-    colors = colors.map(toColor);
+    colors = colors.map(Color.parse);
 
     sort(domain, (i, j) => {
       swap(colors, i, j);
@@ -94,7 +93,7 @@ export default function (colorConstructor: typeof Color, gradientConstructor: ty
   };
 
   colorConstructor.prototype.gradient = function (color) {
-    return new gradientConstructor([this, toColor(color)], [0, 1]);
+    return new gradientConstructor([this, Color.parse(color)], [0, 1]);
   };
 
   gradientConstructor.prototype.at = function (x, model = RGB, interpolatorFactory = lerp) {

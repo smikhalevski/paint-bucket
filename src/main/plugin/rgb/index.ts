@@ -11,7 +11,6 @@ import {
   createAccessor,
   enhanceParse,
   normalizeColorInt,
-  toColor,
 } from '../../utils';
 
 declare module '../../core' {
@@ -402,14 +401,14 @@ export default function (colorConstructor: typeof Color): void {
 
   colorConstructor.prototype.contrast = function (color) {
     let a = this.luminance() + 0.05;
-    let b = toColor(color).luminance() + 0.05;
+    let b = Color.parse(color).luminance() + 0.05;
 
     return a > b ? a / b : b / a;
   };
 
   colorConstructor.prototype.mix = function (color, ratio) {
     const rgb1 = this.useComponents(RGB);
-    const rgb2 = toColor(color).getComponents(RGB);
+    const rgb2 = Color.parse(color).getComponents(RGB);
 
     ratio = clamp(ratio);
 

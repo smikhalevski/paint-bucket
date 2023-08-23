@@ -5,16 +5,15 @@
 import { Color } from './Color';
 import type { Accessor, ColorLike } from './types';
 
-/**
- * Clamps value to [0, 1] range. `NaN` values are converted to 0.
- */
-export function clamp(x: number): number {
-  x = +x;
-  return x >= 0 ? (x <= 1 ? x : 1) : 0;
-}
+const { round } = Math;
 
 /**
  * Creates the accessor callback that invokes getter of setter depending on the number of arguments.
+ *
+ * @param get The value getter.
+ * @param set The value setter.
+ * @template Output The value returned by the getter.
+ * @template Input The value passed to the setter.
  */
 export function createAccessor<Output, Input>(
   get: (color: Color) => Output,
@@ -33,17 +32,22 @@ export function createAccessor<Output, Input>(
   };
 }
 
-export function toColor(value: ColorLike): Color {
-  return value instanceof Color ? value : Color.parse(value);
-}
-
 export function enhanceParse(
   constructor: typeof Color,
   enhancer: (parse: (value: ColorLike) => Color) => (value: ColorLike) => Color
 ): void {
   constructor.parse = enhancer(constructor.parse);
 }
-const { round } = Math;
+
+/**
+ * Clamps value to [0, 1] range. `NaN` values are converted to 0.
+ *
+ * @param x The number to clamp.
+ */
+export function clamp(x: number): number {
+  x = +x;
+  return x >= 0 ? (x <= 1 ? x : 1) : 0;
+}
 
 /**
  * Normalizes the size of components in the 32-bit color integer.
