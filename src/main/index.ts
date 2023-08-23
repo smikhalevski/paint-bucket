@@ -4,21 +4,21 @@
 
 import { Color, Gradient } from './core';
 
-import cssPlugin from './plugin/css';
-import differencePlugin from './plugin/difference';
-import gradientPlugin from './plugin/gradient';
-import hslPlugin from './plugin/hsl';
-import palettePlugin from './plugin/palette';
-import rgbPlugin from './plugin/rgb';
-import x11Plugin from './plugin/x11';
+import enableCSS from './plugin/css';
+import enableDifference from './plugin/difference';
+import enableGradient from './plugin/gradient';
+import enableHSL from './plugin/hsl';
+import enablePalette from './plugin/palette';
+import enableRGB from './plugin/rgb';
+import enableX11 from './plugin/x11';
 
-cssPlugin(Color);
-differencePlugin(Color);
-gradientPlugin(Color, Gradient);
-hslPlugin(Color);
-palettePlugin(Color);
-rgbPlugin(Color);
-x11Plugin(Color);
+enableCSS(Color);
+enableDifference(Color);
+enableGradient(Color, Gradient);
+enableHSL(Color);
+enablePalette(Color);
+enableRGB(Color);
+enableX11(Color);
 
 export type * from './plugin/css';
 export type * from './plugin/difference';
@@ -29,7 +29,7 @@ export type * from './plugin/rgb';
 export type * from './plugin/x11';
 
 export * from './core';
-export * from './color-model/hsl';
-export * from './color-model/hsv';
-export * from './color-model/lab';
-export * from './color-model/xyz';
+export { HSL } from './color-model/hsl';
+export { HSV } from './color-model/hsv';
+export { LAB } from './color-model/lab';
+export { XYZ } from './color-model/xyz';
