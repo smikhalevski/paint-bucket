@@ -15,53 +15,6 @@ import {
 } from '../../utils';
 
 declare module '../../core' {
-  namespace Color {
-    /**
-     * Creates the new color from HSLa components.
-     *
-     * ```ts
-     * Color.hsl([240, 100, 50]); // Opaque blue color
-     *
-     * Color.hsl([, , 100]); // Opaque white color
-     * ```
-     *
-     * @param hsl H ∈ [0, 360], S and L ∈ [0, 100] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a H, S or L
-     * component is omitted it is set to 0. If alpha component is omitted it is set to 1.
-     * @returns The new color instance.
-     * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/hsl!}
-     */
-    function hsl(hsl: Partial<HSL>): Color;
-
-    /**
-     * Creates the new color from HSL components represented as 24-bit integer.
-     *
-     * ```ts
-     * Color.hsl24(0xff_ff_ff).hsl() // ⮕ [255, 255, 255, 1]
-     * ```
-     *
-     * @param hsl The 24-bit integer, representing color in HSL model (without alpha component).
-     * @returns The new color instance.
-     * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/hsl!}
-     */
-    function hsl24(hsl: number): Color;
-
-    /**
-     * Creates the new color from HSLa components represented as 32-bit integer.
-     *
-     * ```ts
-     * Color.hsl32(0xaa_bb_cc_dd).hsl();
-     * ```
-     *
-     * @param hsl The 32-bit integer, representing color in HSLa model (with alpha component).
-     * @returns The new color instance.
-     * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/hsl!}
-     */
-    function hsl32(hsl: number): Color;
-  }
-
   interface Color {
     /**
      * Returns HSLa components as an array where H ∈ [0, 360], S and L ∈ [0, 100] and a ∈ [0, 1] (0 = transparent, 1 =
@@ -80,8 +33,6 @@ declare module '../../core' {
      * Sets HSLa components.
      *
      * ```ts
-     * Color.hsl([360, 0, 0, 0.5]);
-     *
      * new Color().hsl(([, , L]) => [240, 100, L, 0.5]);
      * ```
      *
@@ -207,10 +158,10 @@ declare module '../../core' {
     lightness(L: Applicator<number>): Color;
 
     /**
-     * Spins hue.
+     * Spins the hue component.
      *
      * ```ts
-     * Color.spin(45);
+     * new Color().spin(45);
      * // or
      * new Color().hue(H => H + 45);
      * ```
@@ -253,14 +204,8 @@ declare module '../../core' {
   }
 }
 
-export default function (colorConstructor: typeof Color): void {
-  colorConstructor.hsl = hsl => new colorConstructor().hsl(hsl);
-
-  colorConstructor.hsl24 = hsl => new colorConstructor().hsl24(hsl);
-
-  colorConstructor.hsl32 = hsl => new colorConstructor().hsl32(hsl);
-
-  colorConstructor.prototype.hsl = createAccessor<HSL, Partial<HSL>>(
+export default function (ctor: typeof Color): void {
+  ctor.prototype.hsl = createAccessor<HSL, Partial<HSL>>(
     color => {
       const hsl = color.getComponents(HSL);
       return [hsl[0] * 360, hsl[1] * 100, hsl[2] * 100, hsl[3]];
@@ -285,7 +230,7 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.hsl24 = createAccessor(
+  ctor.prototype.hsl24 = createAccessor(
     color => convertComponentsToColorInt32(color.getComponents(HSL)) >>> 8,
 
     (color, value) => {
@@ -293,7 +238,7 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.hsl32 = createAccessor(
+  ctor.prototype.hsl32 = createAccessor(
     color => convertComponentsToColorInt32(color.getComponents(HSL)),
 
     (color, value) => {
@@ -301,7 +246,7 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.hue = createAccessor(
+  ctor.prototype.hue = createAccessor(
     color => color.getComponents(HSL)[0] * 360,
 
     (color, H) => {
@@ -309,7 +254,7 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.saturation = createAccessor(
+  ctor.prototype.saturation = createAccessor(
     color => color.getComponents(HSL)[1] * 100,
 
     (color, S) => {
@@ -317,7 +262,7 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.lightness = createAccessor(
+  ctor.prototype.lightness = createAccessor(
     color => color.getComponents(HSL)[2] * 100,
 
     (color, L) => {
@@ -325,19 +270,19 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.spin = function (H) {
+  ctor.prototype.spin = function (H) {
     const hsl = this.useComponents(HSL);
     hsl[0] = clamp(((hsl[0] + H) / 360) % 1);
     return this;
   };
 
-  colorConstructor.prototype.lighten = function (p) {
+  ctor.prototype.lighten = function (p) {
     const hsl = this.useComponents(HSL);
     hsl[2] = clamp(hsl[2] * (1 + +p));
     return this;
   };
 
-  colorConstructor.prototype.darken = function (p) {
+  ctor.prototype.darken = function (p) {
     return this.lighten(-p);
   };
 }

@@ -21,7 +21,7 @@ declare module '../../core' {
     /**
      * Returns three complement colors.
      *
-     * @return The list of {@link Color} instances.
+     * @returns The list of {@link Color} instances.
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/palette!}
      */
@@ -30,7 +30,7 @@ declare module '../../core' {
     /**
      * Returns four complement colors.
      *
-     * @return The list of {@link Color} instances.
+     * @returns The list of {@link Color} instances.
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/palette!}
      */
@@ -39,7 +39,7 @@ declare module '../../core' {
     /**
      * Returns three complement colors.
      *
-     * @return The list of {@link Color} instances.
+     * @returns The list of {@link Color} instances.
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/palette!}
      */
@@ -50,7 +50,7 @@ declare module '../../core' {
      *
      * @param [n = 6] The number of colors to pick.
      * @param [slices = 30] The number of colors to pick.
-     * @return The list of {@link Color} instances.
+     * @returns The list of {@link Color} instances.
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/palette!}
      */
@@ -60,7 +60,7 @@ declare module '../../core' {
      * Returns the list of monochromatic colors.
      *
      * @param [n = 6] The number of colors to pick.
-     * @return The list of {@link Color} instances.
+     * @returns The list of {@link Color} instances.
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/palette!}
      */
@@ -68,60 +68,60 @@ declare module '../../core' {
   }
 }
 
-export default function (colorConstructor: typeof Color): void {
-  colorConstructor.prototype.complement = function () {
+export default function (ctor: typeof Color): void {
+  ctor.prototype.complement = function () {
     const [H, S, L, a] = this.getComponents(HSL);
 
-    return new colorConstructor(HSL, [(H + 0.5) % 1, S, L, a]);
+    return new ctor(HSL, [(H + 0.5) % 1, S, L, a]);
   };
 
-  colorConstructor.prototype.triad = function () {
-    const [H, S, L, a] = this.getComponents(HSL);
-
-    return [
-      new colorConstructor(HSL, [H, S, L, a]),
-      new colorConstructor(HSL, [(H + 1 / 3) % 1, S, L, a]),
-      new colorConstructor(HSL, [(H + 2 / 3) % 1, S, L, a]),
-    ];
-  };
-
-  colorConstructor.prototype.tetrad = function () {
+  ctor.prototype.triad = function () {
     const [H, S, L, a] = this.getComponents(HSL);
 
     return [
-      new colorConstructor(HSL, [H, S, L, a]),
-      new colorConstructor(HSL, [(H + 1 / 4) % 1, S, L, a]),
-      new colorConstructor(HSL, [(H + 2 / 4) % 1, S, L, a]),
-      new colorConstructor(HSL, [(H + 3 / 4) % 1, S, L, a]),
+      new ctor(HSL, [H, S, L, a]),
+      new ctor(HSL, [(H + 1 / 3) % 1, S, L, a]),
+      new ctor(HSL, [(H + 2 / 3) % 1, S, L, a]),
     ];
   };
 
-  colorConstructor.prototype.splitComplement = function () {
+  ctor.prototype.tetrad = function () {
     const [H, S, L, a] = this.getComponents(HSL);
 
     return [
-      new colorConstructor(HSL, [H, S, L, a]),
-      new colorConstructor(HSL, [(H + 0.2) % 1, S, L, a]),
-      new colorConstructor(HSL, [(H + 0.6) % 1, S, L, a]),
+      new ctor(HSL, [H, S, L, a]),
+      new ctor(HSL, [(H + 1 / 4) % 1, S, L, a]),
+      new ctor(HSL, [(H + 2 / 4) % 1, S, L, a]),
+      new ctor(HSL, [(H + 3 / 4) % 1, S, L, a]),
     ];
   };
 
-  colorConstructor.prototype.analogous = function (n = 6, slices = 30) {
+  ctor.prototype.splitComplement = function () {
+    const [H, S, L, a] = this.getComponents(HSL);
+
+    return [
+      new ctor(HSL, [H, S, L, a]),
+      new ctor(HSL, [(H + 0.2) % 1, S, L, a]),
+      new ctor(HSL, [(H + 0.6) % 1, S, L, a]),
+    ];
+  };
+
+  ctor.prototype.analogous = function (n = 6, slices = 30) {
     const [H, S, L, a] = this.getComponents(HSL);
 
     const part = 1 / slices;
-    const colors = [new colorConstructor(HSL, [H, S, L, a])];
+    const colors = [new ctor(HSL, [H, S, L, a])];
 
     let nextH = (H - (part * n) / 2 + 2) % 1;
 
     while (--n > 0) {
       nextH = (nextH + part) % 1;
-      colors.push(new colorConstructor(HSL, [nextH, S, L, a]));
+      colors.push(new ctor(HSL, [nextH, S, L, a]));
     }
     return colors;
   };
 
-  colorConstructor.prototype.monochromatic = function (n = 6) {
+  ctor.prototype.monochromatic = function (n = 6) {
     const [H, S, V, a] = this.getComponents(HSV);
 
     const colors: Color[] = [];
@@ -130,7 +130,7 @@ export default function (colorConstructor: typeof Color): void {
     let nextV = V;
 
     while (n-- > 0) {
-      colors.push(new colorConstructor(HSV, [H, S, nextV, a]));
+      colors.push(new ctor(HSV, [H, S, nextV, a]));
       nextV = (nextV + deltaV) % 1;
     }
 

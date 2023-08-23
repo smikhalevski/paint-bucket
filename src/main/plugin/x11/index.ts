@@ -27,10 +27,10 @@ declare module '../../core' {
   }
 }
 
-export default function (colorConstructor: typeof Color): void {
-  const parse = colorConstructor.parse;
+export default function (ctor: typeof Color): void {
+  const parse = ctor.parse;
 
-  colorConstructor.parse = value => {
+  ctor.parse = value => {
     if (typeof value !== 'string') {
       return parse(value);
     }
@@ -38,7 +38,7 @@ export default function (colorConstructor: typeof Color): void {
     const components = x11Components.get(value.trim().toLowerCase());
 
     if (components !== undefined) {
-      return new colorConstructor(RGB, components.slice(0));
+      return new ctor(RGB, components.slice(0));
     }
     return parse(value);
   };

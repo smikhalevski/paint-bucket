@@ -58,7 +58,7 @@ export function clamp(x: number): number {
  *
  * @param color The input color to normalize, ex. `0xff_ff_ff` for white in RGB space.
  * @param nibbleCount The number (1, 2, 3, 4, 6, or 8) of nibbles the input color.
- * @return A valid 32-bit color integer.
+ * @returns A valid 32-bit color integer.
  */
 export function normalizeColorInt(color: number, nibbleCount: number): number {
   let a, b, c, d;

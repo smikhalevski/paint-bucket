@@ -63,12 +63,12 @@ declare module '../../core' {
   }
 }
 
-export default function (colorConstructor: typeof Color): void {
-  const parse = colorConstructor.parse;
+export default function (ctor: typeof Color): void {
+  const parse = ctor.parse;
 
-  colorConstructor.parse = value => (typeof value === 'string' && parseColor(value, new Color())) || parse(value);
+  ctor.parse = value => (typeof value === 'string' && parseColor(value, new ctor())) || parse(value);
 
-  colorConstructor.prototype.css = createAccessor(
+  ctor.prototype.css = createAccessor(
     color => stringifyColor(color, RGB),
 
     (color, value) => {
@@ -76,11 +76,11 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.cssHSL = function () {
+  ctor.prototype.cssHSL = function () {
     return stringifyColor(this, HSL);
   };
 
-  colorConstructor.prototype.toString = function () {
+  ctor.prototype.toString = function () {
     return this.css();
   };
 }

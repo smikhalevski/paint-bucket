@@ -32,8 +32,8 @@ declare module '../../core' {
   }
 }
 
-export default function (colorConstructor: typeof Color): void {
-  colorConstructor.prototype.deltaE = function (color) {
+export default function (ctor: typeof Color): void {
+  ctor.prototype.deltaE = function (color) {
     return getDeltaE(this.getComponents(LAB), Color.parse(color).getComponents(LAB));
   };
 }

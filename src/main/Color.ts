@@ -62,7 +62,7 @@ export class Color {
    * returned as is.
    *
    * @param value The value to parse.
-   * @return The parsed color, or black color if value is invalid.
+   * @returns The parsed color, or black color if value is invalid.
    * @see {@link clr}
    */
   static parse(value: ColorLike): Color {

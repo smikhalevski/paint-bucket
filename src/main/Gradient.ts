@@ -1,6 +1,7 @@
+import { lerp } from 'algomatic';
 import { Color } from './Color';
 import { RGB } from './rgb';
-import { ColorModel, Interpolator, InterpolatorFactory } from './types';
+import { ColorLike, ColorModel, Interpolator, InterpolatorFactory } from './types';
 import { clamp } from './utils';
 
 // Black RGBa color that is returned if gradient has zero domain size
@@ -16,11 +17,21 @@ export class Gradient {
   get version(): number {
     let version = 0;
 
-    for (let i = 0; i < this.colors.length; ++i) {
-      version += this.colors[i].version;
+    for (let i = 0; i < this._colors.length; ++i) {
+      version += this._colors[i].version;
     }
     return version;
   }
+
+  /**
+   * The list of colors that comprise the gradient.
+   */
+  private _colors: Color[] = [];
+
+  /**
+   * The stop values for each color.
+   */
+  private _domain: number[] = [];
 
   /**
    * Color components returned by the {@link getComponents} method.
@@ -54,22 +65,40 @@ export class Gradient {
   private _componentValues: number[][] = [];
 
   /**
-   * Creates the new {@link Gradient} instance.
+   * Adds the new stop to the gradient.
    *
-   * @param colors The list of colors that comprise the gradient.
-   * @param domain The stop values for each color. Values must be sorted in ascending order. The number of domain
-   * values must exactly match the number of provided colors.
+   * @param value The position of the stop.
+   * @param color The color associated with the stop.
    */
-  constructor(
-    /**
-     * The list of colors that comprise the gradient.
-     */
-    readonly colors: readonly Color[],
-    /**
-     * The stop values for each color.
-     */
-    readonly domain: readonly number[]
-  ) {}
+  stop(value: number, color: ColorLike): Gradient {
+    const { _domain, _colors } = this;
+
+    color = Color.parse(color);
+
+    for (let i = 0; i < _domain.length; ++i) {
+      if (value < _domain[i]) {
+        _domain.splice(i, 0, value);
+        _colors.splice(i, 0, color);
+        return this;
+      }
+    }
+
+    _domain.push(value);
+    _colors.push(color);
+    return this;
+  }
+
+  /**
+   * Returns the color at the given position in the gradient.
+   *
+   * @param x The value from the gradient domain for which the color is requested.
+   * @param [model = RGB] The color model that should be used for interpolation.
+   * @param [interpolatorFactory = lerp] The function that returns a color component interpolator.
+   * @returns The new {@link Color} instance.
+   */
+  at(x: number, model = RGB, interpolatorFactory: InterpolatorFactory = lerp): Color {
+    return new Color(model, this.getComponents(model, x, interpolatorFactory).slice(0));
+  }
 
   /**
    * Returns color components that correspond to a value from the gradient domain.
@@ -84,10 +113,10 @@ export class Gradient {
    * @returns The read-only components array.
    */
   getComponents(model: ColorModel, value: number, interpolatorFactory: InterpolatorFactory): readonly number[] {
-    const { colors, domain, _tempComponents, _componentValues, _interpolatorFactory, _interpolators } = this;
+    const { _colors, _domain, _tempComponents, _componentValues, _interpolatorFactory, _interpolators } = this;
 
     const { componentCount } = model;
-    const domainLength = domain.length;
+    const domainLength = _domain.length;
 
     // Empty gradients are rendered as black
     if (domainLength === 0) {
@@ -99,7 +128,7 @@ export class Gradient {
     }
 
     if (domainLength === 1) {
-      return this.colors[0].getComponents(model);
+      return this._colors[0].getComponents(model);
     }
 
     const interpolatedVersion = this.version;
@@ -108,7 +137,7 @@ export class Gradient {
       // Update color component interpolators
 
       for (let i = 0; i < domainLength; ++i) {
-        const components = colors[i].getComponents(model);
+        const components = _colors[i].getComponents(model);
 
         for (let j = 0; j < componentCount; ++j) {
           (_componentValues[j] ||= [])[i] = components[j];
@@ -125,9 +154,9 @@ export class Gradient {
           _interpolators.length > i &&
           (update = _interpolators[i].update) !== undefined
         ) {
-          update(domain, _componentValues[i]);
+          update(_domain, _componentValues[i]);
         } else {
-          _interpolators[i] = interpolatorFactory(domain, _componentValues[i]);
+          _interpolators[i] = interpolatorFactory(_domain, _componentValues[i]);
         }
       }
       this._interpolatorFactory = interpolatorFactory;

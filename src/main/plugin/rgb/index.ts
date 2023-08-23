@@ -30,53 +30,6 @@ declare module '../../core' {
     'paint-bucket/plugin/rgb': number | Partial<RGB>;
   }
 
-  namespace Color {
-    /**
-     * Creates the new color from RGBa components.
-     *
-     * ```ts
-     * Color.rgb([255, 255, 255, 0.5]);
-     *
-     * Color.rgb([, , 255]); // Opaque blue color
-     * ```
-     *
-     * @param rgb R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B component is
-     * omitted it is set to 0. If alpha component is omitted it is set to 1.
-     * @returns The new color instance.
-     * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
-     */
-    function rgb(rgb: Partial<RGB>): Color;
-
-    /**
-     * Creates the new color from RGB components represented as 24-bit integer.
-     *
-     * ```ts
-     * Color.rgb24(0xff_ff_ff).rgb() // ⮕ [255, 255, 255, 1]
-     * ```
-     *
-     * @param rgb The 24-bit integer, representing color in RGB model (without alpha component).
-     * @returns The new color instance.
-     * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
-     */
-    function rgb24(rgb: number): Color;
-
-    /**
-     * Creates the new color from RGBa components represented as 32-bit integer.
-     *
-     * ```ts
-     * Color.rgb32(0xaa_bb_cc_dd).rgb() // ⮕ [170, 187, 204, 0.86]
-     * ```
-     *
-     * @param rgb The 32-bit integer, representing color in RGBa model (with alpha component).
-     * @returns The new color instance.
-     * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
-     */
-    function rgb32(rgb: number): Color;
-  }
-
   interface Color {
     /**
      * Returns RGBa components as an array where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
@@ -94,8 +47,6 @@ declare module '../../core' {
      * Sets RGBa components.
      *
      * ```ts
-     * Color.rgb([255, 255, 255, 0.5]);
-     *
      * new Color().rgb(([, , B]) => [255, 255, B, 0.5]);
      * ```
      *
@@ -294,26 +245,20 @@ declare module '../../core' {
   }
 }
 
-export default function (colorConstructor: typeof Color): void {
-  const parse = colorConstructor.parse;
+export default function (ctor: typeof Color): void {
+  const parse = ctor.parse;
 
-  colorConstructor.parse = value => {
+  ctor.parse = value => {
     if (typeof value === 'number') {
-      return colorConstructor.rgb24(value);
+      return new ctor().rgb24(value);
     }
     if (Array.isArray(value)) {
-      return colorConstructor.rgb(value);
+      return new ctor().rgb(value);
     }
     return parse(value);
   };
 
-  colorConstructor.rgb = rgb => new colorConstructor().rgb(rgb);
-
-  colorConstructor.rgb24 = rgb => new colorConstructor().rgb24(rgb);
-
-  colorConstructor.rgb32 = rgb => new colorConstructor().rgb32(rgb);
-
-  colorConstructor.prototype.rgb = createAccessor<RGB, Partial<RGB>>(
+  ctor.prototype.rgb = createAccessor<RGB, Partial<RGB>>(
     color => {
       const rgb = color.getComponents(RGB);
       return [rgb[0] * 0xff, rgb[1] * 0xff, rgb[2] * 0xff, rgb[3]];
@@ -338,7 +283,7 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.rgb24 = createAccessor(
+  ctor.prototype.rgb24 = createAccessor(
     color => convertComponentsToColorInt32(color.getComponents(RGB)) >>> 8,
 
     (color, value) => {
@@ -346,7 +291,7 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.rgb32 = createAccessor(
+  ctor.prototype.rgb32 = createAccessor(
     color => convertComponentsToColorInt32(color.getComponents(RGB)),
 
     (color, value) => {
@@ -354,7 +299,7 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.red = createAccessor(
+  ctor.prototype.red = createAccessor(
     color => color.getComponents(RGB)[0] * 0xff,
 
     (color, R) => {
@@ -362,7 +307,7 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.green = createAccessor(
+  ctor.prototype.green = createAccessor(
     color => color.getComponents(RGB)[1] * 0xff,
 
     (color, G) => {
@@ -370,7 +315,7 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.blue = createAccessor(
+  ctor.prototype.blue = createAccessor(
     color => color.getComponents(RGB)[2] * 0xff,
 
     (color, B) => {
@@ -378,7 +323,7 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.alpha = createAccessor(
+  ctor.prototype.alpha = createAccessor(
     color => color.getComponents(RGB)[3],
 
     (color, a) => {
@@ -386,12 +331,12 @@ export default function (colorConstructor: typeof Color): void {
     }
   );
 
-  colorConstructor.prototype.brightness = function () {
+  ctor.prototype.brightness = function () {
     const rgb = this.getComponents(RGB);
     return rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114;
   };
 
-  colorConstructor.prototype.luminance = function () {
+  ctor.prototype.luminance = function () {
     const rgb = this.getComponents(RGB);
     return rotate(rgb[0]) * 0.2126 + rotate(rgb[1]) * 0.7152 + rotate(rgb[2]) * 0.0722;
   };
@@ -400,14 +345,14 @@ export default function (colorConstructor: typeof Color): void {
     return v > 0.03928 ? Math.pow((v + 0.055) / 1.055, 2.4) : v / 12.92;
   }
 
-  colorConstructor.prototype.contrast = function (color) {
+  ctor.prototype.contrast = function (color) {
     let a = this.luminance() + 0.05;
     let b = Color.parse(color).luminance() + 0.05;
 
     return a > b ? a / b : b / a;
   };
 
-  colorConstructor.prototype.mix = function (color, ratio) {
+  ctor.prototype.mix = function (color, ratio) {
     const rgb1 = this.useComponents(RGB);
     const rgb2 = Color.parse(color).getComponents(RGB);
 
@@ -420,7 +365,7 @@ export default function (colorConstructor: typeof Color): void {
     return this;
   };
 
-  colorConstructor.prototype.greyscale = function () {
+  ctor.prototype.greyscale = function () {
     const rgb = this.useComponents(RGB);
     const [R, G, B] = rgb;
     const value = Math.sqrt(R * R * 0.299 + G * G * 0.587 + B * B * 0.114);
