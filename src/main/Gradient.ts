@@ -26,43 +26,43 @@ export class Gradient {
   /**
    * The list of colors that comprise the gradient.
    */
-  private _colors: Color[] = [];
+  protected _colors: Color[] = [];
 
   /**
    * The stop values for each color.
    */
-  private _domain: number[] = [];
+  protected _domain: number[] = [];
 
   /**
    * Color components returned by the {@link getComponents} method.
    */
-  private _tempComponents: number[] = [0, 0, 0, 1];
+  protected _tempComponents: number[] = [0, 0, 0, 1];
 
   /**
    * The model that was requested during the last {@link getComponents} call.
    */
-  private _model?: ColorModel;
+  protected _model?: ColorModel;
 
   /**
    * The version of the gradient that was interpolated during the last {@link getComponents} call.
    */
-  private _interpolatedVersion?: number;
+  protected _interpolatedVersion?: number;
 
   /**
    * The interpolation factory that was used during the last {@link getComponents} call.
    */
-  private _interpolatorFactory?: InterpolatorFactory;
+  protected _interpolatorFactory?: InterpolatorFactory;
 
   /**
    * Color component interpolators that were produced by {@link _interpolatorFactory} for components provided by the
    * {@link _model} for colors with cumulative version {@link _interpolatedVersion}.
    */
-  private _interpolators: Interpolator[] = [];
+  protected _interpolators: Interpolator[] = [];
 
   /**
    * Component values grouped by channel.
    */
-  private _componentValues: number[][] = [];
+  protected _componentValues: number[][] = [];
 
   /**
    * Adds the new stop to the gradient.

@@ -17,27 +17,27 @@ export class Color {
     return this._version;
   }
 
-  private _version = 0;
+  protected _version = 0;
 
   /**
    * The current color model.
    */
-  private _model: ColorModel;
+  protected _model: ColorModel;
 
   /**
    * Color components of the {@link _model}.
    */
-  private _components: number[];
+  protected _components: number[];
 
   /**
    * The color model that was last acquired by {@link getComponents}.
    */
-  private _tempModel: ColorModel | null = null;
+  protected _tempModel: ColorModel | null = null;
 
   /**
    * Color components of the {@link _tempModel}.
    */
-  private _tempComponents: number[] | null = null;
+  protected _tempComponents: number[] | null = null;
 
   /**
    * Creates a new black {@link Color} instance.
