@@ -1,227 +1,218 @@
 const tinycolor2 = require('tinycolor2');
 const chromaJs = require('chroma-js');
-const {color, Rgb, Lab} = require('paint-bucket');
-const {csplineMonot, lerp} = require('algomatic');
+const { clr, Gradient, RGB, LAB } = require('./lib');
+const { csplineMonot, lerp } = require('algomatic');
 
 // Create color from components
-describe('color([255, 255, 255])', () => {
-
-  test('tinycolor2', (measure) => {
-    const rgb = {r: 0xAB, g: 0xCD, b: 0xEF};
+describe('clr([255, 255, 255])', () => {
+  test('tinycolor2', measure => {
+    const rgb = { r: 0xab, g: 0xcd, b: 0xef };
     measure(() => tinycolor2(rgb));
   });
 
-  test('chroma.js', (measure) => {
-    const rgb = [0xAB, 0xCD, 0xEF];
+  test('chroma.js', measure => {
+    const rgb = [0xab, 0xcd, 0xef];
     measure(() => chromaJs(rgb));
   });
 
-  test('paint-bucket', (measure) => {
-    const rgb = [0xAB, 0xCD, 0xEF];
-    measure(() => color(rgb));
+  test('paint-bucket', measure => {
+    const rgb = [0xab, 0xcd, 0xef];
+    measure(() => clr(rgb));
   });
-}, {targetRme: 0.005});
+});
 
 // Parse color from short HEX
-describe('color(\'#abc\')', () => {
-
-  test('tinycolor2', (measure) => {
+describe("clr('#abc')", () => {
+  test('tinycolor2', measure => {
     measure(() => tinycolor2('#abc'));
   });
 
-  test('chroma.js', (measure) => {
+  test('chroma.js', measure => {
     measure(() => chromaJs('#abc'));
   });
 
-  test('paint-bucket', (measure) => {
-    measure(() => color('#abc'));
+  test('paint-bucket', measure => {
+    measure(() => clr('#abc'));
   });
-}, {targetRme: 0.005});
+});
 
 // Parse color from 24-bit HEX
-describe('color(\'#abcdef\')', () => {
-
-  test('tinycolor2', (measure) => {
+describe("clr('#abcdef')", () => {
+  test('tinycolor2', measure => {
     measure(() => tinycolor2('#abcdef'));
   });
 
-  test('chroma.js', (measure) => {
+  test('chroma.js', measure => {
     measure(() => chromaJs('#abcdef'));
   });
 
-  test('paint-bucket', (measure) => {
-    measure(() => color('#abcdef'));
+  test('paint-bucket', measure => {
+    measure(() => clr('#abcdef'));
   });
-}, {targetRme: 0.005});
+});
 
 // Parse color from 32-bit HEX
-describe('color(\'#abcdefff\')', () => {
-
-  test('tinycolor2', (measure) => {
+describe("clr('#abcdefff')", () => {
+  test('tinycolor2', measure => {
     measure(() => tinycolor2('#abcdefff'));
   });
 
-  test('chroma.js', (measure) => {
+  test('chroma.js', measure => {
     measure(() => chromaJs('#abcdefff'));
   });
 
-  test('paint-bucket', (measure) => {
-    measure(() => color('#abcdefff'));
+  test('paint-bucket', measure => {
+    measure(() => clr('#abcdefff'));
   });
-}, {targetRme: 0.005});
+});
 
 // Parse color from 24-bit integer
-describe('color(0xAB_CD_EF)', () => {
-
+describe('clr(0xab_cd_ef)', () => {
   // Not supported
   // test('tinycolor2', (measure) => {
-  //   measure(() => tinycolor2(0xAB_CD_EF));
+  //   measure(() => tinycolor2(0xab_cd_ef));
   // });
 
-  test('chroma.js', (measure) => {
-    measure(() => chromaJs(0xAB_CD_EF));
+  test('chroma.js', measure => {
+    measure(() => chromaJs(0xab_cd_ef));
   });
 
-  test('paint-bucket', (measure) => {
-    measure(() => color(0xAB_CD_EF));
+  test('paint-bucket', measure => {
+    measure(() => clr(0xab_cd_ef));
   });
-}, {targetRme: 0.005});
+});
 
 // Parse color from 32-bit integer
-describe('color.rgb32(0xAB_CD_EF_FF)', () => {
-
+describe('clr().rgb32(0xab_cd_ef_ff)', () => {
   // Not supported
   // test('tinycolor2', (measure) => {
-  //   measure(() => tinycolor2(0xAB_CD_EF_FF));
+  //   measure(() => tinycolor2(0xab_cd_ef_ff));
   // });
 
   // Not supported
   // test('chroma.js', (measure) => {
-  //   measure(() => chromaJs(0xAB_CD_EF_FF));
+  //   measure(() => chromaJs(0xab_cd_ef_ff));
   // });
 
-  test('paint-bucket', (measure) => {
-    measure(() => color.rgb32(0xAB_CD_EF_FF));
+  test('paint-bucket', measure => {
+    measure(() => clr().rgb32(0xab_cd_ef_ff));
   });
-}, {targetRme: 0.005});
+});
 
 // Parse color from RGBa
-describe('color(\'rgba(128, 128, 128, 0.5)\')', () => {
-
-  test('tinycolor2', (measure) => {
+describe("clr('rgba(128, 128, 128, 0.5)')", () => {
+  test('tinycolor2', measure => {
     measure(() => tinycolor2('rgba(128,128,128,0.5)'));
   });
 
-  test('chroma.js', (measure) => {
+  test('chroma.js', measure => {
     measure(() => chromaJs('rgba(128,128,128,0.5)'));
   });
 
-  test('paint-bucket', (measure) => {
-    measure(() => color('rgba(128,128,128,0.5)'));
+  test('paint-bucket', measure => {
+    measure(() => clr('rgba(128,128,128,0.5)'));
   });
-}, {targetRme: 0.005});
+});
 
 // Desaturate color
-describe('c.saturation(50).rgb()', () => {
-
-  test('tinycolor2', (measure) => {
-    const rgb = {r: 0xAB, g: 0xCD, b: 0xEF};
+describe('clr().saturation(50).rgb()', () => {
+  test('tinycolor2', measure => {
+    const rgb = { r: 0xab, g: 0xcd, b: 0xef };
     let c;
-    measure(() => c.desaturate().toRgb(), {
-      beforeIteration() {
-        c = tinycolor2(rgb);
-      },
+
+    beforeIteration(() => {
+      c = tinycolor2(rgb);
     });
+    measure(() => c.desaturate().toRgb());
   });
 
-  test('chroma.js', (measure) => {
-    const rgb = [0xAB, 0xCD, 0xEF];
+  test('chroma.js', measure => {
+    const rgb = [0xab, 0xcd, 0xef];
     let c;
-    measure(() => c.desaturate().rgb(), {
-      beforeIteration() {
-        c = chromaJs(rgb);
-      },
+
+    beforeIteration(() => {
+      c = chromaJs(rgb);
     });
+    measure(() => c.desaturate().rgb());
   });
 
-  test('paint-bucket', (measure) => {
-    const rgb = [0xAB, 0xCD, 0xEF];
+  test('paint-bucket', measure => {
+    const rgb = [0xab, 0xcd, 0xef];
     let c;
-    measure(() => c.saturation(50).rgb(), {
-      beforeIteration() {
-        c = color(rgb);
-      },
+
+    beforeIteration(() => {
+      c = clr(rgb);
     });
+    measure(() => c.saturation(50).rgb());
   });
-}, {targetRme: 0.005});
+});
 
 // Spin + lighten color
-describe('c.hue(90).lightness(10).rgb()', () => {
-
-  test('tinycolor2', (measure) => {
-    const rgb = {r: 0xAB, g: 0xCD, b: 0xEF};
+describe('clr().hue(90).lightness(10).rgb()', () => {
+  test('tinycolor2', measure => {
+    const rgb = { r: 0xab, g: 0xcd, b: 0xef };
     let c;
-    measure(() => c.spin(90).lighten().toRgb(), {
-      beforeIteration() {
-        c = tinycolor2(rgb);
-      },
+
+    beforeIteration(() => {
+      c = tinycolor2(rgb);
     });
+    measure(() => c.spin(90).lighten().toRgb());
   });
 
-  test('paint-bucket', (measure) => {
-    const rgb = [0xAB, 0xCD, 0xEF];
+  test('paint-bucket', measure => {
+    const rgb = [0xab, 0xcd, 0xef];
     let c;
-    measure(() => c.hue(90).lightness(10).rgb(), {
-      beforeIteration() {
-        c = color(rgb);
-      },
+
+    beforeIteration(() => {
+      c = clr(rgb);
     });
+    measure(() => c.hue(90).lightness(10).rgb());
   });
-}, {targetRme: 0.005});
+});
 
 // Create gradient from HEX
-describe('color.gradient([\'#fff\', \'#000\'])', () => {
+describe('clr.gradient(["#fff", "#000"])', () => {
+  const colors = ['#fff', '#000'];
 
-  const hexColors = ['#fff', '#000'];
-
-  test('chroma.js', (measure) => {
-    measure(() => chromaJs.scale(hexColors));
+  test('chroma.js', measure => {
+    measure(() => chromaJs.scale(colors));
   });
 
-  test('paint-bucket', (measure) => {
-    measure(() => color.gradient(hexColors));
+  test('paint-bucket', measure => {
+    measure(() => clr.gradient(colors));
   });
-}, {targetRme: 0.005});
-
+});
 
 // Interpolate linear RGB gradient
-describe('g.at(0.5, Rgb, lerp)', () => {
+describe('clr.gradient(…).at(0.5, RGB, lerp)', () => {
+  const colors = ['#fff', '#000'];
 
-  const hexColors = ['#fff', '#000'];
+  test('chroma.js', measure => {
+    const gradient = chromaJs.scale(colors).mode('lrgb');
 
-  test('chroma.js', (measure) => {
-    const g = chromaJs.scale(hexColors).mode('lrgb');
-    measure(() => g(0.7));
+    measure(() => gradient(0.7));
   });
 
-  test('paint-bucket', (measure) => {
-    const g = color.gradient(hexColors);
-    measure(() => g.at(0.7, Rgb, lerp));
+  test('paint-bucket', measure => {
+    const gradient = clr.gradient(colors);
+
+    measure(() => gradient.at(0.7, RGB, lerp));
   });
-}, {targetRme: 0.005});
+});
 
 // Interpolate spline LAB gradient
-describe('g.at(0.5, Lab, csplineMonot)', () => {
+describe('clr.gradient(…).at(0.5, LAB, csplineMonot)', () => {
+  const colors = ['#fff', '#000'];
 
-  const hexColors = ['#fff', '#000'];
+  test('chroma.js', measure => {
+    const gradient = chromaJs.scale(colors).mode('lab');
 
-  test('chroma.js', (measure) => {
-    const g = chromaJs.scale(hexColors).mode('lab');
-    measure(() => g(0.7));
+    measure(() => gradient(0.7));
   });
 
-  test('paint-bucket', (measure) => {
-    const g = color.gradient(hexColors);
-    measure(() => g.at(0.7, Lab, csplineMonot));
+  test('paint-bucket', measure => {
+    const gradient = clr.gradient(colors);
+
+    measure(() => gradient.at(0.7, LAB, csplineMonot));
   });
-}, {targetRme: 0.005});
+});

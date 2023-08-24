@@ -1,8 +1,8 @@
-# Paint Bucket [![build](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml/badge.svg?branch=master&event=push)](https://github.com/smikhalevski/paint-bucket/actions/workflows/master.yml)
-
-<a href="#readme">
-  <img alt="Red paint" src="https://github.com/smikhalevski/paint-bucket/raw/master/paint.png"/>
-</a>
+<p>
+  <a href="#readme">
+    <img alt="Paint Bucket" src="images/logo.png"/>
+  </a>
+</p>
 
 [Highly performant](#performance), [extensible](#plugins), and
 [tiny](https://bundlephobia.com/package/paint-bucket) color manipulation library.
@@ -13,49 +13,57 @@ npm install --save-prod paint-bucket
 
 # Usage
 
-🪣 [API documentation is available here.](https://smikhalevski.github.io/paint-bucket/classes/core_src_main.Color.html)
+🔎 [API documentation is available here.](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html)
 
 ```ts
-import {color} from 'paint-bucket';
+import { clr } from 'paint-bucket';
 
-// or cherry-pick plugins to reduce bundle size
-// import '@paint-bucket/rgb-plugin';
-// import '@paint-bucket/hsl-plugin';
-// import '@paint-bucket/css-plugin';
-// import {color} from '@paint-bucket/core';
+clr('#abcdef').saturation(S => S / 2).red(); // ⮕ 188
+```
 
-color('#abcdef').saturation((S) => S / 2).red(); // → 188
+You can cherry-pick plugins that you need:
+
+```ts
+import { clr, Color } from 'paint-bucket/core';
+import rgbPlugin from 'paint-bucket/plugin/rgb';
+
+rgbPlugin(Color);
+
+clr().red(); // ✅
+
+clr().saturation(); // ❌ Error: saturation not defined
 ```
 
 Most methods provide getter-setter semantics:
 
 ```ts
-// Set
-color('#f00').red(127.5); // → Color instance
+// Setter
+clr('#f00').red(127.5); // ⮕ Color instance
 // or
-color('#f00').red((R) => R / 2); // → Color instance
+clr('#f00').red(R => R / 2); // ⮕ Color instance
 
-// Get
-color('#f00').red(); // → 255
+// Getter
+clr('#f00').red(); // ⮕ 255
 ```
 
 Mutate multiple components at the same time:
 
 ```ts
-color([64, 128, 0])
-    .rgb(([R, G, B, a]) => [R * 3, G * 2, B, a])
-    .rgb();
-// → [192, 255, 0, 1]
+clr([64, 128, 0])
+  .rgb(([R, G, B, a]) => [R * 3, G * 2, B, a])
+  .rgb();
+// ⮕ [192, 255, 0, 1]
 ```
 
-`color` returns a mutable instance of `Color`. To create a copy of the `Color` instance you can use one of these
-approaches:
+[`clr`](https://smikhalevski.github.io/paint-bucket/functions/paint_bucket_core.clr-1.html) returns a mutable instance
+of the [`Color`](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html) class. To create a
+copy of the `Color` instance you can use one of these approaches:
 
 ```ts
-const color1 = color('#f00');
+const color1 = clr('#f00');
 
 // color2 is a copy of color1
-const color2 = color(color1);
+const color2 = clr(color1);
 // or
 const color3 = color1.clone();
 ```
@@ -63,86 +71,91 @@ const color3 = color1.clone();
 Parse and serialize CSS color strings:
 
 ```ts
-color('pink').css(); // → "#ffc0cb"
+clr('pink').css(); // ⮕ "#ffc0cb"
 
-color('rgba(255, 192, 203)').css(); // → "#ffc0cb"
+clr('rgba(255, 192, 203)').css(); // ⮕ "#ffc0cb"
 ```
 
 Create gradients and obtain color at arbitrary position:
 
 ```ts
-color('red').gradient('blue').at(0.70).css(); // → "#4d00b3"
+clr.gradient(['red', 'blue']).at(0.7).css(); // ⮕ "#4d00b3"
 ```
 
-Create multi-stop gradients:
+Create multi-stop gradients with custom stop values:
 
 ```ts
-color
-    .gradient(['red', 'pink', 'blue'], [0, 0.5, 1])
-    .at(0.70)
-    .css();
-// → "#9973e0"
+clr.gradient()
+  .stop(0, 'red')
+  .stop(50, 'pink')
+  .stop(100, 'blue')
+  .at(70)
+  .css();
+// ⮕ "#9973e0"
 ```
 
 # Concepts
 
-Color manipulation isn't possible without the color model concept.
+<dl>
+<dt><a href="https://en.wikipedia.org/wiki/Color_model">Color model</a></dt>
+<dd>
 
-> [Color model](https://en.wikipedia.org/wiki/Color_model) is an abstract mathematical model describing the way colors
-> can be represented as tuples of numbers (aka color components).
+An abstract mathematical model describing the way colors can be represented as tuples of numbers (aka color components).
 
 There's a large variety of color models aimed for different purposes. Different color models define different color
 components. For example, RGB color model defines three color components: red, green and blue; while HSL defines hue,
 saturation and lightness color components. One color model can be converted to the other.
 
-> [Color space](https://en.wikipedia.org/wiki/Color_space) defines how color components of the particular color model
-> are serialized.
+</dd>
+<dt><a href="https://en.wikipedia.org/wiki/Color_space">Color space</a></dt>
+<dd>
+
+Defines how color components of the particular color model are serialized.
 
 For example, RGB color model can be represented as Adobe RGB or sRGB color space.
+
+</dd>
+</dl>
 
 Paint Bucket provides an abstraction for color models which are represented as objects that define methods to convert
 color components between color model representation and RGB. Color components are an array of numbers.
 
 ```ts
-import {ColorModel, Rgb} from '@paint-bucket/core';
+import { ColorModel, RGB } from 'paint-bucket/core';
 
-const Cmyk: ColorModel = {
+const CMYK: ColorModel = {
+  name: 'CMYK',
 
   // The number of color components that this model uses:
   // cyan, magenta, yellow, black, and alpha 
   componentCount: 5,
 
-  componentsToRgb(components: readonly number[], rgb: Rgb): void {
+  convertComponentsToRGB(components: readonly number[], rgb: RGB): void {
     // Update elements of the rgb array
   },
-  rgbToComponents(rgb: Readonly<Rgb>, components: number[]): void {
+  convertRGBToComponents(rgb: Readonly<RGB>, components: number[]): void {
     // Update elements of the components array
   },
 };
 ```
 
-Since color models are pluggable, they reside in separate packages:
+Color models are pluggable.
 
-- [`@paint-bucket/hsl`](./packages/hsl) for [HSL color model](https://en.wikipedia.org/wiki/HSL_and_HSV);
-- [`@paint-bucket/hsv`](./packages/hsv) for [HSV color model](https://en.wikipedia.org/wiki/HSL_and_HSV);
-- [`@paint-bucket/lab`](./packages/lab)
-  for [CIE-L\*a\*b\* color model](https://en.wikipedia.org/wiki/CIELAB_color_space);
-- [`@paint-bucket/xyz`](./packages/xyz)
-  for [CIE 1931 XYZ color model](https://en.wikipedia.org/wiki/CIE_1931_color_space);
+- `paint-bucket/color-model/hsl` for [HSL color model](https://en.wikipedia.org/wiki/HSL_and_HSV);
 
-RGB color model is defined in [`@paint-bucket/core`](./packages/core).
+- `paint-bucket/color-model/hsv` for [HSV color model](https://en.wikipedia.org/wiki/HSL_and_HSV);
 
-[@csstools/convert-colors](https://github.com/jonathantneal/convert-colors)
-and [color-space](https://github.com/colorjs/color-space) were used as a reference implementation of color model
-conversion algorithms.
+- `paint-bucket/color-model/lab` for [CIE-L\*a\*b\* color model](https://en.wikipedia.org/wiki/CIELAB_color_space);
+
+- `paint-bucket/color-model/xyz` for [CIE 1931 XYZ color model](https://en.wikipedia.org/wiki/CIE_1931_color_space);
 
 Color model converters expect component values to be in [0, 1] range. Plugin APIs may return component values in any
 other range, but internally components are always normalized to [0, 1].
 
 ```ts
-import {Hsl} from '@paint-bucket/hsl';
+import { HSL } from 'paint-bucket/color-model/hsl';
 
-const hsl: Hsl = [
+const hsl: HSL = [
   1, // Hue
   0, // Saturation
   0, // Lightness
@@ -153,7 +166,7 @@ const hsl: Hsl = [
 When you create a new `Color` instance, it uses the RGB color model and corresponding components for the black color.
 
 ```ts
-import {Color} from '@paint-bucket/core';
+import { Color } from 'paint-bucket/core';
 
 new Color(); // Opaque black RGB color
 ```
@@ -161,183 +174,133 @@ new Color(); // Opaque black RGB color
 You can create a color with any model and components.
 
 ```ts
-import {Color} from '@paint-bucket/core';
-import {Hsl} from '@paint-bucket/hsl';
+import { Color } from 'paint-bucket/core';
+import { HSL } from 'paint-bucket/color-model/hsl';
 
-new Color(Hsl, [0.5, 1, 0.5, 0.7]); // 70% transparent cyan HSL color
+new Color(HSL, [0.5, 1, 0.5, 0.7]); // 70% transparent cyan HSL color
 ```
 
-`Color` provides a mechanism to acquire color components in any color model via the `Color.get` method.
+`Color` provides a mechanism to acquire color components in any color model via the
+[`getComponents`](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html#getComponents)
+method.
 
 ```ts
-import {Color, Rgb} from '@paint-bucket/core';
-import {Hsl} from '@paint-bucket/hsl';
+import { Color, RGB } from 'paint-bucket/core';
+import { HSL } from 'paint-bucket/color-model/hsl';
 
-new Color(Hsl, [0.5, 1, 0.5, 0.7]).get(Rgb); // → [0, 1, 1, 0.7]
+new Color(HSL, [0.5, 1, 0.5, 0.7]).getComponents(RGB); // ⮕ [0, 1, 1, 0.7]
 ```
 
 Here, we created a Color instance initialized with the components of the cyan color in the HSL color model and retrieved
 components in the RGB color model.
 
-`Color.get` method returns read-only color components, which are computed on the fly. To update the color components of
-the `Color` instance, you should use the `Color.use` method. This method returns a writable array of components in a
-particular color model.
+[`getComponents`](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html#getComponents) method
+returns read-only color components, which are computed on the fly. To update the color components of the `Color`
+instance, you should useComponents the
+[`useComponents`](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html#useComponents)
+method. This method returns a writable array of components in a particular color model.
 
 ```ts
-import {Color, Rgb} from '@paint-bucket/core';
-import {Hsl} from '@paint-bucket/hsl';
+import { Color, RGB } from 'paint-bucket/core';
+import { HSL } from 'paint-bucket/color-model/hsl';
 
-const color = new Color(Hsl, [0.5, 1, 0.5, 0.5]); // Cyan
-const rgb = color.use(Rgb);
+const color = new Color(HSL, [0.5, 1, 0.5, 0.5]); // cyan
+const rgb = color.useComponents(RGB);
 
 // Set blue component value to 0 
 rgb[2] = 0;
 
-color.get(Hsl); // → Green [0.333, 1, 0.5, 0.7]
+color.getComponents(HSL); // ⮕ Green [0.333, 1, 0.5, 0.7]
 ```
 
 # Plugins
 
-Paint Bucket library relies on plugins in every aspect. The core package doesn't implement any color manipulation
-functionality. When you import a plugin package (for example [`@paint-bucket/rgb-plugin`](./packages/rgb-plugin))
-`Color` class prototype is automatically enriched with new functionality.
+Paint Bucket relies on plugins in every aspect. The `paint-bucket/core` doesn't implement any color manipulation
+functionality.
 
 ```ts
-import '@paint-bucket/rgb-plugin';
-import {Color} from '@paint-bucket/core';
+import { clr, Color } from 'paint-bucket/core';
+import rgbPlugin from 'paint-bucket/plugin/rgb';
 
-new Color().red(64).red((R) => R * 2).red(); // → 128
+rgbPlugin(Color);
+
+clr().red(64).red(R => R * 2).red(); // ⮕ 128
 ```
 
 Here's a list of plugins in this repo:
 
-- [`@paint-bucket/rgb-plugin`](./packages/rgb-plugin) implements RGBa color model manipulation methods;
-- [`@paint-bucket/hsl-plugin`](./packages/hsl-plugin) implements HSLa color model manipulation methods;
-- [`@paint-bucket/gradient-plugin`](./packages/gradient-plugin) enables gradient manipulation;
-- [`@paint-bucket/palette-plugin`](./packages/palette-plugin) creates various color palettes from the base color;
-- [`@paint-bucket/difference-plugin`](./packages/difference-plugin) provides
-  [color difference](https://en.wikipedia.org/wiki/Color_difference) computation methods;
-- [`@paint-bucket/css-plugin`](./packages/css-plugin) enables `color` function to parse CSS color strings;
-- [`@paint-bucket/x11-plugin`](./packages/x11-plugin) enables `color` to recognize
+- `paint-bucket/plugin/rgb` implements RGBa color model manipulation methods;
+
+- `paint-bucket/plugin/hsl` implements HSLa color model manipulation methods;
+
+- `paint-bucket/plugin/palette` creates various color palettes from the base color;
+
+- `paint-bucket/plugin/difference` provides [color difference](https://en.wikipedia.org/wiki/Color_difference)
+  computation methods;
+
+- `paint-bucket/plugin/css` enables
+  [`clr`](https://smikhalevski.github.io/paint-bucket/functions/paint_bucket_core.clr-1.html) function to parse CSS
+  color strings;
+
+- `paint-bucket/plugin/x11` enables
+  [`clr`](https://smikhalevski.github.io/paint-bucket/functions/paint_bucket_core.clr-1.html) to recognize
   [X11 color names](https://en.wikipedia.org/wiki/X11_color_names).
 
 ## Extend color instance
 
-Below is an example that shows how to extend the `Color` prototype to implement a color component read and write
-methods.
+Below is an example that shows how to extend the
+[`Color`](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html)
+prototype to implement a color component read and write methods.
 
 ```ts
-// ./plugin1.ts
+// ./my-plugin.ts
+import { Color, RGB } from 'paint-bucket/core';
 
-import {Color, Rgb} from '@paint-bucket/core';
-
-declare module '@paint-bucket/core/lib/Color' {
-
+declare module 'paint-bucket/core' {
   interface Color {
+    // Returns the green color component in range [0, 255]
+    getGreen(): number;
 
-    /**
-     * @returns The red color component in range [0, 255]
-     */
-    getRed(): number;
-
-    /**
-     * Sets the red color component.
-     *
-     * @param R The red color component in range [0, 255]
-     */
-    setRed(value: number): Color;
+    // Sets the green color component in range [0, 255]
+    setGreen(green: number): Color;
   }
 }
 
-Color.prototype.getRed = function (this: Color) {
+export default function (ctor: typeof Color): void {
 
-  // Get read-only array of RGB color components where each component
-  // is in [0, 1] range
-  const rgb = this.get(Rgb);
+  ctor.prototype.getGreen = function () {
+    // Get read-only array of RGB color components where each component
+    // is in [0, 1] range
+    const rgb = this.getComponents(RGB);
 
-  return rgb[0] * 255;
-};
+    return rgb[1] * 255;
+  };
 
-Color.prototype.setRed = function (this: Color, value) {
+  ctor.prototype.setGreen = function (green) {
+    // Get writable array of RGB color components where each component
+    // is in [0, 1] range
+    const rgb = this.useComponents(RGB);
 
-  // Get writable array of RGB color components where each component
-  // is in [0, 1] range
-  const rgb = this.use(Rgb);
+    // Update the green component
+    rgb[1] = green / 255;
 
-  // Update the red component
-  rgb[0] = value / 255;
-
-  // Return Color instance to allow chaining
-  return this;
-};
-```
-
-To use this component we need to create a `Color` instance:
-
-```ts
-import {Color, Rgb} from '@paint-bucket/core';
-import './plugin1.ts';
-
-const color = new Color().setRed(128);
-
-color.get(Rgb); // → [0.5, 0, 0, 1]
-```
-
-## Extend color parsing
-
-Using `Color` constructor and initializing colors using arrays of components isn't the most convenient way, so
-`@paint-bucket/core` exports a `color` function to streamline this process.
-
-```ts
-import {color, Rgb} from '@paint-bucket/core';
-import './plugin1.ts';
-
-color().setRed(128).get(Rgb); // → [0.5, 0, 0, 1]
-```
-
-`color` function returns the `Color` instance. Using plugins, you can extend what arguments `color` function would
-accept. Below is the example, how you can implement creating `Color` by its name.
-
-```ts
-// ./plugin2.ts
-
-import {Color} from '@paint-bucket/core';
-
-declare module '@paint-bucket/core/lib/Color' {
-
-  // Merge declarations for the interface that the color function implements
-  interface ColorFunction {
-
-    (name: 'pink' | 'cyan' | 'bisque'): Color;
-  }
+    // Return Color instance to allow chaining
+    return this;
+  };
 }
-
-// Add the parsing middleware
-Color.overrideParser((next) => (name) => {
-  switch (name) {
-
-    case 'pink':
-      return new Color(Rgb, [1, 0.7529, 0.7960, 1]); // #FFC0CB
-
-    case 'cyan':
-      return new Color(Rgb, [0, 1, 1, 1]); // #00FFFF
-
-    case 'bisque':
-      return new Color(Rgb, [1, 0.8941, 0.7686, 1]); // #FFE4C4
-  }
-
-  // If the name wasn't recognized then pass the argument to the next middleware
-  return next(value);
-});
 ```
 
-Now we can use this plugin with the `color` function.
+To use this plugin we need to create a `Color` instance:
 
 ```ts
-import {color, Rgb} from '@paint-bucket/core';
-import './plugin2.ts';
+import { clr, Color, RGB } from 'paint-bucket/core';
+import myPlugin from './my-plugin';
 
-color('cyan').get(Rgb); // → [0, 1, 1, 1]
+myPlugin(Color);
+
+const color = clr().setRed(128);
+
+color.getComponents(RGB); // ⮕ [0.5, 0, 0, 1]
 ```
 
 # Performance
@@ -346,25 +309,23 @@ Clone this repo and use `npm ci && npm run build && npm run perf` to run the per
 
 Results are in millions of operations per second [^1]. The higher number is better.
 
-|                                      | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
-|--------------------------------------|-------------:|--------------------------------------------------:|----------------------------------------------:| 
-| `color([255, 255, 255])`             |        47.65 |                                              4.05 |                                          2.51 |
-| `color('#abc')`                      |        10.02 |                                              1.80 |                                          1.90 |
-| `color('#abcdef')`                   |         9.54 |                                              1.86 |                                          2.24 |
-| `color('#abcdefff')`                 |         9.14 |                                              1.82 |                                          1.96 |
-| `color(0xAB_CD_EF)`                  |         6.30 |                                                 — |                                          3.90 |
-| `color.rgb32(0xAB_CD_EF_FF)`         |         6.31 |                                                 — |                                             — |
-| `color('rgba(128, 128, 128, 0.5)')`  |         2.69 |                                              1.66 |                                          0.24 |
-| `c.saturation(50).rgb()` [^2]        |        22.96 |                                              0.95 |                                          1.04 |
-| `c.hue(90).lightness(10).rgb()` [^2] |        17.71 |                                              0.65 |                                             — |
-| `color.gradient(['#fff', '#000'])`   |         5.02 |                                                 — |                                          0.52 |
-| `g.at(0.5, Rgb, lerp)` [^3]          |        13.95 |                                                 — |                                          4.86 |
-| `g.at(0.5, Lab, csplineMonot)` [^3]  |        12.26 |                                                 — |                                          4.80 |
+|                                                   | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
+|---------------------------------------------------|-------------:|--------------------------------------------------:|----------------------------------------------:| 
+| `clr([255, 255, 255])`                            |         18.1 |                                               3.8 |                                           2.1 |
+| `clr('#abc')`                                     |          6.5 |                                               1.6 |                                           1.7 |
+| `clr('#abcdef')`                                  |          6.2 |                                               1.8 |                                           1.9 |
+| `clr('#abcdefff')`                                |          5.7 |                                               1.8 |                                           1.7 |
+| `clr(0xab_cd_ef)`                                 |         15.3 |                                                🚫 |                                           2.9 |
+| `clr().rgb32(0xab_cd_ef_ff)`                      |         15.6 |                                                🚫 |                                            🚫 |
+| `clr('rgba(128, 128, 128, 0.5)')`                 |          3.0 |                                               1.5 |                                           0.2 |
+| `clr(…).saturation(50).rgb()`                     |         11.0 |                                               0.9 |                                           1.0 |
+| `clr(…).hue(90).lightness(10).rgb()`              |          9.5 |                                               0.6 |                                            🚫 |
+| `clr.gradient(['#fff', '#000'])`                  |          3.3 |                                                🚫 |                                           0.5 |
+| `clr.gradient(…).at(0.5, RGB, lerp)` [^2]         |          8.5 |                                                🚫 |                                           3.7 |
+| `clr.gradient(…).at(0.5, LAB, csplineMonot)` [^2] |          8.4 |                                                🚫 |                                           3.8 |
 
 [^1]: Performance was measured on Apple M1 Max using [TooFast](https://github.com/smikhalevski/toofast).
 
-[^2]: `c` is the `Color` instance.
-
-[^3]: `g` is the `Gradient` instance. [`lerp`](https://github.com/smikhalevski/algomatic/#lerp) and
+[^2]: [`lerp`](https://github.com/smikhalevski/algomatic/#lerp) and
 [`csplineMonot`](https://github.com/smikhalevski/algomatic/#csplinemonot) are linear and monotonous cubic spline
 interpolation factories respectively from [Algomatic](https://github.com/smikhalevski/algomatic).
