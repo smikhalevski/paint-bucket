@@ -28,9 +28,8 @@ jobs:
       - run: npm test
 
       - name: Publish package
-        run: |
-          cd ./lib
-          npm publish
+        working-directory: ./lib
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
