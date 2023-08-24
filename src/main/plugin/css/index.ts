@@ -4,11 +4,12 @@
  * @module paint-bucket/plugin/css
  */
 
-import { HSL } from '../../color-model/hsl';
 import { Applicator, Color, RGB } from '../../core';
 import { createAccessor } from '../../utils';
 import { parseColor } from './parseColor';
-import { stringifyColor } from './stringifyColor';
+import { stringifyHex } from './stringifyHex';
+import { stringifyHSL } from './stringifyHSL';
+import { stringifyRGB } from './stringifyRGB';
 
 declare module '../../core' {
   interface ColorLikeSource {
@@ -24,7 +25,7 @@ declare module '../../core' {
 
   interface Color {
     /**
-     * Returns color as a hex or RGBa CSS string.
+     * Returns color as an RGBa CSS string, or as a hex string if alpha channel is set to 1.
      *
      * ```ts
      * Color.parse('#abc').css(); // #aabbcc
@@ -50,6 +51,30 @@ declare module '../../core' {
     css(color: Applicator<string>): Color;
 
     /**
+     * Returns color as a hex string. This produces a 32-bit hex string if the alpha channel isn't set to 1.
+     *
+     * ```ts
+     * Color.parse([170, 186, 204, 0.87]).cssHex(); // #aabbccdd
+     * ```
+     *
+     * @group Plugin Methods
+     * @plugin {@link paint-bucket/plugin/css!}
+     */
+    cssHex(): string;
+
+    /**
+     * Returns color as an RGBa CSS string.
+     *
+     * ```ts
+     * Color.parse([26, 51, 89]).cssRGB(); // rgb(26,51,89)
+     * ```
+     *
+     * @group Plugin Methods
+     * @plugin {@link paint-bucket/plugin/css!}
+     */
+    cssRGB(): string;
+
+    /**
      * Returns color as an HSLa CSS string.
      *
      * ```ts
@@ -64,20 +89,28 @@ declare module '../../core' {
 }
 
 export default function (ctor: typeof Color): void {
-  const parse = ctor.parse;
+  const nextParse = ctor.parse;
 
-  ctor.parse = value => (typeof value === 'string' && parseColor(value, new ctor())) || parse(value);
+  ctor.parse = value => (typeof value === 'string' && parseColor(value, new ctor())) || nextParse(value);
 
   ctor.prototype.css = createAccessor(
-    color => stringifyColor(color, RGB),
+    color => (color.getComponents(RGB)[3] === 1 ? stringifyHex(color) : stringifyRGB(color)),
 
     (color, value) => {
       parseColor(value, color);
     }
   );
 
+  ctor.prototype.cssHex = function () {
+    return stringifyHex(this);
+  };
+
+  ctor.prototype.cssRGB = function () {
+    return stringifyRGB(this);
+  };
+
   ctor.prototype.cssHSL = function () {
-    return stringifyColor(this, HSL);
+    return stringifyHSL(this);
   };
 
   ctor.prototype.toString = function () {

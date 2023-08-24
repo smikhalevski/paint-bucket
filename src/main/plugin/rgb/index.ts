@@ -246,7 +246,7 @@ declare module '../../core' {
 }
 
 export default function (ctor: typeof Color): void {
-  const parse = ctor.parse;
+  const nextParse = ctor.parse;
 
   ctor.parse = value => {
     if (typeof value === 'number') {
@@ -255,7 +255,7 @@ export default function (ctor: typeof Color): void {
     if (Array.isArray(value)) {
       return new ctor().rgb(value);
     }
-    return parse(value);
+    return nextParse(value);
   };
 
   ctor.prototype.rgb = createAccessor<RGB, Partial<RGB>>(

@@ -28,11 +28,11 @@ declare module '../../core' {
 }
 
 export default function (ctor: typeof Color): void {
-  const parse = ctor.parse;
+  const nextParse = ctor.parse;
 
   ctor.parse = value => {
     if (typeof value !== 'string') {
-      return parse(value);
+      return nextParse(value);
     }
 
     const components = x11Components.get(value.trim().toLowerCase());
@@ -40,6 +40,6 @@ export default function (ctor: typeof Color): void {
     if (components !== undefined) {
       return new ctor(RGB, components.slice(0));
     }
-    return parse(value);
+    return nextParse(value);
   };
 }
