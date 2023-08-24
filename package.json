@@ -70,8 +70,13 @@
       "types": "./plugin/x11/index.d.ts",
       "import": "./plugin/x11/index.mjs",
       "require": "./plugin/x11/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
+  "sideEffects": [
+    "./index.mjs",
+    "./index.js"
+  ],
   "scripts": {
     "build": "tsc --project tsconfig.build.json && rollup --config rollup.config.js && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
     "clean": "rimraf docs gen lib",
@@ -79,7 +84,6 @@
     "perf": "toofast perf.js",
     "docs": "typedoc src/main/color-model/* src/main/plugin/* src/main/utils.ts src/main/index.ts"
   },
-  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smikhalevski/paint-bucket.git"
