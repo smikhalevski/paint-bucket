@@ -14,12 +14,12 @@ module.exports = ['index', 'core', 'utils']
         { file: './lib/' + name + '.mjs', format: 'es' },
       ],
       plugins: [nodeResolve()],
-      external: /algomatic|(\..*(plugin|core|utils))/,
+      external: /algomatic|(\..*\/(color-model|plugin|core|utils))/,
     },
     {
       input: './gen/' + name + '.d.ts',
       output: { file: './lib/' + name + '.d.ts', format: 'es' },
       plugins: [dts.default()],
-      external: /algomatic|(\..*(plugin|core|utils))/,
+      external: /algomatic|(\..*\/(color-model|plugin|core|utils))/,
     },
   ]);
