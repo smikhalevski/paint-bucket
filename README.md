@@ -1,6 +1,6 @@
-<p>
+<p align="center">
   <a href="#readme">
-    <img alt="Paint Bucket" src="images/logo.png"/>
+    <img alt="Paint Bucket" src="images/logo.png" width="600"/>
   </a>
 </p>
 
