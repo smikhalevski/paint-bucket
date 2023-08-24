@@ -2,32 +2,99 @@
   "name": "paint-bucket",
   "version": "1.1.0",
   "description": "Highly performant, extensible, and tiny color manipulation library.",
-  "main": "./lib/index.js",
-  "module": "./lib/index.mjs",
-  "types": "./lib/index.d.ts",
+  "main": "./index.js",
+  "module": "./index.mjs",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.js"
+    },
+    "./core": {
+      "types": "./core.d.ts",
+      "import": "./core.mjs",
+      "require": "./core.js"
+    },
+    "./utils": {
+      "types": "./utils.d.ts",
+      "import": "./utils.mjs",
+      "require": "./utils.js"
+    },
+    "./color-model/hsl": {
+      "types": "./color-model/hsl/index.d.ts",
+      "import": "./color-model/hsl/index.mjs",
+      "require": "./color-model/hsl/index.js"
+    },
+    "./color-model/hsv": {
+      "types": "./color-model/hsv/index.d.ts",
+      "import": "./color-model/hsv/index.mjs",
+      "require": "./color-model/hsv/index.js"
+    },
+    "./color-model/lab": {
+      "types": "./color-model/lab/index.d.ts",
+      "import": "./color-model/lab/index.mjs",
+      "require": "./color-model/lab/index.js"
+    },
+    "./color-model/xyz": {
+      "types": "./color-model/xyz/index.d.ts",
+      "import": "./color-model/xyz/index.mjs",
+      "require": "./color-model/xyz/index.js"
+    },
+    "./plugin/css": {
+      "types": "./plugin/css/index.d.ts",
+      "import": "./plugin/css/index.mjs",
+      "require": "./plugin/css/index.js"
+    },
+    "./plugin/difference": {
+      "types": "./plugin/difference/index.d.ts",
+      "import": "./plugin/difference/index.mjs",
+      "require": "./plugin/difference/index.js"
+    },
+    "./plugin/hsl": {
+      "types": "./plugin/hsl/index.d.ts",
+      "import": "./plugin/hsl/index.mjs",
+      "require": "./plugin/hsl/index.js"
+    },
+    "./plugin/palette": {
+      "types": "./plugin/palette/index.d.ts",
+      "import": "./plugin/palette/index.mjs",
+      "require": "./plugin/palette/index.js"
+    },
+    "./plugin/rgb": {
+      "types": "./plugin/rgb/index.d.ts",
+      "import": "./plugin/rgb/index.mjs",
+      "require": "./plugin/rgb/index.js"
+    },
+    "./plugin/x11": {
+      "types": "./plugin/x11/index.d.ts",
+      "import": "./plugin/x11/index.mjs",
+      "require": "./plugin/x11/index.js"
+    }
+  },
   "scripts": {
-    "build": "tsc --project tsconfig.build.json && rollup --config rollup.config.js",
+    "build": "tsc --project tsconfig.build.json && rollup --config rollup.config.js && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
     "clean": "rimraf docs gen lib",
     "test": "jest",
     "perf": "toofast perf.js",
     "docs": "typedoc src/main/color-model/* src/main/plugin/* src/main/utils.ts src/main/index.ts"
   },
   "sideEffects": false,
-  "files": [
-    "lib"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smikhalevski/paint-bucket.git"
   },
   "keywords": [
     "color",
+    "gradient",
     "decode",
     "hex",
     "rgb",
     "rgba",
     "hsl",
-    "hsla"
+    "hsla",
+    "lab",
+    "xyz"
   ],
   "author": "Savva Mikhalevski <smikhalevski@gmail.com>",
   "license": "MIT",
