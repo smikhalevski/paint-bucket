@@ -5,13 +5,11 @@ import rgbPlugin from '../../../main/plugin/rgb';
 rgbPlugin(Color);
 cssPlugin(Color);
 
-describe('plugin', () => {
+describe('css plugin', () => {
   test('creates color from CSS representation', () => {
     expect(Color.parse('#abc').rgb32()).toBe(0xaa_bb_cc_ff);
   });
-});
 
-describe('css', () => {
   test('stringifies color as RGB', () => {
     expect(Color.parse('#abc').css()).toBe('#aabbcc');
   });

@@ -3,7 +3,7 @@ import rgbPlugin from '../../../main/plugin/rgb';
 
 rgbPlugin(Color);
 
-describe('color', () => {
+describe('parse', () => {
   test('creates color from component array', () => {
     expect(Color.parse([128, 128, 128, 0.5]).rgb()).toEqual([128, 128, 128, 0.5]);
   });
