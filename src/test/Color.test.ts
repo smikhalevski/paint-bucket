@@ -1,5 +1,4 @@
-import { lerp } from 'algomatic';
-import { Color, ColorModel, Gradient, Interpolator, RGB } from '../main/core';
+import { Color, ColorModel, RGB } from '../main/core';
 
 describe('Color', () => {
   const abcColorModel: ColorModel = {
@@ -61,7 +60,7 @@ describe('Color', () => {
     color.useComponents(abcColorModel);
     color.useComponents(abcColorModel);
 
-    expect(color.version).toBe(3);
+    expect(color.version).toBe(4);
   });
 
   test('does not bump color version on get', () => {
@@ -71,7 +70,7 @@ describe('Color', () => {
     color.getComponents(abcColorModel);
     color.getComponents(abcColorModel);
 
-    expect(color.version).toBe(0);
+    expect(color.version).toBe(1);
   });
 
   test('reuses temp components between two get calls', () => {
@@ -122,94 +121,5 @@ describe('Color', () => {
     const colorClone = color.clone();
 
     expect(color.getComponents(RGB)).not.toBe(colorClone.getComponents(RGB));
-  });
-});
-
-describe('Gradient', () => {
-  test('returns black color for an empty gradient', () => {
-    const gradient = new Gradient([], []);
-
-    expect(gradient.getComponents(RGB, 0.5, lerp)).toEqual([0, 0, 0, 1]);
-  });
-
-  test('returns the only color for a gradient with a single color', () => {
-    const gradient = new Gradient([new Color(RGB, [1, 1, 1, 1])], [0]);
-
-    expect(gradient.getComponents(RGB, 0.5, lerp)).toEqual([1, 1, 1, 1]);
-  });
-
-  test('returns components at value', () => {
-    const gradient = new Gradient([new Color(RGB, [1, 1, 1, 1]), new Color()], [0, 1]);
-
-    expect(gradient.getComponents(RGB, 0.5, lerp)).toEqual([0.5, 0.5, 0.5, 1]);
-  });
-
-  test('returns components at out-of-bounds value', () => {
-    const gradient = new Gradient([new Color(RGB, [1, 1, 1, 1]), new Color()], [0, 1]);
-
-    expect(gradient.getComponents(RGB, -1, lerp)).toEqual([1, 1, 1, 1]);
-    expect(gradient.getComponents(RGB, 2, lerp)).toEqual([0, 0, 0, 1]);
-  });
-
-  test('supports multiple stops', () => {
-    const gradient = new Gradient(
-      [new Color(RGB, [1, 1, 1, 1]), new Color(), new Color(RGB, [1, 0, 0, 1])],
-      [0, 0.5, 1]
-    );
-
-    expect(gradient.getComponents(RGB, 0.25, lerp)).toEqual([0.5, 0.5, 0.5, 1]);
-    expect(gradient.getComponents(RGB, 0.5, lerp)).toEqual([0, 0, 0, 1]);
-    expect(gradient.getComponents(RGB, 0.75, lerp)).toEqual([0.5, 0, 0, 1]);
-  });
-
-  test('updates interpolators if color was changed', () => {
-    const color1 = new Color();
-    const color2 = new Color();
-    const gradient = new Gradient([color1, color2], [0, 1]);
-
-    const interpolatorUpdateMock = jest.fn();
-    const interpolatorFactoryMock = jest.fn(() => {
-      const interpolator: Interpolator = () => 0;
-      interpolator.update = interpolatorUpdateMock;
-      return interpolator;
-    });
-
-    expect(interpolatorFactoryMock).toHaveBeenCalledTimes(0);
-
-    gradient.getComponents(RGB, 0.5, interpolatorFactoryMock);
-
-    expect(interpolatorFactoryMock).toHaveBeenCalledTimes(4);
-    expect(interpolatorUpdateMock).not.toHaveBeenCalled();
-
-    color1.useComponents(RGB)[1] = 0.5;
-    gradient.getComponents(RGB, 0.5, interpolatorFactoryMock);
-
-    expect(interpolatorFactoryMock).toHaveBeenCalledTimes(4);
-    expect(interpolatorUpdateMock).toHaveBeenCalledTimes(4);
-  });
-
-  test('updates interpolators if a new model was requested', () => {
-    const gradient = new Gradient([new Color(), new Color()], [0, 1]);
-
-    const interpolatorFactoryMock = jest.fn(() => () => 0);
-
-    gradient.getComponents(RGB, 0.5, interpolatorFactoryMock);
-    gradient.getComponents({ ...RGB }, 0.5, interpolatorFactoryMock);
-
-    expect(interpolatorFactoryMock).toHaveBeenCalledTimes(8);
-  });
-
-  test('re-creates non-updatable interpolators if color was changed', () => {
-    const color1 = new Color();
-    const color2 = new Color();
-    const gradient = new Gradient([color1, color2], [0, 1]);
-
-    const interpolatorFactoryMock = jest.fn(() => () => 0);
-
-    gradient.getComponents(RGB, 0.5, interpolatorFactoryMock);
-    color1.useComponents(RGB)[1] = 0.5;
-    gradient.getComponents(RGB, 0.5, interpolatorFactoryMock);
-
-    expect(interpolatorFactoryMock).toHaveBeenCalledTimes(8);
   });
 });

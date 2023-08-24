@@ -17,7 +17,7 @@ export class Color {
     return this._version;
   }
 
-  protected _version = 0;
+  protected _version = 1;
 
   /**
    * The current color model.

@@ -15,11 +15,11 @@ describe('color', () => {
 
 describe('rgb', () => {
   test('creates color from component array', () => {
-    expect(Color.rgb([128, 128, 128, 0.5]).rgb()).toEqual([128, 128, 128, 0.5]);
+    expect(new Color().rgb([128, 128, 128, 0.5]).rgb()).toEqual([128, 128, 128, 0.5]);
   });
 
   test('clamps components', () => {
-    expect(Color.rgb([1000, -1000, 256, 2]).rgb()).toEqual([255, 0, 255, 1]);
+    expect(new Color().rgb([1000, -1000, 256, 2]).rgb()).toEqual([255, 0, 255, 1]);
   });
 
   test('sets color from partial component array', () => {
@@ -29,7 +29,7 @@ describe('rgb', () => {
 
 describe('rgb24', () => {
   test('creates color from a 24-bit integer', () => {
-    expect(Color.rgb24(0xff_ff_ff).rgb()).toEqual([255, 255, 255, 1]);
+    expect(new Color().rgb24(0xff_ff_ff).rgb()).toEqual([255, 255, 255, 1]);
   });
 
   test('returns 24-bit integer', () => {
@@ -39,7 +39,7 @@ describe('rgb24', () => {
 
 describe('rgb32', () => {
   test('creates color from 32-bit integer', () => {
-    expect(Color.rgb32(0xff_ff_ff_ee).rgb()).toEqual([255, 255, 255, 0.9333333333333333]);
+    expect(new Color().rgb32(0xff_ff_ff_ee).rgb()).toEqual([255, 255, 255, 0.9333333333333333]);
   });
 });
 
