@@ -4,19 +4,19 @@
 
 import { Color } from './core';
 
-import enableCSS from './plugin/css';
-import enableDifference from './plugin/difference';
-import enableHSL from './plugin/hsl';
-import enablePalette from './plugin/palette';
-import enableRGB from './plugin/rgb';
-import enableX11 from './plugin/x11';
+import cssPlugin from './plugin/css';
+import differencePlugin from './plugin/difference';
+import hslPlugin from './plugin/hsl';
+import palettePlugin from './plugin/palette';
+import rgbPlugin from './plugin/rgb';
+import x11Plugin from './plugin/x11';
 
-enableCSS(Color);
-enableDifference(Color);
-enableHSL(Color);
-enablePalette(Color);
-enableRGB(Color);
-enableX11(Color);
+cssPlugin(Color);
+differencePlugin(Color);
+hslPlugin(Color);
+palettePlugin(Color);
+rgbPlugin(Color);
+x11Plugin(Color);
 
 export type * from './plugin/css';
 export type * from './plugin/difference';

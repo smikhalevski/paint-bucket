@@ -171,45 +171,47 @@ describe('clr().hue(90).lightness(10).rgb()', () => {
 });
 
 // Create gradient from HEX
-describe('new Gradient().stop(…).stop(…)', () => {
-  test('chroma.js', measure => {
-    const colors = ['#fff', '#000'];
+describe('clr.gradient(["#fff", "#000"])', () => {
+  const colors = ['#fff', '#000'];
 
+  test('chroma.js', measure => {
     measure(() => chromaJs.scale(colors));
   });
 
   test('paint-bucket', measure => {
-    measure(() => new Gradient().stop(0, '#fff').stop(1, '#000'));
+    measure(() => clr.gradient(colors));
   });
 });
 
 // Interpolate linear RGB gradient
-describe('new Gradient().at(0.5, RGB, lerp)', () => {
+describe('clr.gradient(…).at(0.5, RGB, lerp)', () => {
+  const colors = ['#fff', '#000'];
+
   test('chroma.js', measure => {
-    const colors = ['#fff', '#000'];
     const gradient = chromaJs.scale(colors).mode('lrgb');
 
     measure(() => gradient(0.7));
   });
 
   test('paint-bucket', measure => {
-    const gradient = new Gradient().stop(0, '#fff').stop(1, '#000');
+    const gradient = clr.gradient(colors);
 
     measure(() => gradient.at(0.7, RGB, lerp));
   });
 });
 
 // Interpolate spline LAB gradient
-describe('new Gradient().at(0.5, LAB, csplineMonot)', () => {
+describe('clr.gradient(…).at(0.5, LAB, csplineMonot)', () => {
+  const colors = ['#fff', '#000'];
+
   test('chroma.js', measure => {
-    const colors = ['#fff', '#000'];
     const gradient = chromaJs.scale(colors).mode('lab');
 
     measure(() => gradient(0.7));
   });
 
   test('paint-bucket', measure => {
-    const gradient = new Gradient().stop(0, '#fff').stop(1, '#000');
+    const gradient = clr.gradient(colors);
 
     measure(() => gradient.at(0.7, LAB, csplineMonot));
   });

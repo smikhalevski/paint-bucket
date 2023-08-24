@@ -3,9 +3,9 @@
  *
  * ```ts
  * import { Color } from 'paint-bucket/core';
- * import enableX11 from 'paint-bucket/plugin/x11';
+ * import x11Plugin from 'paint-bucket/plugin/x11';
  *
- * enableX11(Color);
+ * x11Plugin(Color);
  * ```
  *
  * @module paint-bucket/plugin/x11
