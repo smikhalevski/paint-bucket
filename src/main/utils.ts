@@ -3,7 +3,7 @@
  */
 
 import { Color } from './Color';
-import type { Accessor } from './types';
+import { Accessor } from './types';
 
 const { round } = Math;
 

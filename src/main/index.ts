@@ -26,6 +26,7 @@ export type * from './plugin/rgb';
 export type * from './plugin/x11';
 
 export * from './core';
+
 export { HSL } from './color-model/hsl';
 export { HSV } from './color-model/hsv';
 export { LAB } from './color-model/lab';
