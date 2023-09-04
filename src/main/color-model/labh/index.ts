@@ -9,4 +9,5 @@
  */
 
 export * from './labh';
+export * from './labh-rgb';
 export * from './labh-xyz';

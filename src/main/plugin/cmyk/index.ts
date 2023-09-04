@@ -20,6 +20,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/CMYK_color_model CMYK color model}
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
     cmyk(): CMYK;
@@ -35,6 +36,7 @@ declare module '../../core' {
      * 1 = opaque). If a cyan, magenta, yellow, or black component is omitted it is set to 0. If alpha component is
      * omitted it is set to 1.
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/CMYK_color_model CMYK color model}
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
     cmyk(cmyk: Applicator<CMYK, Partial<CMYK>>): Color;
@@ -44,6 +46,7 @@ declare module '../../core' {
      *
      * @returns Cyan ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/CMYK_color_model CMYK color model}
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
     cyan(): number;
@@ -58,6 +61,7 @@ declare module '../../core' {
      *
      * @param c Cyan ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/CMYK_color_model CMYK color model}
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
     cyan(c: Applicator<number>): Color;
@@ -67,6 +71,7 @@ declare module '../../core' {
      *
      * @returns Magenta ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/CMYK_color_model CMYK color model}
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
     magenta(): number;
@@ -81,6 +86,7 @@ declare module '../../core' {
      *
      * @param m Magenta ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/CMYK_color_model CMYK color model}
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
     magenta(m: Applicator<number>): Color;
@@ -90,6 +96,7 @@ declare module '../../core' {
      *
      * @returns Yellow ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/CMYK_color_model CMYK color model}
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
     yellow(): number;
@@ -104,6 +111,7 @@ declare module '../../core' {
      *
      * @param y Yellow ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/CMYK_color_model CMYK color model}
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
     yellow(y: Applicator<number>): Color;
@@ -113,6 +121,7 @@ declare module '../../core' {
      *
      * @returns Black ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/CMYK_color_model CMYK color model}
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
     black(): number;
@@ -127,6 +136,7 @@ declare module '../../core' {
      *
      * @param k Black ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/CMYK_color_model CMYK color model}
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
     black(k: Applicator<number>): Color;

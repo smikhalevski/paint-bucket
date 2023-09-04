@@ -14,8 +14,8 @@ describe('convertRGBToCMYK', () => {
 
 describe('convertCMYKToRGB', () => {
   test('converts CMYK to RGB', () => {
-    const hsl = convertRGBToCMYK([0.2, 0.34, 0.56, 1], [0, 0, 0, 0, 0]);
+    const cmyk = convertRGBToCMYK([0.2, 0.34, 0.56, 1], [0, 0, 0, 0, 0]);
 
-    expect(convertCMYKToRGB(hsl, [0, 0, 0, 1])).toEqual([0.19999999999999996, 0.3400000000000001, 0.56, 1]);
+    expect(convertCMYKToRGB(cmyk, [0, 0, 0, 1])).toEqual([0.19999999999999996, 0.3400000000000001, 0.56, 1]);
   });
 });

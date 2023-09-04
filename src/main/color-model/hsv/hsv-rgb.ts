@@ -12,27 +12,20 @@ export function convertRGBToHSV(rgb: RGB, hsv: HSV): HSV {
   const V = max(R, G, B);
   const d = V - min(R, G, B);
 
-  const S = V === 0 ? 0 : d / V;
+  let H;
 
-  let H = 0;
-
-  if (d !== 0) {
-    switch (V) {
-      case R:
-        H = (G - B) / d + (G < B ? 6 : 0);
-        break;
-      case G:
-        H = (B - R) / d + 2;
-        break;
-      case B:
-        H = (R - G) / d + 4;
-        break;
-    }
-    H /= 6;
+  if (d === 0) {
+    H = 0;
+  } else if (V === R) {
+    H = ((G - B) / d + (G < B ? 6 : 0)) / 6;
+  } else if (V === G) {
+    H = ((B - R) / d + 2) / 6;
+  } else {
+    H = ((R - G) / d + 4) / 6;
   }
 
   hsv[0] = H;
-  hsv[1] = S;
+  hsv[1] = V === 0 ? 0 : d / V;
   hsv[2] = V;
   hsv[3] = rgb[3];
 
@@ -51,11 +44,10 @@ export function convertHSVToRGB(hsv: HSV, rgb: RGB): RGB {
   const q = V * (1 - f * S);
   const t = V * (1 - (1 - f) * S);
 
-  let B = 0;
-  let G = 0;
-  let R = 0;
+  let R, G, B;
 
   switch (i % 6) {
+    default:
     case 0:
       R = V;
       G = t;
