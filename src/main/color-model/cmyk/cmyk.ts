@@ -4,7 +4,7 @@ import { convertCMYKToRGB, convertRGBToCMYK } from './cmyk-rgb';
 /**
  * CMYKa color components.
  */
-export type CMYK = [C: number, M: number, Y: number, K: number, a: number];
+export type CMYK = [cyan: number, magenta: number, yellow: number, black: number, alpha: number];
 
 /**
  * CMYKa color model definition.

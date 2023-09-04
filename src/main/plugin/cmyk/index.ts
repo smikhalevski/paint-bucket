@@ -11,8 +11,8 @@ import { clamp, createAccessor } from '../../utils';
 declare module '../../core' {
   interface Color {
     /**
-     * Returns CMYKa components as an array where C, M, Y, and K ∈ [0, 100], and a ∈ [0, 1] (0 = transparent, 1 =
-     * opaque).
+     * Returns CMYKa components as an array where cyan, magenta, yellow, and black ∈ [0, 100], and alpha ∈ [0, 1]
+     * (0 = transparent, 1 = opaque).
      *
      * ```ts
      * clr().cmyk();
@@ -28,15 +28,16 @@ declare module '../../core' {
      * Sets HSLa components.
      *
      * ```ts
-     * clr().cmyk(([, , Y]) => [50, 64, Y, 43, 0.5]);
+     * clr().cmyk(([, , y]) => [50, 64, y, 43, 0.5]);
      * ```
      *
-     * @param hsl The tuple of C, M, Y, and K ∈ [0, 100], and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a C, M, Y, or
-     * K component is omitted it is set to 0. If alpha component is omitted it is set to 1.
+     * @param cmyk The tuple of cyan, magenta, yellow, and black ∈ [0, 100], and alpha ∈ [0, 1] (0 = transparent,
+     * 1 = opaque). If a cyan, magenta, yellow, or black component is omitted it is set to 0. If alpha component is
+     * omitted it is set to 1.
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
-    cmyk(hsl: Applicator<CMYK, Partial<CMYK>>): Color;
+    cmyk(cmyk: Applicator<CMYK, Partial<CMYK>>): Color;
 
     /**
      * Returns cyan color component.
@@ -51,15 +52,15 @@ declare module '../../core' {
      * Sets cyan color component.
      *
      * ```ts
-     * clr().cyan(10).cyan(C => C * 2).cyan();
+     * clr().cyan(10).cyan(c => c * 2).cyan();
      * // ⮕ 20
      * ```
      *
-     * @param C Cyan ∈ [0, 100].
+     * @param c Cyan ∈ [0, 100].
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
-    cyan(C: Applicator<number>): Color;
+    cyan(c: Applicator<number>): Color;
 
     /**
      * Returns magenta color component.
@@ -74,15 +75,15 @@ declare module '../../core' {
      * Sets magenta color component.
      *
      * ```ts
-     * clr().magenta(10).magenta(M => M * 2).magenta();
+     * clr().magenta(10).magenta(m => m * 2).magenta();
      * // ⮕ 20
      * ```
      *
-     * @param M Magenta ∈ [0, 100].
+     * @param m Magenta ∈ [0, 100].
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
-    magenta(M: Applicator<number>): Color;
+    magenta(m: Applicator<number>): Color;
 
     /**
      * Returns yellow color component.
@@ -97,15 +98,15 @@ declare module '../../core' {
      * Sets yellow color component.
      *
      * ```ts
-     * clr().yellow(10).yellow(Y => Y * 2).yellow();
+     * clr().yellow(10).yellow(y => y * 2).yellow();
      * // ⮕ 20
      * ```
      *
-     * @param Y Yellow ∈ [0, 100].
+     * @param y Yellow ∈ [0, 100].
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
-    yellow(Y: Applicator<number>): Color;
+    yellow(y: Applicator<number>): Color;
 
     /**
      * Returns black color component.
@@ -120,15 +121,15 @@ declare module '../../core' {
      * Sets black color component.
      *
      * ```ts
-     * clr().black(10).black(K => K * 2).black();
+     * clr().black(10).black(k => k * 2).black();
      * // ⮕ 20
      * ```
      *
-     * @param K Black ∈ [0, 100].
+     * @param k Black ∈ [0, 100].
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/cmyk!}
      */
-    black(K: Applicator<number>): Color;
+    black(k: Applicator<number>): Color;
   }
 }
 

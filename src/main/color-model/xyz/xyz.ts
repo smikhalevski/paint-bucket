@@ -4,7 +4,7 @@ import { convertRGBToXYZ, convertXYZToRGB } from './xyz-rgb';
 /**
  * CIE 1931 XYZa color components.
  */
-export type XYZ = [X: number, Y: number, Z: number, a: number];
+export type XYZ = [x: number, y: number, z: number, alpha: number];
 
 /**
  * CIE 1931 XYZa color model definition.

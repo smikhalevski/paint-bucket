@@ -17,8 +17,8 @@ import {
 declare module '../../core' {
   interface Color {
     /**
-     * Returns HSLa components as an array where H ∈ [0, 360], S and L ∈ [0, 100] and a ∈ [0, 1] (0 = transparent, 1 =
-     * opaque).
+     * Returns HSLa components as an array where hue ∈ [0, 360], saturation and lightness ∈ [0, 100] and alpha ∈ [0, 1]
+     * (0 = transparent, 1 = opaque).
      *
      * ```ts
      * clr().hsl();
@@ -34,11 +34,12 @@ declare module '../../core' {
      * Sets HSLa components.
      *
      * ```ts
-     * clr().hsl(([, , L]) => [240, 100, L, 0.5]);
+     * clr().hsl(([, , l]) => [240, 100, l, 0.5]);
      * ```
      *
-     * @param hsl The tuple of H ∈ [0, 360], S and L ∈ [0, 100] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a H, S
-     * or L component is omitted it is set to 0. If alpha component is omitted it is set to 1.
+     * @param hsl The tuple of hue ∈ [0, 360], saturation and lightness ∈ [0, 100] and alpha ∈ [0, 1] (0 = transparent,
+     * 1 = opaque). If a hue, saturation or lightness component is omitted it is set to 0. If alpha component is omitted
+     * it is set to 1.
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
@@ -109,15 +110,15 @@ declare module '../../core' {
      * Sets hue color component.
      *
      * ```ts
-     * clr().hue(90).hue(H => H * 2).hue();
+     * clr().hue(90).hue(h => h * 2).hue();
      * // ⮕ 180
      * ```
      *
-     * @param H Hue ∈ [0, 360].
+     * @param h Hue ∈ [0, 360].
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
-    hue(H: Applicator<number>): Color;
+    hue(h: Applicator<number>): Color;
 
     /**
      * Returns saturation color component.
@@ -132,14 +133,14 @@ declare module '../../core' {
      * Sets saturation color component.
      *
      * ```ts
-     * clr().saturation(20).saturation(S => S * 2).saturation();
+     * clr().saturation(20).saturation(s => s * 2).saturation();
      * // ⮕ 40
      * ```
-     * @param S Saturation ∈ [0, 100].
+     * @param s Saturation ∈ [0, 100].
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
-    saturation(S: Applicator<number>): Color;
+    saturation(s: Applicator<number>): Color;
 
     /**
      * Returns lightness color component.
@@ -154,14 +155,14 @@ declare module '../../core' {
      * Sets lightness color component.
      *
      * ```ts
-     * clr().lightness(20).lightness(L => L * 2).lightness();
+     * clr().lightness(20).lightness(l => l * 2).lightness();
      * // ⮕ 40
      * ```
-     * @param L Lightness ∈ [0, 100].
+     * @param l Lightness ∈ [0, 100].
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
-    lightness(L: Applicator<number>): Color;
+    lightness(l: Applicator<number>): Color;
 
     /**
      * Spins the hue component.
@@ -169,14 +170,14 @@ declare module '../../core' {
      * ```ts
      * clr().spin(45);
      * // or
-     * clr().hue(H => H + 45);
+     * clr().hue(h => h + 45);
      * ```
      *
-     * @param H The hue delta ∈ [0, 360] to spin by.
+     * @param h The hue delta ∈ [0, 360] to spin by.
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
-    spin(H: number): Color;
+    spin(h: number): Color;
 
     /**
      * Makes color lighter by the given percentage.
@@ -184,7 +185,7 @@ declare module '../../core' {
      * ```ts
      * clr().lighten(0.2);
      * // or
-     * clr().lightness(L => L * 1.2);
+     * clr().lightness(l => l * 1.2);
      * ```
      *
      * @param p The percentage ∈ [0, 1] by which the lightness must be increased.
@@ -199,7 +200,7 @@ declare module '../../core' {
      * ```ts
      * clr().darken(0.2);
      * // or
-     * clr().lightness(L => L * 0.98);
+     * clr().lightness(l => l * 0.98);
      * ```
      *
      * @param p The percentage ∈ [0, 1] by which the lightness must be decreased.

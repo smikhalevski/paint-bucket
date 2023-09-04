@@ -4,7 +4,7 @@ import { convertLABToRGB, convertRGBToLAB } from './lab-rgb';
 /**
  * CIE-L*a*b* color components.
  */
-export type LAB = [L: number, A: number, B: number, a: number];
+export type LAB = [lightness: number, a: number, b: number, alpha: number];
 
 /**
  * CIE-L*a*b* color model definition.
