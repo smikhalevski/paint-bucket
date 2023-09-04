@@ -1,5 +1,5 @@
 /**
- * HSLa color model manipulation plugin
+ * HSLa color model manipulation plugin.
  *
  * @module paint-bucket/plugin/hsl
  */
@@ -21,7 +21,8 @@ declare module '../../core' {
      * opaque).
      *
      * ```ts
-     * new Color().hsl(); // ⮕ [0, 0, 0, 1]
+     * clr().hsl();
+     * // ⮕ [0, 0, 0, 1]
      * ```
      *
      * @group Plugin Methods
@@ -33,7 +34,7 @@ declare module '../../core' {
      * Sets HSLa components.
      *
      * ```ts
-     * new Color().hsl(([, , L]) => [240, 100, L, 0.5]);
+     * clr().hsl(([, , L]) => [240, 100, L, 0.5]);
      * ```
      *
      * @param hsl The tuple of H ∈ [0, 360], S and L ∈ [0, 100] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a H, S
@@ -47,7 +48,8 @@ declare module '../../core' {
      * Returns 24-bit integer representing HSL components without alpha.
      *
      * ```ts
-     * new Color().hsl24(); // ⮕ 0x00_00_00
+     * clr().hsl24();
+     * // ⮕ 0x00_00_00
      * ```
      *
      * @group Plugin Methods
@@ -59,7 +61,7 @@ declare module '../../core' {
      * Sets HSL components from 24-bit integer representation.
      *
      * ```ts
-     * new Color().hsl24(0xff_ff_ff).hsl();
+     * clr().hsl24(0xff_ff_ff).hsl();
      * ```
      *
      * @param hsl The 24-bit integer, representing color in HSL model.
@@ -72,7 +74,8 @@ declare module '../../core' {
      * Returns 32-bit integer representing HSLa components.
      *
      * ```ts
-     * new Color().hsl32(); // ⮕ 0x00_00_00_ff
+     * clr().hsl32();
+     * // ⮕ 0x00_00_00_ff
      * ```
      *
      * @group Plugin Methods
@@ -84,7 +87,7 @@ declare module '../../core' {
      * Sets HSLa components from 32-bit integer representation.
      *
      * ```ts
-     * new Color().hsl32(0xaa_bb_cc_dd).hsl();
+     * clr().hsl32(0xaa_bb_cc_dd).hsl();
      * ```
      *
      * @param hsl The 32-bit integer, representing color in HSLa model.
@@ -106,7 +109,8 @@ declare module '../../core' {
      * Sets hue color component.
      *
      * ```ts
-     * new Color().hue(90).hue(H => H * 2).hue(); // ⮕ 180
+     * clr().hue(90).hue(H => H * 2).hue();
+     * // ⮕ 180
      * ```
      *
      * @param H Hue ∈ [0, 360].
@@ -128,7 +132,8 @@ declare module '../../core' {
      * Sets saturation color component.
      *
      * ```ts
-     * new Color().saturation(20).saturation(S => S * 2).saturation(); // ⮕ 40
+     * clr().saturation(20).saturation(S => S * 2).saturation();
+     * // ⮕ 40
      * ```
      * @param S Saturation ∈ [0, 100].
      * @group Plugin Methods
@@ -149,7 +154,8 @@ declare module '../../core' {
      * Sets lightness color component.
      *
      * ```ts
-     * new Color().lightness(20).lightness(L => L * 2).lightness(); // ⮕ 40
+     * clr().lightness(20).lightness(L => L * 2).lightness();
+     * // ⮕ 40
      * ```
      * @param L Lightness ∈ [0, 100].
      * @group Plugin Methods
@@ -161,9 +167,9 @@ declare module '../../core' {
      * Spins the hue component.
      *
      * ```ts
-     * new Color().spin(45);
+     * clr().spin(45);
      * // or
-     * new Color().hue(H => H + 45);
+     * clr().hue(H => H + 45);
      * ```
      *
      * @param H The hue delta ∈ [0, 360] to spin by.
@@ -176,9 +182,9 @@ declare module '../../core' {
      * Makes color lighter by the given percentage.
      *
      * ```ts
-     * new Color().lighten(0.2);
+     * clr().lighten(0.2);
      * // or
-     * new Color().lightness(L => L * 1.2);
+     * clr().lightness(L => L * 1.2);
      * ```
      *
      * @param p The percentage ∈ [0, 1] by which the lightness must be increased.
@@ -191,9 +197,9 @@ declare module '../../core' {
      * Makes color lighter by the given percentage.
      *
      * ```ts
-     * new Color().darken(0.2);
+     * clr().darken(0.2);
      * // or
-     * new Color().lightness(L => L * 0.98);
+     * clr().lightness(L => L * 0.98);
      * ```
      *
      * @param p The percentage ∈ [0, 1] by which the lightness must be decreased.

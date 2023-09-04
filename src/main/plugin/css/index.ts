@@ -17,7 +17,8 @@ declare module '../../core' {
      * Parses color from CSS string.
      *
      * ```ts
-     * Color.parse('hsl(290, 20%, 50% / 80%)').css(); // rgba(145,102,153,0.80)
+     * clr('hsl(290, 20%, 50% / 80%)').css();
+     * // ⮕ rgba(145,102,153,0.80)
      * ```
      */
     'paint-bucket/plugin/css': string;
@@ -28,9 +29,11 @@ declare module '../../core' {
      * Returns color as an RGBa CSS string, or as a hex string if alpha channel is set to 1.
      *
      * ```ts
-     * Color.parse('#abc').css(); // #aabbcc
+     * clr('#abc').css();
+     * // ⮕ #aabbcc
      *
-     * Color.parse([26, 51, 89, 0.5]).css(); // rgba(26,51,89,0.50)
+     * clr([26, 51, 89, 0.5]).css();
+     * // ⮕ rgba(26,51,89,0.50)
      * ```
      *
      * @group Plugin Methods
@@ -42,7 +45,8 @@ declare module '../../core' {
      * Sets color from CSS string.
      *
      * ```ts
-     * new Color().css('hsl(290, 20%, 50% / 80%)').css(); // rgba(145,102,153,0.80)
+     * clr().css('hsl(290, 20%, 50% / 80%)').css();
+     * // ⮕ rgba(145,102,153,0.80)
      * ```
      *
      * @group Plugin Methods
@@ -54,7 +58,8 @@ declare module '../../core' {
      * Returns color as a hex string. This produces a 32-bit hex string if the alpha channel isn't set to 1.
      *
      * ```ts
-     * Color.parse([170, 186, 204, 0.87]).cssHex(); // #aabbccdd
+     * clr([170, 186, 204, 0.87]).cssHex();
+     * // ⮕ #aabbccdd
      * ```
      *
      * @group Plugin Methods
@@ -66,7 +71,8 @@ declare module '../../core' {
      * Returns color as an RGBa CSS string.
      *
      * ```ts
-     * Color.parse([26, 51, 89]).cssRGB(); // rgb(26,51,89)
+     * clr([26, 51, 89]).cssRGB();
+     * // ⮕ rgb(26,51,89)
      * ```
      *
      * @group Plugin Methods
@@ -78,7 +84,8 @@ declare module '../../core' {
      * Returns color as an HSLa CSS string.
      *
      * ```ts
-     * Color.parse('#abc').cssHSL(); // hsla(210,25%,73%,0.5)
+     * clr('#abc').cssHSL();
+     * // ⮕ hsla(210,25%,73%,0.5)
      * ```
      *
      * @group Plugin Methods
