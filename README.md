@@ -18,7 +18,7 @@ npm install --save-prod paint-bucket
 ```ts
 import { clr } from 'paint-bucket';
 
-clr('#abcdef').saturation(S => S / 2).red();
+clr('#abcdef').saturation(s => s / 2).red();
 // ⮕ 188
 ```
 
@@ -41,7 +41,7 @@ Most methods provide getter-setter semantics:
 // Setter
 clr('#f00').red(127.5);
 // or
-clr('#f00').red(R => R / 2);
+clr('#f00').red(r => r / 2);
 
 // Getter
 clr('#f00').red();
@@ -52,7 +52,7 @@ Mutate multiple components at the same time:
 
 ```ts
 clr([64, 128, 0])
-  .rgb(([R, G, B, a]) => [R * 3, G * 2, B, a])
+  .rgb(([r, g, b, a]) => [r * 3, g * 2, b, a])
   .rgb();
 // ⮕ [192, 255, 0, 1]
 ```
@@ -146,12 +146,12 @@ const CMYK: ColorModel = {
 
 Color models are pluggable.
 
+- `paint-bucket/color-model/cmyk` for [CMYK color model](https://en.wikipedia.org/wiki/CMYK_color_model);
 - `paint-bucket/color-model/hsl` for [HSL color model](https://en.wikipedia.org/wiki/HSL_and_HSV);
-
 - `paint-bucket/color-model/hsv` for [HSV color model](https://en.wikipedia.org/wiki/HSL_and_HSV);
-
+- `paint-bucket/color-model/hwb` for [HWB color model](https://en.wikipedia.org/wiki/HWB_color_model);
 - `paint-bucket/color-model/lab` for [CIE-L\*a\*b\* color model](https://en.wikipedia.org/wiki/CIELAB_color_space);
-
+- `paint-bucket/color-model/labh` for [Hunter L, a, b color model](https://en.wikipedia.org/wiki/Hunter_Lab);
 - `paint-bucket/color-model/xyz` for [CIE 1931 XYZ color model](https://en.wikipedia.org/wiki/CIE_1931_color_space);
 
 Color model converters expect component values to be in [0, 1] range. Plugin APIs may return component values in any
@@ -231,7 +231,7 @@ import rgbPlugin from 'paint-bucket/plugin/rgb';
 
 rgbPlugin(Color);
 
-clr().red(64).red(R => R * 2).red();
+clr().red(64).red(r => r * 2).red();
 // ⮕ 128
 ```
 
