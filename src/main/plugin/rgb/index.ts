@@ -16,15 +16,16 @@ declare module '../../core' {
   interface ColorLikeSource {
     /**
      * Creates the new color from RGBa components. Components can be represented as a 24-bit integer RGB color, or
-     * an array of separate component values where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
-     * If the R, G or B component is omitted it is set to 0. If alpha component is omitted it is set to 1.
+     * an array of separate component values where red, green and blue ∈ [0, 255] and alpha ∈ [0, 1] (0 = transparent,
+     * 1 = opaque). If the red, green or blue component is omitted it is set to 0. If alpha component is omitted it is
+     * set to 1.
      *
      * ```ts
-     * Color.parse([255, 255, 255, 0.5]); // Semi-transparent white
+     * clr([255, 255, 255, 0.5]); // Semi-transparent white
      *
-     * Color.parse([, , 255]); // Opaque blue color
+     * clr([, , 255]); // Opaque blue color
      *
-     * Color.parse(0x00_00_ff);
+     * clr(0x00_00_ff);
      * ```
      */
     'paint-bucket/plugin/rgb': number | Partial<RGB>;
@@ -32,10 +33,12 @@ declare module '../../core' {
 
   interface Color {
     /**
-     * Returns RGBa components as an array where R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque).
+     * Returns RGBa components as an array where red, green and blue ∈ [0, 255] and alpha ∈ [0, 1] (0 = transparent,
+     * 1 = opaque).
      *
      * ```ts
-     * new Color().rgb(); // ⮕ [0, 0, 0, 1]
+     * clr().rgb();
+     * // ⮕ [0, 0, 0, 1]
      * ```
      *
      * @group Plugin Methods
@@ -47,11 +50,11 @@ declare module '../../core' {
      * Sets RGBa components.
      *
      * ```ts
-     * new Color().rgb(([, , B]) => [255, 255, B, 0.5]);
+     * clr().rgb(([, , B]) => [255, 255, B, 0.5]);
      * ```
      *
-     * @param rgb The tuple of R, G and B ∈ [0, 255] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a R, G or B
-     * component is omitted it is set to 0. If alpha component is omitted it is set to 1.
+     * @param rgb The tuple of red, green and blue ∈ [0, 255] and alpha ∈ [0, 1] (0 = transparent, 1 = opaque). If red,
+     * green or blue component is omitted it is set to 0. If alpha component is omitted it is set to 1.
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/rgb!}
      */
@@ -61,7 +64,8 @@ declare module '../../core' {
      * Returns 24-bit integer representing RGB components without alpha.
      *
      * ```ts
-     * new Color().rgb24(); // ⮕ 0x00_00_00
+     * clr().rgb24();
+     * // ⮕ 0x00_00_00
      * ```
      *
      * @group Plugin Methods
@@ -73,7 +77,8 @@ declare module '../../core' {
      * Sets RGB components from 24-bit integer representation.
      *
      * ```ts
-     * new Color().rgb24(0xff_ff_ff).rgb(); // ⮕ [255, 255, 255, 1]
+     * clr().rgb24(0xff_ff_ff).rgb();
+     * // ⮕ [255, 255, 255, 1]
      * ```
      *
      * @param rgb The 24-bit integer, representing color in RGB model.
@@ -86,7 +91,8 @@ declare module '../../core' {
      * Returns 32-bit integer representing RGBa components.
      *
      * ```ts
-     * new Color().rgb32(); // ⮕ 0x00_00_00_ff
+     * clr().rgb32();
+     * // ⮕ 0x00_00_00_ff
      * ```
      *
      * @group Plugin Methods
@@ -98,7 +104,8 @@ declare module '../../core' {
      * Sets RGBa components from 32-bit integer representation.
      *
      * ```ts
-     * new Color().rgb32(0xaa_bb_cc_dd).rgb(); // ⮕ [170, 187, 204, 0.86]
+     * clr().rgb32(0xaa_bb_cc_dd).rgb();
+     * // ⮕ [170, 187, 204, 0.86]
      * ```
      *
      * @param rgb The 32-bit integer, representing color in RGBa model.
@@ -120,14 +127,15 @@ declare module '../../core' {
      * Sets red color component.
      *
      * ```ts
-     * new Color().red(64).red(R => R * 2).red(); // ⮕ 128
+     * clr().red(64).red(r => r * 2).red();
+     * // ⮕ 128
      * ```
      *
-     * @param R Red ∈ [0, 255].
+     * @param r Red ∈ [0, 255].
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/rgb!}
      */
-    red(R: Applicator<number>): Color;
+    red(r: Applicator<number>): Color;
 
     /**
      * Returns green color component.
@@ -142,13 +150,14 @@ declare module '../../core' {
      * Sets green color component.
      *
      * ```ts
-     * new Color().green(64).green(G => G * 2).green(); // ⮕ 128
+     * clr().green(64).green(g => g * 2).green();
+     * // ⮕ 128
      * ```
-     * @param G Green ∈ [0, 255].
+     * @param g Green ∈ [0, 255].
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/rgb!}
      */
-    green(G: Applicator<number>): Color;
+    green(g: Applicator<number>): Color;
 
     /**
      * Returns blue color component.
@@ -163,13 +172,14 @@ declare module '../../core' {
      * Sets blue color component.
      *
      * ```ts
-     * new Color().blue(64).blue(B => B * 2).blue(); // ⮕ 128
+     * clr().blue(64).blue(b => b * 2).blue();
+     * // ⮕ 128
      * ```
-     * @param B Blue ∈ [0, 255].
+     * @param b Blue ∈ [0, 255].
      * @group Plugin Methods
      * @plugin {@link paint-bucket/plugin/rgb!}
      */
-    blue(B: Applicator<number>): Color;
+    blue(b: Applicator<number>): Color;
 
     /**
      * Returns opacity (alpha) component.
@@ -184,7 +194,8 @@ declare module '../../core' {
      * Sets opacity (alpha) component.
      *
      * ```ts
-     * new Color().alpha(0.2).alpha(a => a * 2).alpha(); // ⮕ 0.4
+     * clr().alpha(0.2).alpha(a => a * 2).alpha();
+     * // ⮕ 0.4
      * ```
      * @param a Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
      * @group Plugin Methods
@@ -216,7 +227,8 @@ declare module '../../core' {
      * Returns the color contrast ∈ [1, 21].
      *
      * ```ts
-     * Color.parse(0x00_00_00).contrast(0xff_ff_ff); // ⮕ 21
+     * clr(0x00_00_00).contrast(0xff_ff_ff);
+     * // ⮕ 21
      * ```
      *
      * @group Plugin Methods

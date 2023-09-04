@@ -3,7 +3,7 @@ import { ColorModel } from './types';
 /**
  * Color components of the RGBa color model.
  */
-export type RGB = [R: number, G: number, B: number, a: number];
+export type RGB = [red: number, green: number, blue: number, alpha: number];
 
 /**
  * RGBa color model definition.

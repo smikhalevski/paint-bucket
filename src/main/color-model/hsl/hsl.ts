@@ -4,7 +4,7 @@ import { convertHSLToRGB, convertRGBToHSL } from './hsl-rgb';
 /**
  * HSLa color components.
  */
-export type HSL = [H: number, S: number, L: number, a: number];
+export type HSL = [hue: number, saturation: number, lightness: number, alpha: number];
 
 /**
  * HSLa color model definition.

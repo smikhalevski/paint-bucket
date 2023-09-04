@@ -1,5 +1,5 @@
 /**
- * HSLa color model manipulation plugin
+ * HSLa color model manipulation plugin.
  *
  * @module paint-bucket/plugin/hsl
  */
@@ -17,14 +17,16 @@ import {
 declare module '../../core' {
   interface Color {
     /**
-     * Returns HSLa components as an array where H ∈ [0, 360], S and L ∈ [0, 100] and a ∈ [0, 1] (0 = transparent, 1 =
-     * opaque).
+     * Returns HSLa components as an array where hue ∈ [0, 360], saturation and lightness ∈ [0, 100] and alpha ∈ [0, 1]
+     * (0 = transparent, 1 = opaque).
      *
      * ```ts
-     * new Color().hsl(); // ⮕ [0, 0, 0, 1]
+     * clr().hsl();
+     * // ⮕ [0, 0, 0, 1]
      * ```
      *
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
     hsl(): HSL;
@@ -33,12 +35,14 @@ declare module '../../core' {
      * Sets HSLa components.
      *
      * ```ts
-     * new Color().hsl(([, , L]) => [240, 100, L, 0.5]);
+     * clr().hsl(([, , l]) => [240, 100, l, 0.5]);
      * ```
      *
-     * @param hsl The tuple of H ∈ [0, 360], S and L ∈ [0, 100] and a ∈ [0, 1] (0 = transparent, 1 = opaque). If a H, S
-     * or L component is omitted it is set to 0. If alpha component is omitted it is set to 1.
+     * @param hsl The tuple of hue ∈ [0, 360], saturation and lightness ∈ [0, 100] and alpha ∈ [0, 1] (0 = transparent,
+     * 1 = opaque). If a hue, saturation or lightness component is omitted it is set to 0. If alpha component is omitted
+     * it is set to 1.
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
     hsl(hsl: Applicator<HSL, Partial<HSL>>): Color;
@@ -47,10 +51,12 @@ declare module '../../core' {
      * Returns 24-bit integer representing HSL components without alpha.
      *
      * ```ts
-     * new Color().hsl24(); // ⮕ 0x00_00_00
+     * clr().hsl24();
+     * // ⮕ 0x00_00_00
      * ```
      *
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
     hsl24(): number;
@@ -59,11 +65,12 @@ declare module '../../core' {
      * Sets HSL components from 24-bit integer representation.
      *
      * ```ts
-     * new Color().hsl24(0xff_ff_ff).hsl();
+     * clr().hsl24(0xff_ff_ff).hsl();
      * ```
      *
      * @param hsl The 24-bit integer, representing color in HSL model.
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
     hsl24(hsl: Applicator<number>): Color;
@@ -72,10 +79,12 @@ declare module '../../core' {
      * Returns 32-bit integer representing HSLa components.
      *
      * ```ts
-     * new Color().hsl32(); // ⮕ 0x00_00_00_ff
+     * clr().hsl32();
+     * // ⮕ 0x00_00_00_ff
      * ```
      *
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
     hsl32(): number;
@@ -84,11 +93,12 @@ declare module '../../core' {
      * Sets HSLa components from 32-bit integer representation.
      *
      * ```ts
-     * new Color().hsl32(0xaa_bb_cc_dd).hsl();
+     * clr().hsl32(0xaa_bb_cc_dd).hsl();
      * ```
      *
      * @param hsl The 32-bit integer, representing color in HSLa model.
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
     hsl32(hsl: Applicator<number>): Color;
@@ -98,6 +108,7 @@ declare module '../../core' {
      *
      * @returns Hue ∈ [0, 360].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
     hue(): number;
@@ -106,20 +117,23 @@ declare module '../../core' {
      * Sets hue color component.
      *
      * ```ts
-     * new Color().hue(90).hue(H => H * 2).hue(); // ⮕ 180
+     * clr().hue(90).hue(h => h * 2).hue();
+     * // ⮕ 180
      * ```
      *
-     * @param H Hue ∈ [0, 360].
+     * @param h Hue ∈ [0, 360].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
-    hue(H: Applicator<number>): Color;
+    hue(h: Applicator<number>): Color;
 
     /**
      * Returns saturation color component.
      *
      * @returns Saturation ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
     saturation(): number;
@@ -128,19 +142,22 @@ declare module '../../core' {
      * Sets saturation color component.
      *
      * ```ts
-     * new Color().saturation(20).saturation(S => S * 2).saturation(); // ⮕ 40
+     * clr().saturation(20).saturation(s => s * 2).saturation();
+     * // ⮕ 40
      * ```
-     * @param S Saturation ∈ [0, 100].
+     * @param s Saturation ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
-    saturation(S: Applicator<number>): Color;
+    saturation(s: Applicator<number>): Color;
 
     /**
      * Returns lightness color component.
      *
      * @returns Lightness ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
     lightness(): number;
@@ -149,40 +166,44 @@ declare module '../../core' {
      * Sets lightness color component.
      *
      * ```ts
-     * new Color().lightness(20).lightness(L => L * 2).lightness(); // ⮕ 40
+     * clr().lightness(20).lightness(l => l * 2).lightness();
+     * // ⮕ 40
      * ```
-     * @param L Lightness ∈ [0, 100].
+     * @param l Lightness ∈ [0, 100].
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
-    lightness(L: Applicator<number>): Color;
+    lightness(l: Applicator<number>): Color;
 
     /**
      * Spins the hue component.
      *
      * ```ts
-     * new Color().spin(45);
+     * clr().spin(45);
      * // or
-     * new Color().hue(H => H + 45);
+     * clr().hue(h => h + 45);
      * ```
      *
-     * @param H The hue delta ∈ [0, 360] to spin by.
+     * @param h The hue delta ∈ [0, 360] to spin by.
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
-    spin(H: number): Color;
+    spin(h: number): Color;
 
     /**
      * Makes color lighter by the given percentage.
      *
      * ```ts
-     * new Color().lighten(0.2);
+     * clr().lighten(0.2);
      * // or
-     * new Color().lightness(L => L * 1.2);
+     * clr().lightness(l => l * 1.2);
      * ```
      *
      * @param p The percentage ∈ [0, 1] by which the lightness must be increased.
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
     lighten(p: number): Color;
@@ -191,13 +212,14 @@ declare module '../../core' {
      * Makes color lighter by the given percentage.
      *
      * ```ts
-     * new Color().darken(0.2);
+     * clr().darken(0.2);
      * // or
-     * new Color().lightness(L => L * 0.98);
+     * clr().lightness(l => l * 0.98);
      * ```
      *
      * @param p The percentage ∈ [0, 1] by which the lightness must be decreased.
      * @group Plugin Methods
+     * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
      * @plugin {@link paint-bucket/plugin/hsl!}
      */
     darken(p: number): Color;

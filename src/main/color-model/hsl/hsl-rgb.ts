@@ -21,19 +21,13 @@ export function convertRGBToHSL(rgb: RGB, hsl: HSL): HSL {
   if (d !== 0) {
     S = L > 0.5 ? d / (2 - p) : d / p;
 
-    switch (x) {
-      case R:
-        H = (G - B) / d + (G < B ? 6 : 0);
-        break;
-      case G:
-        H = (B - R) / d + 2;
-        break;
-      case B:
-        H = (R - G) / d + 4;
-        break;
+    if (x === R) {
+      H = ((G - B) / d + (G < B ? 6 : 0)) / 6;
+    } else if (x === G) {
+      H = ((B - R) / d + 2) / 6;
+    } else {
+      H = ((R - G) / d + 4) / 6;
     }
-
-    H /= 6;
   }
 
   hsl[0] = H;
@@ -53,10 +47,11 @@ export function convertHSLToRGB(hsl: HSL, rgb: RGB): RGB {
   let R = L;
   let G = L;
   let B = L;
+  let q, p;
 
   if (S !== 0) {
-    const q = L < 0.5 ? L * (1 + S) : L + S - L * S;
-    const p = 2 * L - q;
+    q = L < 0.5 ? L * (1 + S) : L + S - L * S;
+    p = 2 * L - q;
 
     R = convertHueToRGB(p, q, H + 1 / 3);
     G = convertHueToRGB(p, q, H);

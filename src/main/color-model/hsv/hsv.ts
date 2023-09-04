@@ -4,7 +4,7 @@ import { convertHSVToRGB, convertRGBToHSV } from './hsv-rgb';
 /**
  * HSVa color components.
  */
-export type HSV = [H: number, S: number, V: number, a: number];
+export type HSV = [hue: number, saturation: number, value: number, alpha: number];
 
 /**
  * HSVa color model definition.

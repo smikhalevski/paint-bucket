@@ -120,7 +120,8 @@ export function composeColorInt32(a: number, b: number, c: number, d: number): n
  * Returns an 8-bit component from a 32-bit color integer.
  *
  * ```ts
- * getColorIntComponent(0x12_34_56_78, 2); // ⮕ 0x56
+ * getColorIntComponent(0x12_34_56_78, 2);
+ * // ⮕ 0x56
  * ```
  */
 export function getColorInt32Component(color: number, offset: number): number {
@@ -131,7 +132,8 @@ export function getColorInt32Component(color: number, offset: number): number {
  * Sets an 8-bit component to a 32-bit color integer.
  *
  * ```ts
- * setColorIntComponent(0x12_34_56_78, 2, 0xab); // ⮕ 0x12_34_ab_78
+ * setColorIntComponent(0x12_34_56_78, 2, 0xab);
+ * // ⮕ 0x12_34_ab_78
  * ```
  */
 export function setColorInt32Component(color: number, offset: number, value: number): number {

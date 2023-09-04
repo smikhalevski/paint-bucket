@@ -18,7 +18,8 @@ npm install --save-prod paint-bucket
 ```ts
 import { clr } from 'paint-bucket';
 
-clr('#abcdef').saturation(S => S / 2).red(); // ⮕ 188
+clr('#abcdef').saturation(s => s / 2).red();
+// ⮕ 188
 ```
 
 You can cherry-pick plugins that you need:
@@ -38,19 +39,20 @@ Most methods provide getter-setter semantics:
 
 ```ts
 // Setter
-clr('#f00').red(127.5); // ⮕ Color instance
+clr('#f00').red(127.5);
 // or
-clr('#f00').red(R => R / 2); // ⮕ Color instance
+clr('#f00').red(r => r / 2);
 
 // Getter
-clr('#f00').red(); // ⮕ 255
+clr('#f00').red();
+// ⮕ 255
 ```
 
 Mutate multiple components at the same time:
 
 ```ts
 clr([64, 128, 0])
-  .rgb(([R, G, B, a]) => [R * 3, G * 2, B, a])
+  .rgb(([r, g, b, a]) => [r * 3, g * 2, b, a])
   .rgb();
 // ⮕ [192, 255, 0, 1]
 ```
@@ -71,15 +73,18 @@ const color3 = color1.clone();
 Parse and serialize CSS color strings:
 
 ```ts
-clr('pink').css(); // ⮕ "#ffc0cb"
+clr('pink').css();
+// ⮕ "#ffc0cb"
 
-clr('rgba(255, 192, 203)').css(); // ⮕ "#ffc0cb"
+clr('rgba(255, 192, 203)').css();
+// ⮕ "#ffc0cb"
 ```
 
 Create gradients and obtain color at arbitrary position:
 
 ```ts
-clr.gradient(['red', 'blue']).at(0.7).css(); // ⮕ "#4d00b3"
+clr.gradient(['red', 'blue']).at(0.7).css();
+// ⮕ "#4d00b3"
 ```
 
 Create multi-stop gradients with custom stop values:
@@ -141,12 +146,12 @@ const CMYK: ColorModel = {
 
 Color models are pluggable.
 
+- `paint-bucket/color-model/cmyk` for [CMYK color model](https://en.wikipedia.org/wiki/CMYK_color_model);
 - `paint-bucket/color-model/hsl` for [HSL color model](https://en.wikipedia.org/wiki/HSL_and_HSV);
-
 - `paint-bucket/color-model/hsv` for [HSV color model](https://en.wikipedia.org/wiki/HSL_and_HSV);
-
+- `paint-bucket/color-model/hwb` for [HWB color model](https://en.wikipedia.org/wiki/HWB_color_model);
 - `paint-bucket/color-model/lab` for [CIE-L\*a\*b\* color model](https://en.wikipedia.org/wiki/CIELAB_color_space);
-
+- `paint-bucket/color-model/labh` for [Hunter L, a, b color model](https://en.wikipedia.org/wiki/Hunter_Lab);
 - `paint-bucket/color-model/xyz` for [CIE 1931 XYZ color model](https://en.wikipedia.org/wiki/CIE_1931_color_space);
 
 Color model converters expect component values to be in [0, 1] range. Plugin APIs may return component values in any
@@ -168,7 +173,7 @@ When you create a new `Color` instance, it uses the RGB color model and correspo
 ```ts
 import { Color } from 'paint-bucket/core';
 
-new Color(); // Opaque black RGB color
+clr(); // Opaque black RGB color
 ```
 
 You can create a color with any model and components.
@@ -188,7 +193,8 @@ method.
 import { Color, RGB } from 'paint-bucket/core';
 import { HSL } from 'paint-bucket/color-model/hsl';
 
-new Color(HSL, [0.5, 1, 0.5, 0.7]).getComponents(RGB); // ⮕ [0, 1, 1, 0.7]
+new Color(HSL, [0.5, 1, 0.5, 0.7]).getComponents(RGB);
+// ⮕ [0, 1, 1, 0.7]
 ```
 
 Here, we created a Color instance initialized with the components of the cyan color in the HSL color model and retrieved
@@ -204,13 +210,14 @@ method. This method returns a writable array of components in a particular color
 import { Color, RGB } from 'paint-bucket/core';
 import { HSL } from 'paint-bucket/color-model/hsl';
 
-const color = new Color(HSL, [0.5, 1, 0.5, 0.5]); // cyan
+const color = new Color(HSL, [0.5, 1, 0.5, 0.5]);
 const rgb = color.useComponents(RGB);
 
 // Set blue component value to 0 
 rgb[2] = 0;
 
-color.getComponents(HSL); // ⮕ Green [0.333, 1, 0.5, 0.7]
+color.getComponents(HSL);
+// ⮕ [0.333, 1, 0.5, 0.7]
 ```
 
 # Plugins
@@ -224,7 +231,8 @@ import rgbPlugin from 'paint-bucket/plugin/rgb';
 
 rgbPlugin(Color);
 
-clr().red(64).red(R => R * 2).red(); // ⮕ 128
+clr().red(64).red(r => r * 2).red();
+// ⮕ 128
 ```
 
 Here's a list of plugins in this repo:
@@ -300,7 +308,8 @@ myPlugin(Color);
 
 const color = clr().setRed(128);
 
-color.getComponents(RGB); // ⮕ [0.5, 0, 0, 1]
+color.getComponents(RGB);
+// ⮕ [0.5, 0, 0, 1]
 ```
 
 # Performance
