@@ -1,5 +1,5 @@
 /**
- * @module paint-bucket/core
+ * @module core
  */
 
 import { Color } from './core';

@@ -5,7 +5,7 @@
  * import { LABh } from 'paint-bucket/color-model/labh';
  * ```
  *
- * @module paint-bucket/color-model/labh
+ * @module color-model/labh
  */
 
 export * from './labh';

@@ -5,7 +5,7 @@
  * import { HSL } from 'paint-bucket/color-model/hsl';
  * ```
  *
- * @module paint-bucket/color-model/hsl
+ * @module color-model/hsl
  */
 
 export * from './hsl';

@@ -8,7 +8,7 @@
  * x11Plugin(Color);
  * ```
  *
- * @module paint-bucket/plugin/x11
+ * @module plugin/x11
  */
 
 import { Color, RGB } from '../../core';

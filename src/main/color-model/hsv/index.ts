@@ -5,7 +5,7 @@
  * import { HSV } from 'paint-bucket/color-model/hsv';
  * ```
  *
- * @module paint-bucket/color-model/hsv
+ * @module color-model/hsv
  */
 
 export * from './hsv';

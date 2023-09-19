@@ -1,7 +1,7 @@
 /**
  * Palette generation plugin.
  *
- * @module paint-bucket/plugin/palette
+ * @module plugin/palette
  */
 
 import { HSL } from '../../color-model/hsl';
@@ -14,7 +14,7 @@ declare module '../../core' {
      * Returns a new complement color.
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/palette!}
+     * @plugin {@link plugin/palette! plugin/palette}
      */
     complement(): Color;
 
@@ -23,7 +23,7 @@ declare module '../../core' {
      *
      * @returns The list of {@link Color} instances.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/palette!}
+     * @plugin {@link plugin/palette! plugin/palette}
      */
     triad(): Color[];
 
@@ -32,7 +32,7 @@ declare module '../../core' {
      *
      * @returns The list of {@link Color} instances.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/palette!}
+     * @plugin {@link plugin/palette! plugin/palette}
      */
     tetrad(): Color[];
 
@@ -41,7 +41,7 @@ declare module '../../core' {
      *
      * @returns The list of {@link Color} instances.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/palette!}
+     * @plugin {@link plugin/palette! plugin/palette}
      */
     splitComplement(): Color[];
 
@@ -52,7 +52,7 @@ declare module '../../core' {
      * @param [slices = 30] The number of colors to pick.
      * @returns The list of {@link Color} instances.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/palette!}
+     * @plugin {@link plugin/palette! plugin/palette}
      */
     analogous(n?: number, slices?: number): Color[];
 
@@ -62,7 +62,7 @@ declare module '../../core' {
      * @param [n = 6] The number of colors to pick.
      * @returns The list of {@link Color} instances.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/palette!}
+     * @plugin {@link plugin/palette! plugin/palette}
      */
     monochromatic(n?: number): Color[];
   }
