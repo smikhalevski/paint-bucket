@@ -3,23 +3,34 @@ const dts = require('rollup-plugin-dts');
 const fs = require('fs');
 const path = require('path');
 
+const external = /algomatic|\..*\/(core|utils|color-model|plugin)/;
+
 module.exports = ['index', 'core', 'utils']
-  .concat(fs.readdirSync('./gen/color-model').map(name => 'color-model/' + path.basename(name) + '/index'))
-  .concat(fs.readdirSync('./gen/plugin').map(name => 'plugin/' + path.basename(name) + '/index'))
-  .flatMap(name => [
+  .concat(
+    fs.readdirSync('gen/color-model').map(it => `color-model/${it}/index`),
+    fs.readdirSync('gen/plugin').map(it => `plugin/${it}/index`)
+  )
+  .flatMap(input => [
     {
-      input: './gen/' + name + '.js',
+      input: `gen/${input}.js`,
       output: [
-        { file: './lib/' + name + '.js', format: 'cjs' },
-        { file: './lib/' + name + '.mjs', format: 'es' },
+        { file: `lib/${input}.js`, format: 'cjs' },
+        { file: `lib/${input}.mjs`, format: 'es' },
       ],
-      plugins: [nodeResolve()],
-      external: /algomatic|(\..*\/(color-model|plugin|core|utils))/,
+      plugins: [
+        nodeResolve(),
+
+        // Append a file extension to relative imports and exports
+        {
+          renderChunk: (code, chunk) => code.replace(/(require\(|from )'\.[^']+/g, '$&' + path.extname(chunk.fileName)),
+        },
+      ],
+      external,
     },
     {
-      input: './gen/' + name + '.d.ts',
-      output: { file: './lib/' + name + '.d.ts', format: 'es' },
+      input: `gen/${input}.d.ts`,
+      output: { file: `lib/${input}.d.ts`, format: 'es' },
       plugins: [dts.default()],
-      external: /algomatic|(\..*\/(color-model|plugin|core|utils))/,
+      external,
     },
   ]);

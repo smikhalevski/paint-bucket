@@ -43,7 +43,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function hsvPlugin(ctor: typeof Color): void {
   ctor.prototype.hsv = createAccessor<HSV, Partial<HSV>>(
     color => {
       const hsv = color.getComponents(HSV);

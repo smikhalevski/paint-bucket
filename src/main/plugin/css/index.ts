@@ -95,7 +95,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function cssPlugin(ctor: typeof Color): void {
   const nextParse = ctor.parse;
 
   ctor.parse = value => (typeof value === 'string' && parseColor(value, new ctor())) || nextParse(value);

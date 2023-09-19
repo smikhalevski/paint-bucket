@@ -27,7 +27,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function x11Plugin(ctor: typeof Color): void {
   const nextParse = ctor.parse;
 
   ctor.parse = value => {

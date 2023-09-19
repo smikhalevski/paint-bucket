@@ -143,7 +143,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function cmykPlugin(ctor: typeof Color): void {
   ctor.prototype.cmyk = createAccessor<CMYK, Partial<CMYK>>(
     color => {
       const cmyk = color.getComponents(CMYK);

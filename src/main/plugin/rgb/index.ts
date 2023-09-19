@@ -257,7 +257,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function rgbPlugin(ctor: typeof Color): void {
   const nextParse = ctor.parse;
 
   ctor.parse = value => {

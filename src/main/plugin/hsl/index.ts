@@ -226,7 +226,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function hslPlugin(ctor: typeof Color): void {
   ctor.prototype.hsl = createAccessor<HSL, Partial<HSL>>(
     color => {
       const hsl = color.getComponents(HSL);

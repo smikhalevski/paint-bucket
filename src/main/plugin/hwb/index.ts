@@ -91,7 +91,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function hwbPlugin(ctor: typeof Color): void {
   ctor.prototype.hwb = createAccessor<HWB, Partial<HWB>>(
     color => {
       const hwb = color.getComponents(HWB);

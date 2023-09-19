@@ -36,7 +36,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function labPlugin(ctor: typeof Color): void {
   ctor.prototype.lab = createAccessor<LAB, Partial<LAB>>(
     color => {
       const lab = color.getComponents(LAB);

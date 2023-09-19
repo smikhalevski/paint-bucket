@@ -32,7 +32,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function differencePlugin(ctor: typeof Color): void {
   ctor.prototype.deltaE = function (color) {
     return getDeltaE(this.getComponents(LAB), Color.parse(color).getComponents(LAB));
   };

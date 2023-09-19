@@ -68,7 +68,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function palettePlugin(ctor: typeof Color): void {
   ctor.prototype.complement = function () {
     const [H, S, L, a] = this.getComponents(HSL);
 
