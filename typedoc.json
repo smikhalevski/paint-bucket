@@ -8,5 +8,11 @@
   "hideGenerator": true,
   "readme": "none",
   "tsconfig": "./tsconfig.build.json",
-  "customCss": "./node_modules/typedoc-custom-css/custom.css"
+  "customCss": "./node_modules/typedoc-custom-css/custom.css",
+  "entryPoints": [
+    "./src/main/color-model/*",
+    "./src/main/plugin/*",
+    "./src/main/utils.ts",
+    "./src/main/index.ts"
+  ]
 }
