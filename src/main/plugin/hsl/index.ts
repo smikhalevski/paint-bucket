@@ -4,7 +4,7 @@
  * @module plugin/hsl
  */
 
-import { HSL } from '../../color-model/hsl';
+import { HSL } from '../../color-model/hsl/index';
 import { Applicator, Color } from '../../core';
 import {
   clamp,

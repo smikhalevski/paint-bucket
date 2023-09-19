@@ -2,7 +2,7 @@
  * @module plugin/difference
  */
 
-import { LAB } from '../../color-model/lab';
+import { LAB } from '../../color-model/lab/index';
 import { Color, ColorLike } from '../../core';
 import { getDeltaE } from './getDeltaE';
 

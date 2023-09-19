@@ -4,7 +4,7 @@
  * @module plugin/lab
  */
 
-import { LAB } from '../../color-model/lab';
+import { LAB } from '../../color-model/lab/index';
 import { Applicator, Color } from '../../core';
 import { clamp, createAccessor } from '../../utils';
 

@@ -4,7 +4,7 @@
  * @module plugin/hsv
  */
 
-import { HSV } from '../../color-model/hsv';
+import { HSV } from '../../color-model/hsv/index';
 import { Applicator, Color } from '../../core';
 import { clamp, createAccessor } from '../../utils';
 

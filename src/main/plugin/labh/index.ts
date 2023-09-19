@@ -4,7 +4,7 @@
  * @module plugin/labh
  */
 
-import { LABh } from '../../color-model/labh';
+import { LABh } from '../../color-model/labh/index';
 import { Applicator, Color } from '../../core';
 import { clamp, createAccessor } from '../../utils';
 
