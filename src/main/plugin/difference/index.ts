@@ -1,8 +1,8 @@
 /**
- * @module paint-bucket/plugin/difference
+ * @module plugin/difference
  */
 
-import { LAB } from '../../color-model/lab';
+import { LAB } from '../../color-model/lab/index';
 import { Color, ColorLike } from '../../core';
 import { getDeltaE } from './getDeltaE';
 
@@ -22,7 +22,7 @@ declare module '../../core' {
      * Alpha channel is ignored.
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/difference!}
+     * @plugin {@link plugin/difference! plugin/difference}
      * @see {@link http://zschuessler.github.io/DeltaE/learn Learn about Delta E 101}
      * @see {@link http://www.ece.rochester.edu/~gsharma/ciede2000 The CIEDE2000 Color-Difference formula}
      * @see {@link https://en.wikipedia.org/wiki/Color_difference Color difference}
@@ -32,7 +32,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function differencePlugin(ctor: typeof Color): void {
   ctor.prototype.deltaE = function (color) {
     return getDeltaE(this.getComponents(LAB), Color.parse(color).getComponents(LAB));
   };

@@ -5,7 +5,7 @@
  * import { XYZ } from 'paint-bucket/color-model/xyz';
  * ```
  *
- * @module paint-bucket/color-model/xyz
+ * @module color-model/xyz
  */
 
 export * from './xyz';

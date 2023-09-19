@@ -1,7 +1,7 @@
 /**
  * CSS color values parsing and serialization plugin.
  *
- * @module paint-bucket/plugin/css
+ * @module plugin/css
  */
 
 import { Applicator, Color, RGB } from '../../core';
@@ -37,7 +37,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/css!}
+     * @plugin {@link plugin/css! plugin/css}
      */
     css(): string;
 
@@ -50,7 +50,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/css!}
+     * @plugin {@link plugin/css! plugin/css}
      */
     css(color: Applicator<string>): Color;
 
@@ -63,7 +63,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/css!}
+     * @plugin {@link plugin/css! plugin/css}
      */
     cssHex(): string;
 
@@ -76,7 +76,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/css!}
+     * @plugin {@link plugin/css! plugin/css}
      */
     cssRGB(): string;
 
@@ -89,13 +89,13 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/css!}
+     * @plugin {@link plugin/css! plugin/css}
      */
     cssHSL(): string;
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function cssPlugin(ctor: typeof Color): void {
   const nextParse = ctor.parse;
 
   ctor.parse = value => (typeof value === 'string' && parseColor(value, new ctor())) || nextParse(value);

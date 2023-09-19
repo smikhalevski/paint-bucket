@@ -1,10 +1,10 @@
 /**
  * Hunter L, a, b color model manipulation plugin.
  *
- * @module paint-bucket/plugin/labh
+ * @module plugin/labh
  */
 
-import { LABh } from '../../color-model/labh';
+import { LABh } from '../../color-model/labh/index';
 import { Applicator, Color } from '../../core';
 import { clamp, createAccessor } from '../../utils';
 
@@ -20,7 +20,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/labh!}
+     * @plugin {@link plugin/labh! plugin/labh}
      */
     labh(): LABh;
 
@@ -30,13 +30,13 @@ declare module '../../core' {
      * @param labh The tuple of L ∈ [0, 100], a and b ∈ [-128, 128], and alpha ∈ [0, 1] (0 = transparent, 1 = opaque).
      * If L, a, or b component is omitted it is set to 0. If alpha component is omitted it is set to 1.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/labh!}
+     * @plugin {@link plugin/labh! plugin/labh}
      */
     labh(labh: Applicator<LABh, Partial<LABh>>): Color;
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function labhPlugin(ctor: typeof Color): void {
   ctor.prototype.labh = createAccessor<LABh, Partial<LABh>>(
     color => {
       const lab = color.getComponents(LABh);

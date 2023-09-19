@@ -1,5 +1,5 @@
 /**
- * @module paint-bucket/utils
+ * @module utils
  */
 
 import { Color } from './Color';

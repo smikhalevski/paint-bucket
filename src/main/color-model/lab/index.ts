@@ -5,7 +5,7 @@
  * import { LAB } from 'paint-bucket/color-model/lab';
  * ```
  *
- * @module paint-bucket/color-model/lab
+ * @module color-model/lab
  */
 
 export * from './lab';

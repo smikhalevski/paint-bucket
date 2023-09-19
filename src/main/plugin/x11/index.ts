@@ -8,7 +8,7 @@
  * x11Plugin(Color);
  * ```
  *
- * @module paint-bucket/plugin/x11
+ * @module plugin/x11
  */
 
 import { Color, RGB } from '../../core';
@@ -27,7 +27,7 @@ declare module '../../core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function x11Plugin(ctor: typeof Color): void {
   const nextParse = ctor.parse;
 
   ctor.parse = value => {

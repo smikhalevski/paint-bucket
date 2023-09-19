@@ -1,10 +1,10 @@
 /**
  * HSVa color model manipulation plugin.
  *
- * @module paint-bucket/plugin/hsv
+ * @module plugin/hsv
  */
 
-import { HSV } from '../../color-model/hsv';
+import { HSV } from '../../color-model/hsv/index';
 import { Applicator, Color } from '../../core';
 import { clamp, createAccessor } from '../../utils';
 
@@ -21,7 +21,7 @@ declare module '../../core' {
      *
      * @group Plugin Methods
      * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
-     * @plugin {@link paint-bucket/plugin/hsv!}
+     * @plugin {@link plugin/hsv! plugin/hsv}
      */
     hsv(): HSV;
 
@@ -37,13 +37,13 @@ declare module '../../core' {
      * it is set to 1.
      * @group Plugin Methods
      * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
-     * @plugin {@link paint-bucket/plugin/hsv!}
+     * @plugin {@link plugin/hsv! plugin/hsv}
      */
     hsv(hsv: Applicator<HSV, Partial<HSV>>): Color;
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function hsvPlugin(ctor: typeof Color): void {
   ctor.prototype.hsv = createAccessor<HSV, Partial<HSV>>(
     color => {
       const hsv = color.getComponents(HSV);

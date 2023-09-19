@@ -1,7 +1,7 @@
 /**
  * RGBa color model manipulation plugin.
  *
- * @module paint-bucket/plugin/rgb
+ * @module plugin/rgb
  */
 import { Applicator, Color, ColorLike, RGB } from '../../core';
 import {
@@ -42,7 +42,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     rgb(): RGB;
 
@@ -56,7 +56,7 @@ declare module '../../core' {
      * @param rgb The tuple of red, green and blue ∈ [0, 255] and alpha ∈ [0, 1] (0 = transparent, 1 = opaque). If red,
      * green or blue component is omitted it is set to 0. If alpha component is omitted it is set to 1.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     rgb(rgb: Applicator<RGB, Partial<RGB>>): Color;
 
@@ -69,7 +69,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     rgb24(): number;
 
@@ -83,7 +83,7 @@ declare module '../../core' {
      *
      * @param rgb The 24-bit integer, representing color in RGB model.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     rgb24(rgb: Applicator<number>): Color;
 
@@ -96,7 +96,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     rgb32(): number;
 
@@ -110,7 +110,7 @@ declare module '../../core' {
      *
      * @param rgb The 32-bit integer, representing color in RGBa model.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     rgb32(rgb: Applicator<number>): Color;
 
@@ -119,7 +119,7 @@ declare module '../../core' {
      *
      * @returns Red ∈ [0, 255].
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     red(): number;
 
@@ -133,7 +133,7 @@ declare module '../../core' {
      *
      * @param r Red ∈ [0, 255].
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     red(r: Applicator<number>): Color;
 
@@ -142,7 +142,7 @@ declare module '../../core' {
      *
      * @returns Green ∈ [0, 255].
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     green(): number;
 
@@ -155,7 +155,7 @@ declare module '../../core' {
      * ```
      * @param g Green ∈ [0, 255].
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     green(g: Applicator<number>): Color;
 
@@ -164,7 +164,7 @@ declare module '../../core' {
      *
      * @returns Blue ∈ [0, 255].
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     blue(): number;
 
@@ -177,7 +177,7 @@ declare module '../../core' {
      * ```
      * @param b Blue ∈ [0, 255].
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     blue(b: Applicator<number>): Color;
 
@@ -186,7 +186,7 @@ declare module '../../core' {
      *
      * @returns Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     alpha(): number;
 
@@ -199,7 +199,7 @@ declare module '../../core' {
      * ```
      * @param a Alpha ∈ [0, 1], 0 = transparent, 1 = opaque.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     alpha(a: Applicator<number>): Color;
 
@@ -208,7 +208,7 @@ declare module '../../core' {
      *
      * @returns Brightness ∈ [0, 1].
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      * @see {@link http://www.w3.org/TR/AERT#color-contrast Web Content Accessibility Guidelines (Version 1.0)}
      */
     brightness(): number;
@@ -218,7 +218,7 @@ declare module '../../core' {
      *
      * @returns Luminance ∈ [0, 1], 0 = darkest black, 1 = lightest white.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef WCAG20 Relative Luminance}
      */
     luminance(): number;
@@ -232,7 +232,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      * @see {@link http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef WCAG Contrast Ratio}
      */
     contrast(color: ColorLike): number;
@@ -243,7 +243,7 @@ declare module '../../core' {
      * @param color The color to mix.
      * @param ratio The percentage ∈ [0, 1] of the mix between colors.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     mix(color: ColorLike, ratio: number): Color;
 
@@ -251,13 +251,13 @@ declare module '../../core' {
      * Converts to grayscale using [Highly Sensitive Perceived brightness (HSP)](http://alienryderflex.com/hsp.html)
      * equation. The output color uses the same color model as the input.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/rgb!}
+     * @plugin {@link plugin/rgb! plugin/rgb}
      */
     greyscale(): Color;
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function rgbPlugin(ctor: typeof Color): void {
   const nextParse = ctor.parse;
 
   ctor.parse = value => {

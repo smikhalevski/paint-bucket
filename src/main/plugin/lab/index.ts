@@ -1,10 +1,10 @@
 /**
  * CIE-L\*a\*b\* color model manipulation plugin.
  *
- * @module paint-bucket/plugin/lab
+ * @module plugin/lab
  */
 
-import { LAB } from '../../color-model/lab';
+import { LAB } from '../../color-model/lab/index';
 import { Applicator, Color } from '../../core';
 import { clamp, createAccessor } from '../../utils';
 
@@ -20,7 +20,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/lab!}
+     * @plugin {@link plugin/lab! plugin/lab}
      */
     lab(): LAB;
 
@@ -30,13 +30,13 @@ declare module '../../core' {
      * @param lab The tuple of L\* ∈ [0, 100], a\* and b\* ∈ [-100, 100], and alpha ∈ [0, 1] (0 = transparent,
      * 1 = opaque). If L\*, a\*, or b\* component is omitted it is set to 0. If alpha component is omitted it is set to 1.
      * @group Plugin Methods
-     * @plugin {@link paint-bucket/plugin/lab!}
+     * @plugin {@link plugin/lab! plugin/lab}
      */
     lab(lab: Applicator<LAB, Partial<LAB>>): Color;
   }
 }
 
-export default function (ctor: typeof Color): void {
+export default function labPlugin(ctor: typeof Color): void {
   ctor.prototype.lab = createAccessor<LAB, Partial<LAB>>(
     color => {
       const lab = color.getComponents(LAB);

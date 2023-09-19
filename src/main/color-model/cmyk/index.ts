@@ -5,7 +5,7 @@
  * import { CMYK } from 'paint-bucket/color-model/cmyk';
  * ```
  *
- * @module paint-bucket/color-model/cmyk
+ * @module color-model/cmyk
  */
 
 export * from './cmyk';
