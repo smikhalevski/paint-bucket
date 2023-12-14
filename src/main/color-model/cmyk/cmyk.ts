@@ -1,4 +1,4 @@
-import { ColorModel } from '../../core';
+import type { ColorModel } from '../../core';
 import { convertCMYKToRGB, convertRGBToCMYK } from './cmyk-rgb';
 
 /**

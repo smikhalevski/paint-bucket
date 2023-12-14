@@ -1,4 +1,4 @@
-import { ColorModel } from '../../core';
+import type { ColorModel } from '../../core';
 import { convertHWBToRGB, convertRGBToHWB } from './hwb-rgb';
 
 /**

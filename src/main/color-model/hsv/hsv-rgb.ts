@@ -1,4 +1,4 @@
-import { RGB } from '../../core';
+import { RGB } from '../../rgb';
 import { HSV } from './hsv';
 
 const { min, max, floor } = Math;

@@ -1,4 +1,4 @@
-import { ColorModel } from './types';
+import type { ColorModel } from './types';
 
 /**
  * Color components of the RGBa color model.

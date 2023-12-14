@@ -3,7 +3,9 @@
  *
  * @module plugin/rgb
  */
-import { Applicator, Color, ColorLike, RGB } from '../../core';
+import type { Applicator, ColorLike } from '../../core';
+import { Color } from '../../Color';
+import { RGB } from '../../rgb';
 import {
   clamp,
   convertColorInt32ToComponents,

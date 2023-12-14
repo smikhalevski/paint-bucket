@@ -4,8 +4,8 @@
  * @module plugin/hsl
  */
 
-import { HSL } from '../../color-model/hsl/index';
-import { Applicator, Color } from '../../core';
+import type { Applicator, Color } from '../../core';
+import { HSL } from '../../color-model/hsl';
 import {
   clamp,
   convertColorInt32ToComponents,

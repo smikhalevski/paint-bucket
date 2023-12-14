@@ -8,5 +8,5 @@
  * @module color-model/cmyk
  */
 
-export * from './cmyk';
-export * from './cmyk-rgb';
+export { CMYK } from './cmyk';
+export { convertCMYKToRGB, convertRGBToCMYK } from './cmyk-rgb';

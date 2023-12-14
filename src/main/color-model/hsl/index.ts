@@ -8,5 +8,5 @@
  * @module color-model/hsl
  */
 
-export * from './hsl';
-export * from './hsl-rgb';
+export { HSL } from './hsl';
+export { convertHSLToRGB, convertRGBToHSL } from './hsl-rgb';

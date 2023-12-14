@@ -1,4 +1,4 @@
-import { RGB } from '../../core';
+import { RGB } from '../../rgb';
 import { convertRGBToXYZ, convertXYZToRGB, WhitePoint, XYZ } from '../xyz';
 import { LABh } from './labh';
 import { convertLABhToXYZ, convertXYZToLABh } from './labh-xyz';

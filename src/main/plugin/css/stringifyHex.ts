@@ -1,4 +1,4 @@
-import { Color } from '../../Color';
+import type { Color } from '../../Color';
 import { RGB } from '../../rgb';
 import { convertComponentsToColorInt32 } from '../../utils';
 

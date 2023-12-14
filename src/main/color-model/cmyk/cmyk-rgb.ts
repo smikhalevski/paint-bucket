@@ -1,4 +1,4 @@
-import { RGB } from '../../core';
+import { RGB } from '../../rgb';
 import { CMYK } from './cmyk';
 
 const { min } = Math;

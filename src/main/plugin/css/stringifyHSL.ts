@@ -1,5 +1,5 @@
-import { HSL } from '../../color-model/hsl/index';
-import { Color } from '../../core';
+import type { Color } from '../../core';
+import { HSL } from '../../color-model/hsl';
 
 const { round } = Math;
 
