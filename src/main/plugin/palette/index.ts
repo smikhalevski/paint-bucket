@@ -4,9 +4,9 @@
  * @module plugin/palette
  */
 
-import { HSL } from '../../color-model/hsl/index';
-import { HSV } from '../../color-model/hsv/index';
-import { Color } from '../../core';
+import type { Color } from '../../core';
+import { HSL } from '../../color-model/hsl';
+import { HSV } from '../../color-model/hsv';
 
 declare module '../../core' {
   interface Color {

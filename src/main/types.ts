@@ -1,5 +1,5 @@
-import { Color } from './Color';
-import { RGB } from './rgb';
+import type { Color } from './Color';
+import type { RGB } from './rgb';
 
 /**
  * Merge declaration with this interface to add more types to {@link ColorLike} type.

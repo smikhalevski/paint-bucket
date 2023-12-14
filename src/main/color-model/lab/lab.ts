@@ -1,4 +1,4 @@
-import { ColorModel } from '../../core';
+import type { ColorModel } from '../../core';
 import { convertLABToRGB, convertRGBToLAB } from './lab-rgb';
 
 /**

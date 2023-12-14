@@ -1,4 +1,4 @@
-import { RGB } from '../../core';
+import { RGB } from '../../rgb';
 import { convertRGBToXYZ, convertXYZToRGB, WhitePoint, XYZ } from '../xyz';
 import { LAB } from './lab';
 import { convertLABToXYZ, convertXYZToLAB } from './lab-xyz';

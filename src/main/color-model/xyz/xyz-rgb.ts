@@ -1,4 +1,4 @@
-import { RGB } from '../../core';
+import { RGB } from '../../rgb';
 import { clamp } from '../../utils';
 import { WhitePoint } from './WhitePoint';
 import { XYZ } from './xyz';

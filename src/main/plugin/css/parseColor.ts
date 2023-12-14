@@ -1,6 +1,7 @@
-import { Color, RGB } from '../../core';
+import type { Color } from '../../core';
+import { RGB } from '../../rgb';
 import { clamp, getColorInt32Component, normalizeColorInt } from '../../utils';
-import { HSL } from '../../color-model/hsl/index';
+import { HSL } from '../../color-model/hsl';
 
 const valuePattern = '\\s*(\\d+(?:\\.\\d+)?%?)';
 
