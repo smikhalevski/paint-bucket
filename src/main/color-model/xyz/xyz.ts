@@ -1,4 +1,4 @@
-import type { ColorModel } from '../../core';
+import { ColorModel } from '../../core';
 import { convertRGBToXYZ, convertXYZToRGB } from './xyz-rgb';
 
 /**

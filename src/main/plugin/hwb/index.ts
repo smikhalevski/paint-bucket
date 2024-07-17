@@ -4,7 +4,7 @@
  * @module plugin/hwb
  */
 
-import type { Applicator, Color } from '../../core';
+import { Applicator, Color } from '../../core';
 import { HWB } from '../../color-model/hwb';
 import { clamp, createAccessor } from '../../utils';
 

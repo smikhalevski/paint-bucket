@@ -11,7 +11,7 @@
  * @module plugin/x11
  */
 
-import type { Color } from '../../core';
+import { Color } from '../../core';
 import { RGB } from '../../rgb';
 import { x11Components } from './x11-components';
 

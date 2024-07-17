@@ -4,7 +4,7 @@
  * @module plugin/palette
  */
 
-import type { Color } from '../../core';
+import { Color } from '../../core';
 import { HSL } from '../../color-model/hsl';
 import { HSV } from '../../color-model/hsv';
 

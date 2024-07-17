@@ -1,4 +1,4 @@
-import type { ColorLike, ColorModel, Interpolator, InterpolatorFactory } from './types';
+import { ColorLike, ColorModel, Interpolator, InterpolatorFactory } from './types';
 import { lerp } from 'algomatic';
 import { Color } from './Color';
 import { RGB } from './rgb';

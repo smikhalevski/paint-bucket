@@ -4,6 +4,7 @@
     "importHelpers": true,
     "moduleResolution": "Node",
     "esModuleInterop": true,
+    "isolatedModules": true,
     "noUnusedLocals": true,
     "strict": true,
     "target": "ES5",

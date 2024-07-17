@@ -4,7 +4,7 @@
  * @module plugin/cmyk
  */
 
-import type { Applicator, Color } from '../../core';
+import { Applicator, Color } from '../../core';
 import { CMYK } from '../../color-model/cmyk';
 import { clamp, createAccessor } from '../../utils';
 

@@ -1,4 +1,4 @@
-import type { Color } from '../../Color';
+import { Color } from '../../Color';
 import { RGB } from '../../rgb';
 
 const { round } = Math;

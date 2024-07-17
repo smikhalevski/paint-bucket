@@ -3,7 +3,7 @@
  *
  * @module plugin/rgb
  */
-import type { Applicator, ColorLike } from '../../core';
+import { Applicator, ColorLike } from '../../core';
 import { Color } from '../../Color';
 import { RGB } from '../../rgb';
 import {

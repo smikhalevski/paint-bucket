@@ -1,4 +1,4 @@
-import type { ColorLike, ColorModel } from './types';
+import { ColorLike, ColorModel } from './types';
 import { RGB } from './rgb';
 
 // RGBa color components that are used for implicit model-to-model conversions

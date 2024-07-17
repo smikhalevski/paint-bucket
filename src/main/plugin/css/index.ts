@@ -4,7 +4,7 @@
  * @module plugin/css
  */
 
-import type { Applicator, Color } from '../../core';
+import { Applicator, Color } from '../../core';
 import { RGB } from '../../rgb';
 import { createAccessor } from '../../utils';
 import { parseColor } from './parseColor';

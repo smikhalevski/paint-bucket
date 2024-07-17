@@ -1,4 +1,4 @@
-import type { Color } from '../../core';
+import { Color } from '../../core';
 import { RGB } from '../../rgb';
 import { clamp, getColorInt32Component, normalizeColorInt } from '../../utils';
 import { HSL } from '../../color-model/hsl';
