@@ -4,8 +4,8 @@
  * @module plugin/hsv
  */
 
-import { HSV } from '../../color-model/hsv/index';
 import { Applicator, Color } from '../../core';
+import { HSV } from '../../color-model/hsv';
 import { clamp, createAccessor } from '../../utils';
 
 declare module '../../core' {
@@ -21,7 +21,7 @@ declare module '../../core' {
      *
      * @group Plugin Methods
      * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
-     * @plugin {@link plugin/hsv! plugin/hsv}
+     * @plugin {@link plugin/hsv! paint-bucket/plugin/hsv}
      */
     hsv(): HSV;
 
@@ -37,7 +37,7 @@ declare module '../../core' {
      * it is set to 1.
      * @group Plugin Methods
      * @see {@link https://en.wikipedia.org/wiki/HSL_and_HSV HSL and HSV color models}
-     * @plugin {@link plugin/hsv! plugin/hsv}
+     * @plugin {@link plugin/hsv! paint-bucket/plugin/hsv}
      */
     hsv(hsv: Applicator<HSV, Partial<HSV>>): Color;
   }

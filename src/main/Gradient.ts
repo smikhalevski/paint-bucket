@@ -1,7 +1,7 @@
+import { ColorLike, ColorModel, Interpolator, InterpolatorFactory } from './types';
 import { lerp } from 'algomatic';
 import { Color } from './Color';
 import { RGB } from './rgb';
-import { ColorLike, ColorModel, Interpolator, InterpolatorFactory } from './types';
 import { clamp } from './utils';
 
 // Black RGBa color that is returned if gradient has zero domain size

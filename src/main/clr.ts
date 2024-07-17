@@ -1,5 +1,5 @@
-import { Color } from './Color';
 import { ColorLike } from './types';
+import { Color } from './Color';
 import { Gradient } from './Gradient';
 
 /**

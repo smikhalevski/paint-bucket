@@ -11,7 +11,7 @@
 npm install --save-prod paint-bucket
 ```
 
-# Usage
+# Overview
 
 🔎 [API documentation is available here.](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html)
 
@@ -99,31 +99,11 @@ clr.gradient()
 // ⮕ "#9973e0"
 ```
 
-# Concepts
+# Color models
 
-<dl>
-<dt><a href="https://en.wikipedia.org/wiki/Color_model">Color model</a></dt>
-<dd>
-
-An abstract mathematical model describing the way colors can be represented as tuples of numbers (aka color components).
-
-There's a large variety of color models aimed for different purposes. Different color models define different color
-components. For example, RGB color model defines three color components: red, green and blue; while HSL defines hue,
-saturation and lightness color components. One color model can be converted to the other.
-
-</dd>
-<dt><a href="https://en.wikipedia.org/wiki/Color_space">Color space</a></dt>
-<dd>
-
-Defines how color components of the particular color model are serialized.
-
-For example, RGB color model can be represented as Adobe RGB or sRGB color space.
-
-</dd>
-</dl>
-
-Paint Bucket provides an abstraction for color models which are represented as objects that define methods to convert
-color components between color model representation and RGB. Color components are an array of numbers.
+Paint Bucket provides an abstraction for [color models](https://en.wikipedia.org/wiki/Color_model) which are represented
+as objects that define methods to convert color components between color model representation and RGB. Color components
+are an array of numbers.
 
 ```ts
 import { ColorModel, RGB } from 'paint-bucket/core';
@@ -143,16 +123,6 @@ const CMYK: ColorModel = {
   },
 };
 ```
-
-Color models are pluggable.
-
-- `paint-bucket/color-model/cmyk` for [CMYK color model](https://en.wikipedia.org/wiki/CMYK_color_model);
-- `paint-bucket/color-model/hsl` for [HSL color model](https://en.wikipedia.org/wiki/HSL_and_HSV);
-- `paint-bucket/color-model/hsv` for [HSV color model](https://en.wikipedia.org/wiki/HSL_and_HSV);
-- `paint-bucket/color-model/hwb` for [HWB color model](https://en.wikipedia.org/wiki/HWB_color_model);
-- `paint-bucket/color-model/lab` for [CIE-L\*a\*b\* color model](https://en.wikipedia.org/wiki/CIELAB_color_space);
-- `paint-bucket/color-model/labh` for [Hunter L, a, b color model](https://en.wikipedia.org/wiki/Hunter_Lab);
-- `paint-bucket/color-model/xyz` for [CIE 1931 XYZ color model](https://en.wikipedia.org/wiki/CIE_1931_color_space);
 
 Color model converters expect component values to be in [0, 1] range. Plugin APIs may return component values in any
 other range, but internally components are always normalized to [0, 1].
@@ -220,6 +190,16 @@ color.getComponents(HSL);
 // ⮕ [0.333, 1, 0.5, 0.7]
 ```
 
+Paint Bucket includes pluggable implementations for following color models:
+
+- [CMYK color model](https://en.wikipedia.org/wiki/CMYK_color_model)
+- [HSL color model](https://en.wikipedia.org/wiki/HSL_and_HSV)
+- [HSV color model](https://en.wikipedia.org/wiki/HSL_and_HSV)
+- [HWB color model](https://en.wikipedia.org/wiki/HWB_color_model)
+- [CIE-L\*a\*b\* color model](https://en.wikipedia.org/wiki/CIELAB_color_space)
+- [Hunter L, a, b color model](https://en.wikipedia.org/wiki/Hunter_Lab)
+- [CIE 1931 XYZ color model](https://en.wikipedia.org/wiki/CIE_1931_color_space)
+
 # Plugins
 
 Paint Bucket relies on plugins in every aspect. The `paint-bucket/core` doesn't implement any color manipulation
@@ -235,24 +215,40 @@ clr().red(64).red(r => r * 2).red();
 // ⮕ 128
 ```
 
-Here's a list of plugins in this repo:
+<dl>
+<dt><code>cmyk</code></dt>
+<dd>CMYKa color model manipulation plugin.</dd>
 
-- `paint-bucket/plugin/rgb` implements RGBa color model manipulation methods;
+<dt><code>css</code></dt>
+<dd>CSS color values parsing and serialization plugin.</dd>
 
-- `paint-bucket/plugin/hsl` implements HSLa color model manipulation methods;
+<dt><code>difference</code></dt>
+<dd>Computes the CIEDE2000 <a href="https://en.wikipedia.org/wiki/Color_difference">color difference</a>.</dd>
 
-- `paint-bucket/plugin/palette` creates various color palettes from the base color;
+<dt><code>hsl</code></dt>
+<dd>HSLa color model manipulation plugin.</dd>
 
-- `paint-bucket/plugin/difference` provides [color difference](https://en.wikipedia.org/wiki/Color_difference)
-  computation methods;
+<dt><code>hsv</code></dt>
+<dd>HSVa color model manipulation plugin.</dd>
 
-- `paint-bucket/plugin/css` enables
-  [`clr`](https://smikhalevski.github.io/paint-bucket/functions/paint_bucket_core.clr-1.html) function to parse CSS
-  color strings;
+<dt><code>hwb</code></dt>
+<dd>HWBa color model manipulation plugin.</dd>
 
-- `paint-bucket/plugin/x11` enables
-  [`clr`](https://smikhalevski.github.io/paint-bucket/functions/paint_bucket_core.clr-1.html) to recognize
-  [X11 color names](https://en.wikipedia.org/wiki/X11_color_names).
+<dt><code>lab</code></dt>
+<dd>CIE-L*a*b*  color model manipulation methods.</dd>
+
+<dt><code>labh</code></dt>
+<dd>Hunter L, a, b color model manipulation plugin.</dd>
+
+<dt><code>palette</code></dt>
+<dd>Palette generation plugin.</dd>
+
+<dt><code>rgb</code></dt>
+<dd>RGBa color model manipulation plugin.</dd>
+
+<dt><code>x11</code></dt>
+<dd><a href="https://en.wikipedia.org/wiki/X11_color_names)">X11 color names</a> name parsing plugin.</dd>
+</dl>
 
 ## Extend color instance
 

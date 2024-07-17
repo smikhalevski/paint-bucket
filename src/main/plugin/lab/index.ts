@@ -4,8 +4,8 @@
  * @module plugin/lab
  */
 
-import { LAB } from '../../color-model/lab/index';
 import { Applicator, Color } from '../../core';
+import { LAB } from '../../color-model/lab';
 import { clamp, createAccessor } from '../../utils';
 
 declare module '../../core' {
@@ -20,7 +20,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link plugin/lab! plugin/lab}
+     * @plugin {@link plugin/lab! paint-bucket/plugin/lab}
      */
     lab(): LAB;
 
@@ -30,7 +30,7 @@ declare module '../../core' {
      * @param lab The tuple of L\* ∈ [0, 100], a\* and b\* ∈ [-100, 100], and alpha ∈ [0, 1] (0 = transparent,
      * 1 = opaque). If L\*, a\*, or b\* component is omitted it is set to 0. If alpha component is omitted it is set to 1.
      * @group Plugin Methods
-     * @plugin {@link plugin/lab! plugin/lab}
+     * @plugin {@link plugin/lab! paint-bucket/plugin/lab}
      */
     lab(lab: Applicator<LAB, Partial<LAB>>): Color;
   }

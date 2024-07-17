@@ -1,36 +1,17 @@
-const nodeResolve = require('@rollup/plugin-node-resolve');
-const dts = require('rollup-plugin-dts');
-const fs = require('fs');
-const path = require('path');
+const typescript = require('@rollup/plugin-typescript');
+const { globSync } = require('glob');
 
-const external = /algomatic|\..*\/(core|utils|color-model|plugin)/;
-
-module.exports = ['index', 'core', 'utils']
-  .concat(
-    fs.readdirSync('gen/color-model').map(it => `color-model/${it}/index`),
-    fs.readdirSync('gen/plugin').map(it => `plugin/${it}/index`)
-  )
-  .flatMap(input => [
-    {
-      input: `gen/${input}.js`,
-      output: [
-        { file: `lib/${input}.js`, format: 'cjs' },
-        { file: `lib/${input}.mjs`, format: 'es' },
-      ],
-      plugins: [
-        nodeResolve(),
-
-        // Append a file extension to relative imports and exports
-        {
-          renderChunk: (code, chunk) => code.replace(/(require\(|from )'\.[^']+/g, '$&' + path.extname(chunk.fileName)),
-        },
-      ],
-      external,
-    },
-    {
-      input: `gen/${input}.d.ts`,
-      output: { file: `lib/${input}.d.ts`, format: 'es' },
-      plugins: [dts.default()],
-      external,
-    },
-  ]);
+module.exports = {
+  input: [
+    './src/main/index.ts',
+    './src/main/core.ts',
+    './src/main/utils.ts',
+    ...globSync('./src/main/{color-model,plugin}/*/index.ts'),
+  ],
+  output: [
+    { format: 'cjs', entryFileNames: '[name].js', dir: './lib', preserveModules: true },
+    { format: 'es', entryFileNames: '[name].mjs', dir: './lib', preserveModules: true },
+  ],
+  plugins: [typescript({ tsconfig: './tsconfig.build.json' })],
+  external: ['algomatic'],
+};

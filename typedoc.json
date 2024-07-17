@@ -6,13 +6,17 @@
   "excludeInternal": true,
   "disableSources": true,
   "hideGenerator": true,
+  "navigation": {
+    "includeFolders": false
+  },
+  "sortEntryPoints": false,
   "readme": "none",
   "tsconfig": "./tsconfig.build.json",
   "customCss": "./node_modules/typedoc-custom-css/custom.css",
   "entryPoints": [
-    "./src/main/color-model/*",
+    "./src/main/core.ts",
     "./src/main/plugin/*",
-    "./src/main/utils.ts",
-    "./src/main/index.ts"
+    "./src/main/color-model/*",
+    "./src/main/utils.ts"
   ]
 }

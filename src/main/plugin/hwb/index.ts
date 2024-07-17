@@ -4,8 +4,8 @@
  * @module plugin/hwb
  */
 
-import { HWB } from '../../color-model/hwb/index';
 import { Applicator, Color } from '../../core';
+import { HWB } from '../../color-model/hwb';
 import { clamp, createAccessor } from '../../utils';
 
 declare module '../../core' {
@@ -21,7 +21,7 @@ declare module '../../core' {
      *
      * @group Plugin Methods
      * @see {@link https://en.wikipedia.org/wiki/HWB_color_model HWB color model}
-     * @plugin {@link plugin/hwb! plugin/hwb}
+     * @plugin {@link plugin/hwb! paint-bucket/plugin/hwb}
      */
     hwb(): HWB;
 
@@ -37,7 +37,7 @@ declare module '../../core' {
      * it is set to 1.
      * @group Plugin Methods
      * @see {@link https://en.wikipedia.org/wiki/HWB_color_model HWB color model}
-     * @plugin {@link plugin/hwb! plugin/hwb}
+     * @plugin {@link plugin/hwb! paint-bucket/plugin/hwb}
      */
     hwb(hwb: Applicator<HWB, Partial<HWB>>): Color;
 
@@ -47,7 +47,7 @@ declare module '../../core' {
      * @returns Whiteness ∈ [0, 100].
      * @group Plugin Methods
      * @see {@link https://en.wikipedia.org/wiki/HWB_color_model HWB color model}
-     * @plugin {@link plugin/hwb! plugin/hwb}
+     * @plugin {@link plugin/hwb! paint-bucket/plugin/hwb}
      */
     whiteness(): number;
 
@@ -61,7 +61,7 @@ declare module '../../core' {
      * @param w Whiteness ∈ [0, 100].
      * @group Plugin Methods
      * @see {@link https://en.wikipedia.org/wiki/HWB_color_model HWB color model}
-     * @plugin {@link plugin/hwb! plugin/hwb}
+     * @plugin {@link plugin/hwb! paint-bucket/plugin/hwb}
      */
     whiteness(w: Applicator<number>): Color;
 
@@ -71,7 +71,7 @@ declare module '../../core' {
      * @returns Blackness ∈ [0, 100].
      * @group Plugin Methods
      * @see {@link https://en.wikipedia.org/wiki/HWB_color_model HWB color model}
-     * @plugin {@link plugin/hwb! plugin/hwb}
+     * @plugin {@link plugin/hwb! paint-bucket/plugin/hwb}
      */
     blackness(): number;
 
@@ -85,7 +85,7 @@ declare module '../../core' {
      * @param b Blackness ∈ [0, 100].
      * @group Plugin Methods
      * @see {@link https://en.wikipedia.org/wiki/HWB_color_model HWB color model}
-     * @plugin {@link plugin/hwb! plugin/hwb}
+     * @plugin {@link plugin/hwb! paint-bucket/plugin/hwb}
      */
     blackness(b: Applicator<number>): Color;
   }
