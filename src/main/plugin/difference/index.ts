@@ -23,7 +23,7 @@ declare module '../../core' {
      * Alpha channel is ignored.
      *
      * @group Plugin Methods
-     * @plugin {@link plugin/difference! plugin/difference}
+     * @plugin {@link plugin/difference! paint-bucket/plugin/difference}
      * @see {@link http://zschuessler.github.io/DeltaE/learn Learn about Delta E 101}
      * @see {@link http://www.ece.rochester.edu/~gsharma/ciede2000 The CIEDE2000 Color-Difference formula}
      * @see {@link https://en.wikipedia.org/wiki/Color_difference Color difference}

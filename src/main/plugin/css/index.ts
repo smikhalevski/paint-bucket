@@ -38,7 +38,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link plugin/css! plugin/css}
+     * @plugin {@link plugin/css! paint-bucket/plugin/css}
      */
     css(): string;
 
@@ -51,7 +51,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link plugin/css! plugin/css}
+     * @plugin {@link plugin/css! paint-bucket/plugin/css}
      */
     css(color: Applicator<string>): Color;
 
@@ -64,7 +64,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link plugin/css! plugin/css}
+     * @plugin {@link plugin/css! paint-bucket/plugin/css}
      */
     cssHex(): string;
 
@@ -77,7 +77,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link plugin/css! plugin/css}
+     * @plugin {@link plugin/css! paint-bucket/plugin/css}
      */
     cssRGB(): string;
 
@@ -90,7 +90,7 @@ declare module '../../core' {
      * ```
      *
      * @group Plugin Methods
-     * @plugin {@link plugin/css! plugin/css}
+     * @plugin {@link plugin/css! paint-bucket/plugin/css}
      */
     cssHSL(): string;
   }
