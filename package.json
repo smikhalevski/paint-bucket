@@ -1,6 +1,6 @@
 {
   "name": "paint-bucket",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Highly performant, extensible, and tiny color manipulation library.",
   "main": "./index.js",
   "module": "./index.mjs",
