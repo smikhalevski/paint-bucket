@@ -1,6 +1,13 @@
 /**
  * CIE-L\*a\*b\* color model manipulation plugin.
  *
+ * ```ts
+ * import { clr } from 'paint-bucket/core';
+ * import 'paint-bucket/core/lab';
+ *
+ * clr().lab();
+ * ```
+ *
  * @module plugin/lab
  */
 
@@ -36,29 +43,27 @@ declare module '../../core' {
   }
 }
 
-export default function labPlugin(ctor: typeof Color): void {
-  ctor.prototype.lab = createAccessor<LAB, Partial<LAB>>(
-    color => {
-      const lab = color.getComponents(LAB);
-      return [lab[0] * 100, lab[1] * 200 - 100, lab[2] * 200 - 100, lab[3]];
-    },
+Color.prototype.lab = createAccessor<LAB, Partial<LAB>>(
+  color => {
+    const lab = color.getComponents(LAB);
+    return [lab[0] * 100, lab[1] * 200 - 100, lab[2] * 200 - 100, lab[3]];
+  },
 
-    (color, value) => {
-      const lab = color.useComponents(LAB);
-      const [L, A, B, a] = value;
+  (color, value) => {
+    const lab = color.useComponents(LAB);
+    const [L, A, B, a] = value;
 
-      if (L !== undefined) {
-        lab[0] = clamp(L / 100);
-      }
-      if (A !== undefined) {
-        lab[1] = clamp((A + 100) / 200);
-      }
-      if (B !== undefined) {
-        lab[2] = clamp((B + 100) / 200);
-      }
-      if (a !== undefined) {
-        lab[3] = clamp(a);
-      }
+    if (L !== undefined) {
+      lab[0] = clamp(L / 100);
     }
-  );
-}
+    if (A !== undefined) {
+      lab[1] = clamp((A + 100) / 200);
+    }
+    if (B !== undefined) {
+      lab[2] = clamp((B + 100) / 200);
+    }
+    if (a !== undefined) {
+      lab[3] = clamp(a);
+    }
+  }
+);

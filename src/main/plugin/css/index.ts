@@ -1,6 +1,13 @@
 /**
  * CSS color values parsing and serialization plugin.
  *
+ * ```ts
+ * import { clr } from 'paint-bucket/core';
+ * import 'paint-bucket/core/css';
+ *
+ * clr().css();
+ * ```
+ *
  * @module plugin/css
  */
 
@@ -96,32 +103,30 @@ declare module '../../core' {
   }
 }
 
-export default function cssPlugin(ctor: typeof Color): void {
-  const nextParse = ctor.parse;
+const nextParse = Color.parse;
 
-  ctor.parse = value => (typeof value === 'string' && parseColor(value, new ctor())) || nextParse(value);
+Color.parse = value => (typeof value === 'string' && parseColor(value, new Color())) || nextParse(value);
 
-  ctor.prototype.css = createAccessor(
-    color => (color.getComponents(RGB)[3] === 1 ? stringifyHex(color) : stringifyRGB(color)),
+Color.prototype.css = createAccessor(
+  color => (color.getComponents(RGB)[3] === 1 ? stringifyHex(color) : stringifyRGB(color)),
 
-    (color, value) => {
-      parseColor(value, color);
-    }
-  );
+  (color, value) => {
+    parseColor(value, color);
+  }
+);
 
-  ctor.prototype.cssHex = function () {
-    return stringifyHex(this);
-  };
+Color.prototype.cssHex = function () {
+  return stringifyHex(this);
+};
 
-  ctor.prototype.cssRGB = function () {
-    return stringifyRGB(this);
-  };
+Color.prototype.cssRGB = function () {
+  return stringifyRGB(this);
+};
 
-  ctor.prototype.cssHSL = function () {
-    return stringifyHSL(this);
-  };
+Color.prototype.cssHSL = function () {
+  return stringifyHSL(this);
+};
 
-  ctor.prototype.toString = function () {
-    return this.css();
-  };
-}
+Color.prototype.toString = function () {
+  return this.css();
+};

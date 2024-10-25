@@ -1,11 +1,7 @@
 import { Color } from '../../../main/core';
-import cssPlugin from '../../../main/plugin/css';
-import palettePlugin from '../../../main/plugin/palette';
-import rgbPlugin from '../../../main/plugin/rgb';
-
-rgbPlugin(Color);
-cssPlugin(Color);
-palettePlugin(Color);
+import '../../../main/plugin/css';
+import '../../../main/plugin/palette';
+import '../../../main/plugin/rgb';
 
 function toCss(color: Color): string {
   return color.css();

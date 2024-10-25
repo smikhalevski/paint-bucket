@@ -1,9 +1,6 @@
 import { Color } from '../../../main/core';
-import differencePlugin from '../../../main/plugin/difference';
-import rgbPlugin from '../../../main/plugin/rgb';
-
-rgbPlugin(Color);
-differencePlugin(Color);
+import '../../../main/plugin/difference';
+import '../../../main/plugin/rgb';
 
 describe('deltaE', () => {
   test('returns color difference', () => {

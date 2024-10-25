@@ -1,7 +1,5 @@
 import { Color } from '../../../main/core';
-import cmykPlugin from '../../../main/plugin/cmyk';
-
-cmykPlugin(Color);
+import '../../../main/plugin/cmyk';
 
 describe('cmyk', () => {
   test('returns cyan color component', () => {

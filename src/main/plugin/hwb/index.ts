@@ -1,6 +1,13 @@
 /**
  * HWBa color model manipulation plugin.
  *
+ * ```ts
+ * import { clr } from 'paint-bucket/core';
+ * import 'paint-bucket/core/hwb';
+ *
+ * clr().hwb();
+ * ```
+ *
  * @module plugin/hwb
  */
 
@@ -91,45 +98,43 @@ declare module '../../core' {
   }
 }
 
-export default function hwbPlugin(ctor: typeof Color): void {
-  ctor.prototype.hwb = createAccessor<HWB, Partial<HWB>>(
-    color => {
-      const hwb = color.getComponents(HWB);
-      return [hwb[0] * 360, hwb[1] * 100, hwb[2] * 100, hwb[3]];
-    },
+Color.prototype.hwb = createAccessor<HWB, Partial<HWB>>(
+  color => {
+    const hwb = color.getComponents(HWB);
+    return [hwb[0] * 360, hwb[1] * 100, hwb[2] * 100, hwb[3]];
+  },
 
-    (color, value) => {
-      const hwb = color.useComponents(HWB);
-      const [H, W, B, a] = value;
+  (color, value) => {
+    const hwb = color.useComponents(HWB);
+    const [H, W, B, a] = value;
 
-      if (H !== undefined) {
-        hwb[0] = clamp((H / 360) % 1);
-      }
-      if (W !== undefined) {
-        hwb[1] = clamp(W / 100);
-      }
-      if (B !== undefined) {
-        hwb[2] = clamp(B / 100);
-      }
-      if (a !== undefined) {
-        hwb[3] = clamp(a);
-      }
+    if (H !== undefined) {
+      hwb[0] = clamp((H / 360) % 1);
     }
-  );
-
-  ctor.prototype.whiteness = createAccessor(
-    color => color.getComponents(HWB)[1] * 100,
-
-    (color, W) => {
-      color.useComponents(HWB)[1] = clamp(W / 100);
+    if (W !== undefined) {
+      hwb[1] = clamp(W / 100);
     }
-  );
-
-  ctor.prototype.blackness = createAccessor(
-    color => color.getComponents(HWB)[2] * 100,
-
-    (color, B) => {
-      color.useComponents(HWB)[2] = clamp(B / 100);
+    if (B !== undefined) {
+      hwb[2] = clamp(B / 100);
     }
-  );
-}
+    if (a !== undefined) {
+      hwb[3] = clamp(a);
+    }
+  }
+);
+
+Color.prototype.whiteness = createAccessor(
+  color => color.getComponents(HWB)[1] * 100,
+
+  (color, W) => {
+    color.useComponents(HWB)[1] = clamp(W / 100);
+  }
+);
+
+Color.prototype.blackness = createAccessor(
+  color => color.getComponents(HWB)[2] * 100,
+
+  (color, B) => {
+    color.useComponents(HWB)[2] = clamp(B / 100);
+  }
+);

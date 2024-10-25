@@ -26,9 +26,7 @@ You can cherry-pick plugins that you need:
 
 ```ts
 import { clr, Color } from 'paint-bucket/core';
-import rgbPlugin from 'paint-bucket/plugin/rgb';
-
-rgbPlugin(Color);
+import 'paint-bucket/plugin/rgb';
 
 clr().red(); // ✅
 
@@ -207,9 +205,7 @@ functionality.
 
 ```ts
 import { clr, Color } from 'paint-bucket/core';
-import rgbPlugin from 'paint-bucket/plugin/rgb';
-
-rgbPlugin(Color);
+import'paint-bucket/plugin/rgb';
 
 clr().red(64).red(r => r * 2).red();
 // ⮕ 128

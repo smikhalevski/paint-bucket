@@ -1,7 +1,5 @@
 import { Color } from '../../../main/core';
-import hslPlugin from '../../../main/plugin/hsl';
-
-hslPlugin(Color);
+import '../../../main/plugin/hsl';
 
 describe('hue', () => {
   test('returns hue color component', () => {

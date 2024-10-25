@@ -1,6 +1,13 @@
 /**
  * HSVa color model manipulation plugin.
  *
+ * ```ts
+ * import { clr } from 'paint-bucket/core';
+ * import 'paint-bucket/core/hsv';
+ *
+ * clr().hsv();
+ * ```
+ *
  * @module plugin/hsv
  */
 
@@ -43,29 +50,27 @@ declare module '../../core' {
   }
 }
 
-export default function hsvPlugin(ctor: typeof Color): void {
-  ctor.prototype.hsv = createAccessor<HSV, Partial<HSV>>(
-    color => {
-      const hsv = color.getComponents(HSV);
-      return [hsv[0] * 360, hsv[1] * 100, hsv[2] * 100, hsv[3]];
-    },
+Color.prototype.hsv = createAccessor<HSV, Partial<HSV>>(
+  color => {
+    const hsv = color.getComponents(HSV);
+    return [hsv[0] * 360, hsv[1] * 100, hsv[2] * 100, hsv[3]];
+  },
 
-    (color, value) => {
-      const hsv = color.useComponents(HSV);
-      const [H, S, V, a] = value;
+  (color, value) => {
+    const hsv = color.useComponents(HSV);
+    const [H, S, V, a] = value;
 
-      if (H !== undefined) {
-        hsv[0] = clamp((H / 360) % 1);
-      }
-      if (S !== undefined) {
-        hsv[1] = clamp(S / 100);
-      }
-      if (V !== undefined) {
-        hsv[2] = clamp(V / 100);
-      }
-      if (a !== undefined) {
-        hsv[3] = clamp(a);
-      }
+    if (H !== undefined) {
+      hsv[0] = clamp((H / 360) % 1);
     }
-  );
-}
+    if (S !== undefined) {
+      hsv[1] = clamp(S / 100);
+    }
+    if (V !== undefined) {
+      hsv[2] = clamp(V / 100);
+    }
+    if (a !== undefined) {
+      hsv[3] = clamp(a);
+    }
+  }
+);

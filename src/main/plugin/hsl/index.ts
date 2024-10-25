@@ -1,6 +1,13 @@
 /**
  * HSLa color model manipulation plugin.
  *
+ * ```ts
+ * import { clr } from 'paint-bucket/core';
+ * import 'paint-bucket/core/hsl';
+ *
+ * clr().hsl();
+ * ```
+ *
  * @module plugin/hsl
  */
 
@@ -226,85 +233,83 @@ declare module '../../core' {
   }
 }
 
-export default function hslPlugin(ctor: typeof Color): void {
-  ctor.prototype.hsl = createAccessor<HSL, Partial<HSL>>(
-    color => {
-      const hsl = color.getComponents(HSL);
-      return [hsl[0] * 360, hsl[1] * 100, hsl[2] * 100, hsl[3]];
-    },
+Color.prototype.hsl = createAccessor<HSL, Partial<HSL>>(
+  color => {
+    const hsl = color.getComponents(HSL);
+    return [hsl[0] * 360, hsl[1] * 100, hsl[2] * 100, hsl[3]];
+  },
 
-    (color, value) => {
-      const hsl = color.useComponents(HSL);
-      const [H, S, L, a] = value;
+  (color, value) => {
+    const hsl = color.useComponents(HSL);
+    const [H, S, L, a] = value;
 
-      if (H !== undefined) {
-        hsl[0] = clamp((H / 360) % 1);
-      }
-      if (S !== undefined) {
-        hsl[1] = clamp(S / 100);
-      }
-      if (L !== undefined) {
-        hsl[2] = clamp(L / 100);
-      }
-      if (a !== undefined) {
-        hsl[3] = clamp(a);
-      }
+    if (H !== undefined) {
+      hsl[0] = clamp((H / 360) % 1);
     }
-  );
-
-  ctor.prototype.hsl24 = createAccessor(
-    color => convertComponentsToColorInt32(color.getComponents(HSL)) >>> 8,
-
-    (color, value) => {
-      convertColorInt32ToComponents(normalizeColorInt(value, 6), color.useComponents(HSL));
+    if (S !== undefined) {
+      hsl[1] = clamp(S / 100);
     }
-  );
-
-  ctor.prototype.hsl32 = createAccessor(
-    color => convertComponentsToColorInt32(color.getComponents(HSL)),
-
-    (color, value) => {
-      convertColorInt32ToComponents(normalizeColorInt(value, 8), color.useComponents(HSL));
+    if (L !== undefined) {
+      hsl[2] = clamp(L / 100);
     }
-  );
-
-  ctor.prototype.hue = createAccessor(
-    color => color.getComponents(HSL)[0] * 360,
-
-    (color, H) => {
-      color.useComponents(HSL)[0] = clamp(H / 360);
+    if (a !== undefined) {
+      hsl[3] = clamp(a);
     }
-  );
+  }
+);
 
-  ctor.prototype.saturation = createAccessor(
-    color => color.getComponents(HSL)[1] * 100,
+Color.prototype.hsl24 = createAccessor(
+  color => convertComponentsToColorInt32(color.getComponents(HSL)) >>> 8,
 
-    (color, S) => {
-      color.useComponents(HSL)[1] = clamp(S / 100);
-    }
-  );
+  (color, value) => {
+    convertColorInt32ToComponents(normalizeColorInt(value, 6), color.useComponents(HSL));
+  }
+);
 
-  ctor.prototype.lightness = createAccessor(
-    color => color.getComponents(HSL)[2] * 100,
+Color.prototype.hsl32 = createAccessor(
+  color => convertComponentsToColorInt32(color.getComponents(HSL)),
 
-    (color, L) => {
-      color.useComponents(HSL)[2] = clamp(L / 100);
-    }
-  );
+  (color, value) => {
+    convertColorInt32ToComponents(normalizeColorInt(value, 8), color.useComponents(HSL));
+  }
+);
 
-  ctor.prototype.spin = function (H) {
-    const hsl = this.useComponents(HSL);
-    hsl[0] = clamp(((hsl[0] + H) / 360) % 1);
-    return this;
-  };
+Color.prototype.hue = createAccessor(
+  color => color.getComponents(HSL)[0] * 360,
 
-  ctor.prototype.lighten = function (p) {
-    const hsl = this.useComponents(HSL);
-    hsl[2] = clamp(hsl[2] * (1 + +p));
-    return this;
-  };
+  (color, H) => {
+    color.useComponents(HSL)[0] = clamp(H / 360);
+  }
+);
 
-  ctor.prototype.darken = function (p) {
-    return this.lighten(-p);
-  };
-}
+Color.prototype.saturation = createAccessor(
+  color => color.getComponents(HSL)[1] * 100,
+
+  (color, S) => {
+    color.useComponents(HSL)[1] = clamp(S / 100);
+  }
+);
+
+Color.prototype.lightness = createAccessor(
+  color => color.getComponents(HSL)[2] * 100,
+
+  (color, L) => {
+    color.useComponents(HSL)[2] = clamp(L / 100);
+  }
+);
+
+Color.prototype.spin = function (H) {
+  const hsl = this.useComponents(HSL);
+  hsl[0] = clamp(((hsl[0] + H) / 360) % 1);
+  return this;
+};
+
+Color.prototype.lighten = function (p) {
+  const hsl = this.useComponents(HSL);
+  hsl[2] = clamp(hsl[2] * (1 + +p));
+  return this;
+};
+
+Color.prototype.darken = function (p) {
+  return this.lighten(-p);
+};

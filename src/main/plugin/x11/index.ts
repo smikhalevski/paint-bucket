@@ -2,10 +2,10 @@
  * X11 color name parsing plugin.
  *
  * ```ts
- * import { Color } from 'paint-bucket/core';
- * import x11Plugin from 'paint-bucket/plugin/x11';
+ * import { clr } from 'paint-bucket/core';
+ * import 'paint-bucket/core/x11';
  *
- * x11Plugin(Color);
+ * clr('yellow');
  * ```
  *
  * @module plugin/x11
@@ -28,19 +28,17 @@ declare module '../../core' {
   }
 }
 
-export default function x11Plugin(ctor: typeof Color): void {
-  const nextParse = ctor.parse;
+const nextParse = Color.parse;
 
-  ctor.parse = value => {
-    if (typeof value !== 'string') {
-      return nextParse(value);
-    }
-
-    const components = x11Components.get(value.trim().toLowerCase());
-
-    if (components !== undefined) {
-      return new ctor(RGB, components.slice(0));
-    }
+Color.parse = value => {
+  if (typeof value !== 'string') {
     return nextParse(value);
-  };
-}
+  }
+
+  const components = x11Components.get(value.trim().toLowerCase());
+
+  if (components !== undefined) {
+    return new Color(RGB, components.slice(0));
+  }
+  return nextParse(value);
+};

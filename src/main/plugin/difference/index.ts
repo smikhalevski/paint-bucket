@@ -1,4 +1,13 @@
 /**
+ * Computes the CIEDE2000 color-difference.
+ *
+ * ```ts
+ * import { clr } from 'paint-bucket/core';
+ * import 'paint-bucket/core/difference';
+ *
+ * clr().deltaE(clr());
+ * ```
+ *
  * @module plugin/difference
  */
 
@@ -33,8 +42,6 @@ declare module '../../core' {
   }
 }
 
-export default function differencePlugin(ctor: typeof Color): void {
-  ctor.prototype.deltaE = function (color) {
-    return getDeltaE(this.getComponents(LAB), Color.parse(color).getComponents(LAB));
-  };
-}
+Color.prototype.deltaE = function (color) {
+  return getDeltaE(this.getComponents(LAB), Color.parse(color).getComponents(LAB));
+};

@@ -1,6 +1,13 @@
 /**
  * Hunter L, a, b color model manipulation plugin.
  *
+ * ```ts
+ * import { clr } from 'paint-bucket/core';
+ * import 'paint-bucket/core/labh';
+ *
+ * clr().labh();
+ * ```
+ *
  * @module plugin/labh
  */
 
@@ -36,29 +43,27 @@ declare module '../../core' {
   }
 }
 
-export default function labhPlugin(ctor: typeof Color): void {
-  ctor.prototype.labh = createAccessor<LABh, Partial<LABh>>(
-    color => {
-      const lab = color.getComponents(LABh);
-      return [lab[0] * 100, lab[1] * 256 - 128, lab[2] * 256 - 128, lab[3]];
-    },
+Color.prototype.labh = createAccessor<LABh, Partial<LABh>>(
+  color => {
+    const lab = color.getComponents(LABh);
+    return [lab[0] * 100, lab[1] * 256 - 128, lab[2] * 256 - 128, lab[3]];
+  },
 
-    (color, value) => {
-      const labh = color.useComponents(LABh);
-      const [L, A, B, a] = value;
+  (color, value) => {
+    const labh = color.useComponents(LABh);
+    const [L, A, B, a] = value;
 
-      if (L !== undefined) {
-        labh[0] = clamp(L / 100);
-      }
-      if (A !== undefined) {
-        labh[1] = clamp((A + 128) / 256);
-      }
-      if (B !== undefined) {
-        labh[2] = clamp((B + 128) / 256);
-      }
-      if (a !== undefined) {
-        labh[3] = clamp(a);
-      }
+    if (L !== undefined) {
+      labh[0] = clamp(L / 100);
     }
-  );
-}
+    if (A !== undefined) {
+      labh[1] = clamp((A + 128) / 256);
+    }
+    if (B !== undefined) {
+      labh[2] = clamp((B + 128) / 256);
+    }
+    if (a !== undefined) {
+      labh[3] = clamp(a);
+    }
+  }
+);

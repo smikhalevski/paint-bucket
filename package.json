@@ -57,65 +57,87 @@
       "require": "./color-model/xyz/index.js"
     },
     "./plugin/cmyk": {
-      "types": "./plugin/css/cmyk.d.ts",
-      "import": "./plugin/css/cmyk.mjs",
-      "require": "./plugin/css/cmyk.js"
+      "types": "./plugin/cmyk/index.d.ts",
+      "import": "./plugin/cmyk/index.mjs",
+      "require": "./plugin/cmyk/index.js"
     },
     "./plugin/css": {
-      "types": "./plugin/css/css.d.ts",
-      "import": "./plugin/css/css.mjs",
-      "require": "./plugin/css/css.js"
+      "types": "./plugin/css/index.d.ts",
+      "import": "./plugin/css/index.mjs",
+      "require": "./plugin/css/index.js"
     },
     "./plugin/difference": {
-      "types": "./plugin/css/difference.d.ts",
-      "import": "./plugin/css/difference.mjs",
-      "require": "./plugin/css/difference.js"
+      "types": "./plugin/difference/index.d.ts",
+      "import": "./plugin/difference/index.mjs",
+      "require": "./plugin/difference/index.js"
     },
     "./plugin/hsl": {
-      "types": "./plugin/css/hsl.d.ts",
-      "import": "./plugin/css/hsl.mjs",
-      "require": "./plugin/css/hsl.js"
+      "types": "./plugin/hsl/index.d.ts",
+      "import": "./plugin/hsl/index.mjs",
+      "require": "./plugin/hsl/index.js"
     },
     "./plugin/hsv": {
-      "types": "./plugin/css/hsv.d.ts",
-      "import": "./plugin/css/hsv.mjs",
-      "require": "./plugin/css/hsv.js"
+      "types": "./plugin/hsv/index.d.ts",
+      "import": "./plugin/hsv/index.mjs",
+      "require": "./plugin/hsv/index.js"
     },
     "./plugin/hwb": {
-      "types": "./plugin/css/hwb.d.ts",
-      "import": "./plugin/css/hwb.mjs",
-      "require": "./plugin/css/hwb.js"
+      "types": "./plugin/hwb/index.d.ts",
+      "import": "./plugin/hwb/index.mjs",
+      "require": "./plugin/hwb/index.js"
     },
     "./plugin/lab": {
-      "types": "./plugin/css/lab.d.ts",
-      "import": "./plugin/css/lab.mjs",
-      "require": "./plugin/css/lab.js"
+      "types": "./plugin/lab/index.d.ts",
+      "import": "./plugin/lab/index.mjs",
+      "require": "./plugin/lab/index.js"
     },
     "./plugin/labh": {
-      "types": "./plugin/css/labh.d.ts",
-      "import": "./plugin/css/labh.mjs",
-      "require": "./plugin/css/labh.js"
+      "types": "./plugin/labh/index.d.ts",
+      "import": "./plugin/labh/index.mjs",
+      "require": "./plugin/labh/index.js"
     },
     "./plugin/palette": {
-      "types": "./plugin/css/palette.d.ts",
-      "import": "./plugin/css/palette.mjs",
-      "require": "./plugin/css/palette.js"
+      "types": "./plugin/palette/index.d.ts",
+      "import": "./plugin/palette/index.mjs",
+      "require": "./plugin/palette/index.js"
     },
     "./plugin/rgb": {
-      "types": "./plugin/css/rgb.d.ts",
-      "import": "./plugin/css/rgb.mjs",
-      "require": "./plugin/css/rgb.js"
+      "types": "./plugin/rgb/index.d.ts",
+      "import": "./plugin/rgb/index.mjs",
+      "require": "./plugin/rgb/index.js"
     },
     "./plugin/x11": {
-      "types": "./plugin/css/x11.d.ts",
-      "import": "./plugin/css/x11.mjs",
-      "require": "./plugin/css/x11.js"
+      "types": "./plugin/x11/index.d.ts",
+      "import": "./plugin/x11/index.mjs",
+      "require": "./plugin/x11/index.js"
     },
     "./package.json": "./package.json"
   },
   "sideEffects": [
     "./index.mjs",
-    "./index.js"
+    "./index.js",
+    "./plugin/cmyk/index.mjs",
+    "./plugin/cmyk/index.js",
+    "./plugin/css/index.mjs",
+    "./plugin/css/index.js",
+    "./plugin/difference/index.mjs",
+    "./plugin/difference/index.js",
+    "./plugin/hsl/index.mjs",
+    "./plugin/hsl/index.js",
+    "./plugin/hsv/index.mjs",
+    "./plugin/hsv/index.js",
+    "./plugin/hwb/index.mjs",
+    "./plugin/hwb/index.js",
+    "./plugin/lab/index.mjs",
+    "./plugin/lab/index.js",
+    "./plugin/labh/index.mjs",
+    "./plugin/labh/index.js",
+    "./plugin/palette/index.mjs",
+    "./plugin/palette/index.js",
+    "./plugin/rgb/index.mjs",
+    "./plugin/rgb/index.js",
+    "./plugin/x11/index.mjs",
+    "./plugin/x11/index.js"
   ],
   "scripts": {
     "build": "rollup --config && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
@@ -147,21 +169,22 @@
   },
   "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
   "devDependencies": {
-    "@rollup/plugin-typescript": "^11.1.6",
-    "@types/jest": "^29.5.12",
-    "chroma-js": "^2.4.2",
+    "@rollup/plugin-typescript": "^12.1.1",
+    "@swc/core": "^1.7.39",
+    "@swc/jest": "^0.2.36",
+    "@types/jest": "^29.5.14",
+    "chroma-js": "^3.1.2",
     "glob": "^11.0.0",
     "jest": "^29.7.0",
     "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
-    "rollup": "^4.18.1",
+    "rollup": "^4.24.0",
     "tinycolor2": "^1.6.0",
     "toofast": "^2.0.0",
-    "ts-jest": "^29.2.2",
-    "tslib": "^2.6.3",
-    "typedoc": "^0.26.4",
+    "tslib": "^2.8.0",
+    "typedoc": "^0.26.10",
     "typedoc-custom-css": "github:smikhalevski/typedoc-custom-css#master",
-    "typescript": "^5.5.3"
+    "typescript": "^5.6.3"
   },
   "dependencies": {
     "algomatic": "^3.2.1"

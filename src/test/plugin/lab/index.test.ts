@@ -1,7 +1,5 @@
 import { Color } from '../../../main/core';
-import labPlugin from '../../../main/plugin/lab';
-
-labPlugin(Color);
+import '../../../main/plugin/lab';
 
 describe('lab', () => {
   test('mutates LAB color components', () => {

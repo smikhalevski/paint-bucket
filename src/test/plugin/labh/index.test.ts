@@ -1,7 +1,5 @@
 import { Color } from '../../../main/core';
-import labhPlugin from '../../../main/plugin/labh';
-
-labhPlugin(Color);
+import '../../../main/plugin/labh';
 
 describe('labh', () => {
   test('mutates LABh color components', () => {

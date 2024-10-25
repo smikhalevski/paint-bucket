@@ -1,9 +1,6 @@
 import { Color } from '../../../main/core';
-import cssPlugin from '../../../main/plugin/css';
-import rgbPlugin from '../../../main/plugin/rgb';
-
-rgbPlugin(Color);
-cssPlugin(Color);
+import '../../../main/plugin/css';
+import '../../../main/plugin/rgb';
 
 describe('css plugin', () => {
   test('creates color from CSS representation', () => {

@@ -1,7 +1,5 @@
 import { Color, RGB } from '../../../main/core';
-import rgbPlugin from '../../../main/plugin/rgb';
-
-rgbPlugin(Color);
+import '../../../main/plugin/rgb';
 
 describe('parse', () => {
   test('creates color from component array', () => {

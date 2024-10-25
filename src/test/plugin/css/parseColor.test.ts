@@ -1,8 +1,6 @@
 import { Color } from '../../../main/core';
 import { parseColor } from '../../../main/plugin/css/parseColor';
-import rgbPlugin from '../../../main/plugin/rgb';
-
-rgbPlugin(Color);
+import '../../../main/plugin/rgb';
 
 describe('parseColor', () => {
   test('parses transparent color', () => {

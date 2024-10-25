@@ -1,6 +1,13 @@
 /**
  * CMYKa color model manipulation plugin.
  *
+ * ```ts
+ * import { clr } from 'paint-bucket/core';
+ * import 'paint-bucket/core/cmyk';
+ *
+ * clr().cmyk();
+ * ```
+ *
  * @module plugin/cmyk
  */
 
@@ -143,64 +150,62 @@ declare module '../../core' {
   }
 }
 
-export default function cmykPlugin(ctor: typeof Color): void {
-  ctor.prototype.cmyk = createAccessor<CMYK, Partial<CMYK>>(
-    color => {
-      const cmyk = color.getComponents(CMYK);
-      return [cmyk[0] * 100, cmyk[1] * 100, cmyk[2] * 100, cmyk[3] * 100, cmyk[4]];
-    },
+Color.prototype.cmyk = createAccessor<CMYK, Partial<CMYK>>(
+  color => {
+    const cmyk = color.getComponents(CMYK);
+    return [cmyk[0] * 100, cmyk[1] * 100, cmyk[2] * 100, cmyk[3] * 100, cmyk[4]];
+  },
 
-    (color, value) => {
-      const cmyk = color.useComponents(CMYK);
-      const [C, M, Y, K, a] = value;
+  (color, value) => {
+    const cmyk = color.useComponents(CMYK);
+    const [C, M, Y, K, a] = value;
 
-      if (C !== undefined) {
-        cmyk[0] = clamp(C / 100);
-      }
-      if (M !== undefined) {
-        cmyk[1] = clamp(M / 100);
-      }
-      if (Y !== undefined) {
-        cmyk[2] = clamp(Y / 100);
-      }
-      if (K !== undefined) {
-        cmyk[3] = clamp(K / 100);
-      }
-      if (a !== undefined) {
-        cmyk[4] = clamp(a);
-      }
+    if (C !== undefined) {
+      cmyk[0] = clamp(C / 100);
     }
-  );
-
-  ctor.prototype.cyan = createAccessor(
-    color => color.getComponents(CMYK)[0] * 100,
-
-    (color, C) => {
-      color.useComponents(CMYK)[0] = clamp(C / 100);
+    if (M !== undefined) {
+      cmyk[1] = clamp(M / 100);
     }
-  );
-
-  ctor.prototype.magenta = createAccessor(
-    color => color.getComponents(CMYK)[1] * 100,
-
-    (color, M) => {
-      color.useComponents(CMYK)[1] = clamp(M / 100);
+    if (Y !== undefined) {
+      cmyk[2] = clamp(Y / 100);
     }
-  );
-
-  ctor.prototype.yellow = createAccessor(
-    color => color.getComponents(CMYK)[2] * 100,
-
-    (color, Y) => {
-      color.useComponents(CMYK)[2] = clamp(Y / 100);
+    if (K !== undefined) {
+      cmyk[3] = clamp(K / 100);
     }
-  );
-
-  ctor.prototype.black = createAccessor(
-    color => color.getComponents(CMYK)[3] * 100,
-
-    (color, K) => {
-      color.useComponents(CMYK)[3] = clamp(K / 100);
+    if (a !== undefined) {
+      cmyk[4] = clamp(a);
     }
-  );
-}
+  }
+);
+
+Color.prototype.cyan = createAccessor(
+  color => color.getComponents(CMYK)[0] * 100,
+
+  (color, C) => {
+    color.useComponents(CMYK)[0] = clamp(C / 100);
+  }
+);
+
+Color.prototype.magenta = createAccessor(
+  color => color.getComponents(CMYK)[1] * 100,
+
+  (color, M) => {
+    color.useComponents(CMYK)[1] = clamp(M / 100);
+  }
+);
+
+Color.prototype.yellow = createAccessor(
+  color => color.getComponents(CMYK)[2] * 100,
+
+  (color, Y) => {
+    color.useComponents(CMYK)[2] = clamp(Y / 100);
+  }
+);
+
+Color.prototype.black = createAccessor(
+  color => color.getComponents(CMYK)[3] * 100,
+
+  (color, K) => {
+    color.useComponents(CMYK)[3] = clamp(K / 100);
+  }
+);

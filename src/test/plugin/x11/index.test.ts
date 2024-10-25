@@ -1,7 +1,5 @@
 import { Color, RGB } from '../../../main/core';
-import x11Plugin from '../../../main/plugin/x11';
-
-x11Plugin(Color);
+import '../../../main/plugin/x11';
 
 describe('parse', () => {
   test('creates color by X11 name', () => {
