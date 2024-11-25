@@ -13,7 +13,7 @@ npm install --save-prod paint-bucket
 
 # Overview
 
-🔎 [API documentation is available here.](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html)
+🔎 [API documentation is available here.](https://smikhalevski.github.io/paint-bucket/classes/core.Color.html)
 
 ```ts
 import { clr } from 'paint-bucket';
@@ -55,8 +55,8 @@ clr([64, 128, 0])
 // ⮕ [192, 255, 0, 1]
 ```
 
-[`clr`](https://smikhalevski.github.io/paint-bucket/functions/paint_bucket_core.clr-1.html) returns a mutable instance
-of the [`Color`](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html) class. To create a
+[`clr`](https://smikhalevski.github.io/paint-bucket/functions/core.clr.html) returns a mutable instance
+of the [`Color`](https://smikhalevski.github.io/paint-bucket/classes/core.Color.html) class. To create a
 copy of the `Color` instance you can use one of these approaches:
 
 ```ts
@@ -154,7 +154,7 @@ new Color(HSL, [0.5, 1, 0.5, 0.7]); // 70% transparent cyan HSL color
 ```
 
 `Color` provides a mechanism to acquire color components in any color model via the
-[`getComponents`](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html#getComponents)
+[`getComponents`](https://smikhalevski.github.io/paint-bucket/classes/core.Color.html#getComponents)
 method.
 
 ```ts
@@ -168,10 +168,10 @@ new Color(HSL, [0.5, 1, 0.5, 0.7]).getComponents(RGB);
 Here, we created a Color instance initialized with the components of the cyan color in the HSL color model and retrieved
 components in the RGB color model.
 
-[`getComponents`](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html#getComponents) method
+[`getComponents`](https://smikhalevski.github.io/paint-bucket/classes/core.Color.html#getComponents) method
 returns read-only color components, which are computed on the fly. To update the color components of the `Color`
 instance, you should useComponents the
-[`useComponents`](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html#useComponents)
+[`useComponents`](https://smikhalevski.github.io/paint-bucket/classes/core.Color.html#useComponents)
 method. This method returns a writable array of components in a particular color model.
 
 ```ts
@@ -249,7 +249,7 @@ clr().red(64).red(r => r * 2).red();
 ## Extend color instance
 
 Below is an example that shows how to extend the
-[`Color`](https://smikhalevski.github.io/paint-bucket/classes/paint_bucket_core.Color.html)
+[`Color`](https://smikhalevski.github.io/paint-bucket/classes/core.Color.html)
 prototype to implement a color component read and write methods.
 
 ```ts
@@ -266,37 +266,32 @@ declare module 'paint-bucket/core' {
   }
 }
 
-export default function (ctor: typeof Color): void {
+Color.prototype.getGreen = function () {
+  // Get read-only array of RGB color components where each component
+  // is in [0, 1] range
+  const rgb = this.getComponents(RGB);
 
-  ctor.prototype.getGreen = function () {
-    // Get read-only array of RGB color components where each component
-    // is in [0, 1] range
-    const rgb = this.getComponents(RGB);
+  return rgb[1] * 255;
+};
 
-    return rgb[1] * 255;
-  };
+Color.prototype.setGreen = function (green) {
+  // Get writable array of RGB color components where each component
+  // is in [0, 1] range
+  const rgb = this.useComponents(RGB);
 
-  ctor.prototype.setGreen = function (green) {
-    // Get writable array of RGB color components where each component
-    // is in [0, 1] range
-    const rgb = this.useComponents(RGB);
+  // Update the green component
+  rgb[1] = green / 255;
 
-    // Update the green component
-    rgb[1] = green / 255;
-
-    // Return Color instance to allow chaining
-    return this;
-  };
-}
+  // Return Color instance to allow chaining
+  return this;
+};
 ```
 
 To use this plugin we need to create a `Color` instance:
 
 ```ts
-import { clr, Color, RGB } from 'paint-bucket/core';
-import myPlugin from './my-plugin';
-
-myPlugin(Color);
+import { clr, RGB } from 'paint-bucket/core';
+import './my-plugin';
 
 const color = clr().setRed(128);
 
