@@ -13,21 +13,28 @@ export function clr(value?: ColorLike): Color {
   return value instanceof Color ? value.clone() : Color.parse(value);
 }
 
+clr.gradient = gradient;
+
 /**
- * Creates a new gradient.
+ * Creates a new gradient with equidistant stops.
  *
- * @param colors The optional list of colors that comprise the gradient. Stop position for each color is set to its
- * index in the array.
+ * @param colors The list of colors that comprise the gradient.
+ * @param minValue The value of the first color in {@link colors}.
+ * @param maxValue The value of the last color in {@link colors}.
  */
-function gradient(colors?: readonly ColorLike[]): Gradient {
+function gradient(
+  colors?: readonly ColorLike[],
+  minValue = 0,
+  maxValue = colors === undefined ? 0 : minValue + colors.length - 1
+): Gradient {
   const gradient = new Gradient();
 
-  if (colors) {
-    for (let i = 0; i < colors.length; ++i) {
-      gradient.stop(i, colors[i]);
-    }
+  if (colors === undefined) {
+    return gradient;
+  }
+
+  for (let i = 0; i < colors.length; ++i) {
+    gradient.stop(minValue + (maxValue - minValue) * (i / (colors.length - 1)), colors[i]);
   }
   return gradient;
 }
-
-clr.gradient = gradient;
