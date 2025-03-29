@@ -169,24 +169,24 @@
   },
   "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
   "devDependencies": {
-    "@rollup/plugin-typescript": "^12.1.1",
-    "@swc/core": "^1.7.39",
-    "@swc/jest": "^0.2.36",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@swc/core": "^1.11.13",
+    "@swc/jest": "^0.2.37",
     "@types/jest": "^29.5.14",
     "chroma-js": "^3.1.2",
-    "glob": "^11.0.0",
+    "glob": "^11.0.1",
     "jest": "^29.7.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
-    "rollup": "^4.24.0",
+    "rollup": "^4.38.0",
     "tinycolor2": "^1.6.0",
     "toofast": "^2.0.0",
-    "tslib": "^2.8.0",
+    "tslib": "^2.8.1",
     "typedoc": "^0.26.10",
     "typedoc-custom-css": "github:smikhalevski/typedoc-custom-css#master",
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "algomatic": "^3.2.1"
+    "algomatic": ">=3.2.1"
   }
 }
