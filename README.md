@@ -1,7 +1,5 @@
 <p align="center">
-  <a href="#readme">
-    <img alt="Paint Bucket" src="images/logo.png" width="600"/>
-  </a>
+  <a href="#readme"><img alt="Paint Bucket" src="images/logo.png" width="600"/></a>
 </p>
 
 [Highly performant](#performance), [extensible](#plugins), and
@@ -305,9 +303,7 @@ color.getComponents(RGB);
 
 # Performance
 
-Clone this repo and use `npm ci && npm run build && npm run perf` to run the performance testsuite.
-
-Results are in millions of operations per second. The higher number is better.
+Results are in millions of operations per second (MHz). The higher number is better.
 
 |                                      | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
 | ------------------------------------ | -----------: | ------------------------------------------------: | --------------------------------------------: |
@@ -321,7 +317,7 @@ Results are in millions of operations per second. The higher number is better.
 | `clr(…).saturation(50).rgb()`        |         11.0 |                                               0.9 |                                           1.0 |
 | `clr(…).hue(90).lightness(10).rgb()` |          9.5 |                                               0.6 |                                            🚫 |
 | `clr.gradient(['#fff', '#000'])`     |          3.3 |                                                🚫 |                                           0.5 |
-| `clr.gradient(…).at(0.5, RGB)`       |          8.5 |                                                🚫 |                                           3.7 |
+| `clr.gradient(…).at(0.5)`            |          8.5 |                                                🚫 |                                           3.7 |
 
 Tests were conducted using [TooFast](https://github.com/smikhalevski/toofast#readme) on Apple M1 with Node.js v23.1.0.
 

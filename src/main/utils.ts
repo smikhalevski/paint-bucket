@@ -167,7 +167,7 @@ export function convertComponentsToColorInt32(components: readonly number[]): nu
 }
 
 /**
- * Returns a linear interpolation function for given pivot points.
+ * Returns a linear interpolator for given pivot points.
  */
 export function lerp(xs: ArrayLike<number>, ys: ArrayLike<number>): Interpolator {
   const n = min(xs.length, ys.length);
