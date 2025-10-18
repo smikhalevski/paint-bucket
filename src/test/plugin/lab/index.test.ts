@@ -1,4 +1,5 @@
-import { Color } from '../../../main/core';
+import { describe, test, expect } from 'vitest';
+import { Color } from '../../../main/core.js';
 import '../../../main/plugin/lab';
 
 describe('lab', () => {

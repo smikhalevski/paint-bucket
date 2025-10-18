@@ -11,11 +11,11 @@
  * @module plugin/x11
  */
 
-import { Color } from '../../core';
-import { RGB } from '../../rgb';
-import { x11Components } from './x11-components';
+import { Color } from '../../core.js';
+import { RGB } from '../../rgb.js';
+import { x11Components } from './x11-components.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface ColorLikeSource {
     /**
      * Creates a new color using its [X11 color name](https://en.wikipedia.org/wiki/X11_color_names).

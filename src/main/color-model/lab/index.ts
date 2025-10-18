@@ -8,6 +8,6 @@
  * @module color-model/lab
  */
 
-export { LAB } from './lab';
-export { convertLABToRGB, convertRGBToLAB } from './lab-rgb';
-export { convertLABToXYZ, convertXYZToLAB } from './lab-xyz';
+export { LAB } from './lab.js';
+export { convertLABToRGB, convertRGBToLAB } from './lab-rgb.js';
+export { convertLABToXYZ, convertXYZToLAB } from './lab-xyz.js';

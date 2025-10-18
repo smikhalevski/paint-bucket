@@ -1,5 +1,5 @@
-import { Color } from './Color';
-import { RGB } from './rgb';
+import { Color } from './Color.js';
+import { RGB } from './rgb.js';
 
 /**
  * Merge declaration with this interface to add more types to {@link ColorLike} type.

@@ -1,4 +1,5 @@
-import { clr } from '../main';
+import { describe, test, expect } from 'vitest';
+import { clr } from '../main/index.js';
 
 describe('clr', () => {
   test('parses hex color', () => {

@@ -1,4 +1,5 @@
-import { convertCMYKToRGB, convertRGBToCMYK } from '../../../main/color-model/cmyk';
+import { describe, test, expect } from 'vitest';
+import { convertCMYKToRGB, convertRGBToCMYK } from '../../../main/color-model/cmyk/index.js';
 
 describe('convertRGBToCMYK', () => {
   test('converts black RGB to CMYK', () => {

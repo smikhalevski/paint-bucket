@@ -2,8 +2,8 @@
  * @module utils
  */
 
-import { Color } from './Color';
-import { Accessor } from './types';
+import { Color } from './Color.js';
+import { Accessor } from './types.js';
 
 const { round } = Math;
 

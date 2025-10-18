@@ -1,5 +1,6 @@
-import { Color, RGB } from '../../../main/core';
-import { stringifyHex } from '../../../main/plugin/css/stringifyHex';
+import { describe, test, expect } from 'vitest';
+import { Color, RGB } from '../../../main/core.js';
+import { stringifyHex } from '../../../main/plugin/css/stringifyHex.js';
 
 describe('stringifyHex', () => {
   test('stringifies black RGB', () => {

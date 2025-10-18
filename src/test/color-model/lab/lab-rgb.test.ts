@@ -1,4 +1,5 @@
-import { convertLABToRGB, convertRGBToLAB } from '../../../main/color-model/lab';
+import { describe, test, expect } from 'vitest';
+import { convertLABToRGB, convertRGBToLAB } from '../../../main/color-model/lab/index.js';
 
 describe('convertRGBToLAB', () => {
   test('converts black RGB to LAB', () => {

@@ -11,11 +11,11 @@
  * @module plugin/hsv
  */
 
-import { Applicator, Color } from '../../core';
-import { HSV } from '../../color-model/hsv';
-import { clamp, createAccessor } from '../../utils';
+import { Applicator, Color } from '../../core.js';
+import { HSV } from '../../color-model/hsv/index.js';
+import { clamp, createAccessor } from '../../utils.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface Color {
     /**
      * Returns HSVa components as an array where hue ∈ [0, 360], saturation and value ∈ [0, 100] and alpha ∈ [0, 1]

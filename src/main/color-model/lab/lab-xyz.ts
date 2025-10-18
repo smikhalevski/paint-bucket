@@ -1,6 +1,6 @@
-import { clamp } from '../../utils';
-import { WhitePoint, XYZ } from '../xyz';
-import { LAB } from './lab';
+import { clamp } from '../../utils.js';
+import { WhitePoint, XYZ } from '../xyz/index.js';
+import { LAB } from './lab.js';
 
 function pow3(x: number): number {
   return x * x * x;

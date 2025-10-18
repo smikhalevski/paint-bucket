@@ -1,5 +1,5 @@
-import { RGB } from '../../rgb';
-import { CMYK } from './cmyk';
+import { RGB } from '../../rgb.js';
+import { CMYK } from './cmyk.js';
 
 const { min } = Math;
 

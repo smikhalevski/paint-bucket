@@ -1,4 +1,5 @@
-import { convertRGBToXYZ, convertXYZToRGB } from '../../../main/color-model/xyz';
+import { describe, test, expect } from 'vitest';
+import { convertRGBToXYZ, convertXYZToRGB } from '../../../main/color-model/xyz/index.js';
 
 describe('convertRGBToXYZ', () => {
   test('converts black RGB to XYZ', () => {

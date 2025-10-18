@@ -1,4 +1,5 @@
-import { convertHWBToRGB, convertRGBToHWB } from '../../../main/color-model/hwb';
+import { describe, test, expect } from 'vitest';
+import { convertHWBToRGB, convertRGBToHWB } from '../../../main/color-model/hwb/index.js';
 
 describe('convertRGBToHWB', () => {
   test('converts black RGB to HWB', () => {

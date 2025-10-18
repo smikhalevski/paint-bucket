@@ -1,4 +1,5 @@
-import { Color, Gradient, Interpolator, RGB } from '../main/core';
+import { describe, test, expect, vi } from 'vitest';
+import { Color, Gradient, Interpolator, RGB } from '../main/core.js';
 import { lerp } from 'algomatic';
 
 describe('Gradient', () => {
@@ -43,8 +44,8 @@ describe('Gradient', () => {
     const color2 = new Color();
     const gradient = new Gradient().stop(0, color1).stop(1, color2);
 
-    const interpolatorUpdateMock = jest.fn();
-    const interpolatorFactoryMock = jest.fn(() => {
+    const interpolatorUpdateMock = vi.fn();
+    const interpolatorFactoryMock = vi.fn(() => {
       const interpolator: Interpolator = () => 0;
       interpolator.update = interpolatorUpdateMock;
       return interpolator;
@@ -67,7 +68,7 @@ describe('Gradient', () => {
   test('updates interpolators if a new model was requested', () => {
     const gradient = new Gradient().stop(0, new Color()).stop(1, new Color());
 
-    const interpolatorFactoryMock = jest.fn(() => () => 0);
+    const interpolatorFactoryMock = vi.fn(() => () => 0);
 
     gradient.getComponents(RGB, 0.5, interpolatorFactoryMock);
     gradient.getComponents({ ...RGB }, 0.5, interpolatorFactoryMock);
@@ -80,7 +81,7 @@ describe('Gradient', () => {
     const color2 = new Color();
     const gradient = new Gradient().stop(0, color1).stop(1, color2);
 
-    const interpolatorFactoryMock = jest.fn(() => () => 0);
+    const interpolatorFactoryMock = vi.fn(() => () => 0);
 
     gradient.getComponents(RGB, 0.5, interpolatorFactoryMock);
     color1.useComponents(RGB)[1] = 0.5;

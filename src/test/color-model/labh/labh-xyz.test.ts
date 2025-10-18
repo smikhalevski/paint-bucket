@@ -1,4 +1,5 @@
-import { convertLABhToXYZ, convertXYZToLABh } from '../../../main/color-model/labh';
+import { describe, test, expect } from 'vitest';
+import { convertLABhToXYZ, convertXYZToLABh } from '../../../main/color-model/labh/index.js';
 
 describe('convertXYZToLABh', () => {
   test('converts black XYZ to LABh', () => {

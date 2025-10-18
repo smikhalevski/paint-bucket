@@ -1,5 +1,5 @@
-import { XYZ } from '../xyz';
-import { LABh } from './labh';
+import { XYZ } from '../xyz/index.js';
+import { LABh } from './labh.js';
 
 const { sqrt } = Math;
 

@@ -1,4 +1,5 @@
-import { convertHSVToRGB, convertRGBToHSV } from '../../../main/color-model/hsv';
+import { describe, test, expect } from 'vitest';
+import { convertHSVToRGB, convertRGBToHSV } from '../../../main/color-model/hsv/index.js';
 
 describe('convertRGBToHSV', () => {
   test('converts black RGB to HSV', () => {

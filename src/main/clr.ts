@@ -1,6 +1,6 @@
-import { ColorLike } from './types';
-import { Color } from './Color';
-import { Gradient } from './Gradient';
+import { ColorLike } from './types.js';
+import { Color } from './Color.js';
+import { Gradient } from './Gradient.js';
 
 /**
  * Parses value into a {@link Color} instance. When another color instance is provided, it is cloned.

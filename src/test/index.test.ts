@@ -1,4 +1,5 @@
-import { Color } from '../main';
+import { describe, test, expect } from 'vitest';
+import { Color } from '../main/index.js';
 
 describe('color', () => {
   test('returns color by X11 name', () => {

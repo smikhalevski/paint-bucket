@@ -1,10 +1,11 @@
+import { describe, test, expect } from 'vitest';
 import {
   clamp,
   composeColorInt32,
   getColorInt32Component,
   normalizeColorInt,
   setColorInt32Component,
-} from '../main/utils';
+} from '../main/utils.js';
 
 describe('clamp', () => {
   test('clamps value', () => {

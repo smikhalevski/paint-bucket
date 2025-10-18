@@ -1,4 +1,5 @@
-import { Color } from '../../../main/core';
+import { describe, test, expect } from 'vitest';
+import { Color } from '../../../main/core.js';
 import '../../../main/plugin/css';
 import '../../../main/plugin/palette';
 import '../../../main/plugin/rgb';

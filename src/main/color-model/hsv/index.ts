@@ -8,5 +8,5 @@
  * @module color-model/hsv
  */
 
-export { HSV } from './hsv';
-export { convertHSVToRGB, convertRGBToHSV } from './hsv-rgb';
+export { HSV } from './hsv.js';
+export { convertHSVToRGB, convertRGBToHSV } from './hsv-rgb.js';

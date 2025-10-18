@@ -1,5 +1,6 @@
-import { Color, RGB } from '../../../main/core';
-import { stringifyRGB } from '../../../main/plugin/css/stringifyRGB';
+import { describe, test, expect } from 'vitest';
+import { Color, RGB } from '../../../main/core.js';
+import { stringifyRGB } from '../../../main/plugin/css/stringifyRGB.js';
 
 describe('stringifyRGB', () => {
   test('stringifies black RGB', () => {

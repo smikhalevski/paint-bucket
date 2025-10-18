@@ -11,12 +11,12 @@
  * @module plugin/difference
  */
 
-import { ColorLike } from '../../core';
-import { Color } from '../../Color';
-import { LAB } from '../../color-model/lab';
-import { getDeltaE } from './getDeltaE';
+import { ColorLike } from '../../core.js';
+import { Color } from '../../Color.js';
+import { LAB } from '../../color-model/lab/index.js';
+import { getDeltaE } from './getDeltaE.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface Color {
     /**
      * Computes the CIEDE2000 color-difference.

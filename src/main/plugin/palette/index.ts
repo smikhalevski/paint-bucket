@@ -11,11 +11,11 @@
  * @module plugin/palette
  */
 
-import { Color } from '../../core';
-import { HSL } from '../../color-model/hsl';
-import { HSV } from '../../color-model/hsv';
+import { Color } from '../../core.js';
+import { HSL } from '../../color-model/hsl/index.js';
+import { HSV } from '../../color-model/hsv/index.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface Color {
     /**
      * Returns a new complement color.

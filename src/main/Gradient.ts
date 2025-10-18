@@ -1,8 +1,8 @@
-import { ColorLike, ColorModel, Interpolator, InterpolatorFactory } from './types';
+import { ColorLike, ColorModel, Interpolator, InterpolatorFactory } from './types.js';
 import { lerp } from 'algomatic';
-import { Color } from './Color';
-import { RGB } from './rgb';
-import { clamp } from './utils';
+import { Color } from './Color.js';
+import { RGB } from './rgb.js';
+import { clamp } from './utils.js';
 
 // Black RGBa color that is returned if gradient has zero domain size
 const blackRGB: RGB = [0, 0, 0, 1];

@@ -1,4 +1,5 @@
-import { convertLABhToRGB, convertRGBToLABh } from '../../../main/color-model/labh';
+import { describe, test, expect } from 'vitest';
+import { convertLABhToRGB, convertRGBToLABh } from '../../../main/color-model/labh/index.js';
 
 describe('convertRGBToLABh', () => {
   test('converts black RGB to LABh', () => {

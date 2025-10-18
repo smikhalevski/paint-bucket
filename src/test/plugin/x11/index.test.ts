@@ -1,4 +1,5 @@
-import { Color, RGB } from '../../../main/core';
+import { describe, test, expect } from 'vitest';
+import { Color, RGB } from '../../../main/core.js';
 import '../../../main/plugin/x11';
 
 describe('parse', () => {

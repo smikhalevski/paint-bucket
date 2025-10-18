@@ -11,11 +11,11 @@
  * @module plugin/hwb
  */
 
-import { Applicator, Color } from '../../core';
-import { HWB } from '../../color-model/hwb';
-import { clamp, createAccessor } from '../../utils';
+import { Applicator, Color } from '../../core.js';
+import { HWB } from '../../color-model/hwb/index.js';
+import { clamp, createAccessor } from '../../utils.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface Color {
     /**
      * Returns HWBa components as an array where hue ∈ [0, 360], whiteness and blackness ∈ [0, 100] and alpha ∈ [0, 1]

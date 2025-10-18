@@ -1,6 +1,6 @@
-import { Color } from '../../Color';
-import { RGB } from '../../rgb';
-import { convertComponentsToColorInt32 } from '../../utils';
+import { Color } from '../../Color.js';
+import { RGB } from '../../rgb.js';
+import { convertComponentsToColorInt32 } from '../../utils.js';
 
 const HEX_MASK = '00000000';
 

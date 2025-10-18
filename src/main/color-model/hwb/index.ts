@@ -8,5 +8,5 @@
  * @module color-model/hwb
  */
 
-export { HWB } from './hwb';
-export { convertHWBToRGB, convertRGBToHWB } from './hwb-rgb';
+export { HWB } from './hwb.js';
+export { convertHWBToRGB, convertRGBToHWB } from './hwb-rgb.js';

@@ -8,6 +8,6 @@
  * @module color-model/xyz
  */
 
-export { XYZ } from './xyz';
-export { convertRGBToXYZ, convertXYZToRGB } from './xyz-rgb';
-export { WhitePoint } from './WhitePoint';
+export { XYZ } from './xyz.js';
+export { convertRGBToXYZ, convertXYZToRGB } from './xyz-rgb.js';
+export { WhitePoint } from './WhitePoint.js';

@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "importHelpers": true,
-    "moduleResolution": "Node",
-    "esModuleInterop": true,
     "isolatedModules": true,
-    "noUnusedLocals": true,
     "strict": true,
-    "target": "ES5",
-    "module": "ES6",
-    "outDir": "./lib"
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "target": "ES2020",
+    "module": "NodeNext",
+    "lib": ["ES2022"],
+    "outDir": "./lib",
+    "jsx": "react"
   },
   "include": ["./src/**/*"]
 }

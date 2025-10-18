@@ -1,5 +1,5 @@
-import { Color } from '../../core';
-import { HSL } from '../../color-model/hsl';
+import { Color } from '../../core.js';
+import { HSL } from '../../color-model/hsl/index.js';
 
 const { round } = Math;
 

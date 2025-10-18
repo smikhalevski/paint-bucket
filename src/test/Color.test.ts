@@ -1,4 +1,5 @@
-import { Color, ColorModel, RGB } from '../main/core';
+import { describe, test, expect, vi } from 'vitest';
+import { Color, ColorModel, RGB } from '../main/core.js';
 
 describe('Color', () => {
   const abcColorModel: ColorModel = {
@@ -79,8 +80,8 @@ describe('Color', () => {
     const abcColorModelMock: ColorModel = {
       name: 'ABC',
       componentCount: 4,
-      convertComponentsToRGB: jest.fn(abcColorModel.convertComponentsToRGB),
-      convertRGBToComponents: jest.fn(abcColorModel.convertRGBToComponents),
+      convertComponentsToRGB: vi.fn(abcColorModel.convertComponentsToRGB),
+      convertRGBToComponents: vi.fn(abcColorModel.convertRGBToComponents),
     };
 
     color.getComponents(abcColorModelMock);
@@ -95,8 +96,8 @@ describe('Color', () => {
     const abcColorModelMock: ColorModel = {
       name: 'ABC',
       componentCount: 4,
-      convertComponentsToRGB: jest.fn(abcColorModel.convertComponentsToRGB),
-      convertRGBToComponents: jest.fn(abcColorModel.convertRGBToComponents),
+      convertComponentsToRGB: vi.fn(abcColorModel.convertComponentsToRGB),
+      convertRGBToComponents: vi.fn(abcColorModel.convertRGBToComponents),
     };
 
     const abc1 = color.getComponents(abcColorModelMock);
