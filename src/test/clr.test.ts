@@ -3,7 +3,7 @@ import { clr } from '../main/index.js';
 
 describe('clr', () => {
   test('parses hex color', () => {
-    expect(clr('#abc').rgb()).toEqual([170, 187, 204, 1]);
+    expect(clr('#abc').rgb()).toStrictEqual([170, 187, 204, 1]);
   });
 });
 

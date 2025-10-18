@@ -4,41 +4,41 @@ import '../../../main/plugin/rgb';
 
 describe('parse', () => {
   test('creates color from component array', () => {
-    expect(Color.parse([128, 128, 128, 0.5]).rgb()).toEqual([128, 128, 128, 0.5]);
+    expect(Color.parse([128, 128, 128, 0.5]).rgb()).toStrictEqual([128, 128, 128, 0.5]);
   });
 
   test('creates color from a 24-bit integer', () => {
-    expect(Color.parse(0xaa_bb_cc).rgb()).toEqual([170, 187, 204, 1]);
+    expect(Color.parse(0xaa_bb_cc).rgb()).toStrictEqual([170, 187, 204, 1]);
   });
 });
 
 describe('rgb', () => {
   test('creates color from component array', () => {
-    expect(new Color().rgb([128, 128, 128, 0.5]).rgb()).toEqual([128, 128, 128, 0.5]);
+    expect(new Color().rgb([128, 128, 128, 0.5]).rgb()).toStrictEqual([128, 128, 128, 0.5]);
   });
 
   test('clamps components', () => {
-    expect(new Color().rgb([1000, -1000, 256, 2]).rgb()).toEqual([255, 0, 255, 1]);
+    expect(new Color().rgb([1000, -1000, 256, 2]).rgb()).toStrictEqual([255, 0, 255, 1]);
   });
 
   test('sets color from partial component array', () => {
-    expect(Color.parse([255, 255, 255, 1]).rgb([128, , , 0.5]).rgb()).toEqual([128, 255, 255, 0.5]);
+    expect(Color.parse([255, 255, 255, 1]).rgb([128, , , 0.5]).rgb()).toStrictEqual([128, 255, 255, 0.5]);
   });
 });
 
 describe('rgb24', () => {
   test('creates color from a 24-bit integer', () => {
-    expect(new Color().rgb24(0xff_ff_ff).rgb()).toEqual([255, 255, 255, 1]);
+    expect(new Color().rgb24(0xff_ff_ff).rgb()).toStrictEqual([255, 255, 255, 1]);
   });
 
   test('returns 24-bit integer', () => {
-    expect(new Color(RGB, [1, 1, 1, 1]).rgb24()).toEqual(0xff_ff_ff);
+    expect(new Color(RGB, [1, 1, 1, 1]).rgb24()).toStrictEqual(0xff_ff_ff);
   });
 });
 
 describe('rgb32', () => {
   test('creates color from 32-bit integer', () => {
-    expect(new Color().rgb32(0xff_ff_ff_ee).rgb()).toEqual([255, 255, 255, 0.9333333333333333]);
+    expect(new Color().rgb32(0xff_ff_ff_ee).rgb()).toStrictEqual([255, 255, 255, 0.9333333333333333]);
   });
 });
 

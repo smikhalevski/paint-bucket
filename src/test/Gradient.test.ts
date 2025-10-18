@@ -6,26 +6,26 @@ describe('Gradient', () => {
   test('returns black color for an empty gradient', () => {
     const gradient = new Gradient();
 
-    expect(gradient.getComponents(RGB, 0.5, lerp)).toEqual([0, 0, 0, 1]);
+    expect(gradient.getComponents(RGB, 0.5, lerp)).toStrictEqual([0, 0, 0, 1]);
   });
 
   test('returns the only color for a gradient with a single color', () => {
     const gradient = new Gradient().stop(0, new Color(RGB, [1, 1, 1, 1]));
 
-    expect(gradient.getComponents(RGB, 0.5, lerp)).toEqual([1, 1, 1, 1]);
+    expect(gradient.getComponents(RGB, 0.5, lerp)).toStrictEqual([1, 1, 1, 1]);
   });
 
   test('returns components at value', () => {
     const gradient = new Gradient().stop(0, new Color(RGB, [1, 1, 1, 1])).stop(1, new Color());
 
-    expect(gradient.getComponents(RGB, 0.5, lerp)).toEqual([0.5, 0.5, 0.5, 1]);
+    expect(gradient.getComponents(RGB, 0.5, lerp)).toStrictEqual([0.5, 0.5, 0.5, 1]);
   });
 
   test('returns components at out-of-bounds value', () => {
     const gradient = new Gradient().stop(0, new Color(RGB, [1, 1, 1, 1])).stop(1, new Color());
 
-    expect(gradient.getComponents(RGB, -1, lerp)).toEqual([1, 1, 1, 1]);
-    expect(gradient.getComponents(RGB, 2, lerp)).toEqual([0, 0, 0, 1]);
+    expect(gradient.getComponents(RGB, -1, lerp)).toStrictEqual([1, 1, 1, 1]);
+    expect(gradient.getComponents(RGB, 2, lerp)).toStrictEqual([0, 0, 0, 1]);
   });
 
   test('supports multiple stops', () => {
@@ -34,9 +34,9 @@ describe('Gradient', () => {
       .stop(0, new Color(RGB, [1, 1, 1, 1]))
       .stop(0.5, new Color());
 
-    expect(gradient.getComponents(RGB, 0.25, lerp)).toEqual([0.5, 0.5, 0.5, 1]);
-    expect(gradient.getComponents(RGB, 0.5, lerp)).toEqual([0, 0, 0, 1]);
-    expect(gradient.getComponents(RGB, 0.75, lerp)).toEqual([0.5, 0, 0, 1]);
+    expect(gradient.getComponents(RGB, 0.25, lerp)).toStrictEqual([0.5, 0.5, 0.5, 1]);
+    expect(gradient.getComponents(RGB, 0.5, lerp)).toStrictEqual([0, 0, 0, 1]);
+    expect(gradient.getComponents(RGB, 0.75, lerp)).toStrictEqual([0.5, 0, 0, 1]);
   });
 
   test('updates interpolators if color was changed', () => {
@@ -96,6 +96,6 @@ describe('Gradient', () => {
       .stop(1, new Color(RGB, [1, 1, 1, 1]))
       .at(0.5);
 
-    expect(color).toEqual(new Color(RGB, [0.5, 0.5, 0.5, 1]));
+    expect(color).toStrictEqual(new Color(RGB, [0.5, 0.5, 0.5, 1]));
   });
 });

@@ -19,8 +19,8 @@ clr.gradient = gradient;
  * Creates a new gradient with equidistant stops.
  *
  * @param colors The list of colors that comprise the gradient.
- * @param minValue The value of the first color in {@link colors}.
- * @param maxValue The value of the last color in {@link colors}.
+ * @param minValue The value of the first color in colors.
+ * @param maxValue The value of the last color in colors.
  */
 function gradient(
   colors?: readonly ColorLike[],

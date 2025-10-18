@@ -2,17 +2,17 @@
  * @module core
  */
 
-import './plugin/cmyk';
-import './plugin/css';
-import './plugin/difference';
-import './plugin/hsl';
-import './plugin/hsv';
-import './plugin/hwb';
-import './plugin/lab';
-import './plugin/labh';
-import './plugin/palette';
-import './plugin/rgb';
-import './plugin/x11';
+import './plugin/cmyk/index.js';
+import './plugin/css/index.js';
+import './plugin/difference/index.js';
+import './plugin/hsl/index.js';
+import './plugin/hsv/index.js';
+import './plugin/hwb/index.js';
+import './plugin/lab/index.js';
+import './plugin/labh/index.js';
+import './plugin/palette/index.js';
+import './plugin/rgb/index.js';
+import './plugin/x11/index.js';
 
 export type * from './plugin/cmyk/index.js';
 export type * from './plugin/css/index.js';

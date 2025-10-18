@@ -3,13 +3,13 @@ import { Color } from '../main/index.js';
 
 describe('color', () => {
   test('returns color by X11 name', () => {
-    expect(Color.parse('blue').rgb()).toEqual([0, 0, 255, 1]);
+    expect(Color.parse('blue').rgb()).toStrictEqual([0, 0, 255, 1]);
   });
 });
 
 describe('rgb', () => {
   test('returns RGBa components', () => {
-    expect(Color.parse('#abc').rgb()).toEqual([170, 187, 204, 1]);
+    expect(Color.parse('#abc').rgb()).toStrictEqual([170, 187, 204, 1]);
   });
 });
 
