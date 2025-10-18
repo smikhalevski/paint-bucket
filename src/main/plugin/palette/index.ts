@@ -55,8 +55,8 @@ declare module '../../core.js' {
     /**
      * Returns the list of analogous colors.
      *
-     * @param [n = 6] The number of colors to pick.
-     * @param [slices = 30] The number of colors to pick.
+     * @param n The number of colors to pick.
+     * @param slices The number of colors to pick.
      * @returns The list of {@link Color} instances.
      * @group Plugin Methods
      * @plugin {@link plugin/palette! paint-bucket/plugin/palette}
@@ -66,7 +66,7 @@ declare module '../../core.js' {
     /**
      * Returns the list of monochromatic colors.
      *
-     * @param [n = 6] The number of colors to pick.
+     * @param n The number of colors to pick.
      * @returns The list of {@link Color} instances.
      * @group Plugin Methods
      * @plugin {@link plugin/palette! paint-bucket/plugin/palette}

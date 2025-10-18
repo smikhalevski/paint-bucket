@@ -91,8 +91,8 @@ export class Gradient {
    * Returns the color at the given position in the gradient.
    *
    * @param x The value from the gradient domain for which the color is requested.
-   * @param [model = RGB] The color model that should be used for interpolation.
-   * @param [interpolatorFactory = lerp] The function that returns a color component interpolator.
+   * @param model The color model that should be used for interpolation.
+   * @param interpolatorFactory The function that returns a color component interpolator.
    * @returns The new {@link Color} instance.
    */
   at(x: number, model = RGB, interpolatorFactory: InterpolatorFactory = lerp): Color {
