@@ -46,18 +46,17 @@ export interface ColorModel {
 
 /**
  * The interpolator function that returns an interpolated value for the given argument.
+ *
+ * @returns An interpolated Y coordinate.
  */
-export interface Interpolator {
-  (x: number): number;
-
-  /**
-   * Update the interpolation domain. Used if stop colors of the gradient are changed.
-   */
-  update?(xs: readonly number[], ys: readonly number[]): void;
-}
+export type Interpolator = (x: number) => number;
 
 /**
  * Factory that returns an interpolator function for given pivot points.
+ *
+ * @param xs The array of X coordinates of pivot points in ascending order.
+ * @param ys The array of corresponding Y coordinates of pivot points.
+ * @returns The function that takes X coordinate and returns an interpolated Y coordinate.
  */
 export type InterpolatorFactory = (xs: readonly number[], ys: readonly number[]) => Interpolator;
 

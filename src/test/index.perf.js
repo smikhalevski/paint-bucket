@@ -1,8 +1,7 @@
-import { describe, test, measure, beforeIteration } from 'toofast';
+import { beforeIteration, describe, measure, test } from 'toofast';
 import tinycolor2 from 'tinycolor2';
 import chromaJs from 'chroma-js';
 import * as paintBucket from '../../lib/index.js';
-import * as algomatic from 'algomatic';
 
 // Create color from components
 describe('clr([255, 255, 255])', () => {
@@ -199,23 +198,6 @@ describe('clr.gradient(…).at(0.5, RGB, lerp)', () => {
   test('paint-bucket', () => {
     const gradient = paintBucket.clr.gradient(colors);
 
-    measure(() => gradient.at(0.7, paintBucket.RGB, algomatic.lerp));
-  });
-});
-
-// Interpolate spline LAB gradient
-describe('clr.gradient(…).at(0.5, LAB, csplineMonot)', () => {
-  const colors = ['#fff', '#000'];
-
-  test('chroma.js', () => {
-    const gradient = chromaJs.scale(colors).mode('lab');
-
-    measure(() => gradient(0.7));
-  });
-
-  test('paint-bucket', () => {
-    const gradient = paintBucket.clr.gradient(colors);
-
-    measure(() => gradient.at(0.7, paintBucket.LAB, algomatic.csplineMonot));
+    measure(() => gradient.at(0.7, paintBucket.RGB));
   });
 });

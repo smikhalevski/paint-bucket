@@ -1,8 +1,10 @@
 import { describe, test, expect } from 'vitest';
 import {
+  binarySearch,
   clamp,
   composeColorInt32,
   getColorInt32Component,
+  lerp,
   normalizeColorInt,
   setColorInt32Component,
 } from '../main/utils.js';
@@ -83,5 +85,31 @@ describe('setColorIntComponent', () => {
     expect(setColorInt32Component(0x12_34_56_78, 1, 0xaa_bb)).toBe(0x12_bb_56_78);
     expect(setColorInt32Component(0x12_34_56_78, 2, 0xaa_bb)).toBe(0x12_34_bb_78);
     expect(setColorInt32Component(0x12_34_56_78, 3, 0xaa_bb)).toBe(0x12_34_56_bb);
+  });
+});
+
+describe('lerp', () => {
+  test('creates a linear interpolator', () => {
+    const f = lerp([], []);
+
+    expect(f(0)).toBe(NaN);
+  });
+
+  test('creates a linear interpolator', () => {
+    const f = lerp([0, 1, 2], [0, 1, 0]);
+
+    expect(f(0)).toBe(0);
+    expect(f(0.5)).toBe(0.5);
+    expect(f(1)).toBe(1);
+    expect(f(1.5)).toBe(0.5);
+    expect(f(2)).toBe(0);
+  });
+});
+
+describe('binarySearch', () => {
+  test('searches for a value in an array', () => {
+    expect(binarySearch([], 20, 0)).toBe(-1);
+    expect(binarySearch([10, 20, 30, 40], 20, 4)).toBe(1);
+    expect(binarySearch([10, 20, 30, 40], 25, 4)).toBe(-3);
   });
 });

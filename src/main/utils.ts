@@ -3,9 +3,9 @@
  */
 
 import { Color } from './Color.js';
-import { Accessor } from './types.js';
+import { Accessor, Interpolator } from './types.js';
 
-const { round } = Math;
+const { min, round } = Math;
 
 /**
  * Creates the accessor callback that invokes getter of setter depending on the number of arguments.
@@ -164,4 +164,71 @@ export function convertComponentsToColorInt32(components: readonly number[]): nu
     round(components[2] * 0xff),
     round(components[3] * 0xff)
   );
+}
+
+/**
+ * Returns a linear interpolation function for given pivot points.
+ */
+export function lerp(xs: ArrayLike<number>, ys: ArrayLike<number>): Interpolator {
+  const n = min(xs.length, ys.length);
+  const x0 = xs[0];
+  const y0 = ys[0];
+  const xn = xs[n - 1];
+  const yn = ys[n - 1];
+
+  return x => {
+    if (x <= x0) {
+      return y0;
+    }
+    if (x >= xn) {
+      return yn;
+    }
+
+    let i = binarySearch(xs, x, n);
+    if (i >= 0) {
+      return ys[i];
+    }
+    i = ~i;
+
+    const xj = xs[i - 1];
+    const yj = ys[i - 1];
+
+    return yj + ((x - xj) / (xs[i] - xj)) * (ys[i] - yj);
+  };
+}
+
+/**
+ * Searches the specified array `xs` for the specified value `x` using the binary search algorithm.
+ *
+ * The array must be sorted into ascending order according to the natural ordering of its elements prior to making
+ * this call. If it is not sorted, the results are undefined.
+ *
+ * @param xs The array to be searched.
+ * @param x The value to be searched for.
+ * @param n The maximum index in `xs` that is searched (exclusive).
+ * @returns The index of the searched value, if it is contained in the array; otherwise, -(insertion point) - 1. The
+ * insertion point is defined as the point at which the searched value would be inserted into the array: the index of
+ * the first element greater than the searched value, or array length if all elements in the array are less than the
+ * specified key. Note that this guarantees that the return value will be ≥ 0 if and only if the searched value is
+ * found.
+ */
+export function binarySearch(xs: ArrayLike<number>, x: number, n: number): number {
+  let m = 0;
+
+  --n;
+
+  while (m <= n) {
+    const i = (n + m) >> 1;
+    const xi = xs[i];
+
+    if (xi < x) {
+      m = i + 1;
+    } else if (xi > x) {
+      n = i - 1;
+    } else {
+      return i;
+    }
+  }
+
+  return -m - 1;
 }
