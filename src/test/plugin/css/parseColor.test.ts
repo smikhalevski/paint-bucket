@@ -1,5 +1,6 @@
-import { Color } from '../../../main/core';
-import { parseColor } from '../../../main/plugin/css/parseColor';
+import { describe, test, expect } from 'vitest';
+import { Color } from '../../../main/core.js';
+import { parseColor } from '../../../main/plugin/css/parseColor.js';
 import '../../../main/plugin/rgb';
 
 describe('parseColor', () => {

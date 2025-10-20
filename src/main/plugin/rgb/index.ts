@@ -10,18 +10,18 @@
  *
  * @module plugin/rgb
  */
-import { Applicator, ColorLike } from '../../core';
-import { Color } from '../../Color';
-import { RGB } from '../../rgb';
+import { Applicator, ColorLike } from '../../core.js';
+import { Color } from '../../Color.js';
+import { RGB } from '../../rgb.js';
 import {
   clamp,
   convertColorInt32ToComponents,
   convertComponentsToColorInt32,
   createAccessor,
   normalizeColorInt,
-} from '../../utils';
+} from '../../utils.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface ColorLikeSource {
     /**
      * Creates the new color from RGBa components. Components can be represented as a 24-bit integer RGB color, or

@@ -11,17 +11,17 @@
  * @module plugin/hsl
  */
 
-import { Applicator, Color } from '../../core';
-import { HSL } from '../../color-model/hsl';
+import { Applicator, Color } from '../../core.js';
+import { HSL } from '../../color-model/hsl/index.js';
 import {
   clamp,
   convertColorInt32ToComponents,
   convertComponentsToColorInt32,
   createAccessor,
   normalizeColorInt,
-} from '../../utils';
+} from '../../utils.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface Color {
     /**
      * Returns HSLa components as an array where hue ∈ [0, 360], saturation and lightness ∈ [0, 100] and alpha ∈ [0, 1]

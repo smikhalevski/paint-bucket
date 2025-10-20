@@ -1,5 +1,5 @@
-import { ColorModel } from '../../core';
-import { convertLABToRGB, convertRGBToLAB } from './lab-rgb';
+import { ColorModel } from '../../core.js';
+import { convertLABToRGB, convertRGBToLAB } from './lab-rgb.js';
 
 /**
  * CIE-L\*a\*b\* color components.

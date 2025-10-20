@@ -1,7 +1,5 @@
 <p align="center">
-  <a href="#readme">
-    <img alt="Paint Bucket" src="images/logo.png" width="600"/>
-  </a>
+  <a href="#readme"><img alt="Paint Bucket" src="images/logo.png" width="600"/></a>
 </p>
 
 [Highly performant](#performance), [extensible](#plugins), and
@@ -18,7 +16,9 @@ npm install --save-prod paint-bucket
 ```ts
 import { clr } from 'paint-bucket';
 
-clr('#abcdef').saturation(s => s / 2).red();
+clr('#abcdef')
+  .saturation(s => s / 2)
+  .red();
 // ⮕ 188
 ```
 
@@ -87,6 +87,7 @@ clr.gradient(['red', 'blue']).at(0.7).css();
 
 Create multi-stop gradients with custom stop values:
 
+<!-- prettier-ignore -->
 ```ts
 clr.gradient()
   .stop(0, 'red')
@@ -110,7 +111,7 @@ const CMYK: ColorModel = {
   name: 'CMYK',
 
   // The number of color components that this model uses:
-  // cyan, magenta, yellow, black, and alpha 
+  // cyan, magenta, yellow, black, and alpha
   componentCount: 5,
 
   convertComponentsToRGB(components: readonly number[], rgb: RGB): void {
@@ -181,7 +182,7 @@ import { HSL } from 'paint-bucket/color-model/hsl';
 const color = new Color(HSL, [0.5, 1, 0.5, 0.5]);
 const rgb = color.useComponents(RGB);
 
-// Set blue component value to 0 
+// Set blue component value to 0
 rgb[2] = 0;
 
 color.getComponents(HSL);
@@ -205,9 +206,12 @@ functionality.
 
 ```ts
 import { clr, Color } from 'paint-bucket/core';
-import'paint-bucket/plugin/rgb';
+import 'paint-bucket/plugin/rgb';
 
-clr().red(64).red(r => r * 2).red();
+clr()
+  .red(64)
+  .red(r => r * 2)
+  .red();
 // ⮕ 128
 ```
 
@@ -230,7 +234,7 @@ clr().red(64).red(r => r * 2).red();
 <br>HWBa color model manipulation plugin.
 
 [paint-bucket/plugin/lab](https://smikhalevski.github.io/paint-bucket/modules/plugin_lab.html)
-<br>CIE-L*a*b*  color model manipulation methods.
+<br>CIE-L\*a\*b\* color model manipulation methods.
 
 [paint-bucket/plugin/labh](https://smikhalevski.github.io/paint-bucket/modules/plugin_labh.html)
 <br>Hunter L, a, b color model manipulation plugin.
@@ -299,27 +303,28 @@ color.getComponents(RGB);
 
 # Performance
 
-Clone this repo and use `npm ci && npm run build && npm run perf` to run the performance testsuite.
+Results are in millions of operations per second (MHz). The higher number is better.
 
-Results are in millions of operations per second [^1]. The higher number is better.
+|                                      | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
+| ------------------------------------ | -----------: | ------------------------------------------------: | --------------------------------------------: |
+| `clr([255, 255, 255])`               |         18.1 |                                               3.8 |                                           2.1 |
+| `clr('#abc')`                        |          6.5 |                                               1.6 |                                           1.7 |
+| `clr('#abcdef')`                     |          6.2 |                                               1.8 |                                           1.9 |
+| `clr('#abcdefff')`                   |          5.7 |                                               1.8 |                                           1.7 |
+| `clr(0xab_cd_ef)`                    |         15.3 |                                                🚫 |                                           2.9 |
+| `clr().rgb32(0xab_cd_ef_ff)`         |         15.6 |                                                🚫 |                                            🚫 |
+| `clr('rgba(128, 128, 128, 0.5)')`    |          3.0 |                                               1.5 |                                           0.2 |
+| `clr(…).saturation(50).rgb()`        |         11.0 |                                               0.9 |                                           1.0 |
+| `clr(…).hue(90).lightness(10).rgb()` |          9.5 |                                               0.6 |                                            🚫 |
+| `clr.gradient(['#fff', '#000'])`     |          3.3 |                                                🚫 |                                           0.5 |
+| `clr.gradient(…).at(0.5)`            |          8.5 |                                                🚫 |                                           3.7 |
 
-|                                                   | paint-bucket | [tinycolor2](https://github.com/bgrins/TinyColor) | [chroma.js](https://github.com/gka/chroma.js) |
-|---------------------------------------------------|-------------:|--------------------------------------------------:|----------------------------------------------:| 
-| `clr([255, 255, 255])`                            |         18.1 |                                               3.8 |                                           2.1 |
-| `clr('#abc')`                                     |          6.5 |                                               1.6 |                                           1.7 |
-| `clr('#abcdef')`                                  |          6.2 |                                               1.8 |                                           1.9 |
-| `clr('#abcdefff')`                                |          5.7 |                                               1.8 |                                           1.7 |
-| `clr(0xab_cd_ef)`                                 |         15.3 |                                                🚫 |                                           2.9 |
-| `clr().rgb32(0xab_cd_ef_ff)`                      |         15.6 |                                                🚫 |                                            🚫 |
-| `clr('rgba(128, 128, 128, 0.5)')`                 |          3.0 |                                               1.5 |                                           0.2 |
-| `clr(…).saturation(50).rgb()`                     |         11.0 |                                               0.9 |                                           1.0 |
-| `clr(…).hue(90).lightness(10).rgb()`              |          9.5 |                                               0.6 |                                            🚫 |
-| `clr.gradient(['#fff', '#000'])`                  |          3.3 |                                                🚫 |                                           0.5 |
-| `clr.gradient(…).at(0.5, RGB, lerp)` [^2]         |          8.5 |                                                🚫 |                                           3.7 |
-| `clr.gradient(…).at(0.5, LAB, csplineMonot)` [^2] |          8.4 |                                                🚫 |                                           3.8 |
+Tests were conducted using [TooFast](https://github.com/smikhalevski/toofast#readme) on Apple M1 with Node.js v23.1.0.
 
-[^1]: Performance was measured on Apple M1 Max using [TooFast](https://github.com/smikhalevski/toofast).
+To reproduce [the performance test suite](./src/test/index.perf.js) results, clone this repo and run:
 
-[^2]: [`lerp`](https://github.com/smikhalevski/algomatic/#lerp) and
-[`csplineMonot`](https://github.com/smikhalevski/algomatic/#csplinemonot) are linear and monotonous cubic spline
-interpolation factories respectively from [Algomatic](https://github.com/smikhalevski/algomatic).
+```shell
+npm ci
+npm run build
+npm run perf
+```

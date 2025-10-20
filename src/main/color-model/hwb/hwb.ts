@@ -1,5 +1,5 @@
-import { ColorModel } from '../../core';
-import { convertHWBToRGB, convertRGBToHWB } from './hwb-rgb';
+import { ColorModel } from '../../core.js';
+import { convertHWBToRGB, convertRGBToHWB } from './hwb-rgb.js';
 
 /**
  * HWBa color components.

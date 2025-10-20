@@ -1,5 +1,5 @@
-import { RGB } from '../../rgb';
-import { HSL } from './hsl';
+import { RGB } from '../../rgb.js';
+import { HSL } from './hsl.js';
 
 const { min, max } = Math;
 

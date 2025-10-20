@@ -1,6 +1,7 @@
-import { RGB } from '../../../main/core';
-import { convertRGBToLAB, LAB } from '../../../main/color-model/lab';
-import { getDeltaE } from '../../../main/plugin/difference/getDeltaE';
+import { describe, test, expect } from 'vitest';
+import { RGB } from '../../../main/core.js';
+import { convertRGBToLAB, LAB } from '../../../main/color-model/lab/index.js';
+import { getDeltaE } from '../../../main/plugin/difference/getDeltaE.js';
 
 describe('getDeltaE', () => {
   const rgb = (R: number, G: number, B: number): RGB => [R / 255, G / 255, B / 255, 1];

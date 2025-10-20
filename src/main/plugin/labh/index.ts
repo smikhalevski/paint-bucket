@@ -11,11 +11,11 @@
  * @module plugin/labh
  */
 
-import { Applicator, Color } from '../../core';
-import { LABh } from '../../color-model/labh';
-import { clamp, createAccessor } from '../../utils';
+import { Applicator, Color } from '../../core.js';
+import { LABh } from '../../color-model/labh/index.js';
+import { clamp, createAccessor } from '../../utils.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface Color {
     /**
      * Returns Hunter L, a, b components as an array where L ∈ [0, 100], a and b ∈ [-128, 128], and alpha ∈ [0, 1]

@@ -1,6 +1,6 @@
-import { ColorLike } from './types';
-import { Color } from './Color';
-import { Gradient } from './Gradient';
+import { ColorLike } from './types.js';
+import { Color } from './Color.js';
+import { Gradient } from './Gradient.js';
 
 /**
  * Parses value into a {@link Color} instance. When another color instance is provided, it is cloned.
@@ -19,8 +19,8 @@ clr.gradient = gradient;
  * Creates a new gradient with equidistant stops.
  *
  * @param colors The list of colors that comprise the gradient.
- * @param minValue The value of the first color in {@link colors}.
- * @param maxValue The value of the last color in {@link colors}.
+ * @param minValue The value of the first color in colors.
+ * @param maxValue The value of the last color in colors.
  */
 function gradient(
   colors?: readonly ColorLike[],

@@ -11,11 +11,11 @@
  * @module plugin/lab
  */
 
-import { Applicator, Color } from '../../core';
-import { LAB } from '../../color-model/lab';
-import { clamp, createAccessor } from '../../utils';
+import { Applicator, Color } from '../../core.js';
+import { LAB } from '../../color-model/lab/index.js';
+import { clamp, createAccessor } from '../../utils.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface Color {
     /**
      * Returns CIE-L\*a\*b\* components as an array where L\* ∈ [0, 100], a\* and b\* ∈ [-100, 100], and alpha ∈ [0, 1]

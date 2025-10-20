@@ -1,7 +1,7 @@
-import { RGB } from '../../rgb';
-import { clamp } from '../../utils';
-import { WhitePoint } from './WhitePoint';
-import { XYZ } from './xyz';
+import { RGB } from '../../rgb.js';
+import { clamp } from '../../utils.js';
+import { WhitePoint } from './WhitePoint.js';
+import { XYZ } from './xyz.js';
 
 const { pow } = Math;
 

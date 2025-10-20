@@ -1,7 +1,7 @@
-import { RGB } from '../../rgb';
-import { convertRGBToXYZ, convertXYZToRGB, WhitePoint, XYZ } from '../xyz';
-import { LAB } from './lab';
-import { convertLABToXYZ, convertXYZToLAB } from './lab-xyz';
+import { RGB } from '../../rgb.js';
+import { convertRGBToXYZ, convertXYZToRGB, WhitePoint, XYZ } from '../xyz/index.js';
+import { LAB } from './lab.js';
+import { convertLABToXYZ, convertXYZToLAB } from './lab-xyz.js';
 
 const tempXYZ: XYZ = [0, 0, 0, 1];
 

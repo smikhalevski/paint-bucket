@@ -8,6 +8,6 @@
  * @module color-model/labh
  */
 
-export { LABh } from './labh';
-export { convertLABhToRGB, convertRGBToLABh } from './labh-rgb';
-export { convertLABhToXYZ, convertXYZToLABh } from './labh-xyz';
+export { LABh } from './labh.js';
+export { convertLABhToRGB, convertRGBToLABh } from './labh-rgb.js';
+export { convertLABhToXYZ, convertXYZToLABh } from './labh-xyz.js';

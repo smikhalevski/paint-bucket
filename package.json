@@ -2,148 +2,52 @@
   "name": "paint-bucket",
   "version": "2.2.1",
   "description": "Highly performant, extensible, and tiny color manipulation library.",
+  "type": "module",
   "main": "./index.js",
-  "module": "./index.mjs",
   "types": "./index.d.ts",
   "exports": {
-    ".": {
-      "types": "./index.d.ts",
-      "import": "./index.mjs",
-      "require": "./index.js"
-    },
-    "./core": {
-      "types": "./core.d.ts",
-      "import": "./core.mjs",
-      "require": "./core.js"
-    },
-    "./utils": {
-      "types": "./utils.d.ts",
-      "import": "./utils.mjs",
-      "require": "./utils.js"
-    },
-    "./color-model/cmyk": {
-      "types": "./color-model/cmyk/index.d.ts",
-      "import": "./color-model/cmyk/index.mjs",
-      "require": "./color-model/cmyk/index.js"
-    },
-    "./color-model/hsl": {
-      "types": "./color-model/hsl/index.d.ts",
-      "import": "./color-model/hsl/index.mjs",
-      "require": "./color-model/hsl/index.js"
-    },
-    "./color-model/hsv": {
-      "types": "./color-model/hsv/index.d.ts",
-      "import": "./color-model/hsv/index.mjs",
-      "require": "./color-model/hsv/index.js"
-    },
-    "./color-model/hwb": {
-      "types": "./color-model/hwb/index.d.ts",
-      "import": "./color-model/hwb/index.mjs",
-      "require": "./color-model/hwb/index.js"
-    },
-    "./color-model/lab": {
-      "types": "./color-model/lab/index.d.ts",
-      "import": "./color-model/lab/index.mjs",
-      "require": "./color-model/lab/index.js"
-    },
-    "./color-model/labh": {
-      "types": "./color-model/labh/index.d.ts",
-      "import": "./color-model/labh/index.mjs",
-      "require": "./color-model/labh/index.js"
-    },
-    "./color-model/xyz": {
-      "types": "./color-model/xyz/index.d.ts",
-      "import": "./color-model/xyz/index.mjs",
-      "require": "./color-model/xyz/index.js"
-    },
-    "./plugin/cmyk": {
-      "types": "./plugin/cmyk/index.d.ts",
-      "import": "./plugin/cmyk/index.mjs",
-      "require": "./plugin/cmyk/index.js"
-    },
-    "./plugin/css": {
-      "types": "./plugin/css/index.d.ts",
-      "import": "./plugin/css/index.mjs",
-      "require": "./plugin/css/index.js"
-    },
-    "./plugin/difference": {
-      "types": "./plugin/difference/index.d.ts",
-      "import": "./plugin/difference/index.mjs",
-      "require": "./plugin/difference/index.js"
-    },
-    "./plugin/hsl": {
-      "types": "./plugin/hsl/index.d.ts",
-      "import": "./plugin/hsl/index.mjs",
-      "require": "./plugin/hsl/index.js"
-    },
-    "./plugin/hsv": {
-      "types": "./plugin/hsv/index.d.ts",
-      "import": "./plugin/hsv/index.mjs",
-      "require": "./plugin/hsv/index.js"
-    },
-    "./plugin/hwb": {
-      "types": "./plugin/hwb/index.d.ts",
-      "import": "./plugin/hwb/index.mjs",
-      "require": "./plugin/hwb/index.js"
-    },
-    "./plugin/lab": {
-      "types": "./plugin/lab/index.d.ts",
-      "import": "./plugin/lab/index.mjs",
-      "require": "./plugin/lab/index.js"
-    },
-    "./plugin/labh": {
-      "types": "./plugin/labh/index.d.ts",
-      "import": "./plugin/labh/index.mjs",
-      "require": "./plugin/labh/index.js"
-    },
-    "./plugin/palette": {
-      "types": "./plugin/palette/index.d.ts",
-      "import": "./plugin/palette/index.mjs",
-      "require": "./plugin/palette/index.js"
-    },
-    "./plugin/rgb": {
-      "types": "./plugin/rgb/index.d.ts",
-      "import": "./plugin/rgb/index.mjs",
-      "require": "./plugin/rgb/index.js"
-    },
-    "./plugin/x11": {
-      "types": "./plugin/x11/index.d.ts",
-      "import": "./plugin/x11/index.mjs",
-      "require": "./plugin/x11/index.js"
-    },
+    ".": "./index.js",
+    "./core": "./core.js",
+    "./utils": "./utils.js",
+    "./color-model/cmyk": "./color-model/cmyk/index.js",
+    "./color-model/hsl": "./color-model/hsl/index.js",
+    "./color-model/hsv": "./color-model/hsv/index.js",
+    "./color-model/hwb": "./color-model/hwb/index.js",
+    "./color-model/lab": "./color-model/lab/index.js",
+    "./color-model/labh": "./color-model/labh/index.js",
+    "./color-model/xyz": "./color-model/xyz/index.js",
+    "./plugin/cmyk": "./plugin/cmyk/index.js",
+    "./plugin/css": "./plugin/css/index.js",
+    "./plugin/difference": "./plugin/difference/index.js",
+    "./plugin/hsl": "./plugin/hsl/index.js",
+    "./plugin/hsv": "./plugin/hsv/index.js",
+    "./plugin/hwb": "./plugin/hwb/index.js",
+    "./plugin/lab": "./plugin/lab/index.js",
+    "./plugin/labh": "./plugin/labh/index.js",
+    "./plugin/palette": "./plugin/palette/index.js",
+    "./plugin/rgb": "./plugin/rgb/index.js",
+    "./plugin/x11": "./plugin/x11/index.js",
     "./package.json": "./package.json"
   },
   "sideEffects": [
-    "./index.mjs",
     "./index.js",
-    "./plugin/cmyk/index.mjs",
     "./plugin/cmyk/index.js",
-    "./plugin/css/index.mjs",
     "./plugin/css/index.js",
-    "./plugin/difference/index.mjs",
     "./plugin/difference/index.js",
-    "./plugin/hsl/index.mjs",
     "./plugin/hsl/index.js",
-    "./plugin/hsv/index.mjs",
     "./plugin/hsv/index.js",
-    "./plugin/hwb/index.mjs",
     "./plugin/hwb/index.js",
-    "./plugin/lab/index.mjs",
     "./plugin/lab/index.js",
-    "./plugin/labh/index.mjs",
     "./plugin/labh/index.js",
-    "./plugin/palette/index.mjs",
     "./plugin/palette/index.js",
-    "./plugin/rgb/index.mjs",
     "./plugin/rgb/index.js",
-    "./plugin/x11/index.mjs",
     "./plugin/x11/index.js"
   ],
   "scripts": {
-    "build": "rollup --config && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
-    "clean": "rimraf docs lib",
-    "test": "jest",
-    "perf": "toofast perf.js",
+    "build": "tsc --project tsconfig.build.json && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
+    "clean": "rimraf lib docs coverage",
+    "test": "vitest run",
+    "perf": "toofast",
     "docs": "typedoc"
   },
   "repository": {
@@ -169,24 +73,14 @@
   },
   "homepage": "https://github.com/smikhalevski/paint-bucket#readme",
   "devDependencies": {
-    "@rollup/plugin-typescript": "^12.1.2",
-    "@swc/core": "^1.11.13",
-    "@swc/jest": "^0.2.37",
-    "@types/jest": "^29.5.14",
     "chroma-js": "^3.1.2",
-    "glob": "^11.0.1",
-    "jest": "^29.7.0",
-    "prettier": "^3.5.3",
+    "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
-    "rollup": "^4.38.0",
     "tinycolor2": "^1.6.0",
-    "toofast": "^2.0.0",
+    "toofast": "^3.0.3",
     "tslib": "^2.8.1",
-    "typedoc": "^0.26.10",
-    "typedoc-custom-css": "github:smikhalevski/typedoc-custom-css#master",
-    "typescript": "^5.6.3"
-  },
-  "dependencies": {
-    "algomatic": ">=3.2.1"
+    "typedoc": "^0.28.14",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   }
 }

@@ -1,5 +1,5 @@
-import { ColorModel } from '../../core';
-import { convertHSLToRGB, convertRGBToHSL } from './hsl-rgb';
+import { ColorModel } from '../../core.js';
+import { convertHSLToRGB, convertRGBToHSL } from './hsl-rgb.js';
 
 /**
  * HSLa color components.

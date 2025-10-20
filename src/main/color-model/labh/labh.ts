@@ -1,5 +1,5 @@
-import { ColorModel } from '../../core';
-import { convertLABhToRGB, convertRGBToLABh } from './labh-rgb';
+import { ColorModel } from '../../core.js';
+import { convertLABhToRGB, convertRGBToLABh } from './labh-rgb.js';
 
 /**
  * Hunter L, a, b color components.

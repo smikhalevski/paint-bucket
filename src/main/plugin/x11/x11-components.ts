@@ -1,4 +1,4 @@
-import { convertColorInt32ToComponents } from '../../utils';
+import { convertColorInt32ToComponents } from '../../utils.js';
 
 /**
  * X11 color name to RGBa components.

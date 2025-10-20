@@ -1,8 +1,7 @@
-import { ColorLike, ColorModel, Interpolator, InterpolatorFactory } from './types';
-import { lerp } from 'algomatic';
-import { Color } from './Color';
-import { RGB } from './rgb';
-import { clamp } from './utils';
+import { ColorLike, ColorModel, Interpolator, InterpolatorFactory } from './types.js';
+import { Color } from './Color.js';
+import { RGB } from './rgb.js';
+import { clamp, lerp } from './utils.js';
 
 // Black RGBa color that is returned if gradient has zero domain size
 const blackRGB: RGB = [0, 0, 0, 1];
@@ -92,8 +91,8 @@ export class Gradient {
    * Returns the color at the given position in the gradient.
    *
    * @param x The value from the gradient domain for which the color is requested.
-   * @param [model = RGB] The color model that should be used for interpolation.
-   * @param [interpolatorFactory = lerp] The function that returns a color component interpolator.
+   * @param model The color model that should be used for interpolation.
+   * @param interpolatorFactory The function that returns a color component interpolator.
    * @returns The new {@link Color} instance.
    */
   at(x: number, model = RGB, interpolatorFactory: InterpolatorFactory = lerp): Color {
@@ -112,7 +111,7 @@ export class Gradient {
    * each call, interpolation result is cached for better performance.
    * @returns The read-only components array.
    */
-  getComponents(model: ColorModel, value: number, interpolatorFactory: InterpolatorFactory): readonly number[] {
+  getComponents(model: ColorModel, value: number, interpolatorFactory: InterpolatorFactory = lerp): readonly number[] {
     const { _colors, _domain, _tempComponents, _componentValues, _interpolatorFactory, _interpolators } = this;
 
     const { componentCount } = model;
@@ -147,18 +146,13 @@ export class Gradient {
       this._interpolatedVersion = interpolatedVersion;
       this._model = model;
 
-      // Create or update interpolators
-      for (let i = 0, update; i < componentCount; ++i) {
-        if (
-          _interpolatorFactory === interpolatorFactory &&
-          _interpolators.length > i &&
-          (update = _interpolators[i].update) !== undefined
-        ) {
-          update(_domain, _componentValues[i]);
-        } else {
+      // Update interpolators
+      if (_interpolatorFactory !== interpolatorFactory) {
+        for (let i = 0; i < componentCount; ++i) {
           _interpolators[i] = interpolatorFactory(_domain, _componentValues[i]);
         }
       }
+
       this._interpolatorFactory = interpolatorFactory;
     }
 

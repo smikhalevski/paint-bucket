@@ -11,15 +11,15 @@
  * @module plugin/css
  */
 
-import { Applicator, Color } from '../../core';
-import { RGB } from '../../rgb';
-import { createAccessor } from '../../utils';
-import { parseColor } from './parseColor';
-import { stringifyHex } from './stringifyHex';
-import { stringifyHSL } from './stringifyHSL';
-import { stringifyRGB } from './stringifyRGB';
+import { Applicator, Color } from '../../core.js';
+import { RGB } from '../../rgb.js';
+import { createAccessor } from '../../utils.js';
+import { parseColor } from './parseColor.js';
+import { stringifyHex } from './stringifyHex.js';
+import { stringifyHSL } from './stringifyHSL.js';
+import { stringifyRGB } from './stringifyRGB.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface ColorLikeSource {
     /**
      * Parses color from CSS string.

@@ -1,5 +1,5 @@
-import { RGB } from '../../rgb';
-import { HWB } from './hwb';
+import { RGB } from '../../rgb.js';
+import { HWB } from './hwb.js';
 
 const { min, max, floor } = Math;
 

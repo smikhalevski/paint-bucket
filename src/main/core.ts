@@ -1,7 +1,7 @@
-export { clr } from './clr';
-export { Color } from './Color';
-export { Gradient } from './Gradient';
-export { RGB } from './rgb';
+export { clr } from './clr.js';
+export { Color } from './Color.js';
+export { Gradient } from './Gradient.js';
+export { RGB } from './rgb.js';
 
 export type {
   Applicator,
@@ -11,4 +11,4 @@ export type {
   ColorLikeSource,
   Interpolator,
   InterpolatorFactory,
-} from './types';
+} from './types.js';

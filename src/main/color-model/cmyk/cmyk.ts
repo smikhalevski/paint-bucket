@@ -1,5 +1,5 @@
-import { ColorModel } from '../../core';
-import { convertCMYKToRGB, convertRGBToCMYK } from './cmyk-rgb';
+import { ColorModel } from '../../core.js';
+import { convertCMYKToRGB, convertRGBToCMYK } from './cmyk-rgb.js';
 
 /**
  * CMYKa color components.

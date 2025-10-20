@@ -1,4 +1,5 @@
-import { Color, ColorModel, RGB } from '../main/core';
+import { describe, test, expect, vi } from 'vitest';
+import { Color, ColorModel, RGB } from '../main/core.js';
 
 describe('Color', () => {
   const abcColorModel: ColorModel = {
@@ -27,7 +28,7 @@ describe('Color', () => {
     abc1 = color.getComponents(abcColorModel);
     abc2 = color.getComponents(abcColorModel);
 
-    expect(abc1).toEqual([0, 0, 0, 1]);
+    expect(abc1).toStrictEqual([0, 0, 0, 1]);
     expect(abc1).toBe(abc2);
   });
 
@@ -40,7 +41,7 @@ describe('Color', () => {
     abc1 = color.useComponents(abcColorModel);
     abc2 = color.getComponents(abcColorModel);
 
-    expect(abc1).toEqual([0, 0, 0, 1]);
+    expect(abc1).toStrictEqual([0, 0, 0, 1]);
     expect(abc1).toBe(abc2);
   });
 
@@ -50,7 +51,7 @@ describe('Color', () => {
     const abc = color.useComponents(abcColorModel);
     abc[0] = abc[1] = abc[2] = 0xff;
 
-    expect(color.getComponents(RGB)).toEqual([1, 1, 1, 1]);
+    expect(color.getComponents(RGB)).toStrictEqual([1, 1, 1, 1]);
   });
 
   test('bumps color version on use', () => {
@@ -79,8 +80,8 @@ describe('Color', () => {
     const abcColorModelMock: ColorModel = {
       name: 'ABC',
       componentCount: 4,
-      convertComponentsToRGB: jest.fn(abcColorModel.convertComponentsToRGB),
-      convertRGBToComponents: jest.fn(abcColorModel.convertRGBToComponents),
+      convertComponentsToRGB: vi.fn(abcColorModel.convertComponentsToRGB),
+      convertRGBToComponents: vi.fn(abcColorModel.convertRGBToComponents),
     };
 
     color.getComponents(abcColorModelMock);
@@ -95,8 +96,8 @@ describe('Color', () => {
     const abcColorModelMock: ColorModel = {
       name: 'ABC',
       componentCount: 4,
-      convertComponentsToRGB: jest.fn(abcColorModel.convertComponentsToRGB),
-      convertRGBToComponents: jest.fn(abcColorModel.convertRGBToComponents),
+      convertComponentsToRGB: vi.fn(abcColorModel.convertComponentsToRGB),
+      convertRGBToComponents: vi.fn(abcColorModel.convertRGBToComponents),
     };
 
     const abc1 = color.getComponents(abcColorModelMock);
@@ -104,9 +105,9 @@ describe('Color', () => {
 
     expect(abcColorModelMock.convertRGBToComponents).toHaveBeenCalledTimes(1);
 
-    expect(abc1).toEqual(abc2);
+    expect(abc1).toStrictEqual(abc2);
     expect(abc1).not.toBe(abc2);
-    expect(abc2).toEqual([0xff, 0xff, 0xff, 1]);
+    expect(abc2).toStrictEqual([0xff, 0xff, 0xff, 1]);
   });
 
   test('returns initial color', () => {

@@ -11,11 +11,11 @@
  * @module plugin/palette
  */
 
-import { Color } from '../../core';
-import { HSL } from '../../color-model/hsl';
-import { HSV } from '../../color-model/hsv';
+import { Color } from '../../core.js';
+import { HSL } from '../../color-model/hsl/index.js';
+import { HSV } from '../../color-model/hsv/index.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface Color {
     /**
      * Returns a new complement color.
@@ -55,8 +55,8 @@ declare module '../../core' {
     /**
      * Returns the list of analogous colors.
      *
-     * @param [n = 6] The number of colors to pick.
-     * @param [slices = 30] The number of colors to pick.
+     * @param n The number of colors to pick.
+     * @param slices The number of colors to pick.
      * @returns The list of {@link Color} instances.
      * @group Plugin Methods
      * @plugin {@link plugin/palette! paint-bucket/plugin/palette}
@@ -66,7 +66,7 @@ declare module '../../core' {
     /**
      * Returns the list of monochromatic colors.
      *
-     * @param [n = 6] The number of colors to pick.
+     * @param n The number of colors to pick.
      * @returns The list of {@link Color} instances.
      * @group Plugin Methods
      * @plugin {@link plugin/palette! paint-bucket/plugin/palette}

@@ -1,5 +1,5 @@
-import { ColorModel } from '../../core';
-import { convertHSVToRGB, convertRGBToHSV } from './hsv-rgb';
+import { ColorModel } from '../../core.js';
+import { convertHSVToRGB, convertRGBToHSV } from './hsv-rgb.js';
 
 /**
  * HSVa color components.

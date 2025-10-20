@@ -11,11 +11,11 @@
  * @module plugin/cmyk
  */
 
-import { Applicator, Color } from '../../core';
-import { CMYK } from '../../color-model/cmyk';
-import { clamp, createAccessor } from '../../utils';
+import { Applicator, Color } from '../../core.js';
+import { CMYK } from '../../color-model/cmyk/index.js';
+import { clamp, createAccessor } from '../../utils.js';
 
-declare module '../../core' {
+declare module '../../core.js' {
   interface Color {
     /**
      * Returns CMYKa components as an array where cyan, magenta, yellow, and black ∈ [0, 100], and alpha ∈ [0, 1]

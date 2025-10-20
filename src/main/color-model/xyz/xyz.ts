@@ -1,5 +1,5 @@
-import { ColorModel } from '../../core';
-import { convertRGBToXYZ, convertXYZToRGB } from './xyz-rgb';
+import { ColorModel } from '../../core.js';
+import { convertRGBToXYZ, convertXYZToRGB } from './xyz-rgb.js';
 
 /**
  * CIE 1931 XYZa color components.
